@@ -19,7 +19,6 @@
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
-  - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -41,9 +40,3 @@ lint-test-job:   # This job also runs in the test stage.
     - sleep 10
     - echo "No lint issues found."
 
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
