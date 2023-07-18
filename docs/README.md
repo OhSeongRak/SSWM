@@ -9,3 +9,4 @@
 - master - develop - feature/피처명  
 ### ✅ 코드리뷰 
 - `feature/피처명` -> `develop` : 최소 2명 코드리뷰 진행 후, 머지  
+### ✅ gitlab, mattermost, jira 통합([URL](https://pythontoomuchinformation.tistory.com/453))
