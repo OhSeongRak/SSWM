@@ -2,7 +2,7 @@
 version: '3.1'
 
 services:
-  db:
+  database:
     image: mysql:8.0
     container_name: sswm-mysql-container
     restart: always
@@ -12,3 +12,14 @@ services:
       TZ: Asia/Seoul
     ports:
       - 3306:3306
+  application:
+    build: .
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/sswm
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - 8080:8080
+    restart: always
