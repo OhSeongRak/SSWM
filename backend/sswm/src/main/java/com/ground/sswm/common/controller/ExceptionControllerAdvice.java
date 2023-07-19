@@ -1,7 +1,7 @@
 package com.ground.sswm.common.controller;
 
 
-import com.ground.sswm.common.exception.WebhasApiException;
+import com.ground.sswm.common.exception.SswmApiException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +19,10 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleApiException(Exception exception, WebRequest request) {
         logger.error("Exception 발생 : {}", exception.getMessage());
-        if (exception instanceof WebhasApiException) {
+        if (exception instanceof SswmApiException) {
             logger.error("Exception 처리 ");
             return handleExceptionInternal(exception, null, new HttpHeaders(),
-                    ((WebhasApiException) exception).getStatus(), request);
+                    ((SswmApiException) exception).getStatus(), request);
         } else {
             return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
                     request);

@@ -5,5 +5,9 @@ import com.ground.sswm.user.dto.UserDto;
 
 public interface UserService {
 
-  void add(UserDto userDto);
+  void addUser(UserDto userReqDto);
+
+  UserDto getUser(int userId);
+
+  int modifyUser(UserDto userReqDto);
 }
