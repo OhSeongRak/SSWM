@@ -14,18 +14,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String nickname;
+    private String email;
+    private String provider;
+    private String providerId;
+    private Boolean isAdmin;
+    private String image;
+    private Integer createdAt;
+    private Integer modifiedAt;
 
-  @Builder
-  public User(Long id, String name) {
-    this.id = id;
-    this.name = name;
-  }
+    @Builder
+    public User(Integer id, String nickname, String email, String provider, String providerId,
+        boolean isAdmin, String image, Integer createdAt, Integer modifiedAt) {
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.isAdmin = isAdmin;
+        this.image = image;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
 
-  public static User from(UserDto userDto) {
-    return User.builder().name(userDto.getName()).build();
-  }
+    public static User from(UserDto userReqDto) {
+        return User.builder()
+            .nickname(userReqDto.getNickname())
+            .image(userReqDto.getImage())
+            .build();
+    }
 }
