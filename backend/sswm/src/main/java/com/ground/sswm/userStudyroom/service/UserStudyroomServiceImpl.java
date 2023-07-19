@@ -1,22 +1,22 @@
 package com.ground.sswm.userStudyroom.service;
 
 import com.ground.sswm.userStudyroom.domain.UserStudyroom;
-import com.ground.sswm.userStudyroom.domain.StudyroomRepository;
-import com.ground.sswm.userStudyroom.dto.StudyroomDto;
+import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
+import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StudyroomServiceImpl implements StudyroomService {
+public class UserStudyroomServiceImpl implements UserStudyroomService {
 
-  private StudyroomRepository studyroomRepository;
+  private UserStudyroomRepository userStudyroomRepository;
 
-  public StudyroomServiceImpl(StudyroomRepository studyroomRepository) {
-    this.studyroomRepository = studyroomRepository;
+  public UserStudyroomServiceImpl(UserStudyroomRepository userStudyroomRepository) {
+    this.userStudyroomRepository = userStudyroomRepository;
   }
 
   @Override
-  public void add(StudyroomDto studyroomDto) {
-    UserStudyroom userStudyroom = UserStudyroom.from(studyroomDto);
-    studyroomRepository.save(userStudyroom);
+  public void add(UserStudyroomDto userStudyroomDto) {
+    UserStudyroom userStudyroom = UserStudyroom.from(userStudyroomDto);
+    userStudyroomRepository.save(userStudyroom);
   }
 }
