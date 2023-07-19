@@ -1,9 +1,9 @@
 package com.ground.sswm.userStudyroom.service;
 
 
-import com.ground.sswm.userStudyroom.dto.StudyroomDto;
+import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
 
-public interface StudyroomService {
+public interface UserStudyroomService {
 
-  void add(StudyroomDto studyroomDto);
+  void add(UserStudyroomDto userStudyroomDto);
 }
