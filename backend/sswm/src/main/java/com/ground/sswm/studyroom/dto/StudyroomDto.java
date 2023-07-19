@@ -12,7 +12,7 @@ public class StudyroomDto {
   private String enterCode;
   private Integer maxUserNum;
   private Integer maxRestTime;
-  private Integer sutdyAvgTime;
+  private Integer studyAvgTime;
   private String image;
   private Integer isDeleted;
   private Date createdAt;

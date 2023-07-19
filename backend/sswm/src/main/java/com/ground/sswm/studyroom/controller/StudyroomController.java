@@ -18,9 +18,5 @@ public class StudyroomController {
   public StudyroomController(StudyroomService studyroomService) {
     this.studyroomService = studyroomService;
   }
-  @PostMapping
-  public ResponseEntity<?> addUser(@RequestBody StudyroomDto studyroomDto){
-    studyroomService.add(studyroomDto);
-    return new ResponseEntity<>("", HttpStatus.OK);
-  }
+
 }
