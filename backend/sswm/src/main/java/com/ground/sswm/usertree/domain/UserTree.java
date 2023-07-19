@@ -1,5 +1,6 @@
 package com.ground.sswm.usertree.domain;
 
+import com.ground.sswm.tree.domain.Tree;
 import com.ground.sswm.user.domain.User;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
