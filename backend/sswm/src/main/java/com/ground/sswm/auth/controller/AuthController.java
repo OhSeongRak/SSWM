@@ -1,0 +1,77 @@
+package com.ground.sswm.auth.controller;
+
+import com.ground.sswm.auth.dto.GoogleUser;
+import com.ground.sswm.auth.dto.JwtDto;
+import com.ground.sswm.auth.dto.OAuthProvider;
+import com.ground.sswm.auth.dto.OAuthTokenDto;
+import com.ground.sswm.auth.dto.OAuthUserInfo;
+import com.ground.sswm.auth.dto.OAuthUserInfoDto;
+import com.ground.sswm.auth.exception.UserUnAuthorizedException;
+import com.ground.sswm.auth.service.AuthService;
+import com.ground.sswm.auth.service.GoogleAuthService;
+import com.ground.sswm.auth.service.SocialAuthService;
+import com.ground.sswm.user.domain.User;
+import com.ground.sswm.user.service.UserService;
+import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Slf4j
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    private UserService userService;
+    private GoogleAuthService googleAuthService;
+    private AuthService authService;
+
+    public AuthController(UserService userService, GoogleAuthService googleAuthService,AuthService authService) {
+        this.userService = userService;
+        this.authService = authService;
+    }
+
+    @PostMapping("/{SOCIAL_TYPE}")
+    public ResponseEntity<?> loginOrRegister(@RequestBody Map<String, Object> data,
+        @PathVariable("SOCIAL_TYPE") String socialType) {
+        log.debug("[POST] /auth/" + socialType);
+        // 회원가입 -> code 받아와서 회원 정보 요청 보내고, (신규사용자) 데이터베이스 정보 저장 후, sswm 만의 토큰 발급
+        // 로그인 -> code 받아와서 회원 정보 요청 보내고, 데이터베이스 정보 확인해서,  sswm 만의 토큰 발급
+        String authorizationCode = (String) data.get("code");
+        log.debug("AuthorizationCode: {}", authorizationCode);
+
+        if (authorizationCode == null) {
+            log.debug("인가 코드 없음");
+            throw new UserUnAuthorizedException("인가코드없음");
+        }
+
+        SocialAuthService socialAuthService;
+        OAuthTokenDto oAuthTokenDto;
+        OAuthUserInfo oauthUser = null;
+        OAuthUserInfoDto userInitialInfo;
+        if (socialType.equals(OAuthProvider.GOOGLE.getProvider())) {
+            socialAuthService = googleAuthService;
+            oAuthTokenDto = socialAuthService.getToken(authorizationCode);
+            userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
+            oauthUser = new GoogleUser(userInitialInfo);
+        } else if (socialType.equals(OAuthProvider.KAKAO.getProvider())) {
+            // TODO : kakao Login
+        }
+
+        // provider 랑 providerId로 User 있는지 확인
+        User userEntity = userService.getUserByProviderId(oauthUser.getProvider(),
+            oauthUser.getProviderId());
+        if(userEntity == null){
+            userEntity = userService.addOAuthUser(oauthUser);
+        }
+        JwtDto jwtDto = authService.createTokens(userEntity);
+        //TODO
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+}
