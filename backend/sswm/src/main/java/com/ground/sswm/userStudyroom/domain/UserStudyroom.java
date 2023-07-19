@@ -3,7 +3,6 @@ package com.ground.sswm.userStudyroom.domain;
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
-import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

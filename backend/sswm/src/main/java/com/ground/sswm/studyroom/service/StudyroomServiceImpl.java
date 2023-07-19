@@ -14,9 +14,4 @@ public class StudyroomServiceImpl implements StudyroomService {
     this.studyroomRepository = studyroomRepository;
   }
 
-  @Override
-  public void add(StudyroomDto studyroomDto) {
-    Studyroom studyroom = Studyroom.from(studyroomDto);
-    studyroomRepository.save(studyroom);
-  }
 }

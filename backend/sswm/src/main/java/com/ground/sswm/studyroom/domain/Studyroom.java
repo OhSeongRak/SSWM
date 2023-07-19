@@ -23,7 +23,7 @@ public class Studyroom {
   private String enterCode;
   private Integer maxUserNum;
   private Integer maxRestTime;
-  private Integer sutdyAvgTime;
+  private Integer studyAvgTime;
   private String image;
   private Integer isDeleted;
   private Date createdAt;
@@ -31,14 +31,14 @@ public class Studyroom {
 
   @Builder
   public Studyroom(Integer id, String name, Integer isPublic, String enterCode, Integer maxUserNum,
-      Integer maxRestTime, Integer sutdyAvgTime, String image, Integer isDeleted, Date createdAt) {
+      Integer maxRestTime, Integer studyAvgTime, String image, Integer isDeleted, Date createdAt) {
     this.id = id;
     this.name = name;
     this.isPublic = isPublic;
     this.enterCode = enterCode;
     this.maxUserNum = maxUserNum;
     this.maxRestTime = maxRestTime;
-    this.sutdyAvgTime = sutdyAvgTime;
+    this.studyAvgTime = studyAvgTime;
     this.image = image;
     this.isDeleted = isDeleted;
     this.createdAt = createdAt;

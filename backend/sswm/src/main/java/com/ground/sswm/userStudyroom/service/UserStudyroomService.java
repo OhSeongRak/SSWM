@@ -5,5 +5,4 @@ import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
 
 public interface UserStudyroomService {
 
-  void add(UserStudyroomDto userStudyroomDto);
 }

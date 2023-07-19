@@ -14,9 +14,4 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     this.userStudyroomRepository = userStudyroomRepository;
   }
 
-  @Override
-  public void add(UserStudyroomDto userStudyroomDto) {
-    UserStudyroom userStudyroom = UserStudyroom.from(userStudyroomDto);
-    userStudyroomRepository.save(userStudyroom);
-  }
 }
