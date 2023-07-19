@@ -1,7 +1,6 @@
 package com.ground.sswm.user.controller;
 
 
-import com.ground.sswm.common.dto.ResponseDto;
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -20,8 +19,8 @@ public class UserController {
     this.userService = userService;
   }
   @PostMapping
-  public ResponseEntity<ResponseDto> addUser(@RequestBody UserDto userDto){
+  public ResponseEntity<?> addUser(@RequestBody UserDto userDto){
     userService.add(userDto);
-    return new ResponseEntity<>(new ResponseDto(200, "유저 (" + userDto + ") 생성 완료", null), HttpStatus.OK);
+    return new ResponseEntity<>("", HttpStatus.OK);
   }
 }
