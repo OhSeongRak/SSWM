@@ -1,5 +1,6 @@
 package com.ground.sswm.studyRoomTag.domain;
 
+import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.tag.domain.Tag;
 import lombok.Getter;
 import lombok.Setter;
