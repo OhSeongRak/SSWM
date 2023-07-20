@@ -1,6 +1,6 @@
 package com.ground.sswm.common.config;
 
-import com.ground.sswm.auth.dto.JwtUtil;
+import com.ground.sswm.auth.jwt.JwtUtil;
 import com.ground.sswm.auth.exception.InvalidTokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
