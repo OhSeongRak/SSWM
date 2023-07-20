@@ -24,6 +24,7 @@ public class UserStudyroom {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String role;
+  private Integer isBan;
   private Integer isDeleted;
   private Integer totalStudy;
   private Integer totalRest;
@@ -38,10 +39,11 @@ public class UserStudyroom {
 
 
   @Builder
-  public UserStudyroom(Integer id, String role, Integer isDeleted, Integer totalStudy,
+  public UserStudyroom(Integer id, String role, Integer isBan, Integer isDeleted, Integer totalStudy,
       Integer totalRest, User user, Studyroom studyroom) {
     this.id = id;
     this.role = role;
+    this.isBan = isBan;
     this.isDeleted = isDeleted;
     this.totalStudy = totalStudy;
     this.totalRest = totalRest;
@@ -55,6 +57,7 @@ public class UserStudyroom {
   public static UserStudyroom from(UserStudyroomDto userStudyroomDto) {
     return UserStudyroom.builder()
         .role(userStudyroomDto.getRole())
+        .isBan(userStudyroomDto.getIsBan())
         .isDeleted(userStudyroomDto.getIsDeleted())
         .totalStudy(userStudyroomDto.getTotalStudy())
         .totalRest(userStudyroomDto.getTotalRest())

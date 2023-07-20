@@ -6,10 +6,12 @@ import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/studyrooms")
 public class UserStudyroomController {
-  private UserStudyroomService userStudyroomService;
+  private final UserStudyroomService userStudyroomService;
 
   @PostMapping("/{studyroomId}/join")
   public ResponseEntity<?> join(@RequestHeader UserDto userDto, @RequestBody UserStudyroomDto userStudyroomDto, @PathVariable Integer studyroomId){
@@ -47,16 +49,29 @@ public class UserStudyroomController {
   }
 
   @PutMapping("/{studyroomId}/ban")
-  public ResponseEntity<?> ban(@RequestHeader UserDto userDto, @PathVariable Integer studyroomId, @RequestBody Integer userId){
-    userStudyroomService.ban(userDto, userId, studyroomId);
+  public ResponseEntity<?> ban(@RequestHeader String Token, @PathVariable Integer studyroomId, @RequestBody UserDto userDto){
+    //userId = Token.parse()
+    //userStudyroomService.ban(userId, userDto.getId(), studyroomId);
     return new ResponseEntity<>("", HttpStatus.OK);
   }
 
   @PutMapping("/{studyroomId}/pass")
-  public ResponseEntity<?> pass(@RequestHeader UserDto userDto, @PathVariable Integer studyroomId, @RequestBody Integer userId){
-    userStudyroomService.pass(userDto, userId, studyroomId);
+  public ResponseEntity<?> pass(@RequestHeader String Token, @PathVariable Integer studyroomId, @RequestBody UserDto userDto){
+    //userId = Token.parse()
+    //userStudyroomService.pass(userId, userDto.getId(), studyroomId);
     return new ResponseEntity<>("", HttpStatus.OK);
   }
 
 
+  @GetMapping("/{studyroomId}/daily-study")
+  public ResponseEntity<?> searchDailyStudy(@RequestHeader UserDto userDto, @PathVariable Integer studyroomId) {
+    List<UserDto> users = userStudyroomService.searchDailyStudy(userDto, studyroomId);
+    return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
+  }
+
+  @GetMapping("/{studyroomId}/daily-attend")
+  public ResponseEntity<?> searchDailyAttend(@RequestHeader UserDto userDto, @PathVariable Integer studyroomId) {
+    List<UserDto> users = userStudyroomService.searchDailyAttend(userDto, studyroomId);
+    return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
+  }
 }

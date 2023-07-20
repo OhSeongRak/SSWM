@@ -12,6 +12,7 @@ import lombok.ToString;
 @Getter@Setter@ToString
 public class UserStudyroomDto {
   private String role;
+  private Integer isBan;
   private Integer isDeleted;
   private Integer totalStudy;
   private Integer totalRest;

@@ -4,6 +4,7 @@ package com.ground.sswm.userStudyroom.service;
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
+import java.util.List;
 
 public interface UserStudyroomService {
     void join(UserDto userDto, Integer studyroomId, UserStudyroomDto userStudyroomDto);
@@ -12,7 +13,11 @@ public interface UserStudyroomService {
 
     void leave(UserDto userDto, Integer studyroomId);
 
-    void ban(UserDto userDto, Integer targetId, Integer studyroomId);
+    void ban(String userId, Integer targetId, Integer studyroomId);
 
-    void pass(UserDto userDto, Integer userId, Integer studyroomId);
+    void pass(String userId, Integer targetId, Integer studyroomId);
+
+    List<UserDto> searchDailyStudy(UserDto userDto, Integer studyroomId);
+
+    List<UserDto> searchDailyAttend(UserDto userDto, Integer studyroomId);
 }

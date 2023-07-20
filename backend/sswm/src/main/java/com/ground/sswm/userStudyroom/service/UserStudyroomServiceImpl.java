@@ -5,6 +5,8 @@ import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserStudyroomServiceImpl implements UserStudyroomService {
 
-  private UserStudyroomRepository userStudyroomRepository;
+  private final UserStudyroomRepository userStudyroomRepository;
 
   @Override
   @Transactional
@@ -38,22 +40,43 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
   @Override
   public OnAirResDto searchUser(UserDto userDto, Integer studyroomId) {
-
     return null;
   }
 
   @Override
+  @Transactional
   public void leave(UserDto userDto, Integer studyroomId) {
 
   }
 
   @Override
-  public void ban(UserDto userDto, Integer targetId, Integer studyroomId) {
-
+  @Transactional
+  public void ban(String userId, Integer targetId, Integer studyroomId) {
+    UserStudyroom hostStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(Integer.valueOf(userId), studyroomId);
+    if(hostStudyroom.getRole() == "Host") {
+      UserStudyroom guestStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(targetId,
+          studyroomId);
+      guestStudyroom.setIsBan(1);
+      guestStudyroom.setIsDeleted(1);
+    }
   }
 
   @Override
-  public void pass(UserDto userDto, Integer userId, Integer studyroomId) {
+  @Transactional
+  public void pass(String userId, Integer targetId, Integer studyroomId) {
+    UserStudyroom hostStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(Integer.valueOf(userId), studyroomId);
+    hostStudyroom.setRole("Guest");
+    UserStudyroom guestStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(targetId, studyroomId);
+    guestStudyroom.setRole("Host");
+  }
 
+  @Override
+  public List<UserDto> searchDailyStudy(UserDto userDto, Integer studyroomId) {
+    return null;
+  }
+
+  @Override
+  public List<UserDto> searchDailyAttend(UserDto userDto, Integer studyroomId) {
+    return null;
   }
 }
