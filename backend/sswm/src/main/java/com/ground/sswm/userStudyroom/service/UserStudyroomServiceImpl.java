@@ -72,6 +72,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
   @Override
   public List<UserDto> searchDailyStudy(UserDto userDto, Integer studyroomId) {
+
     return null;
   }
 
