@@ -1,9 +1,13 @@
 package com.ground.sswm.user.service;
 
+import com.ground.sswm.auth.dto.OAuthUserInfo;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.domain.UserRepository;
 import com.ground.sswm.user.dto.UserDto;
+import com.ground.sswm.user.dto.UserResDto;
 import com.ground.sswm.user.exception.UserNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,21 +26,58 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(int userId) {
+    public UserResDto getUser(int userId) {
         User user = userRepository.findById(userId).orElseThrow(
-            () -> new UserNotFoundException(""+userId)
+            () -> new UserNotFoundException("" + userId)
         );
-        return UserDto.from(user);
+        return UserResDto.from(user);
     }
 
     @Override
-    public int modifyUser(UserDto userReqDto) {
-        if(!userRepository.existsById(userReqDto.getId())){
-            
+    public int modifyUser(int userId, UserDto userReqDto) {
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new UserNotFoundException("" + userId)
+        );
+        if (userReqDto.getNickname() != null) {
+            user.setNickname(userReqDto.getNickname());
         }
-        return userRepository.save(User.from(userReqDto)).getId();
-
+        if (userReqDto.getImage() != null) {
+            user.setImage(userReqDto.getImage());
+        }
+        return userRepository.save(user).getId();
     }
 
+    @Override
+    public List<UserDto> getAllUser() {
+        List<UserDto> userList = userRepository.findAll().stream()
+            .map(UserDto::from)
+            .collect(Collectors.toList());
+        return userList;
+    }
 
+    @Override
+    public void delete(int userId) {
+        userRepository.delete(
+            userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("" + userId)
+            )
+        );
+    }
+
+    @Override
+    public User getUserByProviderId(String provider, String providerId) {
+        return userRepository.findByProviderAndProviderId(provider, providerId);
+    }
+
+    @Override
+    public User addOAuthUser(OAuthUserInfo oauthUser) {
+        User newUser = User.builder()
+            .name(oauthUser.getName())
+            .email(oauthUser.getEmail())
+            .provider(oauthUser.getProvider())
+            .providerId(oauthUser.getProviderId())
+            .isAdmin(false)
+            .build();
+        return userRepository.save(newUser);
+    }
 }
