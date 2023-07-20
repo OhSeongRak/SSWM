@@ -1,6 +1,6 @@
 package com.ground.sswm.user.service;
 
-import com.ground.sswm.auth.dto.OAuthUserInfo;
+import com.ground.sswm.auth.oauth.OAuthUserInfo;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.domain.UserRepository;
 import com.ground.sswm.user.dto.UserDto;
