@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserTreeServiceImpl {
-    UserTreeRepository userTreeRepository;
+    private final UserTreeRepository userTreeRepository;
 
     public List<UserTree> findAll(){
         return userTreeRepository.findAll();
