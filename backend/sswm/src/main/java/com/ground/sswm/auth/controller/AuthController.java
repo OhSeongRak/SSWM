@@ -15,6 +15,7 @@ import com.ground.sswm.auth.service.SocialAuthService;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.service.UserService;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +30,12 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private UserService userService;
-    private GoogleAuthService googleAuthService;
-    private AuthService authService;
-
-    public AuthController(UserService userService, GoogleAuthService googleAuthService,AuthService authService) {
-        this.userService = userService;
-        this.googleAuthService = googleAuthService;
-        this.authService = authService;
-    }
+    private final UserService userService;
+    private final GoogleAuthService googleAuthService;
+    private final AuthService authService;
 
     @PostMapping("/{SOCIAL_TYPE}")
     public ResponseEntity<JwtDto> loginOrRegister(@RequestBody Map<String, Object> data,
@@ -69,24 +65,29 @@ public class AuthController {
         }
 
         // provider 랑 providerId로 User 있는지 확인
-        User userEntity = userService.getUserByProviderId(oauthUser.getProvider(),oauthUser.getProviderId());
-        if(userEntity == null){
+        User userEntity = userService.getUserByProviderId(oauthUser.getProvider(),
+            oauthUser.getProviderId());
+        if (userEntity == null) {
             userEntity = userService.addOAuthUser(oauthUser);
         }
         JwtDto jwtDto = authService.createTokens(userEntity);
-        authService.saveTokens(userEntity.getId(),jwtDto);
+        authService.saveTokens(userEntity.getId(), jwtDto);
         return new ResponseEntity<>(jwtDto, HttpStatus.OK);
     }
+
     @PostMapping("/refresh-access-token")
-    public ResponseEntity<String> refreshToken(HttpServletRequest request) throws InvalidTokenException {
+    public ResponseEntity<JwtDto> refreshToken(HttpServletRequest request)
+        throws InvalidTokenException {
         String refreshToken = request.getHeader("refresh-token");
         Map<String, Object> claims = authService.getClaimsFromToken(refreshToken);
-        Auth saved = authService.getSavedTokenById((int)claims.get("id"));
+        Auth saved = authService.getSavedTokenById((int) claims.get("id"));
         if (refreshToken.equals(saved.getRefreshToken())) {
             String accessToken = authService.createAccessToken(claims);
             saved.setAccessToken(accessToken);
             authService.updateTokens(saved);
-            return new ResponseEntity<>(accessToken, HttpStatus.OK);
+            JwtDto generated = JwtDto.builder().refreshToken(saved.getRefreshToken())
+                .accessToken(saved.getAccessToken()).build();
+            return new ResponseEntity<>(generated, HttpStatus.OK);
         }
         throw new InvalidTokenException("RefreshToken 이상함");
     }
