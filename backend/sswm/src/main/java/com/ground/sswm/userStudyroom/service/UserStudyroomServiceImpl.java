@@ -52,7 +52,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
   @Override
   @Transactional
-  public void ban(String userId, Integer targetId, Integer studyroomId) {
+  public void ban(Integer userId, Integer targetId, Integer studyroomId) {
     UserStudyroom hostStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(Integer.valueOf(userId), studyroomId);
     if(hostStudyroom.getRole() == "Host") {
       UserStudyroom guestStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(targetId,
@@ -64,11 +64,14 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
   @Override
   @Transactional
-  public void pass(String userId, Integer targetId, Integer studyroomId) {
+  public void pass(Integer userId, Integer targetId, Integer studyroomId) {
     UserStudyroom hostStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(Integer.valueOf(userId), studyroomId);
-    hostStudyroom.setRole("Guest");
-    UserStudyroom guestStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(targetId, studyroomId);
-    guestStudyroom.setRole("Host");
+    if(hostStudyroom.getRole() == "Host") {
+      hostStudyroom.setRole("Guest");
+      UserStudyroom guestStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(targetId,
+          studyroomId);
+      guestStudyroom.setRole("Host");
+    }
   }
 
   @Override

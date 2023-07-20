@@ -1,6 +1,8 @@
 package com.ground.sswm.userStudyroom.controller;
 
 
+import com.ground.sswm.auth.jwt.JwtUtil;
+import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
@@ -8,6 +10,7 @@ import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/studyrooms")
 public class UserStudyroomController {
   private final UserStudyroomService userStudyroomService;
-
+  private final AuthService authService;
   @PostMapping("/{studyroomId}/join")
   public ResponseEntity<?> join(@RequestHeader UserDto userDto, @RequestBody UserStudyroomDto userStudyroomDto, @PathVariable Integer studyroomId){
     userStudyroomService.join(userDto, studyroomId, userStudyroomDto);
@@ -50,16 +53,18 @@ public class UserStudyroomController {
   }
 
   @PutMapping("/{studyroomId}/ban")
-  public ResponseEntity<?> ban(@RequestHeader String Token, @PathVariable Integer studyroomId, @RequestBody UserDto userDto){
-    //userId = Token.parse()
-    //userStudyroomService.ban(userId, userDto.getId(), studyroomId);
+  public ResponseEntity<?> ban(@RequestHeader String authorization, @PathVariable Integer studyroomId, @RequestBody UserDto userDto){
+    Map<String, Object> headerToken = authService.getClaimsFromToken(authorization);
+    Integer userId = (Integer)headerToken.get("id");
+    userStudyroomService.ban(userId, userDto.getId(), studyroomId);
     return new ResponseEntity<>("", HttpStatus.OK);
   }
 
   @PutMapping("/{studyroomId}/pass")
-  public ResponseEntity<?> pass(@RequestHeader String Token, @PathVariable Integer studyroomId, @RequestBody UserDto userDto){
-    //userId = Token.parse()
-    //userStudyroomService.pass(userId, userDto.getId(), studyroomId);
+  public ResponseEntity<?> pass(@RequestHeader String authorization, @PathVariable Integer studyroomId, @RequestBody UserDto userDto){
+    Map<String, Object> headerToken = authService.getClaimsFromToken(authorization);
+    Integer userId = (Integer)headerToken.get("id");
+    userStudyroomService.pass(userId, userDto.getId(), studyroomId);
     return new ResponseEntity<>("", HttpStatus.OK);
   }
 
@@ -71,6 +76,7 @@ public class UserStudyroomController {
   }
 
   @GetMapping("/{studyroomId}/daily-attend")
+
   public ResponseEntity<?> searchDailyAttend(@RequestHeader UserDto userDto, @PathVariable Integer studyroomId) {
     List<UserDto> users = userStudyroomService.searchDailyAttend(userDto, studyroomId);
     return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);

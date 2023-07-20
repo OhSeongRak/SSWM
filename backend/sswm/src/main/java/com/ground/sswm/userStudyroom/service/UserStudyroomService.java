@@ -14,9 +14,9 @@ public interface UserStudyroomService {
 
     void leave(UserDto userDto, Integer studyroomId);
 
-    void ban(String userId, Integer targetId, Integer studyroomId);
+    void ban(Integer userId, Integer targetId, Integer studyroomId);
 
-    void pass(String userId, Integer targetId, Integer studyroomId);
+    void pass(Integer userId, Integer targetId, Integer studyroomId);
 
     List<UserStudyTimeResDto> searchDailyStudy(Integer studyroomId);
 
