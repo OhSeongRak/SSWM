@@ -4,6 +4,7 @@ import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
+import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserStudyroomServiceImpl implements UserStudyroomService {
 
   private final UserStudyroomRepository userStudyroomRepository;
-
+  //private final DailyLogRepository dailyLogRepository;
   @Override
   @Transactional
   public void join(UserDto userDto, Integer studyroomId, UserStudyroomDto userStudyroomDto) {
@@ -71,7 +72,10 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
   }
 
   @Override
-  public List<UserDto> searchDailyStudy(UserDto userDto, Integer studyroomId) {
+  public List<UserStudyTimeResDto> searchDailyStudy(Integer studyroomId) {
+    //DailyLog dailyLog = dailyLogRepository.findByStudyroomIdAndDate(studyroomId, Today(int));
+    //List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
+
     return null;
   }
 

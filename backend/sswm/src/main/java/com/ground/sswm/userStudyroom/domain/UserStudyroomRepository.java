@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserStudyroomRepository extends JpaRepository<UserStudyroom, Integer> {
     UserStudyroom findByUserIdAndStudyroomId(Integer targetId, Integer studyroomId);
+    //UserStudyroom findByStudyroomId(Integer studyroomId);
 }

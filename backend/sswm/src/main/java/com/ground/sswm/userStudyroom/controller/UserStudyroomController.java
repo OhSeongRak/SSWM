@@ -4,6 +4,7 @@ package com.ground.sswm.userStudyroom.controller;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
+import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
@@ -65,8 +66,8 @@ public class UserStudyroomController {
 
   @GetMapping("/{studyroomId}/daily-study")
   public ResponseEntity<?> searchDailyStudy(@RequestHeader UserDto userDto, @PathVariable Integer studyroomId) {
-    List<UserDto> users = userStudyroomService.searchDailyStudy(userDto, studyroomId);
-    return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
+    List<UserStudyTimeResDto> users = userStudyroomService.searchDailyStudy(studyroomId);
+    return new ResponseEntity<List<UserStudyTimeResDto>>(users, HttpStatus.OK);
   }
 
   @GetMapping("/{studyroomId}/daily-attend")
