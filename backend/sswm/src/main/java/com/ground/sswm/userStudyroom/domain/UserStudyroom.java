@@ -12,9 +12,11 @@ import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class UserStudyroom {
 
@@ -51,6 +53,11 @@ public class UserStudyroom {
 
 
   public static UserStudyroom from(UserStudyroomDto userStudyroomDto) {
-    return UserStudyroom.builder().role(userStudyroomDto.getRole()).build();
+    return UserStudyroom.builder()
+        .role(userStudyroomDto.getRole())
+        .isDeleted(userStudyroomDto.getIsDeleted())
+        .totalStudy(userStudyroomDto.getTotalStudy())
+        .totalRest(userStudyroomDto.getTotalRest())
+        .build();
   }
 }
