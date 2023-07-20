@@ -1,9 +1,12 @@
-package com.ground.sswm.auth.dto;
-public class GoogleUser implements OAuthUserInfo {
+package com.ground.sswm.auth.oauth;
+
+import com.ground.sswm.auth.dto.OAuthUserInfoDto;
+
+public class GoogleUserInfo implements OAuthUserInfo {
 
     private final OAuthUserInfoDto oAuthUserInfoDto;
 
-    public GoogleUser(OAuthUserInfoDto userInitialInfo) {
+    public GoogleUserInfo(OAuthUserInfoDto userInitialInfo) {
         this.oAuthUserInfoDto = userInitialInfo;
     }
 

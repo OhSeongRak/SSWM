@@ -1,4 +1,4 @@
-package com.ground.sswm.auth.dto;
+package com.ground.sswm.auth.oauth;
 
 public interface OAuthUserInfo {
     String getProviderId();
