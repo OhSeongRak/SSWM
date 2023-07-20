@@ -1,11 +1,11 @@
 package com.ground.sswm.auth.controller;
 
 import com.ground.sswm.auth.domain.Auth;
-import com.ground.sswm.auth.dto.GoogleUser;
+import com.ground.sswm.auth.oauth.GoogleUserInfo;
 import com.ground.sswm.auth.dto.JwtDto;
-import com.ground.sswm.auth.dto.OAuthProvider;
+import com.ground.sswm.auth.oauth.OAuthProvider;
 import com.ground.sswm.auth.dto.OAuthTokenDto;
-import com.ground.sswm.auth.dto.OAuthUserInfo;
+import com.ground.sswm.auth.oauth.OAuthUserInfo;
 import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.exception.InvalidTokenException;
 import com.ground.sswm.auth.exception.UserUnAuthorizedException;
@@ -59,7 +59,7 @@ public class AuthController {
             socialAuthService = googleAuthService;
             oAuthTokenDto = socialAuthService.getToken(authorizationCode);
             userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
-            oauthUser = new GoogleUser(userInitialInfo);
+            oauthUser = new GoogleUserInfo(userInitialInfo);
         } else if (socialType.equals(OAuthProvider.KAKAO.getProvider())) {
             // TODO : kakao Login
         }
