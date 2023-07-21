@@ -1,4 +1,5 @@
 package com.ground.sswm.studyroom.domain;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -6,5 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
 
 //    Studyroom findById(Long studyroomId);
-    Studyroom findByName(String name);
+    Optional<Studyroom> findByName(String name);
 }

@@ -4,7 +4,6 @@ import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.studyroom.domain.StudyroomRepository;
 import com.ground.sswm.studyroom.dto.StudyroomDto;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +38,7 @@ public class StudyroomServiceImpl implements StudyroomService {
   }
 
   @Override
-  public StudyroomDto getStudyroom(Long studyroomId) {
+  public StudyroomDto select(Long studyroomId) {
     Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
     StudyroomDto studyroomDto = StudyroomDto.from(studyroom);
     return studyroomDto;
@@ -53,8 +52,8 @@ public class StudyroomServiceImpl implements StudyroomService {
   }
 
   @Override
-  public Studyroom exists(String name) {
-    return studyroomRepository.findByName(name);
+  public boolean exists(String name) {
+    return studyroomRepository.findByName(name).isPresent();
   }
 }
 

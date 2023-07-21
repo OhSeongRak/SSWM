@@ -15,7 +15,7 @@ public class StudyroomDto {
     private Long id;
     private String name;
     private String notice;
-    private int isPublic;
+    private boolean isPublic;
     private String enterCode;
     private int maxUserNum;
     private int maxRestTime;
@@ -26,7 +26,7 @@ public class StudyroomDto {
     private List<TagDto> tags;
 
     @Builder
-    public StudyroomDto(Long id, String name, String notice, int isPublic, String enterCode, int maxUserNum,
+    public StudyroomDto(Long id, String name, String notice, boolean isPublic, String enterCode, int maxUserNum,
         int maxRestTime, int studyAvgTime, String image, boolean isDeleted, int createdAt) {
         this.id = id;
         this.name = name;
@@ -46,7 +46,7 @@ public class StudyroomDto {
             .id(studyroom.getId())
             .name(studyroom.getName())
             .notice(studyroom.getNotice())
-            .isPublic(studyroom.getIsPublic())
+            .isPublic(studyroom.isPublic())
             .enterCode(studyroom.getEnterCode())
             .maxUserNum(studyroom.getMaxUserNum())
             .maxRestTime(studyroom.getMaxRestTime())

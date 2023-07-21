@@ -23,7 +23,7 @@ public class Studyroom {
 
   private String name;
   private String notice;
-  private int isPublic;
+  private boolean isPublic;
   private String enterCode;
   private int maxUserNum;
   private int maxRestTime;
@@ -34,7 +34,7 @@ public class Studyroom {
 
 
   @Builder
-  public Studyroom(Long id, String name, String notice, int isPublic, String enterCode, int maxUserNum,
+  public Studyroom(Long id, String name, String notice, boolean isPublic, String enterCode, int maxUserNum,
       int maxRestTime, int studyAvgTime, String image, boolean isDeleted, int createdAt) {
     this.id = id;
     this.name = name;
@@ -54,7 +54,7 @@ public class Studyroom {
         .id(studyroomDto.getId())
         .name(studyroomDto.getName())
         .notice(studyroomDto.getNotice())
-        .isPublic(studyroomDto.getIsPublic())
+        .isPublic(studyroomDto.isPublic())
         .enterCode(studyroomDto.getEnterCode())
         .maxUserNum(studyroomDto.getMaxUserNum())
         .maxRestTime(studyroomDto.getMaxRestTime())
@@ -67,7 +67,7 @@ public class Studyroom {
 
   public void setUpdates(StudyroomDto studyroomDto) {
     this.setName(studyroomDto.getName());
-    this.setIsPublic(studyroomDto.getIsPublic());
+    this.setPublic(studyroomDto.isPublic());
     this.setEnterCode(studyroomDto.getEnterCode());
     this.setMaxUserNum(studyroomDto.getMaxUserNum());
     this.setMaxRestTime(studyroomDto.getMaxRestTime());

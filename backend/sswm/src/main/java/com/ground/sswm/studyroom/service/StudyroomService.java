@@ -13,9 +13,9 @@ public interface StudyroomService {
 
     void update(Long studyroomId, StudyroomDto studyroomDto);
 
-    StudyroomDto getStudyroom(Long studyroomId);
+    StudyroomDto select(Long studyroomId);
 
     void delete(Long studyroomId);
 
-    Studyroom exists(String name);
+    boolean exists(String name);
 }
