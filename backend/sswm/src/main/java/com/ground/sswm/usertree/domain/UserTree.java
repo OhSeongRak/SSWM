@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,4 +30,5 @@ public class UserTree {
     private Tree tree;
 
     private int exp;
+
 }
