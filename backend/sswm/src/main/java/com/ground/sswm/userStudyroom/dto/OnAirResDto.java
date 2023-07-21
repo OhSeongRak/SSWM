@@ -6,6 +6,6 @@ import com.ground.sswm.user.dto.UserDto;
 public class OnAirResDto {
     private UserDto userDto;
 
-    private Integer isInLive;
+    private boolean isInLive;
 
 }
