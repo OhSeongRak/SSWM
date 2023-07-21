@@ -78,8 +78,11 @@ public class UserStudyroomController {
     @PutMapping("/{studyroomId}/pass")
     public ResponseEntity<?> pass(@RequestHeader("Authorization") String token,
         @PathVariable Integer studyroomId, @RequestBody UserDto userDto) {
+        //토큰에서 유저정보 받아옴
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Integer userId = (Integer) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
+        Integer userId = (Integer) headerToken.get("id");
+
+        //유저 서비스에 권한 넘기기 호출
 //    userStudyroomService.passUser(userId, userDto.getId(), studyroomId);
         return new ResponseEntity<>("", HttpStatus.OK);
     }

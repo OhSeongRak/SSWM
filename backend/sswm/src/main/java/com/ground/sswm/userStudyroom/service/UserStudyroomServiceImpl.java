@@ -62,7 +62,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     List<OnAirResDto> OnAirResDtos = new ArrayList<>(); //리턴할 리스트 생성
 
     //스터디룸 아이디로 userStudyroom 전부 가져옴
-    List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId).get();
+    List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
 
     //해당 스터디룸에 해당하는 유저 및 현재 접속중인지 체크해서 목록 리턴해줌
     for (UserStudyroom userStudyroom : userStudyrooms
