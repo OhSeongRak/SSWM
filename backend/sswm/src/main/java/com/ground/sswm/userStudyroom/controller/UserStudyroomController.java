@@ -72,7 +72,7 @@ public class UserStudyroomController {
 
 
   @GetMapping("/{studyroomId}/daily-study")
-  public ResponseEntity<?> searchDailyStudy(@RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
+  public ResponseEntity<List<UserStudyTimeResDto>> searchDailyStudy(@RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
 
     List<UserStudyTimeResDto> users = userStudyroomService.searchDailyStudy(studyroomId);
     return new ResponseEntity<List<UserStudyTimeResDto>>(users, HttpStatus.OK);
@@ -80,7 +80,7 @@ public class UserStudyroomController {
 
   @GetMapping("/{studyroomId}/daily-attend")
 
-  public ResponseEntity<?> searchDailyAttend(@RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
+  public ResponseEntity<List<UserDto>> searchDailyAttend(@RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
     Map<String, Object> headerToken = authService.getClaimsFromToken(token);
     Long userId = (Long)headerToken.get("id");
     List<UserDto> users = userStudyroomService.searchDailyAttend(userId, studyroomId);
