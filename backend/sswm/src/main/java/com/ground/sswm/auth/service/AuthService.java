@@ -11,11 +11,11 @@ public interface AuthService {
     JwtDto createTokens(User user);
     Map<String, Object> getClaimsFromToken(String token);
 
-    Auth getSavedTokenByUserId(int id);
+    Auth getSavedTokenByUserId(Long id);
 
     String createAccessToken(Map<String, Object> claims);
 
-    void saveTokens(Integer id, JwtDto jwtDto);
+    void saveTokens(Long id, JwtDto jwtDto);
 
     void updateTokens(Auth saved);
 }

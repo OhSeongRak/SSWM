@@ -16,13 +16,13 @@ public class Auth {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private Integer userId;//unique
+    private Long id;
+    private Long userId;//unique
     private String refreshToken;
     private String accessToken;
 
     @Builder
-    public Auth(Integer userId, String refreshToken, String accessToken) {
+    public Auth(Long userId, String refreshToken, String accessToken) {
         this.userId = userId;
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
