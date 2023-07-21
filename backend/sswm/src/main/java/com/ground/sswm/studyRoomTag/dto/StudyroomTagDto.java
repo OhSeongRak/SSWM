@@ -8,6 +8,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class StudyroomTagDto {
-    private Integer studyroomId;
-    private Integer tagId;
+    private Long studyroomId;
+    private Long tagId;
 }

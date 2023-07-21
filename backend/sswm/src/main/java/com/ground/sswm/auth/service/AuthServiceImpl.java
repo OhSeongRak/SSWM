@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Auth getSavedTokenByUserId(int userId) {
+    public Auth getSavedTokenByUserId(Long userId) {
         return authRepository.findByUserId(userId);
     }
 
@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void saveTokens(Integer userId, JwtDto jwtDto) {
+    public void saveTokens(Long userId, JwtDto jwtDto) {
         Auth newTokens = Auth.builder()
                 .userId(userId)
                 .accessToken(jwtDto.getAccessToken())
