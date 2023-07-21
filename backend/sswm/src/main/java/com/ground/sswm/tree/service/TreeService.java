@@ -7,5 +7,5 @@ import com.ground.sswm.user.dto.UserDto;
 import java.util.List;
 
 public interface TreeService {
-    void saveTree(UserDto userDto, Integer id, TreeDto treeDto);
+    void saveTree(UserDto userDto, Long id, TreeDto treeDto);
 }

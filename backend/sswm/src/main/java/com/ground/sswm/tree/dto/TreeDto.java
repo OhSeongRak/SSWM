@@ -10,12 +10,12 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TreeDto {
-    private Integer id;
+    private Long id;
     private String name;
     private String image;
 
     @Builder
-    public TreeDto(Integer id, String name, String image){
+    public TreeDto(Long id, String name, String image){
         this.id = id;
         this.name = name;
         this.image = image;

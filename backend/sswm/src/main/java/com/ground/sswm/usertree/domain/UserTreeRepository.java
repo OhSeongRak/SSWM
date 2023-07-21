@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserTreeRepository extends JpaRepository<UserTree, Integer> {
+public interface UserTreeRepository extends JpaRepository<UserTree, Long> {
 
 }

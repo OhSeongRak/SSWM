@@ -17,13 +17,13 @@ import lombok.Setter;
 public class Tree {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     private String name;
     private String image;
 
     @Builder
-    public Tree(Integer id, String name, String image){
+    public Tree(Long id, String name, String image){
         this.id = id;
         this.name = name;
         this.image = image;

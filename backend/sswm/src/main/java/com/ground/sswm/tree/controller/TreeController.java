@@ -16,7 +16,7 @@ public class TreeController {
     private final TreeService treeService;
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> saveTree(@RequestHeader UserDto userDto,@RequestBody TreeDto treeDto, @PathVariable Integer id){
+    public ResponseEntity<?> saveTree(@RequestHeader UserDto userDto,@RequestBody TreeDto treeDto, @PathVariable Long id){
         treeService.saveTree(userDto, id,treeDto);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
