@@ -34,11 +34,13 @@ public class UserStudyroomController {
     //유저가 스터디룸에 가입함
     public ResponseEntity<Void> join(@RequestHeader("Authorization") String token,
         @RequestBody UserStudyroomReqDto userStudyroomReqDto, @PathVariable Long studyroomId) {
+
+        //토큰에서 현재 유저 아이디 가져옴
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = (Long) headerToken.get("id");
 
-        Long userId = (Long) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
-
-        userStudyroomService.joinUser(userId, studyroomId, userStudyroomReqDto);//service에 등록 요청
+        //service에 등록 요청
+        userStudyroomService.joinUser(userId, studyroomId, userStudyroomReqDto);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -47,20 +49,25 @@ public class UserStudyroomController {
     //유저가 본인 의지로 룸을 떠남
     public ResponseEntity<?> leave(@RequestHeader("Authorization") String token,
         @PathVariable Long studyroomId) {
-        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Long userId = (Long) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
 
+        //토큰에서 현재 유저 아이디 가져옴
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = (Long) headerToken.get("id");
+
+        //service에게 유저 탈퇴 요청
         userStudyroomService.leaveUser(userId, studyroomId);
+
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @GetMapping("/{studyroomId}/search-user")
     public ResponseEntity<List<OnAirResDto>> searchUser(
         @RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
+        //토큰에서 현재 유저 아이디 가져옴
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = (Long) headerToken.get("id");
 
-        Long userId = (Long) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
-
+        //db에서 유저를 가져와서 리스트로 저장
         List<OnAirResDto> onAirResDtos = userStudyroomService.searchUser(userId, studyroomId);
 
         //name, image, isInLive return
@@ -69,32 +76,40 @@ public class UserStudyroomController {
 
     @PutMapping("/{studyroomId}/ban")
     public ResponseEntity<?> ban(@RequestHeader("Authorization") String token,
-        @PathVariable Integer studyroomId, @RequestBody UserDto userDto) {
+        @PathVariable Long studyroomId, @RequestBody UserDto userDto) {
+
+        //토큰에서 현재 유저 아이디 가져옴
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Integer userId = (Integer) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
-//    userStudyroomService.banUser(userId, userDto.getId(), studyroomId);
+        Long userId = (Long) headerToken.get("id");
+
+        //****service에게 유저 벤 요청(추후 userDto새로 만들고 그 밑 줄 삭제)****
+        //userStudyroomService.banUser(userId, userDto.getId(), studyroomId);
+        userStudyroomService.banUser(userId, 1L, studyroomId);
+
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @PutMapping("/{studyroomId}/pass")
     public ResponseEntity<?> pass(@RequestHeader("Authorization") String token,
-        @PathVariable Integer studyroomId, @RequestBody UserDto userDto) {
+        @PathVariable Long studyroomId, @RequestBody UserDto userDto) {
         //토큰에서 유저정보 받아옴
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Integer userId = (Integer) headerToken.get("id");
+        Long userId = (Long) headerToken.get("id");
 
-        //유저 서비스에 권한 넘기기 호출
-//    userStudyroomService.passUser(userId, userDto.getId(), studyroomId);
+        //****유저 서비스에 권한 넘기기 호출****
+        //userStudyroomService.passRole(userId, userDto.getId(), studyroomId);
+        userStudyroomService.passRole(userId, 1L, studyroomId);
+
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
 
     @GetMapping("/{studyroomId}/daily-study")
     public ResponseEntity<List<UserStudyTimeResDto>> searchDailyStudy(
-        @RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
+        /*@RequestHeader("Authorization") String token,*/ @PathVariable Long studyroomId) {
 
         List<UserStudyTimeResDto> users = userStudyroomService.searchDailyStudy(studyroomId);
-        return new ResponseEntity<List<UserStudyTimeResDto>>(users, HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{studyroomId}/daily-attend")
