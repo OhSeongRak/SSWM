@@ -2,6 +2,7 @@ package com.ground.sswm.studyroom.dto;
 
 import com.ground.sswm.studyroom.domain.Studyroom;
 
+import com.ground.sswm.tag.dto.TagDto;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
