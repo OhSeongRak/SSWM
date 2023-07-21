@@ -66,14 +66,14 @@ public class AuthController {
         // provider 랑 providerId로 User 있는지 확인
         User userEntity = userService.getUserByProviderId(oauthUser.getProvider(),
             oauthUser.getProviderId());
-        if (userEntity == null) {
+        if (userEntity == null) { // 새로운 유저 -> User 테이블에 저장
             userEntity = userService.addOAuthUser(oauthUser);
-        } // 새로운 유저 -> save // 기존유저-> update
+        }
         JwtDto jwtDto = authService.createTokens(userEntity);
         Auth authEntity = authService.getSavedTokenByUserId(userEntity.getId());
-        if (authEntity == null) {
+        if (authEntity == null) { // 새로운 유저 -> Auth 테이블에 저장
             authService.saveTokens(userEntity.getId(), jwtDto);
-        } else {
+        } else { // 기존 유저 -> Auth 테이블의 Token update
             authEntity.setRefreshToken(jwtDto.getRefreshToken());
             authEntity.setAccessToken(jwtDto.getAccessToken());
             authService.updateTokens(authEntity);
@@ -82,10 +82,8 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-access-token")
-    //public ResponseEntity<JwtDto> refreshToken(HttpServletRequest request)
     public ResponseEntity<JwtDto> refreshToken(@RequestHeader("refresh-token") String refreshToken)
         throws InvalidTokenException {
-        //String refreshToken = request.getHeader("refresh-token");
         log.debug("[POST] /refresh-access-token " + refreshToken);
         Map<String, Object> claims = authService.getClaimsFromToken(refreshToken);
         Auth saved = authService.getSavedTokenByUserId((int) claims.get("id"));

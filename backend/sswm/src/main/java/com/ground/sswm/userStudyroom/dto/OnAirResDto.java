@@ -4,8 +4,8 @@ import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.dto.UserDto;
 
 public class OnAirResDto {
-    UserDto userDto;
+    private UserDto userDto;
 
-    Integer isInLive;
+    private boolean isInLive;
 
 }
