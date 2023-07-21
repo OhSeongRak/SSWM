@@ -5,6 +5,7 @@ import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.user.dto.UserResDto;
 import com.ground.sswm.user.service.UserService;
 import java.util.List;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/users")
+@Transactional
 public class UserController {
 
     private UserService userService;
