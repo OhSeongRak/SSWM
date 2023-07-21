@@ -52,6 +52,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     UserStudyroom userStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId, studyroomId).get();
     userStudyroom.setDeleted(true);
 
+
     //****오류 리스트****
     //userId or studyroomId 에 해당하는 값들이 없을 때
     //이미 deleted 되었을 때
@@ -63,6 +64,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
     //스터디룸 아이디로 userStudyroom 전부 가져옴
     List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
+
 
     //해당 스터디룸에 해당하는 유저 및 현재 접속중인지 체크해서 목록 리턴해줌
     for (UserStudyroom userStudyroom : userStudyrooms
@@ -83,6 +85,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
   @Override
   @Transactional
+
   public void banUser(Long userId, Long targetId, Long studyroomId) {
     UserStudyroom hostStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId, studyroomId).get();
 
@@ -111,7 +114,6 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
   @Override
   public List<UserStudyTimeResDto> searchDailyStudy(Long studyroomId) {
-    //
     //DailyLog dailyLog = dailyLogRepository.findByStudyroomIdAndDate(studyroomId, Today(int));
     //List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
 

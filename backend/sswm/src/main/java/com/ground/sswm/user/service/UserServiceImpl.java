@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResDto getUser(int userId) {
+    public UserResDto getUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new UserNotFoundException("" + userId)
         );
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int modifyUser(int userId, UserDto userReqDto) {
+    public void modifyUser(Long userId, UserDto userReqDto) {
         User user = userRepository.findById(userId).orElseThrow(
             () -> new UserNotFoundException("" + userId)
         );
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         if (userReqDto.getImage() != null) {
             user.setImage(userReqDto.getImage());
         }
-        return userRepository.save(user).getId();
+        userRepository.save(user).getId();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(int userId) {
+    public void delete(Long userId) {
         userRepository.delete(
             userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException("" + userId)

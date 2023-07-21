@@ -12,6 +12,7 @@ public class OnAirResDto {
     private UserDto userDto;
 
     private boolean isInLive;
+
     @Builder
     public OnAirResDto(UserDto userDto, boolean isInLive) {
         this.userDto = userDto;

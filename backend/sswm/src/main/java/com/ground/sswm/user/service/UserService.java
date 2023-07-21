@@ -7,17 +7,18 @@ import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.user.dto.UserResDto;
 import java.util.List;
 
-public interface UserService {
+public interface
+UserService {
 
   void addUser(UserDto userReqDto);
 
-  UserResDto getUser(int userId);
+  UserResDto getUser(Long userId);
 
-  int modifyUser(int userId, UserDto userReqDto);
+  void modifyUser(Long userId, UserDto userReqDto);
 
   List<UserDto> getAllUser();
 
-  void delete(int userId);
+  void delete(Long userId);
 
     User getUserByProviderId(String provider, String providerId);
 

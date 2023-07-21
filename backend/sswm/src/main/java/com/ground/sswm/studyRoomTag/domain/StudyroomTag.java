@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class StudyroomTag {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "studyroom_id")

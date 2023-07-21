@@ -18,7 +18,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
+
     private String name;
     private String nickname;
     private String email;
@@ -30,7 +31,7 @@ public class User {
     private Integer modifiedAt;
 
     @Builder
-    public User(Integer id, String name, String nickname, String email, String provider,
+    public User(Long id, String name, String nickname, String email, String provider,
         String providerId,
         boolean isAdmin, String image, Integer createdAt, Integer modifiedAt) {
         this.id = id;
