@@ -2,7 +2,7 @@ package com.ground.sswm.userStudyroom.domain;
 
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
-import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
+import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,11 +22,12 @@ public class UserStudyroom {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
   private String role;
-  private Integer isDeleted;
-  private Integer totalStudy;
-  private Integer totalRest;
+  private boolean isBan;
+  private boolean isDeleted;
+  private int totalStudy;
+  private int totalRest;
 
   @ManyToOne
   @JoinColumn(name = "USER_ID")
@@ -38,10 +39,11 @@ public class UserStudyroom {
 
 
   @Builder
-  public UserStudyroom(Integer id, String role, Integer isDeleted, Integer totalStudy,
-      Integer totalRest, User user, Studyroom studyroom) {
+  public UserStudyroom(Long id, String role, boolean isBan, boolean isDeleted, int totalStudy,
+      int totalRest, User user, Studyroom studyroom) {
     this.id = id;
     this.role = role;
+    this.isBan = isBan;
     this.isDeleted = isDeleted;
     this.totalStudy = totalStudy;
     this.totalRest = totalRest;
@@ -52,12 +54,14 @@ public class UserStudyroom {
 
 
 
-  public static UserStudyroom from(UserStudyroomDto userStudyroomDto) {
+  public static UserStudyroom from(UserStudyroomReqDto userStudyroomReqDto) {
     return UserStudyroom.builder()
-        .role(userStudyroomDto.getRole())
-        .isDeleted(userStudyroomDto.getIsDeleted())
-        .totalStudy(userStudyroomDto.getTotalStudy())
-        .totalRest(userStudyroomDto.getTotalRest())
+        .role(userStudyroomReqDto.getRole())
+        .isBan(userStudyroomReqDto.isBan())
+        .isDeleted(userStudyroomReqDto.isDeleted())
+        .totalStudy(userStudyroomReqDto.getTotalStudy())
+        .totalRest(userStudyroomReqDto.getTotalRest())
         .build();
   }
+
 }

@@ -6,6 +6,6 @@ import org.springframework.web.server.ResponseStatusException;
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class ForbiddenException extends ResponseStatusException{
     public ForbiddenException(String reason) {
-        super(HttpStatus.BAD_REQUEST, reason);
+        super(HttpStatus.FORBIDDEN, reason);
     }
 }
