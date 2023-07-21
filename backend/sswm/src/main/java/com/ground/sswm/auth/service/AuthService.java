@@ -11,7 +11,7 @@ public interface AuthService {
     JwtDto createTokens(User user);
     Map<String, Object> getClaimsFromToken(String token);
 
-    Auth getSavedTokenById(int id);
+    Auth getSavedTokenByUserId(int id);
 
     String createAccessToken(Map<String, Object> claims);
 

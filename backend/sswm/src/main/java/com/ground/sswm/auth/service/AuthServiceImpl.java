@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Auth getSavedTokenById(int userId) {
+    public Auth getSavedTokenByUserId(int userId) {
         return authRepository.findByUserId(userId);
     }
 
