@@ -17,7 +17,7 @@ public class Auth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer userId;
+    private Integer userId;//unique
     private String refreshToken;
     private String accessToken;
 

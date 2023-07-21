@@ -22,10 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @RestController
@@ -69,18 +68,27 @@ public class AuthController {
             oauthUser.getProviderId());
         if (userEntity == null) {
             userEntity = userService.addOAuthUser(oauthUser);
-        }
+        } // 새로운 유저 -> save // 기존유저-> update
         JwtDto jwtDto = authService.createTokens(userEntity);
-        authService.saveTokens(userEntity.getId(), jwtDto);
+        Auth authEntity = authService.getSavedTokenByUserId(userEntity.getId());
+        if (authEntity == null) {
+            authService.saveTokens(userEntity.getId(), jwtDto);
+        } else {
+            authEntity.setRefreshToken(jwtDto.getRefreshToken());
+            authEntity.setAccessToken(jwtDto.getAccessToken());
+            authService.updateTokens(authEntity);
+        }
         return new ResponseEntity<>(jwtDto, HttpStatus.OK);
     }
 
     @PostMapping("/refresh-access-token")
-    public ResponseEntity<JwtDto> refreshToken(HttpServletRequest request)
+    //public ResponseEntity<JwtDto> refreshToken(HttpServletRequest request)
+    public ResponseEntity<JwtDto> refreshToken(@RequestHeader("refresh-token") String refreshToken)
         throws InvalidTokenException {
-        String refreshToken = request.getHeader("refresh-token");
+        //String refreshToken = request.getHeader("refresh-token");
+        log.debug("[POST] /refresh-access-token " + refreshToken);
         Map<String, Object> claims = authService.getClaimsFromToken(refreshToken);
-        Auth saved = authService.getSavedTokenById((int) claims.get("id"));
+        Auth saved = authService.getSavedTokenByUserId((int) claims.get("id"));
         if (refreshToken.equals(saved.getRefreshToken())) {
             String accessToken = authService.createAccessToken(claims);
             saved.setAccessToken(accessToken);
