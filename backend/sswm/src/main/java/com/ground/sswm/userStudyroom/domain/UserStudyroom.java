@@ -1,5 +1,7 @@
 package com.ground.sswm.userStudyroom.domain;
 
+import static javax.persistence.FetchType.*;
+
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import kotlin.Lazy;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
