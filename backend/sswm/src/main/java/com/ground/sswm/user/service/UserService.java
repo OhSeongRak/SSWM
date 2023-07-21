@@ -9,17 +9,19 @@ import java.util.List;
 
 public interface UserService {
 
-  void addUser(UserDto userReqDto);
+    void addUser(UserDto userReqDto);
 
-  UserResDto getUser(int userId);
+    UserResDto getUser(int userId);
 
-  int modifyUser(int userId, UserDto userReqDto);
+    int modifyUser(int userId, UserDto userReqDto);
 
-  List<UserDto> getAllUser();
+    List<UserDto> getAllUser();
 
-  void delete(int userId);
+    void delete(int userId);
 
     User getUserByProviderId(String provider, String providerId);
 
-  User addOAuthUser(OAuthUserInfo oauthUser);
+    User addOAuthUser(OAuthUserInfo oauthUser);
+
+
 }

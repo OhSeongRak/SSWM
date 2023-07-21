@@ -1,14 +1,18 @@
 package com.ground.sswm.userStudyroom.domain;
 
+import static javax.persistence.FetchType.*;
+
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import kotlin.Lazy;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +32,7 @@ public class UserStudyroom {
   private Integer totalStudy;
   private Integer totalRest;
 
-  @ManyToOne
+  @ManyToOne(fetch= LAZY)
   @JoinColumn(name = "USER_ID")
   private User user;
 

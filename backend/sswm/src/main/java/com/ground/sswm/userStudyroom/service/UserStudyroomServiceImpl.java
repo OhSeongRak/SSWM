@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserStudyroomServiceImpl implements UserStudyroomService {
 
-  private UserStudyroomRepository userStudyroomRepository;
+  private final UserStudyroomRepository userStudyroomRepository;
 
   @Override
   @Transactional

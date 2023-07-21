@@ -17,7 +17,7 @@ public class Studyroom {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
   private String name;
   private Integer isPublic;
   private String enterCode;
@@ -30,7 +30,7 @@ public class Studyroom {
 
 
   @Builder
-  public Studyroom(Integer id, String name, Integer isPublic, String enterCode, Integer maxUserNum,
+  public Studyroom(Long id, String name, Integer isPublic, String enterCode, Integer maxUserNum,
       Integer maxRestTime, Integer studyAvgTime, String image, Integer isDeleted, Date createdAt) {
     this.id = id;
     this.name = name;
