@@ -26,64 +26,84 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/studyrooms")
 public class UserStudyroomController {
-  private final UserStudyroomService userStudyroomService;
-  private final AuthService authService;
-  @PostMapping("/{studyroomId}/join")
-  public ResponseEntity<?> join(@RequestBody UserStudyroomReqDto userStudyroomReqDto, @PathVariable Long studyroomId){
-    //Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-    //Integer userId = (Integer)headerToken.get("id");
-    userStudyroomService.join(2L, studyroomId, userStudyroomReqDto);
-    return new ResponseEntity<>("", HttpStatus.OK);
-  }
 
-  @PutMapping("/{studyroomId}/leave")
-  public ResponseEntity<?> leave(@RequestHeader("Authorization") String token, @PathVariable Long studyroomId){
-    Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-    Long userId = (Long)headerToken.get("id");
-    userStudyroomService.leave(userId, studyroomId);
-    return new ResponseEntity<>("", HttpStatus.OK);
-  }
+    private final UserStudyroomService userStudyroomService;
+    private final AuthService authService;
 
-  @GetMapping("/{studyroomId}/search-user")
-  public ResponseEntity<?> searchUser(@RequestHeader("Authorization") String token, @PathVariable Long studyroomId){
-    Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-    Long userId = (Long)headerToken.get("id");
-    OnAirResDto onAirResDto = userStudyroomService.searchUser(userId, studyroomId);
+    @PostMapping("/{studyroomId}/join")
+    //유저가 스터디룸에 가입함
+    public ResponseEntity<Void> join(@RequestHeader("Authorization") String token,
+        @RequestBody UserStudyroomReqDto userStudyroomReqDto, @PathVariable Long studyroomId) {
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
 
-    //name, image, isInLive return
-    return new ResponseEntity<OnAirResDto>(onAirResDto, HttpStatus.OK);
-  }
+        Long userId = (Long) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
 
-  @PutMapping("/{studyroomId}/ban")
-  public ResponseEntity<?> ban(@RequestHeader("Authorization") String token, @PathVariable Integer studyroomId, @RequestBody UserDto userDto){
-    Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-    Integer userId = (Integer)headerToken.get("id");
-//    userStudyroomService.ban(userId, userDto.getId(), studyroomId);
-    return new ResponseEntity<>("", HttpStatus.OK);
-  }
+        userStudyroomService.joinUser(userId, studyroomId, userStudyroomReqDto);//service에 등록 요청
 
-  @PutMapping("/{studyroomId}/pass")
-  public ResponseEntity<?> pass(@RequestHeader("Authorization") String token, @PathVariable Integer studyroomId, @RequestBody UserDto userDto){
-    Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-    Integer userId = (Integer)headerToken.get("id");
-//    userStudyroomService.pass(userId, userDto.getId(), studyroomId);
-    return new ResponseEntity<>("", HttpStatus.OK);
-  }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{studyroomId}/leave")
+    //유저가 본인 의지로 룸을 떠남
+    public ResponseEntity<?> leave(@RequestHeader("Authorization") String token,
+        @PathVariable Long studyroomId) {
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = (Long) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
+
+        userStudyroomService.leaveUser(userId, studyroomId);
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @GetMapping("/{studyroomId}/search-user")
+    public ResponseEntity<List<OnAirResDto>> searchUser(
+        @RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+
+        Long userId = (Long) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
+
+        List<OnAirResDto> onAirResDtos = userStudyroomService.searchUser(userId, studyroomId);
+
+        //name, image, isInLive return
+        return new ResponseEntity<List<OnAirResDto>>(onAirResDtos, HttpStatus.OK);
+    }
+
+    @PutMapping("/{studyroomId}/ban")
+    public ResponseEntity<?> ban(@RequestHeader("Authorization") String token,
+        @PathVariable Integer studyroomId, @RequestBody UserDto userDto) {
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Integer userId = (Integer) headerToken.get("id"); //토큰에서 현재 유저 아이디 가져옴
+//    userStudyroomService.banUser(userId, userDto.getId(), studyroomId);
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    @PutMapping("/{studyroomId}/pass")
+    public ResponseEntity<?> pass(@RequestHeader("Authorization") String token,
+        @PathVariable Integer studyroomId, @RequestBody UserDto userDto) {
+        //토큰에서 유저정보 받아옴
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Integer userId = (Integer) headerToken.get("id");
+
+        //유저 서비스에 권한 넘기기 호출
+//    userStudyroomService.passUser(userId, userDto.getId(), studyroomId);
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
 
 
-  @GetMapping("/{studyroomId}/daily-study")
-  public ResponseEntity<List<UserStudyTimeResDto>> searchDailyStudy(@RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
+    @GetMapping("/{studyroomId}/daily-study")
+    public ResponseEntity<List<UserStudyTimeResDto>> searchDailyStudy(
+        @RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
 
-    List<UserStudyTimeResDto> users = userStudyroomService.searchDailyStudy(studyroomId);
-    return new ResponseEntity<List<UserStudyTimeResDto>>(users, HttpStatus.OK);
-  }
+        List<UserStudyTimeResDto> users = userStudyroomService.searchDailyStudy(studyroomId);
+        return new ResponseEntity<List<UserStudyTimeResDto>>(users, HttpStatus.OK);
+    }
 
-  @GetMapping("/{studyroomId}/daily-attend")
+    @GetMapping("/{studyroomId}/daily-attend")
 
-  public ResponseEntity<List<UserDto>> searchDailyAttend(@RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
-    Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-    Long userId = (Long)headerToken.get("id");
-    List<UserDto> users = userStudyroomService.searchDailyAttend(userId, studyroomId);
-    return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
-  }
+    public ResponseEntity<List<UserDto>> searchDailyAttend(
+        @RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = (Long) headerToken.get("id");
+        List<UserDto> users = userStudyroomService.searchDailyAttend(userId, studyroomId);
+        return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
+    }
 }

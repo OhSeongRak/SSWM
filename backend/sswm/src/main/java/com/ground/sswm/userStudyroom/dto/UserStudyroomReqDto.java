@@ -11,7 +11,7 @@ public class UserStudyroomReqDto {
   private boolean isDeleted;
   private int totalStudy;
   private int totalRest;
-  private int userId;
-  private int studyroomId;
+  private Long userId;
+  private Long studyroomId;
 
 }

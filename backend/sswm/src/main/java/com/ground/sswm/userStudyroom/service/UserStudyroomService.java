@@ -8,15 +8,16 @@ import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import java.util.List;
 
 public interface UserStudyroomService {
-    void join(Long userId, Long studyroomId, UserStudyroomReqDto userStudyroomReqDto);
+    void joinUser(Long userId, Long studyroomId, UserStudyroomReqDto userStudyroomReqDto);
 
-    OnAirResDto searchUser(Long userId, Long studyroomId);
+    void leaveUser(Long userId, Long studyroomId);
 
-    void leave(Long userId, Long studyroomId);
+    List<OnAirResDto> searchUser(Long userId, Long studyroomId);
 
-    void ban(Long userId, Long targetId, Long studyroomId);
 
-    void pass(Long userId, Long targetId, Long studyroomId);
+    void banUser(Long userId, Long targetId, Long studyroomId);
+
+    void passRole(Long userId, Long targetId, Long studyroomId);
 
     List<UserStudyTimeResDto> searchDailyStudy(Long studyroomId);
 
