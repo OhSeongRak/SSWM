@@ -9,31 +9,36 @@ import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Studyroom {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Long id;
+
   private String name;
-  private Integer isPublic;
+  private String notice;
+  private boolean isPublic;
   private String enterCode;
-  private Integer maxUserNum;
-  private Integer maxRestTime;
-  private Integer studyAvgTime;
+  private int maxUserNum;
+  private int maxRestTime;
+  private int studyAvgTime;
   private String image;
-  private Integer isDeleted;
-  private Date createdAt;
+  private boolean isDeleted;
+  private int createdAt;
 
 
   @Builder
-  public Studyroom(Integer id, String name, Integer isPublic, String enterCode, Integer maxUserNum,
-      Integer maxRestTime, Integer studyAvgTime, String image, Integer isDeleted, Date createdAt) {
+  public Studyroom(Long id, String name, String notice, boolean isPublic, String enterCode, int maxUserNum,
+      int maxRestTime, int studyAvgTime, String image, boolean isDeleted, int createdAt) {
     this.id = id;
     this.name = name;
+    this.notice = notice;
     this.isPublic = isPublic;
     this.enterCode = enterCode;
     this.maxUserNum = maxUserNum;
@@ -44,9 +49,29 @@ public class Studyroom {
     this.createdAt = createdAt;
   }
 
-
-
   public static Studyroom from(StudyroomDto studyroomDto) {
-    return Studyroom.builder().name(studyroomDto.getName()).build();
+    return Studyroom.builder()
+        .id(studyroomDto.getId())
+        .name(studyroomDto.getName())
+        .notice(studyroomDto.getNotice())
+        .isPublic(studyroomDto.isPublic())
+        .enterCode(studyroomDto.getEnterCode())
+        .maxUserNum(studyroomDto.getMaxUserNum())
+        .maxRestTime(studyroomDto.getMaxRestTime())
+        .studyAvgTime(studyroomDto.getStudyAvgTime())
+        .image(studyroomDto.getImage())
+        .isDeleted(studyroomDto.isDeleted())
+        .createdAt(studyroomDto.getCreatedAt())
+        .build();
+  }
+
+  public void setUpdates(StudyroomDto studyroomDto) {
+    this.setName(studyroomDto.getName());
+    this.setPublic(studyroomDto.isPublic());
+    this.setEnterCode(studyroomDto.getEnterCode());
+    this.setMaxUserNum(studyroomDto.getMaxUserNum());
+    this.setMaxRestTime(studyroomDto.getMaxRestTime());
+    this.setImage(studyroomDto.getImage());
+    this.setNotice(studyroomDto.getNotice());
   }
 }
