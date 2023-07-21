@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +19,7 @@ import lombok.Setter;
 public class UserTree {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -28,4 +30,5 @@ public class UserTree {
     private Tree tree;
 
     private int exp;
+
 }
