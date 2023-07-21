@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Tag {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
 
     private String name;
 

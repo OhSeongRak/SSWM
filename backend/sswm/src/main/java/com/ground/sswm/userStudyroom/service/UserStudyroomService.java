@@ -3,16 +3,23 @@ package com.ground.sswm.userStudyroom.service;
 
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
-import com.ground.sswm.userStudyroom.dto.UserStudyroomDto;
+import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
+import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
+import java.util.List;
 
 public interface UserStudyroomService {
-    void join(UserDto userDto, Integer studyroomId, UserStudyroomDto userStudyroomDto);
+    void joinUser(Long userId, Long studyroomId, UserStudyroomReqDto userStudyroomReqDto);
 
-    OnAirResDto searchUser(UserDto userDto, Integer studyroomId);
+    void leaveUser(Long userId, Long studyroomId);
 
-    void leave(UserDto userDto, Integer studyroomId);
+    List<OnAirResDto> searchUser(Long userId, Long studyroomId);
 
-    void ban(UserDto userDto, Integer targetId, Integer studyroomId);
 
-    void pass(UserDto userDto, Integer userId, Integer studyroomId);
+    void banUser(Long userId, Long targetId, Long studyroomId);
+
+    void passRole(Long userId, Long targetId, Long studyroomId);
+
+    List<UserStudyTimeResDto> searchDailyStudy(Long studyroomId);
+
+    List<UserDto> searchDailyAttend(Long userId, Long studyroomId);
 }
