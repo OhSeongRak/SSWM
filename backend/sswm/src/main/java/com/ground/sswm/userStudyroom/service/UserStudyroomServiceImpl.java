@@ -10,10 +10,13 @@ import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
+import com.ground.sswm.userStudyroom.dto.UserAttendResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
     @Override
     @Transactional
+    //스터디룸에 가입
     public void joinUser(Long userId, Long studyroomId, UserStudyroomReqDto userStudyroomReqDto) {
 
         //****엔티티 조회 (두 줄 주석풀고 그 밑 두 줄은 지움)****
@@ -53,7 +57,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
     @Override
     @Transactional
-
+    //스터디룸에서 탈퇴
     public void leaveUser(Long userId, Long studyroomId) {
         //userId와 studyroomId로 검색
         UserStudyroom userStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId,
@@ -95,7 +99,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
     @Override
     @Transactional
-
+    //스터디룸에서 유저 차단
     public void banUser(Long userId, Long targetId, Long studyroomId) {
         //userId(Host), studyroomId로 userStudyroom 가져오기
         UserStudyroom hostStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId,
@@ -119,6 +123,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
     @Override
     @Transactional
+    //스터디룸 방장 권한 넘기기
     public void passRole(Long userId, Long targetId, Long studyroomId) {
         //userId(Host), studyroomId로 userStudyroom 가져오기
         UserStudyroom hostStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId,
@@ -146,6 +151,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     }
 
     @Override
+    //스터디룸에서 공부량 top3 조회
     public List<UserStudyTimeResDto> searchDailyStudy(Long studyroomId) {
         //빈 UserStudyTimeResDto 생성
         List<UserStudyTimeResDto> userStudyTimeResDtos = new ArrayList<>();
@@ -176,7 +182,42 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
 
     @Override
-    public List<UserDto> searchDailyAttend(Long userId, Long studyroomId) {
-        return null;
+    //스터디룸에서 출석률 top3 조회
+    public List<UserAttendResDto> searchDailyAttend(Long studyroomId, int startDate, int endDate) {
+        //user를 다 가져온 뒤 dailylog에서 각각을 카운트 한 뒤, 정렬한 다음 3명만 조회
+        //빈 UserStudyTimeResDto 생성
+        List<UserAttendResDto> userAttendResDtos = new ArrayList<>();
+
+        //우선순위큐 생성
+        PriorityQueue<UserAttendResDto> userAttendResDtoQueue = new PriorityQueue<>();
+
+        //studyroomId에 해당하는 userStudyrooms가져오기
+        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
+
+        //deleted 하지 않은 userId만 가져오기
+        for (UserStudyroom userStudyroom: userStudyrooms) {
+            if(userStudyroom.isDeleted()) continue;
+
+            //새 userAttendResDto 생성
+            UserAttendResDto nowUserAttenedResDto = new UserAttendResDto();
+
+            //user entity가져와서 set
+            User user = userStudyroom.getUser();
+            nowUserAttenedResDto.setUserDto(UserDto.from(user));
+
+            //해당 날짜에 출석한 날짜 카운트 및 set
+            int attendDays = dailyLogRepository.countByUserIdAndStudyroomIdAndDateBetween(user.getId(), studyroomId, startDate, endDate);
+            nowUserAttenedResDto.setAttendDays(attendDays);
+
+            //우선순위 큐에 push
+            userAttendResDtoQueue.add(nowUserAttenedResDto);
+        }
+
+        //출석일이 가장 많은 3명 뽑기
+        for(int i=0; i<3; i++){
+            userAttendResDtos.add(userAttendResDtoQueue.poll());
+        }
+
+        return userAttendResDtos;
     }
 }
