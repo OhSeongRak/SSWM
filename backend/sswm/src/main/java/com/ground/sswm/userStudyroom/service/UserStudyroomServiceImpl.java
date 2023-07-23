@@ -34,23 +34,30 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     @Override
     @Transactional
     //스터디룸에 가입
-    public void joinUser(Long userId, Long studyroomId, UserStudyroomReqDto userStudyroomReqDto) {
+    public void joinUser(Long userId, Long studyroomId) {
 
-        //****엔티티 조회 (두 줄 주석풀고 그 밑 두 줄은 지움)****
+        //****엔티티 조회 (두 줄 주석풀고 그 밑 네 줄은 지움)****
         //User user = userRepository.findById(userId).get();
         //Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
         User user = new User();
+        user.setId(userId);
         Studyroom studyroom = new Studyroom();
+        studyroom.setId(studyroomId);
 
         //****이 사람이 탈퇴되었는지, 벤인지도 체크해줘야함****
         //code
 
         //userStudyroom 생성
-        UserStudyroom userStudyroom = UserStudyroom.from(userStudyroomReqDto);
+        UserStudyroom userStudyroom = new UserStudyroom();
 
         //userStudyroom에 user, studyroom 엔티티 추가
         userStudyroom.setUser(user);
         userStudyroom.setStudyroom(studyroom);
+        userStudyroom.setBan(false);
+        userStudyroom.setRole("Guest");
+        userStudyroom.setDeleted(false);
+        userStudyroom.setTotalRest(0);
+        userStudyroom.setTotalStudy(0);
 
         userStudyroomRepository.save(userStudyroom);
     }

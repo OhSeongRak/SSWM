@@ -9,7 +9,7 @@ import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import java.util.List;
 
 public interface UserStudyroomService {
-    void joinUser(Long userId, Long studyroomId, UserStudyroomReqDto userStudyroomReqDto);
+    void joinUser(Long userId, Long studyroomId);
 
     void leaveUser(Long userId, Long studyroomId);
 
