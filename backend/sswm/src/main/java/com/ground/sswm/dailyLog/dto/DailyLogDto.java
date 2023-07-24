@@ -1,6 +1,5 @@
 package com.ground.sswm.dailyLog.dto;
 
-import com.ground.sswm.dailyLog.domain.DailyLog;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class DailyLogDto {
         this.date = date;
     }
 
-    public static DailyLogDto from(DailyLog dailyLog) {
+    public static DailyLogDto from(com.ground.sswm.dailyLog.domain.DailyLog dailyLog) {
         return DailyLogDto.builder()
             .studyTime(dailyLog.getStudyTime())
             .restTime(dailyLog.getRestTime())

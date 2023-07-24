@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DailyLogRepository extends JpaRepository<DailyLog, Long> {
+public interface DailyLogRepository extends JpaRepository<com.ground.sswm.dailyLog.domain.DailyLog, Long> {
 
-    Optional<List<DailyLogDto>> findAllByUserIdAndStudyroomIdAndDateBetween(Long userId, Long studyroomId, int startDate, int endDate);
+    Optional<List<DailyLog>> findAllByUserIdAndStudyroomIdAndDateBetween(Long userId, Long studyroomId, int startDate, int endDate);
 
-    Optional<DailyLogDto> findByUserIdAndStudyroomIdAndDate(Long userId, Long studyroomId, int date);
+    Optional<DailyLog> findByUserIdAndStudyroomIdAndDate(Long userId, Long studyroomId, int date);
+
+    List<DailyLog> findTop3ByStudyroomIdAndDateOrderByStudyTimeDesc(Long studyroomId, int date);
 }

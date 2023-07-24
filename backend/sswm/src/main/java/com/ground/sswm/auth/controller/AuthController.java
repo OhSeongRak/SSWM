@@ -1,16 +1,18 @@
 package com.ground.sswm.auth.controller;
 
 import com.ground.sswm.auth.domain.Auth;
-import com.ground.sswm.auth.oauth.GoogleUserInfo;
 import com.ground.sswm.auth.dto.JwtDto;
-import com.ground.sswm.auth.oauth.OAuthProvider;
 import com.ground.sswm.auth.dto.OAuthTokenDto;
-import com.ground.sswm.auth.oauth.OAuthUserInfo;
 import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.exception.InvalidTokenException;
 import com.ground.sswm.auth.exception.UserUnAuthorizedException;
+import com.ground.sswm.auth.oauth.GoogleUserInfo;
+import com.ground.sswm.auth.oauth.KakaoUserInfo;
+import com.ground.sswm.auth.oauth.OAuthProvider;
+import com.ground.sswm.auth.oauth.OAuthUserInfo;
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.auth.service.GoogleAuthService;
+import com.ground.sswm.auth.service.KakaoAuthService;
 import com.ground.sswm.auth.service.SocialAuthService;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.service.UserService;
@@ -34,6 +36,7 @@ public class AuthController {
 
     private final UserService userService;
     private final GoogleAuthService googleAuthService;
+    private final KakaoAuthService kakaoAuthService;
     private final AuthService authService;
 
     @PostMapping("/{SOCIAL_TYPE}")
@@ -61,6 +64,10 @@ public class AuthController {
             oauthUser = new GoogleUserInfo(userInitialInfo);
         } else if (socialType.equals(OAuthProvider.KAKAO.getProvider())) {
             // TODO : kakao Login
+            socialAuthService = kakaoAuthService;
+            oAuthTokenDto = socialAuthService.getToken(authorizationCode);
+            userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
+            oauthUser = new KakaoUserInfo(userInitialInfo);
         }
 
         // provider 랑 providerId로 User 있는지 확인

@@ -13,6 +13,7 @@ import com.ground.sswm.user.domain.UserRepository;
 import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
