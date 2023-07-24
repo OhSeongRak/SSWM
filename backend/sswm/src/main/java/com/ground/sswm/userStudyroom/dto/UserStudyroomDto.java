@@ -1,10 +1,5 @@
 package com.ground.sswm.userStudyroom.dto;
 
-import com.ground.sswm.studyroom.domain.Studyroom;
-import com.ground.sswm.user.domain.User;
-import java.util.Date;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -3,30 +3,32 @@ package com.ground.sswm.auth.service;
 import com.ground.sswm.auth.dto.OAuthTokenDto;
 import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.exception.KakaoAuthenticateException;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 @Service
 public class KakaoAuthService implements SocialAuthService {
-    private String KAKAO_TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
-    private String KAKAO_USER_INFO_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
-    private String CLIENT_ID = "a8cdfb7c6e1ce33857c1ff4df66c348c";
-    private String CLIENT_SECRET = "ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV";
-    private String REDIRECT_URI = "http://localhost:3000";
+        private String KAKAO_TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
+        private String KAKAO_USER_INFO_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
+        private String CLIENT_ID = "a8cdfb7c6e1ce33857c1ff4df66c348c";
+        private String CLIENT_SECRET = "ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV";
+        private String REDIRECT_URI = "http://localhost:3000";
     @Autowired
     private RestTemplate restTemplate;
 
