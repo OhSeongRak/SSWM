@@ -15,8 +15,10 @@ import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.PriorityQueue;
 
+import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +36,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     @Override
     @Transactional
     //스터디룸에 가입
-    public void joinUser(Long userId, Long studyroomId) {
+    public String joinUser(Long userId, Long studyroomId) {
 
         //****엔티티 조회 (두 줄 주석풀고 그 밑 네 줄은 지움)****
         //User user = userRepository.findById(userId).get();
@@ -45,21 +47,39 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         studyroom.setId(studyroomId);
 
         //****이 사람이 탈퇴되었는지, 벤인지도 체크해줘야함****
-        //code
+        Optional<UserStudyroom> OpuserStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
+            userId, studyroomId);
+        if (OpuserStudyroom.isEmpty()) {
 
-        //userStudyroom 생성
-        UserStudyroom userStudyroom = new UserStudyroom();
+            //userStudyroom 생성
+            UserStudyroom newUserStudyroom = new UserStudyroom();
 
-        //userStudyroom에 user, studyroom 엔티티 추가
-        userStudyroom.setUser(user);
-        userStudyroom.setStudyroom(studyroom);
-        userStudyroom.setBan(false);
-        userStudyroom.setRole("Guest");
-        userStudyroom.setDeleted(false);
-        userStudyroom.setTotalRest(0);
-        userStudyroom.setTotalStudy(0);
+            //userStudyroom에 user, studyroom 엔티티 추가
+            newUserStudyroom.setUser(user);
+            newUserStudyroom.setStudyroom(studyroom);
+            newUserStudyroom.setBan(false);
+            newUserStudyroom.setRole("Guest");
+            newUserStudyroom.setDeleted(false);
+            newUserStudyroom.setTotalRest(0);
+            newUserStudyroom.setTotalStudy(0);
 
-        userStudyroomRepository.save(userStudyroom);
+            userStudyroomRepository.save(newUserStudyroom);
+            return "가입 성공";
+        }
+        else {
+            UserStudyroom userStudyroom = OpuserStudyroom.get();
+            if(userStudyroom.isBan()){
+                return "가입 불가";
+            }
+            else if(userStudyroom.isDeleted()){
+                userStudyroom.setDeleted(false);
+                userStudyroomRepository.save(userStudyroom);
+                return "재가입 성공";
+            }
+            else {
+                return "이미 가입됨";
+            }
+        }
     }
 
     @Override
