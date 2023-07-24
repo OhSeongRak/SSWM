@@ -6,6 +6,8 @@ import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,7 +29,8 @@ public class UserStudyroom {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String role;
+  @Enumerated(EnumType.STRING)
+  private StudyMemberRole role;
   private boolean isBan;
   private boolean isDeleted;
   private int totalStudy;
@@ -46,7 +49,7 @@ public class UserStudyroom {
   public UserStudyroom(Long id, String role, boolean isBan, boolean isDeleted, int totalStudy,
       int totalRest, User user, Studyroom studyroom) {
     this.id = id;
-    this.role = role;
+    this.role = StudyMemberRole.valueOf(role);
     this.isBan = isBan;
     this.isDeleted = isDeleted;
     this.totalStudy = totalStudy;

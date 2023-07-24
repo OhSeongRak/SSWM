@@ -7,18 +7,17 @@ import com.ground.sswm.studyroom.domain.StudyroomRepository;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.domain.UserRepository;
 import com.ground.sswm.user.dto.UserDto;
+import com.ground.sswm.userStudyroom.domain.StudyMemberRole;
 import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
 import com.ground.sswm.userStudyroom.dto.UserAttendResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
-import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
 
-import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +57,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             newUserStudyroom.setUser(user);
             newUserStudyroom.setStudyroom(studyroom);
             newUserStudyroom.setBan(false);
-            newUserStudyroom.setRole("Guest");
+            newUserStudyroom.setRole(StudyMemberRole.GUEST);
             newUserStudyroom.setDeleted(false);
             newUserStudyroom.setTotalRest(0);
             newUserStudyroom.setTotalStudy(0);
@@ -66,20 +65,17 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             userStudyroomRepository.save(newUserStudyroom);
             return "가입 성공";
         }
-        else {
-            UserStudyroom userStudyroom = OpuserStudyroom.get();
-            if(userStudyroom.isBan()){
-                return "가입 불가";
-            }
-            else if(userStudyroom.isDeleted()){
-                userStudyroom.setDeleted(false);
-                userStudyroomRepository.save(userStudyroom);
-                return "재가입 성공";
-            }
-            else {
-                return "이미 가입됨";
-            }
+
+        UserStudyroom userStudyroom = OpuserStudyroom.get();
+        if (userStudyroom.isBan()) {
+            return "가입 불가";
         }
+        if (userStudyroom.isDeleted()) {
+            userStudyroom.setDeleted(false);
+            userStudyroomRepository.save(userStudyroom);
+            return "재가입 성공";
+        }
+        return "이미 가입됨";
     }
 
     @Override
@@ -133,19 +129,21 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             studyroomId).get();
 
         //호스트가 맞는지 판단
-        if (hostStudyroom.getRole() == "Host") {
-            //게스트 가져오기
-            UserStudyroom guestStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
-                targetId,
-                studyroomId).get();
-
-            //****게스트가 맞는지 판단(자기 자신 벤 못하게)****
-            //code
-
-            //게스트 벤 및 탈퇴
-            guestStudyroom.setBan(true);
-            guestStudyroom.setDeleted(true);
+        if (hostStudyroom.getRole() == StudyMemberRole.GUEST) {
+            return; //Exception 처리
         }
+
+        //게스트 가져오기
+        UserStudyroom guestStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
+            targetId,
+            studyroomId).get();
+
+        //****게스트가 맞는지 판단(자기 자신 벤 못하게)****
+        //code
+
+        //게스트 벤 및 탈퇴
+        guestStudyroom.setBan(true);
+        guestStudyroom.setDeleted(true);
     }
 
     @Override
@@ -157,9 +155,9 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             studyroomId).get();
 
         //호스트가 맞는지 판단
-        if (hostStudyroom.getRole() == "Host") {
+        if (hostStudyroom.getRole()  == StudyMemberRole.HOST) {
             //호스트를 게스트로 변경 가져오기
-            hostStudyroom.setRole("Guest");
+            hostStudyroom.setRole(StudyMemberRole.GUEST);
 
             //게스트 가져오기
             UserStudyroom guestStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
@@ -173,7 +171,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             //code
 
             //호스트로 변경
-            guestStudyroom.setRole("Host");
+            guestStudyroom.setRole(StudyMemberRole.HOST);
         }
     }
 
@@ -184,10 +182,11 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         List<UserStudyTimeResDto> userStudyTimeResDtos = new ArrayList<>();
 
         //스터디룸 아이디 및 날짜로 검색해서 공부량 top3 가져오기
-        List<DailyLog> dailyLogs = dailyLogRepository.findTop3ByStudyroomIdAndDateOrderByStudyTimeDesc(studyroomId, 123);
+        List<DailyLog> dailyLogs = dailyLogRepository.findTop3ByStudyroomIdAndDateOrderByStudyTimeDesc(
+            studyroomId, 123);
 
         //3명의 데일리 로그로 UserStudyTimeResDto리스트 만들기
-        for (DailyLog dailyLog:dailyLogs
+        for (DailyLog dailyLog : dailyLogs
         ) {
             //새로운 UserStudyTimeResDto생성
             UserStudyTimeResDto userStudyTimeResDto = new UserStudyTimeResDto();
@@ -219,11 +218,14 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         PriorityQueue<UserAttendResDto> userAttendResDtoQueue = new PriorityQueue<>();
 
         //studyroomId에 해당하는 userStudyrooms가져오기
-        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
+        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(
+            studyroomId);
 
         //deleted 하지 않은 userId만 가져오기
-        for (UserStudyroom userStudyroom: userStudyrooms) {
-            if(userStudyroom.isDeleted()) continue;
+        for (UserStudyroom userStudyroom : userStudyrooms) {
+            if (userStudyroom.isDeleted()) {
+                continue;
+            }
 
             //새 userAttendResDto 생성
             UserAttendResDto nowUserAttenedResDto = new UserAttendResDto();
@@ -233,7 +235,8 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             nowUserAttenedResDto.setUserDto(UserDto.from(user));
 
             //해당 날짜에 출석한 날짜 카운트 및 set
-            int attendDays = dailyLogRepository.countByUserIdAndStudyroomIdAndDateBetween(user.getId(), studyroomId, startDate, endDate);
+            int attendDays = dailyLogRepository.countByUserIdAndStudyroomIdAndDateBetween(
+                user.getId(), studyroomId, startDate, endDate);
             nowUserAttenedResDto.setAttendDays(attendDays);
 
             //우선순위 큐에 push
@@ -241,7 +244,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         }
 
         //출석일이 가장 많은 3명 뽑기
-        for(int i=0; i<3; i++){
+        for (int i = 0; i < 3; i++) {
             userAttendResDtos.add(userAttendResDtoQueue.poll());
         }
 
