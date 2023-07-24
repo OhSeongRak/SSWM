@@ -1,1 +1,63 @@
+pipeline {
+    agent any
 
+//    environment {
+        // Define any environment variables you might need during the build and deployment
+//        NODE_ENV = 'production'
+//    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206', branch:'deploy-frontend'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                // Install Node.js and npm on the build machine if not already available
+                // This step is only necessary if Node.js and npm are not globally installed on your Jenkins agent.
+                // Alternatively, you can use a Docker container with Node.js pre-installed.
+                sh 'npm install'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Build your React app
+                sh 'npm run build'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run any tests you might have (optional)
+                sh 'npm test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Assuming you have a deployment script or process, deploy your app here.
+                // The deployment steps depend on your specific setup and target environment.
+                // For example, if you are deploying to a web server, you might copy the built files to the appropriate directory.
+                // If you are deploying to a cloud service, you might use deployment tools specific to that service.
+                // Adjust this section based on your deployment requirements.
+                // Example:
+                // sh 'npm run deploy'
+            }
+        }
+    }
+
+    post {
+        success {
+            // This block will be executed if the pipeline succeeds
+            echo 'Build and deployment succeeded!'
+        }
+
+        failure {
+            // This block will be executed if the pipeline fails
+            echo 'Build or deployment failed!'
+        }
+    }
+}
