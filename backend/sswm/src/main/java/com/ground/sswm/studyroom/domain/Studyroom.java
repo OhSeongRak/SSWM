@@ -31,7 +31,15 @@ public class Studyroom {
   private String image;
   private boolean isDeleted;
   private int createdAt;
+  private int userNum;
 
+//  public boolean getIsPublic() {
+//    return this.isPublic;
+//  }
+//
+//  public boolean getIsDeleted() {
+//    return this.isDeleted;
+//  }
 
   @Builder
   public Studyroom(Long id, String name, String notice, boolean isPublic, String enterCode, int maxUserNum,
@@ -54,20 +62,20 @@ public class Studyroom {
         .id(studyroomDto.getId())
         .name(studyroomDto.getName())
         .notice(studyroomDto.getNotice())
-        .isPublic(studyroomDto.isPublic())
+        .isPublic(studyroomDto.getIsPublic())
         .enterCode(studyroomDto.getEnterCode())
         .maxUserNum(studyroomDto.getMaxUserNum())
         .maxRestTime(studyroomDto.getMaxRestTime())
         .studyAvgTime(studyroomDto.getStudyAvgTime())
         .image(studyroomDto.getImage())
-        .isDeleted(studyroomDto.isDeleted())
+        .isDeleted(studyroomDto.getIsDeleted())
         .createdAt(studyroomDto.getCreatedAt())
         .build();
   }
 
   public void setUpdates(StudyroomDto studyroomDto) {
     this.setName(studyroomDto.getName());
-    this.setPublic(studyroomDto.isPublic());
+    this.setPublic(studyroomDto.getIsPublic());
     this.setEnterCode(studyroomDto.getEnterCode());
     this.setMaxUserNum(studyroomDto.getMaxUserNum());
     this.setMaxRestTime(studyroomDto.getMaxRestTime());

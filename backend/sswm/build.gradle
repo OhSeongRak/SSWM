@@ -46,6 +46,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+	// ?? 를 보기 쉽게 해주는 dependency
+	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7")
 }
 
 tasks.named('test') {

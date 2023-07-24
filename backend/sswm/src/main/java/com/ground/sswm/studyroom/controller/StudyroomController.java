@@ -2,10 +2,11 @@ package com.ground.sswm.studyroom.controller;
 
 
 import com.ground.sswm.auth.service.AuthService;
+import com.ground.sswm.studyroom.dto.SearchStudyroomReqDto;
+import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
 import com.ground.sswm.studyroom.dto.StudyroomDto;
 import com.ground.sswm.studyroom.service.StudyroomService;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,15 +30,16 @@ public class StudyroomController {
   // 전체 조회 (아직 구현하지 않았습니다!!!!!!)
   @GetMapping
   @ResponseBody
-  public ResponseEntity<List<StudyroomDto>> list() {
-    List<StudyroomDto> studyrooms = studyroomService.list();
-    return new ResponseEntity<List<StudyroomDto>>(studyrooms, HttpStatus.OK);
+  public ResponseEntity<List<SearchStudyroomResDto>> list(@RequestBody SearchStudyroomReqDto searchStudyroomReqDto) {
+    List<SearchStudyroomResDto> studyrooms = studyroomService.list(searchStudyroomReqDto);
+    return new ResponseEntity<List<SearchStudyroomResDto>>(studyrooms, HttpStatus.OK);
   }
 
   // 스터디룸 생성
   @PostMapping
   @ResponseBody
   public ResponseEntity<Long> add(/*@RequestHeader("Authorization") String token, */@RequestBody StudyroomDto studyroomDto) {
+
 //    실제로는 이렇게 해야함!
 //    Map<String, Object> headerToken = authService.getClaimsFromToken(token);
 //    Long userId = (Long) headerToken.get("id");
