@@ -3,7 +3,6 @@ package com.ground.sswm.dailyLog.domain;
 import static javax.persistence.FetchType.LAZY;
 
 
-import com.ground.sswm.dailyLog.dto.DailyLogDto;
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
 import javax.persistence.Entity;
@@ -51,8 +50,8 @@ public class DailyLog {
         this.studyroom = studyroom;
     }
 
-    public static DailyLog from(DailyLogDto dailyLogDto) {
-        return DailyLog.builder()
+    public static DailyLog from(com.ground.sswm.dailyLog.dto.DailyLogDto dailyLogDto) {
+        return com.ground.sswm.dailyLog.domain.DailyLog.builder()
             .studyTime(dailyLogDto.getStudyTime())
             .restTime(dailyLogDto.getRestTime())
             .date(dailyLogDto.getDate())

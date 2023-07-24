@@ -12,10 +12,12 @@ import com.ground.sswm.tag.domain.TagRepository;
 import com.ground.sswm.tag.dto.TagDto;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.domain.UserRepository;
+import com.ground.sswm.userStudyroom.domain.StudyMemberRole;
 import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,7 +103,7 @@ public class StudyroomServiceImpl implements StudyroomService {
 
         // INSERT UserSudyroom
         UserStudyroom userStudyroom = new UserStudyroom();
-        userStudyroom.setRole("HOST");
+        userStudyroom.setRole(StudyMemberRole.HOST);
         userStudyroom.setBan(false);
         userStudyroom.setDeleted(false);
         userStudyroom.setTotalStudy(0);

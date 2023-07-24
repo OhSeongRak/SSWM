@@ -13,10 +13,4 @@ public class DailyLogServiceImpl implements DailyLogService {
 
     private final DailyLogRepository dailyLogRepository;
 
-    @Override
-    public List<DailyLogDto> getDailyLogs(Long userId, Long studyroomId, int startDate,
-        int endDate) {
-
-        return dailyLogRepository.findAllByUserIdAndStudyroomIdAndDateBetween(userId, studyroomId, startDate, endDate).get();
-    }
 }
