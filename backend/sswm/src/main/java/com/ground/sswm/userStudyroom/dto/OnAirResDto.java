@@ -1,6 +1,5 @@
 package com.ground.sswm.userStudyroom.dto;
 
-import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;

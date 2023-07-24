@@ -3,7 +3,6 @@ package com.ground.sswm.auth.service;
 import com.ground.sswm.auth.dto.OAuthTokenDto;
 import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import org.springframework.stereotype.Service;
-
 public interface SocialAuthService {
     // 프론트에서 받은 token 이용해서, 구글로부터 access_token과 id_token 받기
     OAuthTokenDto getToken(String code);

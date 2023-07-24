@@ -3,22 +3,17 @@ package com.ground.sswm.auth.service;
 import com.ground.sswm.auth.dto.OAuthTokenDto;
 import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.exception.GoogleAuthenticateException;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
