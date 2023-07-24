@@ -9,3 +9,5 @@
 - master - develop - feature/피처명  
 ### ✅ 코드리뷰 
 - `feature/피처명` -> `develop` : 최소 2명 코드리뷰 진행 후, 머지  
+### 지라 - 메타모스트 - 깃랩 연동
+- [연동방법](https://www.bearpooh.com/62)
