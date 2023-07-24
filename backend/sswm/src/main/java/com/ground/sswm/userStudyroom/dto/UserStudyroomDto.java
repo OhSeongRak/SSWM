@@ -10,7 +10,7 @@ public class UserStudyroomDto {
   private Integer isDeleted;
   private Integer totalStudy;
   private Integer totalRest;
-  private Integer userId;
-  private Integer studyroomId;
+  private Long userId;
+  private Long studyroomId;
 
 }
