@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface StudyroomService {
 
-    Long add(StudyroomDto studyroomDto);
+    Long add(Long userId, StudyroomDto studyroomDto);
 
     List<StudyroomDto> list();
 
