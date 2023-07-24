@@ -93,7 +93,7 @@ public class AuthController {
         throws InvalidTokenException {
         log.debug("[POST] /refresh-access-token " + refreshToken);
         Map<String, Object> claims = authService.getClaimsFromToken(refreshToken);
-        Auth saved = authService.getSavedTokenByUserId((Long) claims.get("id"));
+        Auth saved = authService.getSavedTokenByUserId(Long.valueOf(claims.get("id").toString()));
         if (refreshToken.equals(saved.getRefreshToken())) {
             String accessToken = authService.createAccessToken(claims);
             saved.setAccessToken(accessToken);

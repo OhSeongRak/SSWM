@@ -12,5 +12,5 @@ public interface UserStudyroomRepository extends JpaRepository<UserStudyroom, Lo
 
     List<UserStudyroom> findAllByStudyroomId(Long studyroomId);
 
-    //UserStudyroom findByStudyroomId(Integer studyroomId);
+    //UserStudyroom findByStudyroomId(Long studyroomId);
 }
