@@ -2,14 +2,15 @@ package com.ground.sswm.userStudyroom.controller;
 
 
 import com.ground.sswm.auth.service.AuthService;
+
 import com.ground.sswm.user.dto.UserDto;
-import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
