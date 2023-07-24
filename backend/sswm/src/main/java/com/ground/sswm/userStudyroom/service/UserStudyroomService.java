@@ -3,12 +3,13 @@ package com.ground.sswm.userStudyroom.service;
 
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
+import com.ground.sswm.userStudyroom.dto.UserAttendResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import java.util.List;
 
 public interface UserStudyroomService {
-    void joinUser(Long userId, Long studyroomId, UserStudyroomReqDto userStudyroomReqDto);
+    String joinUser(Long userId, Long studyroomId);
 
     void leaveUser(Long userId, Long studyroomId);
 
@@ -21,5 +22,5 @@ public interface UserStudyroomService {
 
     List<UserStudyTimeResDto> searchDailyStudy(Long studyroomId);
 
-    List<UserDto> searchDailyAttend(Long userId, Long studyroomId);
+    List<UserAttendResDto> searchDailyAttend(Long studyroomId, int startDate, int endDate);
 }
