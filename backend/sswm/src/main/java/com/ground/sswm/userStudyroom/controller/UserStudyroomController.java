@@ -33,14 +33,14 @@ public class UserStudyroomController {
 
     @PostMapping("/{studyroomId}/join")
     //유저가 스터디룸에 가입함
-    public ResponseEntity<String> join(/*@RequestHeader("Authorization") String token,*/@PathVariable Long studyroomId) {
+    public ResponseEntity<String> join(/*@RequestHeader("Authorization") String token,*/@RequestHeader("userId") Long userId, @PathVariable Long studyroomId) {
 
         //토큰에서 현재 유저 아이디 가져옴
         //Map<String, Object> headerToken = authService.getClaimsFromToken(token);
         //Long userId = (Long) headerToken.get("id");
 
         //service에 등록 요청
-        String result = userStudyroomService.joinUser(1L, studyroomId);
+        String result = userStudyroomService.joinUser(userId, studyroomId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
