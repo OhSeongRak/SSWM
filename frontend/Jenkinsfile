@@ -8,7 +8,7 @@ node {
         $class: 'GitSCM',
         branches: [[name: 'deploy-frontend']],
         userRemoteConfigs: [[
-            url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
+            url: 'https://gitlab%2bdeploy-token-5916@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
         ]]
     ])
 
