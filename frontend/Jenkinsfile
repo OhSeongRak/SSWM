@@ -1,9 +1,6 @@
 pipeline {
     agent {
-        docker {
-            image 'node:18.16.1' // Use Node.js 18.16.1 Docker image
-            args '-p 3000:3000' // Optional: Publish port 3000 if your app runs on this port
-        }
+        
     }
      stages {
         stage('Checkout') {
