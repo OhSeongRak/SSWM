@@ -1,4 +1,4 @@
-pipeline {
+node {
     agent none
     environment {
         DOCKER_IMAGE = 'node:18.16.1' // Node.js 버전 18.16.1 이미지를 사용합니다.
