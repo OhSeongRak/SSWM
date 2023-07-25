@@ -5,7 +5,11 @@ node {
             args '-p 3000:3000' // Optional: Publish port 3000 if your app runs on this port
         }
     }
-     stages {
+    environment {
+        // You can define environment variables if needed
+        // For example: 'NODE_ENV' or 'REACT_APP_API_URL'
+    }
+    stages {
         stage('Checkout') {
             steps {
                 // Checkout your code from your Git repository
@@ -13,7 +17,19 @@ node {
                 git branch: 'deploy-frontend', url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
             }
         }
-     
+        stage('Install Dependencies') {
+            steps {
+                // Install dependencies using npm or yarn
+                sh 'npm install' // or 'yarn install'
+            }
+        }
+        stage('Build') {
+            steps {
+                // Build your React project
+                sh 'npm run build' // or 'yarn build'
+            }
+        }
+        // Add more stages as needed (e.g., test, deploy, etc.)
     }
     post {
         success {
@@ -23,5 +39,4 @@ node {
             // Actions to perform if the pipeline fails
         }
     }
-    
 }
