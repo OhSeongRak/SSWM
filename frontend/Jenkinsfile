@@ -1,11 +1,14 @@
 pipeline {
-    agent any
-
-//    environment {
-        // Define any environment variables you might need during the build and deployment
-//        NODE_ENV = 'production'
-//    }
-
+    agent {
+        docker {
+            image 'node:18.16.1' // Use Node.js 18.16.1 Docker image
+            args '-p 3000:3000' // Optional: Publish port 3000 if your app runs on this port
+        }
+    }
+    environment {
+        // You can define environment variables if needed
+        // For example: 'NODE_ENV' or 'REACT_APP_API_URL'
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -17,16 +20,12 @@ pipeline {
         }
 
     }
-
     post {
         success {
-            // This block will be executed if the pipeline succeeds
-            echo 'Build and deployment succeeded!'
+            // Actions to perform if the pipeline is successful
         }
-
         failure {
-            // This block will be executed if the pipeline fails
-            echo 'Build or deployment failed!'
+            // Actions to perform if the pipeline fails
         }
     }
 }
