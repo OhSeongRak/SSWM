@@ -12,7 +12,7 @@ node {
         dir ('backend') {
             dir ('sswm') {
                 sh "chmod +x gradlew"
-                sh ./gradlew cleanQuerydslSourceDir
+                sh "./gradlew cleanQuerydslSourceDir"
                 sh "./gradlew compileJava"
             }
         }
