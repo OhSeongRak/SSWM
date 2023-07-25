@@ -5,25 +5,5 @@ pipeline {
             args '-p 3000:3000' // Optional: Publish port 3000 if your app runs on this port
         }
     }
-    environment {
-        // You can define environment variables if needed
-        // For example: 'NODE_ENV' or 'REACT_APP_API_URL'
-    }
-    stages {
-        stage('Checkout') {
-            steps {
-                git url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206', branch:'deploy-frontend'
-               
-            }
-        }
-
-    }
-    post {
-        success {
-            // Actions to perform if the pipeline is successful
-        }
-        failure {
-            // Actions to perform if the pipeline fails
-        }
-    }
+    
 }
