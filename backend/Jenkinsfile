@@ -8,7 +8,7 @@ node {
     stage('Build') {
         sh "echo start building ,,"
         sh "cd backend/sswm"
-        sh "java --version"
+        sh "java -version"
         dir ('backend') {
             dir ('sswm') {
                 sh "chmod +x gradlew"
