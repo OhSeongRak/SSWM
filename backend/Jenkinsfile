@@ -7,10 +7,10 @@ node {
 
     stage('Build') {
         sh "echo start building ,,"
-        sh "cd backend/sswm-front"
+        sh "cd backend/sswm"
 
         dir ('backend') {
-            dir ('sswm-front') {
+            dir ('sswm') {
                 sh "pwd"
             }
         }
@@ -26,4 +26,3 @@ node {
         // sh "echo deployment not yet determined"
     }
 }
-
