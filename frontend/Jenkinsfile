@@ -9,7 +9,6 @@ node {
         branches: [[name: 'deploy-frontend']],
         userRemoteConfigs: [[
             url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
-            credentialsId: 'CdgT7t8ASeVSDKjNy3wF'
         ]]
     ])
 
