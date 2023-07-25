@@ -1,45 +1,29 @@
-pipeline {
-     agent any // 실행할 에이전트 선택, "any"는 사용 가능한 모든 노드에서 실행
+node {
+    stage('Checkout') {
+        sh "echo start checkout"
+        git url: 'https://a206:MdQZeq3wYF45cw6yCAQ1@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git', branch: 'deploy-backend'
+        sh "echo checkout done"
+    }
 
-     stages {
-        stage('Build') {
-          steps {
-            sh 'gradle clean build'
-          }
-     }
+    stage('Build') {
+        sh "echo start building ,,"
+        sh "cd backend/sswm-front"
 
-//         stage('Test') {
-//             steps {
-//                  // 테스트 실행 (선택 사항)
-//                  // 프로젝트에 테스트가 있다면 여기서 실행
-//                  sh './gradlew test'
-//              }
-//         }
-//
-//         stage('Deploy') {
-//              steps {
-//                  // 배포 단계 (선택 사항)
-//                  // 빌드 결과물을 서버에 배포하는 작업 수행
-//                  // 예를 들어, AWS, Docker 등을 사용하여 배포
-//                  // sh './gradlew deploy'
-//              }
-//         }
-     }
+        dir ('backend') {
+            dir ('sswm-front') {
+                sh "pwd"
+            }
+        }
+        
+        sh "echo build finished"
+    }
 
-//      post {
-//          always {
-//              // 항상 실행되는 부분 (성공 또는 실패에 관계없이)
-//              // 추가적인 정리 작업 수행
-//          }
-//
-//          success {
-//              // 성공적으로 빌드가 완료된 경우 실행되는 부분
-//              // 예: 이메일 알림, 알림 슬랙 채널 등
-//          }
-//
-//          failure {
-//              // 빌드가 실패한 경우 실행되는 부분
-//              // 예: 알림, 로그 수집 등
-//          }
-//      }
- }
+    stage ('unit test') {
+
+    }
+
+    stage('Deploy') {
+        // sh "echo deployment not yet determined"
+    }
+}
+
