@@ -1,29 +1,5 @@
 node {
-    // Define the Docker image and options
-    def dockerImage = 'node:18.16.1'
-    def dockerOptions = '-p 3000:3000'
-    
-    // Checkout the code from the GitLab repository
-    checkout([
-        $class: 'GitSCM',
-        branches: [[name: 'deploy-frontend']],
-        userRemoteConfigs: [[
-            url: 'https://gitlab%2bdeploy-token-5916@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
-        ]]
-    ])
-
-    // Define the Docker container with Node.js image
-    def dockerContainer = docker.image(dockerImage).withRun(dockerOptions)
-
-    // Run the pipeline steps inside the Docker container
-    dockerContainer.inside {
-        // Set up environment variables if needed
-        // env.NODE_ENV = 'production'
-
-        // Install dependencies using npm or yarn
-        sh 'npm install' // or 'yarn install'
-
-        // Build your React project
-        sh 'npm run build' // or 'yarn build'
+    stage('Test') {
+        sh "echo start testing"
     }
 }
