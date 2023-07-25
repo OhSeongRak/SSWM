@@ -5,6 +5,15 @@ node {
         GIT_BRANCH = 'deploy-frontend' // 빌드할 Git 브랜치
     }
     stages {
+        stage('Pull Docker Image') {
+            agent any
+            steps {
+                script {
+                    // Pull the specified Docker image
+                    docker.image(DOCKER_IMAGE).pull()
+                }
+            }
+        }
         stage('Build in Docker') {
             agent {
                 docker { image DOCKER_IMAGE }
