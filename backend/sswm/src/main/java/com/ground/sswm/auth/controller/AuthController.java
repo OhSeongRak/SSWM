@@ -42,10 +42,14 @@ public class AuthController {
     @PostMapping("/{SOCIAL_TYPE}")
     public ResponseEntity<JwtDto> loginOrRegister(@RequestBody Map<String, Object> data,
         @PathVariable("SOCIAL_TYPE") String socialType) {
+
         log.debug("[POST] /auth/" + socialType);
         // 회원가입 -> code 받아와서 회원 정보 요청 보내고, (신규사용자) 데이터베이스 정보 저장 후, sswm 만의 토큰 발급
         // 로그인 -> code 받아와서 회원 정보 요청 보내고, 데이터베이스 정보 확인해서,  sswm 만의 토큰 발급
+        System.out.println("data = " + data);
+
         String authorizationCode = (String) data.get("code");
+
         log.debug("AuthorizationCode: {}", authorizationCode);
 
         if (authorizationCode == null) {
@@ -57,11 +61,17 @@ public class AuthController {
         OAuthTokenDto oAuthTokenDto;
         OAuthUserInfo oauthUser = null;
         OAuthUserInfoDto userInitialInfo;
+
+        System.out.println("OAuthProvider.GOOGLE.getProvider() = " + OAuthProvider.GOOGLE.getProvider());
         if (socialType.equals(OAuthProvider.GOOGLE.getProvider())) {
             socialAuthService = googleAuthService;
             oAuthTokenDto = socialAuthService.getToken(authorizationCode);
             userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
             oauthUser = new GoogleUserInfo(userInitialInfo);
+            System.out.println("socialAuthService = " + socialAuthService);
+            System.out.println("oAuthTokenDto = " + oAuthTokenDto);
+            System.out.println("userInitialInfo = " + userInitialInfo);
+            System.out.println("oauthUser = " + oauthUser);
         } else if (socialType.equals(OAuthProvider.KAKAO.getProvider())) {
             // TODO : kakao Login
             socialAuthService = kakaoAuthService;
@@ -85,6 +95,8 @@ public class AuthController {
             authEntity.setAccessToken(jwtDto.getAccessToken());
             authService.updateTokens(authEntity);
         }
+
+        System.out.println("일로오나?");
         return new ResponseEntity<>(jwtDto, HttpStatus.OK);
     }
 
