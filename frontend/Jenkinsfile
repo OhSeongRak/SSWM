@@ -1,7 +1,7 @@
 node {
     stage('Test') {
         sh "echo start testing"
-        git url: 'https://gitlab%2bdeploy-token-5916@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git', branch: 'deploy-frontend', credentialsId: ssafy
+        git url: 'https://gitlab%2bdeploy-token-5916@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git', branch: 'deploy-frontend', credentialsId: "ssafy"
         sh "echo done"
     }
 
