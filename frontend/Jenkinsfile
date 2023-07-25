@@ -13,9 +13,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206', branch:'deploy-frontend'
-                dir('sswm-front'){
-                    sh 'pwd'
-                } 
+               
             }
         }
 
