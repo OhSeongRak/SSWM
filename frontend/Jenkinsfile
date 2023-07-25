@@ -1,22 +1,42 @@
 pipeline {
-    agent {
-        
+    agent any
+    
+    environment {
+        GIT_URL = "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git"
     }
-     stages {
-        stage('Checkout') {
+
+    stages {
+        stage('Pull') {
             steps {
-               
+                git url: "${GIT_URL}", branch: "deploy-frontend", poll: true, changelog: true
             }
         }
-     
-    }
-    post {
-        success {
-            // Actions to perform if the pipeline is successful
+        
+        stage('React Build') {
+            steps {
+                sh 'npm install -g yarn'
+                sh 'yarn --cwd ./client install --network-timeout 100000'
+                sh 'yarn --cwd ./client build'
+            }
         }
-        failure {
-            // Actions to perform if the pipeline fails
+        
+        stage('Build') {
+            steps {
+                sh 'docker build -t basepage/nginx ./client/'
+            }
+        }
+        
+        stage('Deploy') {
+            steps{
+                sh 'docker ps -q --filter name=nginx | grep -q . && docker stop nginx && docker rm nginx'
+                sh 'docker run -d --name nginx -p 80:80 -p 443:443 -v /etc/letsencrypt/archive:/etc/letsencrypt/archive -u root basepage/nginx'
+            }
+        }
+
+       stage('Finish') {
+            steps{
+                sh 'docker images -qf dangling=true | xargs -I{} docker rmi {}'
+            }
         }
     }
-    
 }
