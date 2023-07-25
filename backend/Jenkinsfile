@@ -9,8 +9,12 @@ node {
         sh "echo start building ,,"
         sh "cd backend/sswm"
         sh "java -version"
-        sh "./gradlew clean build"
-
+        dir ('backend') {
+            dir ('sswm') {
+                sh "chmod +x gradlew"
+                sh "./gradlew compileJava"
+            }
+        }
         
         sh "echo build finished"
     }
