@@ -8,9 +8,7 @@ pipeline {
      stages {
         stage('Checkout') {
             steps {
-                // Checkout your code from your Git repository
-                // Replace 'YOUR_GIT_REPOSITORY_URL' and 'deploy-frontend' with your actual Git URL and branch name
-                git branch: 'deploy-frontend', url: 'https://gitlab+deploy-token-5916:7LJDt7Rb-iTEqzBh2ghm@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
+               
             }
         }
      
