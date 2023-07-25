@@ -1,42 +1,29 @@
 node {
-    agent {
-        docker {
-            image 'node:18.16.1' // Use Node.js 18.16.1 Docker image
-            args '-p 3000:3000' // Optional: Publish port 3000 if your app runs on this port
-        }
-    }
-    environment {
-        // You can define environment variables if needed
-        // For example: 'NODE_ENV' or 'REACT_APP_API_URL'
-    }
-    stages {
-        stage('Checkout') {
-            steps {
-                // Checkout your code from your Git repository
-                // Replace 'YOUR_GIT_REPOSITORY_URL' and 'deploy-frontend' with your actual Git URL and branch name
-                git branch: 'deploy-frontend', url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                // Install dependencies using npm or yarn
-                sh 'npm install' // or 'yarn install'
-            }
-        }
-        stage('Build') {
-            steps {
-                // Build your React project
-                sh 'npm run build' // or 'yarn build'
-            }
-        }
-        // Add more stages as needed (e.g., test, deploy, etc.)
-    }
-    post {
-        success {
-            // Actions to perform if the pipeline is successful
-        }
-        failure {
-            // Actions to perform if the pipeline fails
-        }
+    // Define the Docker image and options
+    def dockerImage = 'node:18.16.1'
+    def dockerOptions = '-p 3000:3000'
+    
+    // Checkout the code from the GitLab repository
+    checkout([
+        $class: 'GitSCM',
+        branches: [[name: 'deploy-frontend']],
+        userRemoteConfigs: [[
+            url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
+        ]]
+    ])
+
+    // Define the Docker container with Node.js image
+    def dockerContainer = docker.image(dockerImage).withRun(dockerOptions)
+
+    // Run the pipeline steps inside the Docker container
+    dockerContainer.inside {
+        // Set up environment variables if needed
+        // env.NODE_ENV = 'production'
+
+        // Install dependencies using npm or yarn
+        sh 'npm install' // or 'yarn install'
+
+        // Build your React project
+        sh 'npm run build' // or 'yarn build'
     }
 }
