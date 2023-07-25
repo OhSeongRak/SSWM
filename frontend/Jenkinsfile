@@ -1,38 +1,29 @@
 node {
-    agent any
-    environment {
-        DOCKER_IMAGE = 'node:18.16.1' // Node.js 버전 18.16.1 이미지를 사용합니다.
-        GIT_REPO_URL = 'https://gitlab%2bdeploy-token-5916@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
-        GIT_BRANCH = 'deploy-frontend' // 빌드할 Git 브랜치
-    }
-    stages {
-        stage('Build in Docker') {
-            agent {
-                docker { image DOCKER_IMAGE }
-            }
-            steps {
-                checkout([$class: 'GitSCM', branches: [[name: GIT_BRANCH]], userRemoteConfigs: [[url: GIT_REPO_URL]]]) // GitLab 저장소에서 코드를 가져옵니다.
-                sh 'npm install' // 필요한 Node.js 패키지를 설치합니다.
-                sh 'npm run build' // React 애플리케이션을 빌드합니다.
-            }
-        }
-        stage('Test in Docker') {
-            agent {
-                docker { image DOCKER_IMAGE }
-            }
-            steps {
-                sh 'npm test' // 테스트를 실행합니다. (예: Jest 또는 다른 테스트 프레임워크 사용)
-            }
-        }
-        stage('Deploy') {
-            agent any
-            steps {
-                // 빌드된 결과물을 배포하는 단계를 설정합니다. (예: 필요한 경우 배포 스크립트 실행)
-                // 예시: sh 'npm run deploy'
-            }
-        }
-    }
-    post {
-        // 빌드 이후에 실행되는 처리를 설정합니다. (예: 필요한 경우 Slack 알림 등)
+    // Define the Docker image and options
+    def dockerImage = 'node:18.16.1'
+    def dockerOptions = '-p 3000:3000'
+    
+    // Checkout the code from the GitLab repository
+    checkout([
+        $class: 'GitSCM',
+        branches: [[name: 'deploy-frontend']],
+        userRemoteConfigs: [[
+            url: 'https://gitlab%2bdeploy-token-5916@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git'
+        ]]
+    ])
+
+    // Define the Docker container with Node.js image
+    def dockerContainer = docker.image(dockerImage).withRun(dockerOptions)
+
+    // Run the pipeline steps inside the Docker container
+    dockerContainer.inside {
+        // Set up environment variables if needed
+        // env.NODE_ENV = 'production'
+
+        // Install dependencies using npm or yarn
+        sh 'npm install' // or 'yarn install'
+
+        // Build your React project
+        sh 'npm run build' // or 'yarn build'
     }
 }
