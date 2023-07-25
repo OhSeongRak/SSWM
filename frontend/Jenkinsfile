@@ -2,7 +2,7 @@ node {
 
     stage('Checkout') {
         sh "echo start checkout"
-        git url: GIT_REPO_URL, branch: 'deploy-frontend'
+        git url: 'https://a206:MdQZeq3wYF45cw6yCAQ1@lab.ssafy.com/s09-webmobile1-sub2/S09P12A206.git', branch: 'deploy-frontend'
         sh "echo checkout done"
     }
 
