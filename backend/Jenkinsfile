@@ -11,7 +11,7 @@ node {
 
         dir ('backend') {
             dir ('sswm') {
-                sh "pwd"
+                sh "gradle clean build"
             }
         }
         
