@@ -73,6 +73,9 @@ configurations {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
+tasks.withType(JavaCompile) {
+	options.annotationProcessorGeneratedSourcesDirectory = file(querydslSrcDir)
+}
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
