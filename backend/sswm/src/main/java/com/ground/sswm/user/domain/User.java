@@ -48,7 +48,6 @@ public class User {
 
     public static User from(UserDto userDto) {
         return User.builder()
-            .email(userDto.getEmail())
             .nickname(userDto.getNickname())
             .image(userDto.getImage())
             .build();
