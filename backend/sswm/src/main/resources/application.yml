@@ -60,7 +60,7 @@ spring:
     activate:
       on-profile: production_database
   datasource:
-    url: jdbc:mysql://localhost:3306/sswm
+    url: jdbc:mysql://host.docker.internal:3306/sswm
     username: root
     password: root
 
