@@ -6,6 +6,7 @@ node {
         sh "echo checkout done"
     }
 
+
     stage('Build') {
         sh "echo start building ,,"
         sh "cd frontend/sswm-front"
