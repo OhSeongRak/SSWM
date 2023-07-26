@@ -12,20 +12,17 @@ UserService {
 
     void addUser(UserDto userReqDto);
 
-    UserResDto getUserResDto(Long userId);
+  UserResDto getUser(Long userId);
 
-    UserDto getUserDto(Long userId);
+  void modifyUser(Long userId, UserDto userReqDto);
 
     List<UserDto> getAllUser();
 
-    void delete(Long userId);
+  void delete(Long userId);
 
     User getUserByProviderId(String provider, String providerId);
 
     User addOAuthUser(OAuthUserInfo oauthUser);
-
-    void modifyUser(Long id, String nickname, String imagePath);
-
 
 
 }
