@@ -81,28 +81,6 @@ public class UserController {
         return new ResponseEntity<>("닉네임 수정 성공", HttpStatus.OK);
     }
 
-    @PostMapping("/uploads")
-    public ResponseEntity<Object> uploadFiles(@RequestHeader("Authorization") String token,
-        @RequestParam(value = "fileType") String fileType,
-        @RequestPart(value = "files") MultipartFile multipartFile) {
-
-        // 토큰을 가져오고
-        Map<String, Object> claims = jwtUtil.getClaims(token);
-
-        // 토큰에서 유저 아이디를 가져온다
-        long userId = Long.valueOf(claims.get("id").toString());
-        UserDto userDto = userService.getUserDto(userId);
-
-        // 이미지가 존재하면 삭제하고
-        if (userDto.getImage() != null) {
-            fileManageUtil.deleteFile(userDto.getImage());
-        }
-
-        //user.setImage(filePath);
-        //userRepository.save(user);
-        return new ResponseEntity<>("이미지 저장 완료", HttpStatus.OK);
-    }
-
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestHeader("Authorization") String token) {
         Map<String, Object> claims = jwtUtil.getClaims(token);
