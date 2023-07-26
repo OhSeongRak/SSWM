@@ -1,4 +1,4 @@
-package com.ground.sswm.auth.jwt;
+package com.ground.sswm.auth.util;
 
 
 import io.jsonwebtoken.Claims;
