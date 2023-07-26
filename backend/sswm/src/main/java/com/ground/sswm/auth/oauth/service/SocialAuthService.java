@@ -1,8 +1,7 @@
-package com.ground.sswm.auth.service;
+package com.ground.sswm.auth.oauth.service;
 
 import com.ground.sswm.auth.dto.OAuthTokenDto;
 import com.ground.sswm.auth.dto.OAuthUserInfoDto;
-import org.springframework.stereotype.Service;
 
 public interface SocialAuthService {
 

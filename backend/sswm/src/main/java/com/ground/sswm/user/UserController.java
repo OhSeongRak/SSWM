@@ -1,7 +1,7 @@
-package com.ground.sswm.user.controller;
+package com.ground.sswm.user;
 
 
-import com.ground.sswm.auth.util.JwtUtil;
+import com.ground.sswm.auth.jwt.JwtUtil;
 import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.user.dto.UserResDto;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,10 +71,11 @@ public class UserController {
         long userId = Long.valueOf(claims.get("id").toString());
 
         String filePath = null;
-        if (fileType!=null && !fileType.isBlank() && multipartFile!=null && !multipartFile.isEmpty()) {
+        if (fileType != null && !fileType.isBlank() && multipartFile != null
+            && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
         }
-        log.debug("[filePath]>>>> "+filePath);
+        log.debug("[filePath]>>>> " + filePath);
         userService.modifyUser(userId, nickname, filePath);
 
         return new ResponseEntity<>("닉네임 수정 성공", HttpStatus.OK);

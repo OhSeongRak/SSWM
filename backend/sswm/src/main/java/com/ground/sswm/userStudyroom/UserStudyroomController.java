@@ -1,17 +1,14 @@
-package com.ground.sswm.userStudyroom.controller;
+package com.ground.sswm.userStudyroom;
 
 
 import com.ground.sswm.auth.service.AuthService;
-
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.userStudyroom.dto.OnAirResDto;
 import com.ground.sswm.userStudyroom.dto.UserAttendResDto;
 import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
-import com.ground.sswm.userStudyroom.dto.UserStudyroomReqDto;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
 import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +31,8 @@ public class UserStudyroomController {
 
     @PostMapping("/{studyroomId}/join")
     //유저가 스터디룸에 가입함
-    public ResponseEntity<String> join(/*@RequestHeader("Authorization") String token,*/@RequestHeader("userId") Long userId, @PathVariable Long studyroomId) {
+    public ResponseEntity<String> join(/*@RequestHeader("Authorization") String token,*/
+        @RequestHeader("userId") Long userId, @PathVariable Long studyroomId) {
 
         //토큰에서 현재 유저 아이디 가져옴
         //Map<String, Object> headerToken = authService.getClaimsFromToken(token);
@@ -122,7 +120,8 @@ public class UserStudyroomController {
     public ResponseEntity<List<UserAttendResDto>> searchDailyAttend(
         /*@RequestHeader("Authorization") String token,*/ @PathVariable Long studyroomId) {
 
-        List<UserAttendResDto> users = userStudyroomService.searchDailyAttend(studyroomId, 123, 126);
+        List<UserAttendResDto> users = userStudyroomService.searchDailyAttend(studyroomId, 123,
+            126);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }

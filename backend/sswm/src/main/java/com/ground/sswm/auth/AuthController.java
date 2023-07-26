@@ -1,4 +1,4 @@
-package com.ground.sswm.auth.controller;
+package com.ground.sswm.auth;
 
 import com.ground.sswm.auth.domain.Auth;
 import com.ground.sswm.auth.dto.JwtDto;
@@ -10,10 +10,10 @@ import com.ground.sswm.auth.oauth.GoogleUserInfo;
 import com.ground.sswm.auth.oauth.KakaoUserInfo;
 import com.ground.sswm.auth.oauth.OAuthProvider;
 import com.ground.sswm.auth.oauth.OAuthUserInfo;
+import com.ground.sswm.auth.oauth.service.GoogleAuthService;
+import com.ground.sswm.auth.oauth.service.KakaoAuthService;
+import com.ground.sswm.auth.oauth.service.SocialAuthService;
 import com.ground.sswm.auth.service.AuthService;
-import com.ground.sswm.auth.service.GoogleAuthService;
-import com.ground.sswm.auth.service.KakaoAuthService;
-import com.ground.sswm.auth.service.SocialAuthService;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.service.UserService;
 import java.util.Map;

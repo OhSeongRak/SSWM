@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserTreeServiceImpl implements UserTreeService{
+public class UserTreeServiceImpl implements UserTreeService {
+
     private final UserTreeRepository userTreeRepository;
 
-    public List<UserTree> findAll(){
+    public List<UserTree> findAll() {
         return userTreeRepository.findAll();
     }
 }
