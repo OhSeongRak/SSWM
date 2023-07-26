@@ -1,4 +1,4 @@
-package com.ground.sswm.auth.service;
+package com.ground.sswm.auth.oauth.service;
 
 import com.ground.sswm.auth.dto.OAuthTokenDto;
 import com.ground.sswm.auth.dto.OAuthUserInfoDto;
@@ -19,10 +19,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 @Service
 public class GoogleAuthService implements SocialAuthService {
-    private String GOOGLE_TOKEN_REQUEST_URL="https://oauth2.googleapis.com";
-    private String CLIENT_ID="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com";
-    private String CLIENT_SECRET="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";
-    private String REDIRECT_URI="http://localhost:3000";
+
+    private String GOOGLE_TOKEN_REQUEST_URL = "https://oauth2.googleapis.com";
+    private String CLIENT_ID = "508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com";
+    private String CLIENT_SECRET = "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";
+    private String REDIRECT_URI = "http://localhost:3000";
     @Autowired
     private RestTemplate restTemplate;
 
@@ -34,8 +35,9 @@ public class GoogleAuthService implements SocialAuthService {
         JSONParser parser;
         JSONObject elem;
         try {
-            ResponseEntity<String> responseEntity = restTemplate.postForEntity(GOOGLE_TOKEN_REQUEST_URL + "/token",
-                    params, String.class);
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+                GOOGLE_TOKEN_REQUEST_URL + "/token",
+                params, String.class);
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
                 log.debug("구글 API 연결 실패 : code = {}", code);
                 throw new GoogleAuthenticateException("[1] 구글 서버와의 연결에 실패하였습니다.");
@@ -45,13 +47,13 @@ public class GoogleAuthService implements SocialAuthService {
             parser = new JSONParser();
             elem = (JSONObject) parser.parse(responseBody);
             return OAuthTokenDto.builder()
-                    .token_type(elem.get("token_type").toString())
-                    .access_token(elem.get("access_token").toString())
-                    .expires_in(elem.get("expires_in").toString())
-                    .refresh_token(elem.get("refresh_token").toString())
-                    .scope(elem.get("scope").toString())
-                    .id_token(elem.get("id_token").toString())
-                    .build();
+                .token_type(elem.get("token_type").toString())
+                .access_token(elem.get("access_token").toString())
+                .expires_in(elem.get("expires_in").toString())
+                .refresh_token(elem.get("refresh_token").toString())
+                .scope(elem.get("scope").toString())
+                .id_token(elem.get("id_token").toString())
+                .build();
 
         } catch (ParseException e) {
             log.debug("JSON 파싱 실패 : {}", e.getMessage());
@@ -65,20 +67,22 @@ public class GoogleAuthService implements SocialAuthService {
     @Override
     public OAuthUserInfoDto getUserInfo(OAuthTokenDto dto) {
         String idToken = dto.getId_token();
-        String requestUrl = UriComponentsBuilder.fromHttpUrl(GOOGLE_TOKEN_REQUEST_URL + "/tokeninfo")
-                .queryParam("id_token", idToken).toUriString();
+        String requestUrl = UriComponentsBuilder.fromHttpUrl(
+                GOOGLE_TOKEN_REQUEST_URL + "/tokeninfo")
+            .queryParam("id_token", idToken).toUriString();
         String userInfoFromProvider;
         try {
             userInfoFromProvider = restTemplate.getForObject(requestUrl, String.class);
             JSONParser parser = new JSONParser();
             JSONObject userInfo = (JSONObject) parser.parse(userInfoFromProvider);
-
+            log.debug("[GOOGLE INFO] : " + userInfo);
             return OAuthUserInfoDto.builder()
-                    .email(userInfo.get("email").toString())
-                    .name(userInfo.get("name").toString())
-                    .profileImg(userInfo.get("picture").toString())
-                    .providerId(userInfo.get("sub").toString())
-                    .build();
+                .email(userInfo.get("email").toString())
+                .name(userInfo.get("name").toString())
+                .nickname(userInfo.get("name").toString())
+                .profileImg(userInfo.get("picture").toString())
+                .providerId(userInfo.get("sub").toString())
+                .build();
 
         } catch (ParseException e) {
             log.debug("파싱 실패: {}", e.getMessage());

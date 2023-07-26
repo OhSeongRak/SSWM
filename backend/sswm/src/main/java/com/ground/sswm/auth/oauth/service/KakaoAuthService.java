@@ -1,4 +1,4 @@
-package com.ground.sswm.auth.service;
+package com.ground.sswm.auth.oauth.service;
 
 import com.ground.sswm.auth.dto.OAuthTokenDto;
 import com.ground.sswm.auth.dto.OAuthUserInfoDto;
@@ -24,11 +24,12 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 public class KakaoAuthService implements SocialAuthService {
-        private String KAKAO_TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
-        private String KAKAO_USER_INFO_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
-        private String CLIENT_ID = "a8cdfb7c6e1ce33857c1ff4df66c348c";
-        private String CLIENT_SECRET = "ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV";
-        private String REDIRECT_URI = "http://localhost:3000";
+
+    private String KAKAO_TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
+    private String KAKAO_USER_INFO_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
+    private String CLIENT_ID = "a8cdfb7c6e1ce33857c1ff4df66c348c";
+    private String CLIENT_SECRET = "ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV";
+    private String REDIRECT_URI = "http://localhost:3000";
     @Autowired
     private RestTemplate restTemplate;
 
@@ -46,16 +47,17 @@ public class KakaoAuthService implements SocialAuthService {
             requestBody.add(entry.getKey(), entry.getValue().toString());
         }
 
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody,
+            headers);
 
         JSONParser parser;
         JSONObject elem;
         try {
             ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    KAKAO_TOKEN_REQUEST_URL,
-                    HttpMethod.POST,
-                    requestEntity,
-                    String.class);
+                KAKAO_TOKEN_REQUEST_URL,
+                HttpMethod.POST,
+                requestEntity,
+                String.class);
             log.debug("[GETTOKEN2] " + responseEntity.getStatusCode());
 
             if (responseEntity.getStatusCode() != HttpStatus.OK) {
@@ -68,13 +70,13 @@ public class KakaoAuthService implements SocialAuthService {
             elem = (JSONObject) parser.parse(responseBody);
             log.debug("[DATA] " + elem);
             return OAuthTokenDto.builder()
-                    .access_token(elem.get("access_token").toString())
-                    .refresh_token(elem.get("refresh_token").toString())
-                    .token_type(elem.get("token_type").toString())
-                    .expires_in(elem.get("expires_in").toString())
-                    .scope(elem.get("scope").toString())
-                    .id_token(elem.get("id_token").toString())
-                    .build();
+                .access_token(elem.get("access_token").toString())
+                .refresh_token(elem.get("refresh_token").toString())
+                .token_type(elem.get("token_type").toString())
+                .expires_in(elem.get("expires_in").toString())
+                .scope(elem.get("scope").toString())
+                .id_token(elem.get("id_token").toString())
+                .build();
 
         } catch (ParseException e) {
             log.debug("JSON 파싱 실패 : {}", e.getMessage());
@@ -99,7 +101,7 @@ public class KakaoAuthService implements SocialAuthService {
         try {
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    KAKAO_USER_INFO_REQUEST_URL, HttpMethod.POST, requestEntity, String.class);
+                KAKAO_USER_INFO_REQUEST_URL, HttpMethod.POST, requestEntity, String.class);
 
             String responseBody = responseEntity.getBody();
             log.debug("[UserInfo-responseBody] " + responseBody);
@@ -108,15 +110,17 @@ public class KakaoAuthService implements SocialAuthService {
 
             JSONObject kakaoAccount = (JSONObject) userInfo.get("kakao_account");
             log.debug("[UserInfo-JsonObject-kakao_account] " + kakaoAccount);
-            String email = (boolean) kakaoAccount.get("has_email") == true ? kakaoAccount.get("email").toString() : "";
+            String email =
+                (boolean) kakaoAccount.get("has_email") == true ? kakaoAccount.get("email")
+                    .toString() : "";
             JSONObject properties = (JSONObject) userInfo.get("properties");
             log.debug("[UserInfo-JsonObject-properties] " + properties);
-
 
             return OAuthUserInfoDto.builder()
                     .providerId(userInfo.get("id").toString())
                     .email(email)
                     .name(properties.get("nickname").toString())
+                    .nickname(properties.get("nickname").toString())
                     .profileImg(properties.get("profile_image").toString())
                     .build();
 

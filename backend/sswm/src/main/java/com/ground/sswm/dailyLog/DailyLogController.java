@@ -1,4 +1,4 @@
-package com.ground.sswm.dailyLog.controller;
+package com.ground.sswm.dailyLog;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

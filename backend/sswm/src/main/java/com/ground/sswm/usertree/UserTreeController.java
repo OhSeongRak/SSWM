@@ -1,4 +1,4 @@
-package com.ground.sswm.usertree.controller;
+package com.ground.sswm.usertree;
 
 import com.ground.sswm.usertree.domain.UserTree;
 import com.ground.sswm.usertree.service.UserTreeService;
@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/user-trees")
 public class UserTreeController {
+
     private final UserTreeService userTreeService;
 
     @GetMapping
-    public List<UserTree> findAll(){
+    public List<UserTree> findAll() {
         return (List<UserTree>) userTreeService.findAll();
     }
 }

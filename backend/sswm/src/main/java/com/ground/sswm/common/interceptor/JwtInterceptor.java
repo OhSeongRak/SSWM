@@ -1,4 +1,4 @@
-package com.ground.sswm.common.config;
+package com.ground.sswm.common.interceptor;
 
 import com.ground.sswm.auth.exception.InvalidTokenException;
 import com.ground.sswm.auth.jwt.JwtUtil;
@@ -19,8 +19,9 @@ public class JwtInterceptor implements HandlerInterceptor {
     private JwtUtil jwtUtil;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+        Object handler)
+        throws Exception {
         final String token = request.getHeader(HEADER_AUTH);
 
         if (token != null && jwtUtil.validateToken(token)) {
