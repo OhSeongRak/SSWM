@@ -11,6 +11,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.0'
 }
 
+bootJar {
+	mainClass = 'com.ground.sswm.SswmApplication'
+}
+
 group = 'com.ground'
 version = '0.0.1-SNAPSHOT'
 
