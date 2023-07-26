@@ -75,6 +75,8 @@ public class UserServiceImpl implements UserService {
     public User addOAuthUser(OAuthUserInfo oauthUser) {
         User newUser = User.builder()
             .name(oauthUser.getName())
+            .nickname(oauthUser.getNickname() != "" ? oauthUser.getNickname() : oauthUser.getName())
+            .image(oauthUser.getProfileImg())
             .email(oauthUser.getEmail())
             .provider(oauthUser.getProvider())
             .providerId(oauthUser.getProviderId())

@@ -63,7 +63,6 @@ public class AuthController {
             userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
             oauthUser = new GoogleUserInfo(userInitialInfo);
         } else if (socialType.equals(OAuthProvider.KAKAO.getProvider())) {
-            // TODO : kakao Login
             socialAuthService = kakaoAuthService;
             oAuthTokenDto = socialAuthService.getToken(authorizationCode);
             userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);

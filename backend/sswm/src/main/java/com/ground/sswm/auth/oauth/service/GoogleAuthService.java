@@ -75,10 +75,11 @@ public class GoogleAuthService implements SocialAuthService {
             userInfoFromProvider = restTemplate.getForObject(requestUrl, String.class);
             JSONParser parser = new JSONParser();
             JSONObject userInfo = (JSONObject) parser.parse(userInfoFromProvider);
-
+            log.debug("[GOOGLE INFO] : " + userInfo);
             return OAuthUserInfoDto.builder()
                 .email(userInfo.get("email").toString())
                 .name(userInfo.get("name").toString())
+                .nickname(userInfo.get("name").toString())
                 .profileImg(userInfo.get("picture").toString())
                 .providerId(userInfo.get("sub").toString())
                 .build();

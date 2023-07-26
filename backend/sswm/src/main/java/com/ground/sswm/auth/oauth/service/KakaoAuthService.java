@@ -117,11 +117,12 @@ public class KakaoAuthService implements SocialAuthService {
             log.debug("[UserInfo-JsonObject-properties] " + properties);
 
             return OAuthUserInfoDto.builder()
-                .providerId(userInfo.get("id").toString())
-                .email(email)
-                .name(properties.get("nickname").toString())
-                .profileImg(properties.get("profile_image").toString())
-                .build();
+                    .providerId(userInfo.get("id").toString())
+                    .email(email)
+                    .name(properties.get("nickname").toString())
+                    .nickname(properties.get("nickname").toString())
+                    .profileImg(properties.get("profile_image").toString())
+                    .build();
 
         } catch (ParseException e) {
             log.debug("파싱 실패: {}", e.getMessage());
