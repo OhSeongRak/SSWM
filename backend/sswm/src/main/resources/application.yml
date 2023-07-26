@@ -1,8 +1,8 @@
 spring:
   profiles:
     group:
-      - production-set1
-      - production-set2
+      production-set1:
+      production-set2:
 
 ---
 
