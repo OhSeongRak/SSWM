@@ -1,4 +1,4 @@
-package com.ground.sswm.auth.config;
+package com.ground.sswm.common.config;
 
 import java.nio.charset.Charset;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -11,10 +11,12 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RestTemplateConfig {
+
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder
-            .requestFactory(() -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
+            .requestFactory(
+                () -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
             .additionalMessageConverters(new StringHttpMessageConverter(Charset.forName("UTF-8")))
             .build();
     }

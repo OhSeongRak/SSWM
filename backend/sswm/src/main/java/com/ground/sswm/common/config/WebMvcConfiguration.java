@@ -1,6 +1,7 @@
 package com.ground.sswm.common.config;
 
 
+import com.ground.sswm.common.interceptor.JwtInterceptor;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +11,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
+
     //TODO: http method check
-    private final List<String> PATTERNS = Arrays.asList("/users/**","/articles/**/edit","/like-places/**");
+    private final List<String> PATTERNS = Arrays.asList("/users/**", "/articles/**/edit",
+        "/like-places/**");
 
     private JwtInterceptor jwtInterceptor;
 
@@ -28,10 +31,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         // TODO: setting pattern CORS
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*")
-                .allowCredentials(true);;
+            .allowedOrigins("http://localhost:3000")
+            .allowedMethods("GET", "POST", "PUT", "DELETE")
+            .allowedHeaders("*")
+            .allowCredentials(true);
+        ;
 
     }
 

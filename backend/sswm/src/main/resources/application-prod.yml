@@ -1,10 +1,6 @@
 spring:
   profiles:
     group:
-      development:
-        - common
-        - development_database
-        - port_8080
       production-set1:
         - common
         - production_database
@@ -37,16 +33,25 @@ spring:
     host: localhost
     port: 6379
 
----
+# S3 사용 설정
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAZPPUJPXAEPPKBU4Z       # AWS IAM AccessKey 적기
+      secretKey: 3Kgaf4A2pddtxT6bfH8Nr8pcsCT5OsoOjfQt/E/w   # AWS IAM SecretKey 적기
+    s3:
+      bucket: sswm-image    # ex) marryting-gyunny
+    #      dir: /image # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
-spring:
-  config:
-    activate:
-      on-profile: development_database
-  datasource:
-    url: jdbc:mysql://localhost:3307/sswm
-    username: root
-    password: root
+logging:
+  level:
+    com.ground.sswm : DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 ---
 
@@ -58,18 +63,6 @@ spring:
     url: jdbc:mysql://localhost:3306/sswm
     username: root
     password: root
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: port_8080
-
-server:
-  servlet:
-    context-path: /api
-  port: 8080
 
 ---
 
@@ -97,22 +90,3 @@ server:
 
 
 
-# S3 사용 설정
-cloud:
-  aws:
-    credentials:
-      accessKey: AKIAZPPUJPXAEPPKBU4Z       # AWS IAM AccessKey 적기
-      secretKey: 3Kgaf4A2pddtxT6bfH8Nr8pcsCT5OsoOjfQt/E/w   # AWS IAM SecretKey 적기
-    s3:
-      bucket: sswm-image    # ex) marryting-gyunny
-    #      dir: /image # ex) /gyunny
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-
-logging:
-  level:
-    com.ground.sswm : DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

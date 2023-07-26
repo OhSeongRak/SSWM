@@ -7,7 +7,6 @@ import com.ground.sswm.studyroom.domain.StudyroomRepository;
 import com.ground.sswm.studyroom.dto.SearchStudyroomReqDto;
 import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
 import com.ground.sswm.studyroom.dto.StudyroomDto;
-import com.ground.sswm.tag.domain.Tag;
 import com.ground.sswm.tag.domain.TagRepository;
 import com.ground.sswm.tag.dto.TagDto;
 import com.ground.sswm.user.domain.User;
@@ -17,7 +16,6 @@ import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,26 +61,29 @@ public class StudyroomServiceImpl implements StudyroomService {
         if (orderBy.equals("ASC")) {
             switch (sortBy) {
                 case "STUDY_TIME":
-                    searchStudyroomResDtos.sort((o1, o2) -> o1.getStudyAvgTime() - o2.getStudyAvgTime());
+                    searchStudyroomResDtos.sort(
+                        (o1, o2) -> o1.getStudyAvgTime() - o2.getStudyAvgTime());
                     break;
                 case "USER_NUM":
                     searchStudyroomResDtos.sort((o1, o2) -> o1.getUserNum() - o2.getUserNum());
                     break;
                 case "CREATED":
-                    searchStudyroomResDtos.sort((o1, o2) -> o1.getCreatedTime() - o2.getCreatedTime());
+                    searchStudyroomResDtos.sort(
+                        (o1, o2) -> o1.getCreatedTime() - o2.getCreatedTime());
                     break;
             }
-        }
-        else {
+        } else {
             switch (sortBy) {
                 case "STUDY_TIME":
-                    searchStudyroomResDtos.sort((o1, o2) -> o2.getStudyAvgTime() - o1.getStudyAvgTime());
+                    searchStudyroomResDtos.sort(
+                        (o1, o2) -> o2.getStudyAvgTime() - o1.getStudyAvgTime());
                     break;
                 case "USER_NUM":
                     searchStudyroomResDtos.sort((o1, o2) -> o2.getUserNum() - o1.getUserNum());
                     break;
                 case "CREATED":
-                    searchStudyroomResDtos.sort((o1, o2) -> o2.getCreatedTime() - o1.getCreatedTime());
+                    searchStudyroomResDtos.sort(
+                        (o1, o2) -> o2.getCreatedTime() - o1.getCreatedTime());
                     break;
             }
         }

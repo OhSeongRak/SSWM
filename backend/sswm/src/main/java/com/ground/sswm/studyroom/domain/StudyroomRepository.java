@@ -1,6 +1,5 @@
 package com.ground.sswm.studyroom.domain;
 
-import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +18,6 @@ public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
         + " (select t.id from Tag t where t.name in :tagNames))"
         + " and"
         + " (s.name like %:searchKeyword%)")
-    List<Studyroom> list(@Param("tagNames") List<String> tagNames, @Param("searchKeyword") String searchKeyword);
+    List<Studyroom> list(@Param("tagNames") List<String> tagNames,
+        @Param("searchKeyword") String searchKeyword);
 }

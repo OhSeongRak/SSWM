@@ -8,6 +8,7 @@ import java.util.Map;
 public interface AuthService {
 
     JwtDto createTokens(User user);
+
     Map<String, Object> getClaimsFromToken(String token);
 
     Auth getSavedTokenByUserId(Long id);

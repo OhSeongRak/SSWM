@@ -1,4 +1,4 @@
-package com.ground.sswm.common.config;
+package com.ground.sswm.image.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

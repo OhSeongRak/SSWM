@@ -27,5 +27,4 @@ UserService {
     void modifyUser(Long id, String nickname, String imagePath);
 
 
-
 }

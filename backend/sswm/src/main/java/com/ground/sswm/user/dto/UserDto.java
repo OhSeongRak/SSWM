@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter@Setter
+@Getter
+@Setter
 public class UserDto {
+
     private String nickname;
     private String image;
 
     @Builder
-    public UserDto( String nickname, String email, String image) {
+    public UserDto(String nickname, String email, String image) {
         this.nickname = nickname;
         this.image = image;
     }
