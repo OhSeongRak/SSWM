@@ -117,6 +117,7 @@ public class KakaoAuthService implements SocialAuthService {
                     .providerId(userInfo.get("id").toString())
                     .email(email)
                     .name(properties.get("nickname").toString())
+                    .nickname(properties.get("nickname").toString())
                     .profileImg(properties.get("profile_image").toString())
                     .build();
 

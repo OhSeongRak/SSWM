@@ -75,6 +75,8 @@ public class UserServiceImpl implements UserService {
     public User addOAuthUser(OAuthUserInfo oauthUser) {
         User newUser = User.builder()
             .name(oauthUser.getName())
+            .nickname(oauthUser.getNickname() != "" ? oauthUser.getNickname() : oauthUser.getName())
+            .image(oauthUser.getProfileImg())
             .email(oauthUser.getEmail())
             .provider(oauthUser.getProvider())
             .providerId(oauthUser.getProviderId())
@@ -85,12 +87,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void modifyUser(Long id, String nickname, String imagePath) {
-        log.debug("modifyUser "+id+" "+nickname+" "+imagePath);
+        log.debug("modifyUser " + id + " " + nickname + " " + imagePath);
         User user = userRepository.findById(id).orElseThrow(
             () -> new UserNotFoundException("" + id));
 
         // 닉네임 바꾸는 경우
-        if (nickname!=null && !nickname.isBlank()) {
+        if (nickname != null && !nickname.isBlank()) {
             // 다른 사람이 바꾸고자하는 닉네임 이미 사용하고 있음
             User findUser = userRepository.findByNickname(nickname);
             // 만약 유저 닉네임이 중복이라면 함수 종료
@@ -100,9 +102,9 @@ public class UserServiceImpl implements UserService {
             user.setNickname(nickname);
         }
         // 이미지 바꾸는 경우
-        if(imagePath!=null && !imagePath.isBlank()){
+        if (imagePath != null && !imagePath.isBlank()) {
             log.debug("[modifyUser] (1)");
-            if(user.getImage()!=null && !user.getImage().isBlank()){
+            if (user.getImage() != null && !user.getImage().isBlank()) {
                 // 기존 이미지 삭제
                 log.debug("[modifyUser] (2)");
                 fileManageUtil.deleteFile(user.getImage());
