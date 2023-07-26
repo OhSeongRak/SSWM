@@ -8,5 +8,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.provider = :provider and u.providerId = :providerId")
     User findByProviderAndProviderId(String provider, String providerId);
 
+    User findByNickname(String nickname);
+
 
 }
