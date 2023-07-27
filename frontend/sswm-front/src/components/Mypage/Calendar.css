@@ -1,0 +1,44 @@
+/* 스타일을 추가하여 Calendar를 디자인합니다. */
+.calendar {
+  max-width: 400px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.calendar__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.calendar__day {
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+}
+
+.calendar__date {
+  text-align: center;
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.calendar__date--blank {
+  background-color: #f0f0f0;
+}
+
+.calendar__date:hover {
+  background-color: #eee;
+}
