@@ -1,17 +1,14 @@
 spring:
   profiles:
       production-set1:
-  config:
-    activate:
-      on-profile: production-set1
-    datasource:
-      url: jdbc:mysql://localhost:3306/sswm
-      username: root
-      password: root
-    server:
-      servlet:
-        context-path: /api
-        port: 9001
+  datasource:
+    url: jdbc:mysql://localhost:3306/sswm
+    username: root
+    password: root
+  server:
+    servlet:
+      context-path: /api
+      port: 9001
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
@@ -30,21 +27,17 @@ spring:
     port: 6379
 
 ---
-
 spring:
   profiles:
-      production-set2:
-  config:
-    activate:
-      on-profile: production-set2
-    datasource:
-      url: jdbc:mysql://localhost:3306/sswm
-      username: root
-      password: root
-    server:
-      servlet:
-        context-path: /api
-        port: 9001
+      production-set1:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sswm
+    username: root
+    password: root
+  server:
+    servlet:
+      context-path: /api
+      port: 9001
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
