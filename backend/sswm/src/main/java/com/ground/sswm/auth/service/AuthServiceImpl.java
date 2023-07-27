@@ -1,67 +1,135 @@
-package com.ground.sswm.auth.service;
+spring:
+  profiles:
+    group:
+      production-set1:
+      production-set2:
 
-import com.ground.sswm.auth.domain.Auth;
-import com.ground.sswm.auth.domain.AuthRepository;
-import com.ground.sswm.auth.dto.JwtDto;
-import com.ground.sswm.auth.jwt.JwtUtil;
-import com.ground.sswm.user.domain.User;
-import java.util.HashMap;
-import java.util.Map;
-import org.springframework.stereotype.Service;
+---
 
-@Service
-public class AuthServiceImpl implements AuthService {
+spring:
+  config:
+    activate:
+      on-profile: production-set1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
 
-    private JwtUtil jwtUtil;
-    private AuthRepository authRepository;
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    servlet:
+      multipart:  # 파일 올리는 설정
+        max-file-size: 5MB # 요청한 파일 한 개의 크기
+        max-request-size: 5MB # 요청한 파일 전체의 크기
+  redis:
+    host: localhost
+    port: 6379
 
-    public AuthServiceImpl(JwtUtil jwtUtil, AuthRepository authRepository) {
-        this.jwtUtil = jwtUtil;
-        this.authRepository = authRepository;
-    }
+# S3 사용 설정
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAZPPUJPXAEPPKBU4Z       # AWS IAM AccessKey 적기
+      secretKey: 3Kgaf4A2pddtxT6bfH8Nr8pcsCT5OsoOjfQt/E/w   # AWS IAM SecretKey 적기
+    s3:
+      bucket: sswm-image    # ex) marryting-gyunny
+    #      dir: /image # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
-    @Override
-    public JwtDto createTokens(User user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("id", user.getId());
-        claims.put("email", user.getEmail());
-        //claims.put("name", user.getName());
-        //claims.put("nickname", user.getNickname());
-        claims.put("isAdmin", user.getIsAdmin());
-        String accessToken = jwtUtil.generateToken("access-token", claims, 1000 * 60 * 60 * 1);//1시간
-        String refreshToken = jwtUtil.generateToken("refresh-token", claims,
-            1000 * 60 * 60 * 10); // DB에 넣어서 관리
-        return new JwtDto(accessToken, refreshToken);
-    }
+logging:
+  level:
+    com.ground.sswm : DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
-    @Override
-    public Map<String, Object> getClaimsFromToken(String token) {
-        return jwtUtil.getClaims(token);
-    }
+---
+spring:
+  config:
+    activate:
+      on-profile: production-set2
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
 
-    @Override
-    public Auth getSavedTokenByUserId(Long userId) {
-        return authRepository.findByUserId(userId);
-    }
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    servlet:
+      multipart:  # 파일 올리는 설정
+        max-file-size: 5MB # 요청한 파일 한 개의 크기
+        max-request-size: 5MB # 요청한 파일 전체의 크기
+  redis:
+    host: localhost
+    port: 6379
 
-    @Override
-    public String createAccessToken(Map<String, Object> claims) {
-        return jwtUtil.generateToken("access-token", claims, 1000 * 60 * 60 * 1);
-    }
+# S3 사용 설정
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAZPPUJPXAEPPKBU4Z       # AWS IAM AccessKey 적기
+      secretKey: 3Kgaf4A2pddtxT6bfH8Nr8pcsCT5OsoOjfQt/E/w   # AWS IAM SecretKey 적기
+    s3:
+      bucket: sswm-image    # ex) marryting-gyunny
+    #      dir: /image # ex) /gyunny
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
 
-    @Override
-    public void saveTokens(Long userId, JwtDto jwtDto) {
-        Auth newTokens = Auth.builder()
-            .userId(userId)
-            .accessToken(jwtDto.getAccessToken())
-            .refreshToken(jwtDto.getRefreshToken())
-            .build();
-        authRepository.save(newTokens); // userId가 존재시, update token
-    }
+logging:
+  level:
+    com.ground.sswm : DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
-    @Override
-    public void updateTokens(Auth saved) {
-        authRepository.save(saved);
-    }
+---
+spring:
+  config:
+    activate:
+      on-profile: production_set1
+  datasource:
+    url: jdbc:mysql://localhost:3306/sswm
+    username: root
+    password: root
 
-}
+---
+spring:
+  config:
+    activate:
+      on-profile: production_set2
+  datasource:
+    url: jdbc:mysql://localhost:3306/sswm
+    username: root
+    password: root
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: production_set1
+
+server:
+  servlet:
+    context-path: /api
+  port: 9001
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: production_set2
+
+server:
+  servlet:
+    context-path: /api
+  port: 9002
+
