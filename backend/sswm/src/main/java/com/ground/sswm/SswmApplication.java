@@ -3,6 +3,7 @@ package com.ground.sswm;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootTest
 @SpringBootApplication
 public class SswmApplication {
 
