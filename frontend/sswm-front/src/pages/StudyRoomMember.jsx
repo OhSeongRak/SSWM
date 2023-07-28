@@ -33,9 +33,11 @@ const StudyRoomMember = () => {
             <Button variant="contained" color="success">
               스터디룸 탈퇴하기
             </Button>
-            <Button variant="contained" color="primary">
-              라이브 입장
-            </Button>
+            <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
+              <Button variant="contained" color="primary">
+                라이브 입장
+              </Button>
+            </Link>
           </HeaderBtn>
         </HeaderWrap>
 
