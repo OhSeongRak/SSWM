@@ -1,3 +1,6 @@
+bootJar {
+	mainClass = 'com.ground.sswm.SswmApplication'
+}
 buildscript {
     ext {
         queryDslVersion = "5.0.0"
