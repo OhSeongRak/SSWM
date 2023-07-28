@@ -1,25 +1,51 @@
-import logo from './logo.svg';
 import './App.css';
+import './index.css';
+import styled from 'styled-components';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+
+import SignUp from './pages/SignUp';
+import SignUpName from './pages/SignUpName';
+import Login from './pages/Login'
+import MyPage from './pages/MyPage';
+import EditInfo from './pages/EditInfo';
+import StudyRoom from './pages/StudyRoom';
+import CreateStudyRoom from './pages/CreateStudyRoom';
+import StudyRoomAdmin from './pages/StudyRoomAdmin';
+import StudyRoomMember from './pages/StudyRoomMember';
 
 function App() {
+  const data = useSelector((state) => {
+    // store의 state 전부를 객체로 받아옴
+    return state;
+  });
+  console.log(data)
+  console.log('여기호출')
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ContentWrap>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<StudyRoom />}></Route>
+          <Route path="/SignUp" element={<SignUp />}></Route>
+          <Route path="/SignUpName" element={<SignUpName />}></Route>
+          <Route path="/Login" element={<Login />}></Route>
+          <Route path="/MyPage" element={<MyPage />}></Route>
+          <Route path="/EditInfo" element={<EditInfo />}></Route>
+          <Route path="/CreateStudyRoom" element={<CreateStudyRoom />}></Route>
+          <Route path="/StudyRoomAdmin" element={<StudyRoomAdmin />}></Route>
+          <Route path="/StudyRoomMember" element={<StudyRoomMember />}></Route>
+        </Routes>      
+      </BrowserRouter>
+    </ContentWrap>
   );
 }
 
 export default App;
+
+const ContentWrap = styled.div`
+  min-height: 100vh;
+  box-sizing: border-box;
+`
