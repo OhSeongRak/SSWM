@@ -1,10 +1,7 @@
 package com.ground.sswm.studyroom.dto;
 
-import com.ground.sswm.tag.dto.TagDto;
 import java.util.List;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -12,6 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class SearchStudyroomResDto {
+
     private Long id;
     private boolean isPublic;
     private String code;

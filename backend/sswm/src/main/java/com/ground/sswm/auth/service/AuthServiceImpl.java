@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
     private JwtUtil jwtUtil;
     private AuthRepository authRepository;
 
@@ -28,7 +29,8 @@ public class AuthServiceImpl implements AuthService {
         //claims.put("nickname", user.getNickname());
         claims.put("isAdmin", user.getIsAdmin());
         String accessToken = jwtUtil.generateToken("access-token", claims, 1000 * 60 * 60 * 1);//1시간
-        String refreshToken = jwtUtil.generateToken("refresh-token", claims, 1000 * 60 * 60 * 10); // DB에 넣어서 관리
+        String refreshToken = jwtUtil.generateToken("refresh-token", claims,
+            1000 * 60 * 60 * 10); // DB에 넣어서 관리
         return new JwtDto(accessToken, refreshToken);
     }
 
@@ -39,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Auth getSavedTokenByUserId(Long userId) {
-        return authRepository.findByUserId(userId);
+        return authRepository.findById(userId);
     }
 
     @Override
@@ -50,10 +52,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void saveTokens(Long userId, JwtDto jwtDto) {
         Auth newTokens = Auth.builder()
-                .userId(userId)
-                .accessToken(jwtDto.getAccessToken())
-                .refreshToken(jwtDto.getRefreshToken())
-                .build();
+            .userId(userId)
+            .refreshToken(jwtDto.getRefreshToken())
+            .build();
         authRepository.save(newTokens); // userId가 존재시, update token
     }
 

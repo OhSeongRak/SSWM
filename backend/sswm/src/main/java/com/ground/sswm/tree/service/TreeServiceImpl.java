@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class TreeServiceImpl implements TreeService{
+public class TreeServiceImpl implements TreeService {
+
     private final TreeRepository treeRepository;
 
-    public void saveTree(UserDto userDto, Long id, TreeDto treeDto){
-        Tree tree= Tree.from(treeDto);
+    public void saveTree(UserDto userDto, Long id, TreeDto treeDto) {
+        Tree tree = Tree.from(treeDto);
         treeRepository.save(tree);
     }
 }

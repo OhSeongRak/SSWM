@@ -1,7 +1,6 @@
 package com.ground.sswm.studyroom.service;
 
 
-import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.studyroom.dto.SearchStudyroomReqDto;
 import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
 import com.ground.sswm.studyroom.dto.StudyroomDto;

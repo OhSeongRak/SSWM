@@ -30,4 +30,13 @@ public class GoogleUserInfo implements OAuthUserInfo {
         return oAuthUserInfoDto.getName();
     }
 
+    @Override
+    public String getProfileImg(){
+        return oAuthUserInfoDto.getProfileImg();
+    }
+    @Override
+    public String getNickname(){
+        return oAuthUserInfoDto.getNickname();
+    }
+
 }
