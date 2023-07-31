@@ -18,16 +18,12 @@ import lombok.ToString;
 public class Auth {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private Long userId;//unique
     private String refreshToken;
-    private String accessToken;
 
     @Builder
-    public Auth(Long userId, String refreshToken, String accessToken) {
+    public Auth(Long userId, String refreshToken) {
         this.userId = userId;
         this.refreshToken = refreshToken;
-        this.accessToken = accessToken;
     }
 }

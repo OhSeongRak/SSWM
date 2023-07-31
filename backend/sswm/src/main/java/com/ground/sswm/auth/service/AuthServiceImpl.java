@@ -53,7 +53,6 @@ public class AuthServiceImpl implements AuthService {
     public void saveTokens(Long userId, JwtDto jwtDto) {
         Auth newTokens = Auth.builder()
             .userId(userId)
-            .accessToken(jwtDto.getAccessToken())
             .refreshToken(jwtDto.getRefreshToken())
             .build();
         authRepository.save(newTokens); // userId가 존재시, update token
