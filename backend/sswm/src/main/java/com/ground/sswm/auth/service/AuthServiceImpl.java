@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Auth getSavedTokenByUserId(Long userId) {
-        return authRepository.findByUserId(userId);
+        return authRepository.findById(userId);
     }
 
     @Override
