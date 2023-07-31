@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 
@@ -16,6 +16,26 @@ const EditInfo = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const [imageSrc, setImage] = useState(def);
+
+  const imageUp = useRef();
+
+  const onClickImage = () => {
+    imageUp.current.click();
+  };
+
+  const fileBase = (fileUp) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(fileUp);
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImage(reader.result);
+        resolve();
+      };
+    });
+  };
+
   return (
     <div>
       <Gnb />
@@ -25,10 +45,22 @@ const EditInfo = () => {
             <EditContent>
               <EditLeftContent>프로필</EditLeftContent>
               <EditRightContent>
-                <Avatar alt="profile Img" src={def} sx={{ width: 60, height: 60 }} />
-                <Button variant="outlined" color="error">
-                  찾아보기
-                </Button>
+                <input
+                  type="file"
+                  ref={imageUp}
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    fileBase(e.target.files[0]);
+                  }}
+                />
+                {imageSrc && (
+                  <Avatar
+                    onClick={onClickImage}
+                    alt="Default Img"
+                    src={imageSrc}
+                    sx={{ width: 60, height: 60 }}
+                  ></Avatar>
+                )}
               </EditRightContent>
             </EditContent>
             <EditContent>
