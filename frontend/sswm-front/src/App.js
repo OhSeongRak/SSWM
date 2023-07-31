@@ -15,6 +15,7 @@ import StudyRoom from './pages/StudyRoom';
 import CreateStudyRoom from './pages/CreateStudyRoom';
 import StudyRoomAdmin from './pages/StudyRoomAdmin';
 import StudyRoomMember from './pages/StudyRoomMember';
+import LiveRoom from './pages/LiveRoom';
 
 function App() {
   const data = useSelector((state) => {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/CreateStudyRoom" element={<CreateStudyRoom />}></Route>
           <Route path="/StudyRoomAdmin" element={<StudyRoomAdmin />}></Route>
           <Route path="/StudyRoomMember" element={<StudyRoomMember />}></Route>
+          <Route path="/LiveRoom" element={<LiveRoom />}></Route>
         </Routes>      
       </BrowserRouter>
     </ContentWrap>
@@ -46,6 +48,7 @@ function App() {
 export default App;
 
 const ContentWrap = styled.div`
-  min-height: 100vh;
-  box-sizing: border-box;
+  min-height: 100%;
+  margin: 0px;
+  padding: 0px;
 `
