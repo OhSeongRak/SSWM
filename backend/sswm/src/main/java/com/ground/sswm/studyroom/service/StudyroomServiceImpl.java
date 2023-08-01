@@ -16,6 +16,7 @@ import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,11 +116,14 @@ public class StudyroomServiceImpl implements StudyroomService {
 
         // INSERT StudyRoomTag
         List<TagDto> tagDtoList = studyroomDto.getTags();
-        for (TagDto tagDto : tagDtoList) {
-            StudyroomTag studyroomTag = new StudyroomTag();
-            studyroomTag.setStudyroom(studyroom);
-            studyroomTag.setTag(tagRepository.findByName(tagDto.getName()));
-            studyRoomTagRepository.save(studyroomTag);
+        if (tagDtoList != null) {
+            for (TagDto tagDto : tagDtoList) {
+                StudyroomTag studyroomTag = new StudyroomTag();
+                studyroomTag.setStudyroom(studyroom);
+                studyroomTag.setTag(tagRepository.findByName(tagDto.getName()));
+                studyRoomTagRepository.save(studyroomTag);
+            }
+
         }
 
         return studyroom.getId();
@@ -135,8 +139,14 @@ public class StudyroomServiceImpl implements StudyroomService {
 
     @Override
     public StudyroomDto select(Long studyroomId) {
-        Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
-        StudyroomDto studyroomDto = StudyroomDto.from(studyroom);
+
+        Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
+        if (studyroom.isEmpty()) {
+            return null;
+        }
+
+        StudyroomDto studyroomDto = StudyroomDto.from(studyroom.get());
+
         return studyroomDto;
     }
 
@@ -151,6 +161,8 @@ public class StudyroomServiceImpl implements StudyroomService {
     public boolean exists(String name) {
         return studyroomRepository.findByName(name).isPresent();
     }
+
+
 }
 
 
