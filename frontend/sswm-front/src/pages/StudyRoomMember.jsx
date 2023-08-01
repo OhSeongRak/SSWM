@@ -53,9 +53,11 @@ const StudyRoomMember = () => {
                 </Box>
               </CustomModal>
             </div>
-            <Button variant="contained" color="primary">
-              라이브 입장
-            </Button>
+            <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
+              <Button variant="contained" color="primary">
+                라이브 입장
+              </Button>
+            </Link>
           </HeaderBtn>
         </HeaderWrap>
 
