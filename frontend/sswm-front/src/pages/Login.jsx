@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
+import { KAKAO_AUTH_URL } from "../shared/kakaoApi";
 
 import Gnb from "../components/Gnb";
 
@@ -10,7 +11,32 @@ import KakaoLogo from '../assets/Kakao_Logo.svg';
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 
+
+// 로그인
+import GoogleLogin from "../shared/GoogleLogin";
+import Axios from "axios";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import KakaoLogin from "../shared/KakaoLogin";
+import KakaoCallback from "../shared/KakaoCallback";
+const config = {
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+
+  },
+};
+
 const Login = () => {
+  const [user, setUser] = useState(null);
+
+  const getUser = async () => {
+    let res = await Axios.get("https://i9a206.p.ssafy.io/api/users", config);
+    console.log(res.data);
+    setUser(res.data);
+  };
+
+  const kakaoAuth = () => {
+    window.location.href = KAKAO_AUTH_URL; // page redirect
+  }
   return (
     <div>
       <Gnb />
@@ -20,7 +46,13 @@ const Login = () => {
             <Text> 간편로그인 </Text>
             <SocialWrap>
               <LogoImg src={GoogleLogo} />
-              <LogoImg src={KakaoLogo} />
+              <GoogleOAuthProvider clientId="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com">
+                <GoogleLogin />
+              </GoogleOAuthProvider>
+              <LogoImg onClick={kakaoAuth} src={KakaoLogo} />
+              <KakaoLogin JS_KEY="7d0b480cb467b756260e2f69512b54f6"REST_API_KEY ="a8cdfb7c6e1ce33857c1ff4df66c348c" REDIRECT_URI="https://i9a206.p.ssafy.io"/>
+              <KakaoCallback REST_API_KEY ="a8cdfb7c6e1ce33857c1ff4df66c348c" REDIRECT_URI="https://i9a206.p.ssafy.io"/>
+              <button onClick={getUser}>유저정보 가져오기</button>
             </SocialWrap>
             <ButtonWrap>
               <Link to="/SignUp"><Button variant="outlined">회원가입</Button></Link>
@@ -28,6 +60,22 @@ const Login = () => {
             </ButtonWrap>
           </LoginWrap>
         </Box>
+        {user && (
+                <h1>
+                  /user :{" "}
+                  {user.id +
+                    " " +
+                    user.username +
+                    " " +
+                    user.password +
+                    " " +
+                    user.email +
+                    " " +
+                    user.provider +
+                    " " +
+                    user.providerId}
+                </h1>
+              )}
       </ContainerWrap>
     </div>
   );

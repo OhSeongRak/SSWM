@@ -1,5 +1,6 @@
-import styled from 'styled-components';
-import StudyRoomItem from './StudyRoomItem';
+import styled from "styled-components";
+import StudyRoomItem from "./StudyRoomItem";
+import { useInView } from "react-intersection-observer";
 
 const RoomListLayout = styled.div`
   flex: 1;
@@ -7,15 +8,16 @@ const RoomListLayout = styled.div`
 `;
 
 const RoomList = styled.ul`
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 5px;
-`
+`;
 
 const StudyRoomList = (props) => {
-  return(
-    <RoomListLayout>
+  const [ref, inView] = useInView();
+  return (
+    <RoomListLayout ref={ref}>
       <RoomList>
         <StudyRoomItem />
         <StudyRoomItem />
