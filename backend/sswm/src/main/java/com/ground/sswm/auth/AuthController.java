@@ -15,8 +15,9 @@ import com.ground.sswm.auth.oauth.service.KakaoAuthService;
 import com.ground.sswm.auth.oauth.service.SocialAuthService;
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.user.domain.User;
-import com.ground.sswm.user.service.UserService;
 import java.util.Map;
+
+import com.ground.sswm.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

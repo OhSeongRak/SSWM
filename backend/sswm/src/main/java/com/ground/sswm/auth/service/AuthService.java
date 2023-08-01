@@ -20,6 +20,4 @@ public interface AuthService {
     void saveTokens(Long id, JwtDto jwtDto);
 
     void updateTokens(Auth saved);
-
-
 }
