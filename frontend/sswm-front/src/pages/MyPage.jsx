@@ -7,21 +7,22 @@ import MyProfile from "../components/Mypage/MyProfile";
 import Tree from "../components/Mypage/Tree";
 import MyStudyRoom from "../components/Mypage/MyStudyRoom";
 import Calendar from "../components/Mypage/Calendar";
+import Piechart from "../components/Mypage/Chart";
 // import { useDispatch, useSelector } from "react-redux";
 // import { Redirect, useParams } from 'react-router-dom';
 
 const MyPage = () => {
-//   const dispatch = useDispatch();
-//   const profileList = useSelector((state) => state.profile)
-//   const sessionStoragetokenCheck = sessionStorage.getItem('Authorization')
-//   const param = useParams();
+  //   const dispatch = useDispatch();
+  //   const profileList = useSelector((state) => state.profile)
+  //   const sessionStoragetokenCheck = sessionStorage.getItem('Authorization')
+  //   const param = useParams();
 
-//  if(!sessionStoragetokenCheck){
-//   return(
-//     alert('로그인 후 입장가능합니다.'),
-//     <Redirect to={'/login'}/>
-//   )
-//  }
+  //  if(!sessionStoragetokenCheck){
+  //   return(
+  //     alert('로그인 후 입장가능합니다.'),
+  //     <Redirect to={'/login'}/>
+  //   )
+  //  }
 
   return (
     <div>
@@ -57,11 +58,11 @@ const MyPage = () => {
 };
 
 const ContainerWrap = styled.div`
-  width: 80%; 
+  width: 80%;
   display: flex;
   text-align: start;
   border-radius: 15px;
-  background: #FFFFFF;
+  background: #ffffff;
 `;
 
 const SidebarWrap = styled.div`
