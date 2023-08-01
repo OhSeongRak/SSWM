@@ -2,6 +2,7 @@ package com.ground.sswm.common.config;
 
 import com.ground.sswm.auth.domain.Auth;
 import com.ground.sswm.event.domain.StudyEvent;
+import com.ground.sswm.event.dto.StudyEventDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
