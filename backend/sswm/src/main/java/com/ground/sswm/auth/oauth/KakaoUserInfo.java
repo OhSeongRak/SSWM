@@ -4,8 +4,10 @@ import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class KakaoUserInfo implements OAuthUserInfo{
+public class KakaoUserInfo implements OAuthUserInfo {
+
     private final OAuthUserInfoDto oAuthUserInfoDto;
+
     @Override
     public String getProviderId() {
         return oAuthUserInfoDto.getProviderId();
@@ -24,5 +26,14 @@ public class KakaoUserInfo implements OAuthUserInfo{
     @Override
     public String getName() {
         return oAuthUserInfoDto.getName();
+    }
+
+    @Override
+    public String getProfileImg(){
+        return oAuthUserInfoDto.getProfileImg();
+    }
+    @Override
+    public String getNickname(){
+        return oAuthUserInfoDto.getNickname();
     }
 }
