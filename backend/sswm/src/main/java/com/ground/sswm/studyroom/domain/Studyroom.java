@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -20,16 +21,36 @@ public class Studyroom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ColumnDefault(value = "NULL")
     private String name;
+
+    @ColumnDefault(value = "NULL")
     private String notice;
+
+    @ColumnDefault(value = "FALSE")
     private boolean isPublic;
+
+    @ColumnDefault(value = "NULL")
     private String enterCode;
+
+    @ColumnDefault(value = "9")
     private int maxUserNum;
+
+    @ColumnDefault(value = "150")
     private int maxRestTime;
+
+    @ColumnDefault(value = "0")
     private int studyAvgTime;
+
+    @ColumnDefault("NULL")
     private String image;
+
+    @ColumnDefault(value = "FALSE")
     private boolean isDeleted;
+
+    @ColumnDefault(value = "0")
     private int createdAt;
+
     private int userNum;
 
 //  public boolean getIsPublic() {

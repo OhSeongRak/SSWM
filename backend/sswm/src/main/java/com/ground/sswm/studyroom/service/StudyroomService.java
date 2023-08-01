@@ -19,4 +19,6 @@ public interface StudyroomService {
     void delete(Long studyroomId);
 
     boolean exists(String name);
+
+
 }

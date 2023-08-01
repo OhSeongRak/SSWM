@@ -2,6 +2,7 @@ package com.ground.sswm.user;
 
 
 import com.ground.sswm.auth.jwt.JwtUtil;
+import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.user.dto.UserResDto;
@@ -32,8 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
     private final FileManageUtil fileManageUtil;
+    private final AuthService authService;
 
     @Deprecated
     @PostMapping
@@ -67,7 +68,7 @@ public class UserController {
         log.debug("[PUT] /user : fileType " + fileType);
         log.debug("[PUT] /user : nickname " + nickname);
 
-        Map<String, Object> claims = jwtUtil.getClaims(token);
+        Map<String, Object> claims = authService.getClaimsFromToken(token);
         long userId = Long.valueOf(claims.get("id").toString());
 
         String filePath = null;
@@ -83,7 +84,7 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestHeader("Authorization") String token) {
-        Map<String, Object> claims = jwtUtil.getClaims(token);
+        Map<String, Object> claims = authService.getClaimsFromToken(token);
         long userId = Long.valueOf(claims.get("id").toString());
 
         userService.delete(userId);
