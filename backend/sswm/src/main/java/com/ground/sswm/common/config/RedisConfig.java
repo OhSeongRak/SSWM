@@ -1,6 +1,7 @@
 package com.ground.sswm.common.config;
 
 import com.ground.sswm.auth.domain.Auth;
+import com.ground.sswm.event.domain.StudyEvent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +26,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Auth> redisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, Auth> redisAuthTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Auth> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
@@ -38,6 +39,23 @@ public class RedisConfig {
         template.setHashKeySerializer(new StringRedisSerializer());
 
         // Set JSON serializer for values
+        template.setValueSerializer(jsonSerializer);
+        template.setHashValueSerializer(jsonSerializer);
+
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, StudyEvent> redisEventTemplate(RedisConnectionFactory connectionFactory){
+        RedisTemplate<String, StudyEvent> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        Jackson2JsonRedisSerializer<StudyEvent> jsonSerializer = new Jackson2JsonRedisSerializer<>(
+            StudyEvent.class);
+
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+
         template.setValueSerializer(jsonSerializer);
         template.setHashValueSerializer(jsonSerializer);
 

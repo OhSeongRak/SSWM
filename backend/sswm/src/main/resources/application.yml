@@ -12,6 +12,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+
     servlet:
       multipart:  # 파일 올리는 설정
         max-file-size: 5MB # 요청한 파일 한 개의 크기
