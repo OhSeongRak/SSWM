@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public abstract class UnauthorizedException extends SswmApiException {
-
     public UnauthorizedException(String reason) {
         super(HttpStatus.UNAUTHORIZED, reason);
     }

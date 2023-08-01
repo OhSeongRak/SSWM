@@ -1,13 +1,13 @@
 buildscript {
-    ext {
-        queryDslVersion = "5.0.0"
-    }
+	ext {
+		queryDslVersion = "5.0.0"
+	}
 }
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '2.7.13'
-    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id 'java'
+	id 'org.springframework.boot' version '2.7.13'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'org.jetbrains.kotlin.jvm' version '1.9.0'
 }
 
@@ -15,22 +15,23 @@ group = 'com.ground'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '17'
+	sourceCompatibility = '17'
 }
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.518'
 
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -39,21 +40,18 @@ dependencies {
     // redis 설정
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    // querydsl 추가
-    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// querydsl 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
-    // ?? 를 보기 쉽게 해주는 dependency
-    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7")
-
-    // AWS S3 사용
-    implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
+	// ?? 를 보기 쉽게 해주는 dependency
+	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7")
 }
 
 //tasks.named('test') {
@@ -62,27 +60,23 @@ dependencies {
 // querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
 querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
+	jpa = true
+	querydslSourcesDir = querydslDir
 }
 sourceSets {
-    main.java.srcDir querydslDir
+	main.java.srcDir querydslDir
 }
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    querydsl.extendsFrom compileClasspath
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
 }
 
 compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
+	options.annotationProcessorPath = configurations.querydsl
 }
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
+
 //compileTestKotlin {
 //    kotlinOptions {
 //        jvmTarget = "1.8"

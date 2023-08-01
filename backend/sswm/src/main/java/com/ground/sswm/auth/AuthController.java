@@ -15,8 +15,9 @@ import com.ground.sswm.auth.oauth.service.KakaoAuthService;
 import com.ground.sswm.auth.oauth.service.SocialAuthService;
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.user.domain.User;
-import com.ground.sswm.user.service.UserService;
 import java.util.Map;
+
+import com.ground.sswm.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -81,7 +82,6 @@ public class AuthController {
             authService.saveTokens(userEntity.getId(), jwtDto);
         } else { // 기존 유저 -> Auth 테이블의 Token update
             authEntity.setRefreshToken(jwtDto.getRefreshToken());
-            authEntity.setAccessToken(jwtDto.getAccessToken());
             authService.updateTokens(authEntity);
         }
         return new ResponseEntity<>(jwtDto, HttpStatus.OK);
@@ -95,10 +95,10 @@ public class AuthController {
         Auth saved = authService.getSavedTokenByUserId(Long.valueOf(claims.get("id").toString()));
         if (refreshToken.equals(saved.getRefreshToken())) {
             String accessToken = authService.createAccessToken(claims);
-            saved.setAccessToken(accessToken);
             authService.updateTokens(saved);
             JwtDto generated = JwtDto.builder().refreshToken(saved.getRefreshToken())
-                .accessToken(saved.getAccessToken()).build();
+                .accessToken(accessToken)
+                .build();
             return new ResponseEntity<>(generated, HttpStatus.OK);
         }
         throw new InvalidTokenException("RefreshToken 이상함");

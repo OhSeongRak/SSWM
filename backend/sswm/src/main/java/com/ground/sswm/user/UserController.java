@@ -59,10 +59,10 @@ public class UserController {
     // 토큰의 유효성 검사는 프론트에서 하나?
     @PutMapping
     public ResponseEntity<?> modify(@RequestHeader("Authorization") String token,
-        @RequestPart(value = "file", required = false) MultipartFile multipartFile,
-        @RequestPart(value = "fileType", required = false) String fileType,
-        @RequestPart(value = "nickname", required = false) String nickname)
-        throws NicknameAlreadyExistException {
+                                    @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+                                    @RequestPart(value = "fileType", required = false) String fileType,
+                                    @RequestPart(value = "nickname", required = false) String nickname)
+            throws NicknameAlreadyExistException {
         log.debug("[PUT] /user : file " + multipartFile.getOriginalFilename());
         log.debug("[PUT] /user : fileType " + fileType);
         log.debug("[PUT] /user : nickname " + nickname);
@@ -72,7 +72,7 @@ public class UserController {
 
         String filePath = null;
         if (fileType != null && !fileType.isBlank() && multipartFile != null
-            && !multipartFile.isEmpty()) {
+                && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
         }
         log.debug("[filePath]>>>> " + filePath);
