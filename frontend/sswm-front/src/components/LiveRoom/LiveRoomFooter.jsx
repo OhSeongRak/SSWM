@@ -1,17 +1,30 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+import { Button } from "@mui/material";
+
+
 
 const LiveRoomFooter = () => {
   return (
     <ContainerWrap>
       <FooterTitle>
-        스트레칭
+        <Button sx={{ color: 'white' }}>
+          스트레칭
+        </Button>
       </FooterTitle>
       <FooterTitle>
-        휴식설정
+        <Button sx={{ color: 'white' }}>
+          휴식설정
+        </Button>
       </FooterTitle>
       <FooterTitle>
-        나가기
+        <Link to="/">
+          <Button sx={{ color: 'white' }}>
+            나가기
+          </Button>
+        </Link>
       </FooterTitle>
     </ContainerWrap>
   )
@@ -31,4 +44,5 @@ const ContainerWrap = styled.div`
 `
 const FooterTitle = styled.div`
 `
+
 export default LiveRoomFooter;
