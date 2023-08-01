@@ -50,8 +50,7 @@ public class UserStudyroomController {
         @PathVariable Long studyroomId) {
 
         //토큰에서 현재 유저 아이디 가져옴
-        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Long userId = (Long) headerToken.get("id");
+        Long userId = authService.getUserIdFromToken(token);
 
         //service에게 유저 탈퇴 요청
         userStudyroomService.leaveUser(userId, studyroomId);
@@ -64,8 +63,7 @@ public class UserStudyroomController {
     public ResponseEntity<List<OnAirResDto>> searchUser(
         @RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
         //토큰에서 현재 유저 아이디 가져옴
-        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Long userId = (Long) headerToken.get("id");
+        Long userId = authService.getUserIdFromToken(token);
 
         //db에서 유저를 가져와서 리스트로 저장
         List<OnAirResDto> onAirResDtos = userStudyroomService.searchUser(userId, studyroomId);
@@ -80,8 +78,7 @@ public class UserStudyroomController {
         @PathVariable Long studyroomId, @RequestBody UserDto userDto) {
 
         //토큰에서 현재 유저 아이디 가져옴
-        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Long userId = (Long) headerToken.get("id");
+        Long userId = authService.getUserIdFromToken(token);
 
         //****service에게 유저 벤 요청(추후 userDto새로 만들고 그 밑 줄 삭제)****
         //userStudyroomService.banUser(userId, userDto.getId(), studyroomId);
@@ -95,8 +92,7 @@ public class UserStudyroomController {
     public ResponseEntity<?> pass(@RequestHeader("Authorization") String token,
         @PathVariable Long studyroomId, @RequestBody UserDto userDto) {
         //토큰에서 유저정보 받아옴
-        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Long userId = (Long) headerToken.get("id");
+        Long userId = authService.getUserIdFromToken(token);
 
         //****유저 서비스에 권한 넘기기 호출****
         //userStudyroomService.passRole(userId, userDto.getId(), studyroomId);
