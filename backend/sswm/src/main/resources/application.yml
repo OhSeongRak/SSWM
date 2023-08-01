@@ -19,7 +19,7 @@ spring:
   redis:
     host: localhost
     port: 6379
-
+    password: root
 
 logging:
   level:
@@ -31,7 +31,7 @@ server:
   servlet:
     context-path: /api
   port:
-    9001
+    8080
 
 cloud:
   aws:

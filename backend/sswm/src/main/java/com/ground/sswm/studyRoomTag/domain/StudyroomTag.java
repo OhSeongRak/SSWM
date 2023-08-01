@@ -21,11 +21,11 @@ public class StudyroomTag {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studyroom_id")
+    @JoinColumn(name = "STUDTYROOM_ID")
     private Studyroom studyroom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag_id")
+    @JoinColumn(name = "TAG_ID")
     private Tag tag;
 
 }
