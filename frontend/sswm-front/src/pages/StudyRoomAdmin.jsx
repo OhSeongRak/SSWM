@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LockIcon from "@mui/icons-material/Lock";
@@ -15,6 +13,8 @@ import Paper from "@mui/material/Paper";
 import ForestIcon from "@mui/icons-material/Forest";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { styled as muistyled } from "@mui/material/styles";
+import { Snackbar } from "@mui/material";
+import { FormLabel, RadioGroup, Switch } from "@mui/material";
 
 import def from "../assets/dolphin.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
@@ -33,6 +33,19 @@ const StudyRoomAdmin = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // Snackbar
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+
+  const openSnackBar = () => setIsSnackBarOpen(true);
+  const closeSnackBar = () => setIsSnackBarOpen(false);
+  
+  const closeModalEvent = () => {
+    setIsModalOpen(false);
+    openSnackBar(); // Open the CustomSnackBar after closing the modal
+  };
+
+
   return (
     <div>
       <Gnb />
@@ -62,8 +75,9 @@ const StudyRoomAdmin = () => {
                   공개 여부
                 </StudyRoomTitle>
                 <StudyRoomContent>
-                  <FormControlLabel control={<Checkbox />} label="공개" />
-                  <FormControlLabel control={<Checkbox />} label="비공개" />
+                  <RadioGroup row defaultValue="공개">
+                    <Switch {...FormLabel} defaultChecked />
+                  </RadioGroup>
                 </StudyRoomContent>
               </StudyRoomWrap>
               <StudyRoomWrap>
@@ -142,10 +156,16 @@ const StudyRoomAdmin = () => {
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
-                  <Button onClick={() => setIsModalOpen(false)}>확인</Button>
+                  <Button onClick={() => closeModalEvent()}>확인</Button>
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
+              <Snackbar
+                open={isSnackBarOpen}
+                autoHideDuration={3000}
+                onClose={closeSnackBar}
+                message="정상적으로 삭제되었습니다."
+              />
             </div>
           </FooterBtnWrap>
         </FooterWrap>

@@ -16,6 +16,7 @@ import CreateStudyRoom from './pages/CreateStudyRoom';
 import StudyRoomAdmin from './pages/StudyRoomAdmin';
 import StudyRoomMember from './pages/StudyRoomMember';
 import LiveRoom from './pages/LiveRoom';
+import Streching from './pages/Stretching';
 
 function App() {
   const data = useSelector((state) => {
@@ -23,7 +24,6 @@ function App() {
     return state;
   });
   console.log(data)
-  console.log('여기호출')
   
   return (
     <ContentWrap>
@@ -39,6 +39,7 @@ function App() {
           <Route path="/StudyRoomAdmin" element={<StudyRoomAdmin />}></Route>
           <Route path="/StudyRoomMember" element={<StudyRoomMember />}></Route>
           <Route path="/LiveRoom" element={<LiveRoom />}></Route>
+          <Route path="/Streching" element={<Streching />}></Route>
         </Routes>      
       </BrowserRouter>
     </ContentWrap>
