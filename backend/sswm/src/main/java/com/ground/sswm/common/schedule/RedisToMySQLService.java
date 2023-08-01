@@ -1,7 +1,7 @@
 package com.ground.sswm.common.schedule;
 
-
 import com.ground.sswm.event.domain.StudyEvent;
+import com.ground.sswm.event.dto.StudyEventDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

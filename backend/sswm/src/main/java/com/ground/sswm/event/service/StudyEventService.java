@@ -1,8 +1,7 @@
 package com.ground.sswm.event.service;
 
-import com.ground.sswm.event.domain.StudyEventStatus;
-import com.ground.sswm.event.domain.StudyEventType;
+import com.ground.sswm.event.dto.StudyEventDto;
 
 public interface StudyEventService {
-    void addEventLog(StudyEventType event, StudyEventStatus studyEventStatus);
+    void addEventLog(Long userId, StudyEventDto studyEventDto);
 }

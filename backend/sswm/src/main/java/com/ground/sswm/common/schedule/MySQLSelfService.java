@@ -1,6 +1,5 @@
 package com.ground.sswm.common.schedule;
 
-
 import com.ground.sswm.dailyLog.domain.DailyLogRepository;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
 import lombok.RequiredArgsConstructor;
