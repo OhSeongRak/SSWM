@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class OAuthTokenDto {
+
     private String token_type;
     private String access_token;
     private String expires_in;

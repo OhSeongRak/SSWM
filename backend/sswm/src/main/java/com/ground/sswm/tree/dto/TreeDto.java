@@ -10,20 +10,21 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TreeDto {
+
     private Long id;
     private String name;
     private String image;
 
     @Builder
-    public TreeDto(Long id, String name, String image){
+    public TreeDto(Long id, String name, String image) {
         this.id = id;
         this.name = name;
         this.image = image;
     }
 
-    public static TreeDto from (Tree tree){
+    public static TreeDto from(Tree tree) {
         return TreeDto.builder().id(tree.getId())
-                .name(tree.getName()).image(tree.getImage())
-                .build();
+            .name(tree.getName()).image(tree.getImage())
+            .build();
     }
 }

@@ -1,7 +1,5 @@
 package com.ground.sswm.studyroom.dto;
 
-import com.ground.sswm.tag.dto.TagDto;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +11,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class SearchStudyroomReqDto {
+
     private String sortBy;
     private String orderBy;
     private String searchKeyword;

@@ -2,7 +2,6 @@ package com.ground.sswm.dailyLog.domain;
 
 import static javax.persistence.FetchType.LAZY;
 
-
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
 import javax.persistence.Entity;
@@ -35,7 +34,7 @@ public class DailyLog {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name= "STUDYROOM_ID")
+    @JoinColumn(name = "STUDYROOM_ID")
     private Studyroom studyroom;
 
     @Builder

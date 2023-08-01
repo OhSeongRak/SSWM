@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.PriorityQueue;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -155,7 +154,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             studyroomId).get();
 
         //호스트가 맞는지 판단
-        if (hostStudyroom.getRole()  == StudyMemberRole.HOST) {
+        if (hostStudyroom.getRole() == StudyMemberRole.HOST) {
             //호스트를 게스트로 변경 가져오기
             hostStudyroom.setRole(StudyMemberRole.GUEST);
 
