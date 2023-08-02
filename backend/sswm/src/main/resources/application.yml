@@ -3,6 +3,11 @@ spring:
     url: jdbc:mysql://localhost:3306/sswm?createDatabaseIfNotExist=true
     username: root
     password: root
+
+  sql: # data.sql을 사용하기 위해 추가
+    init:
+      mode: always
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
@@ -12,6 +17,8 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+
+    defer-datasource-initialization: true   #-> data.sql을 사용하기 위해 추가
 
     servlet:
       multipart:  # 파일 올리는 설정
@@ -32,7 +39,7 @@ server:
   servlet:
     context-path: /api
   port:
-    8080
+    9001
 
 cloud:
   aws:
