@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DailyLogDto {
+
     private int studyTime;
     private int restTime;
     private int date;

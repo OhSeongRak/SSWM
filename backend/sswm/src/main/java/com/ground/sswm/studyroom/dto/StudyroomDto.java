@@ -1,7 +1,6 @@
 package com.ground.sswm.studyroom.dto;
 
 import com.ground.sswm.studyroom.domain.Studyroom;
-
 import com.ground.sswm.tag.dto.TagDto;
 import java.util.List;
 import lombok.Builder;
@@ -13,6 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class StudyroomDto {
+
     private Long id;
     private String name;
     private String notice;
@@ -35,7 +35,8 @@ public class StudyroomDto {
     }
 
     @Builder
-    public StudyroomDto(Long id, String name, String notice, boolean isPublic, String enterCode, int maxUserNum,
+    public StudyroomDto(Long id, String name, String notice, boolean isPublic, String enterCode,
+        int maxUserNum,
         int maxRestTime, int studyAvgTime, String image, boolean isDeleted, int createdAt) {
         this.id = id;
         this.name = name;

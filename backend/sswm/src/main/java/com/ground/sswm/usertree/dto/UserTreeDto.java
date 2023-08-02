@@ -8,7 +8,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserTreeDto {
+
     private Long userId;
-    private int treeId;
+    private Long treeId;
     private int exp;
 }

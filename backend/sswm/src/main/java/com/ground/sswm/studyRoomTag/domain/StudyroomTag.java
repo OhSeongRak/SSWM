@@ -15,16 +15,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudyroomTag {
+
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studyroom_id")
+    @JoinColumn(name = "STUDTYROOM_ID")
     private Studyroom studyroom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="tag_id")
+    @JoinColumn(name = "TAG_ID")
     private Tag tag;
 
 }
