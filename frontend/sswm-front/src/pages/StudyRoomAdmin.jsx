@@ -14,7 +14,6 @@ import ForestIcon from "@mui/icons-material/Forest";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { styled as muistyled } from "@mui/material/styles";
 import { Snackbar } from "@mui/material";
-import { FormLabel, RadioGroup, Switch } from "@mui/material";
 
 import def from "../assets/dolphin.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
@@ -52,12 +51,11 @@ const StudyRoomAdmin = () => {
 
   const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
-  
+
   const closeModalEvent = () => {
     setIsModalOpen(false);
     openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
-
 
   return (
     <div>
