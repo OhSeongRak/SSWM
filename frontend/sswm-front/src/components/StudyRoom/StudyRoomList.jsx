@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import StudyRoomItem from "./StudyRoomItem";
 import { useInView } from "react-intersection-observer";
+import RecipeReviewCard from "./StudyRoomItem2";
 
 const RoomListLayout = styled.div`
   flex: 1;
@@ -19,10 +20,10 @@ const StudyRoomList = (props) => {
   return (
     <RoomListLayout ref={ref}>
       <RoomList>
-        <StudyRoomItem />
-        <StudyRoomItem />
-        <StudyRoomItem />
-        <StudyRoomItem />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
         <StudyRoomItem />
         <StudyRoomItem />
         <StudyRoomItem />

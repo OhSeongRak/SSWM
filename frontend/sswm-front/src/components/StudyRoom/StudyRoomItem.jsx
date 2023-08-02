@@ -24,16 +24,23 @@ const StudyRoomItem = (props) => {
           >
             2023.07.21~
           </Typography>
+          <Typography
+            sx={{ fontSize: 14, fontFamily: "NanumSquareNeo" }}
+            color="text.secondary"
+            gutterBottom
+          >
+            평균공부시간
+          </Typography>
+
           <Typography sx={{ fontFamily: "NanumSquareNeo" }} variant="h5" component="div">
             Card Section 나누기
           </Typography>
+
           <Typography sx={{ mb: 1.5, fontFamily: "NanumSquareNeo" }} color="text.secondary">
             # 태그 넣을 자리
           </Typography>
-          <Typography sx={{ fontFamily: "NanumSquareNeo" }} variant="body2">
-            아무말 넣기
-            <br />
-            아무말 넣기2
+          <Typography sx={{ mb: 1.5, fontFamily: "NanumSquareNeo" }} color="text.secondary">
+            현재인원/총인원
           </Typography>
         </CardContent>
         <CardActions>
