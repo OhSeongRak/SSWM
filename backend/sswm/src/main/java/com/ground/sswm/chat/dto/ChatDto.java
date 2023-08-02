@@ -29,5 +29,5 @@ public class ChatDto {
     private Long userId; // 유저번호
     private String nickname; // 유저닉네임
     private String content; // 메시지
-    private int createdAt;
+    private long createdAt;
 }

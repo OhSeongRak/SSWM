@@ -10,13 +10,13 @@ import lombok.ToString;
 @Getter
 @Setter
 public class StudyEventDto {
+    private Long studyroomId;
     private StudyEventType event; //LIVE, REST, STRETCH
     private StudyEventStatus studyEventStatus; // ON,OFF
-    private int time; //해당 이벤트가 발생한 시각
 
-    public StudyEventDto(StudyEventType event, StudyEventStatus studyEventStatus, int time) {
+    public StudyEventDto(StudyEventType event, StudyEventStatus studyEventStatus, Long studyroomId) {
         this.event = event;
         this.studyEventStatus = studyEventStatus;
-        this.time = time;
+        this.studyroomId = studyroomId;
     }
 }

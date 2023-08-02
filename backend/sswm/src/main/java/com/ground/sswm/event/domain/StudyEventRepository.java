@@ -12,7 +12,7 @@ public class StudyEventRepository { // Redis
     private final RedisTemplate<String, StudyEvent> redisEventTemplate;
 
     public void save(StudyEvent studyEvent){
-        // key : userId_TYPE_STATUS
+        //TODO: {key : userId_TYPE_STATUS}
         String key = studyEvent.getUserId()+"_"+studyEvent.getEvent()+"_"+studyEvent.getStudyEventStatus();
         redisEventTemplate.opsForValue().set(key, studyEvent, EXPIRATION_TIME_SECONDS, TimeUnit.SECONDS );
     }

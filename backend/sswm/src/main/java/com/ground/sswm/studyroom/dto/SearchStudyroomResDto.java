@@ -17,7 +17,7 @@ public class SearchStudyroomResDto {
     private String name;
     private int userNum;
     private int maxUserNum;
-    private int createdTime;
+    private long createdTime;
     private int studyAvgTime;
     private List<String> tagNames;
 
@@ -25,7 +25,7 @@ public class SearchStudyroomResDto {
     }
 
     public SearchStudyroomResDto(Long id, boolean isPublic, String code, String image, String name,
-        int maxUserNum, int createdTime, int studyAvgTime) {
+        int maxUserNum, long createdTime, int studyAvgTime) {
         this.id = id;
         this.isPublic = isPublic;
         this.code = code;

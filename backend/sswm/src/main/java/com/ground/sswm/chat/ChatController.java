@@ -1,8 +1,8 @@
-package com.ground.sswm.chat.controller;
+package com.ground.sswm.chat;
 
 import com.ground.sswm.chat.dto.ChatDto;
 import com.ground.sswm.chat.pubsub.RedisPublisher;
-import com.ground.sswm.chat.service.ChatService;
+import com.ground.sswm.chat.service.ChatServiceImpl;
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 public class ChatController {
 
     private final RedisPublisher redisPublisher;
-    private final ChatService chatService;
+    private final ChatServiceImpl chatServiceImpl;
     private final UserService userService;
 
     /**
@@ -37,15 +37,15 @@ public class ChatController {
             return;
         }
         if (ChatDto.MessageType.ENTER.equals(chatDto.getType())) {
-            chatService.enterChatRoom(Long.valueOf(chatDto.getStudyroomId()));
+            chatServiceImpl.enterChatRoom(Long.valueOf(chatDto.getStudyroomId()));
 
-            chatDto.setContent(chatDto.getNickname() + "님이 입장하셨습니다.");
+            chatDto.setContent("["+chatDto.getNickname() +"]"+"님이 입장하셨습니다.");
         }
 
-        chatService.createChat(Long.valueOf(chatDto.getStudyroomId()), chatDto.getUserId(), chatDto.getContent(), chatDto.getType());
+        chatServiceImpl.createChat(Long.valueOf(chatDto.getStudyroomId()), chatDto.getUserId(), chatDto.getContent(), chatDto.getType());
 
 
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
-        redisPublisher.publish(chatService.getTopic(Long.valueOf(chatDto.getStudyroomId())), chatDto);
+        redisPublisher.publish(chatServiceImpl.getTopic(Long.valueOf(chatDto.getStudyroomId())), chatDto);
     }
 }
