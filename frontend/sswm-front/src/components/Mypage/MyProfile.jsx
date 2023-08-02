@@ -53,7 +53,7 @@ const MyProfile = (props) => {
                 onClick={() => {
                   // dispatch에 action을 보내 => store에 전달해주기
                   dispatch({
-                    type: "PLUS_ONE",
+                    type: "LEVEL_PLUS_ONE",
                   });
                 }}
               >

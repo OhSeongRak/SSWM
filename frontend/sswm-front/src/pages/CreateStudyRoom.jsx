@@ -4,7 +4,6 @@ import Gnb from "../components/Gnb";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -18,7 +17,9 @@ import ForestIcon from "@mui/icons-material/Forest";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 import def from "../assets/dolphin.jpg";
-import { Avatar, FormLabel, Radio, RadioGroup, Switch } from "@mui/material";
+import { Avatar, FormLabel, RadioGroup, Switch } from "@mui/material";
+
+import { useDispatch, useSelector } from "react-redux";
 
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -29,6 +30,9 @@ const Item = muistyled(Paper)(({ theme }) => ({
 }));
 
 const CreateStudyRoom = () => {
+  const dispatch = useDispatch();
+  const studyroom = useSelector((state) => state.studyroom);
+
   const [imageSrc, setImage] = useState(def);
 
   const imageUp = useRef();
@@ -128,11 +132,23 @@ const CreateStudyRoom = () => {
                   최대 인원
                 </StudyRoomTitle2>
                 <StudyRoomContent>
-                  <IconButton aria-label="minus">
+                  <IconButton aria-label="minus"
+                    onClick={() => {
+                      dispatch({
+                        type: "PERSON_MINUS_ONE",
+                      });
+                    }}
+                  >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
-                  <Item>00</Item>
-                  <IconButton aria-label="plus">
+                  <Item>{studyroom.personnel}</Item>
+                  <IconButton aria-label="plus"
+                    onClick={() => {
+                      dispatch({
+                        type: "PERSON_PLUS_ONE",
+                      });
+                    }}
+                  >
                     <AddCircleOutlineIcon />
                   </IconButton>
                 </StudyRoomContent>
@@ -143,11 +159,23 @@ const CreateStudyRoom = () => {
                   일일 최대 휴식 시간
                 </StudyRoomTitle2>
                 <StudyRoomContent>
-                  <IconButton aria-label="minus">
+                <IconButton aria-label="minus"
+                    onClick={() => {
+                      dispatch({
+                        type: "REST_MINUS_TEN",
+                      });
+                    }}
+                  >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
-                  <Item>00</Item>
-                  <IconButton aria-label="plus">
+                  <Item>{studyroom.resttime}</Item>
+                  <IconButton aria-label="plus"
+                    onClick={() => {
+                      dispatch({
+                        type: "REST_PLUS_TEN",
+                      });
+                    }}
+                  >
                     <AddCircleOutlineIcon />
                   </IconButton>
                 </StudyRoomContent>
@@ -217,9 +245,6 @@ const ContentLeftWrap = styled.div`
   justify-content: center;
   width: 50%;
   height: 100%;
-`;
-const StudyRoomImg = styled.img`
-  height: 90%;
 `;
 const ContentRightWrap = styled.div`
   width: 50%;
