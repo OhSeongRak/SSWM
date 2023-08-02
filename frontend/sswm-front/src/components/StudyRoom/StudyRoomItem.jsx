@@ -50,7 +50,7 @@ const StudyRoomItem = (props) => {
 
 const StudyRoomItemLayout = styled.div`
   padding: 15px 13px;
-  display: inline-block;
+  display: block;
   width: 300px;
   gap: 10px;
   flex-direction: row;

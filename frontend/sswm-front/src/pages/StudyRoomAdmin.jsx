@@ -18,7 +18,7 @@ import { FormLabel, RadioGroup, Switch } from "@mui/material";
 
 import def from "../assets/dolphin.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
-import { Box, Typography } from "@mui/material";
+import { Box, Switch, Typography } from "@mui/material";
 
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -33,6 +33,19 @@ const StudyRoomAdmin = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const [checked, setChecked] = useState(true);
+  const [disabled, setAble] = useState(true);
+
+  const handleChange = () => {
+    if (checked) {
+      setAble(false);
+      setChecked(false);
+    } else {
+      setAble(true);
+      setChecked(true);
+    }
+  };
 
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
@@ -57,7 +70,15 @@ const StudyRoomAdmin = () => {
               <CustomButton>중복확인</CustomButton>
             </HeaderBtn>
             <HeaderBtn>
-              <HeaderBtnText placeholder="입장 코드 " />
+              <HeaderBtnText
+                disabled={disabled}
+                hiddenLabel
+                id="filled-hidden-label-normal"
+                defaultValue=""
+                variant="filled"
+                size="small"
+                helperText="알파벳,숫자 포함한 8자리"
+              />
               <CustomButton>저장</CustomButton>
             </HeaderBtn>
           </HeaderBtnWrap>
@@ -75,9 +96,11 @@ const StudyRoomAdmin = () => {
                   공개 여부
                 </StudyRoomTitle>
                 <StudyRoomContent>
-                  <RadioGroup row defaultValue="공개">
-                    <Switch {...FormLabel} defaultChecked />
-                  </RadioGroup>
+                  <Switch
+                    checked={checked}
+                    onChange={handleChange}
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
                 </StudyRoomContent>
               </StudyRoomWrap>
               <StudyRoomWrap>

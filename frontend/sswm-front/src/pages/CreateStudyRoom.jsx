@@ -17,9 +17,10 @@ import ForestIcon from "@mui/icons-material/Forest";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 import def from "../assets/dolphin.jpg";
-import { Avatar, FormLabel, RadioGroup, Switch } from "@mui/material";
-
+import { Avatar, RadioGroup, Switch } from "@mui/material";
+import MultipleSelectChip from "../components/StudyRoom/Tags";
 import { useDispatch, useSelector } from "react-redux";
+
 
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -50,6 +51,19 @@ const CreateStudyRoom = () => {
         resolve();
       };
     });
+  };
+
+  const [checked, setChecked] = useState(true);
+  const [disabled, setAble] = useState(true);
+
+  const handleChange = () => {
+    if (checked) {
+      setAble(false);
+      setChecked(false);
+    } else {
+      setAble(true);
+      setChecked(true);
+    }
   };
 
   return (
@@ -101,7 +115,11 @@ const CreateStudyRoom = () => {
                   </StudyRoomTitle>
                   <StudyRoomContent>
                     <RadioGroup row defaultValue="공개">
-                      <Switch {...FormLabel} defaultChecked />
+                      <Switch
+                        checked={checked}
+                        onChange={handleChange}
+                        inputProps={{ "aria-label": "controlled" }}
+                      />
                     </RadioGroup>
                   </StudyRoomContent>
                 </StudyRoomWrap>
@@ -112,7 +130,7 @@ const CreateStudyRoom = () => {
                   </StudyRoomTitle>
                   <StudyRoomContent>
                     <TextField
-                      disabled
+                      disabled={disabled}
                       hiddenLabel
                       id="filled-hidden-label-normal"
                       defaultValue=""
@@ -186,13 +204,7 @@ const CreateStudyRoom = () => {
                   태그
                 </StudyRoomTitle2>
                 <StudyRoomContent>
-                  <TextField
-                    hiddenLabel
-                    id="filled-hidden-label-normal"
-                    defaultValue=""
-                    variant="filled"
-                    size="small"
-                  />
+                  <MultipleSelectChip />
                 </StudyRoomContent>
               </StudyRoomWrap>
             </ContentWrap2>
@@ -267,7 +279,7 @@ const StudyRoomTitle = styled.div`
 const StudyRoomTitle2 = styled.div`
   display: flex;
   align-items: center;
-  width: 50%;
+  width: 20%;
   height: 100%;
   font-size: 20px;
   font-family: "NanumSquareNeo";
