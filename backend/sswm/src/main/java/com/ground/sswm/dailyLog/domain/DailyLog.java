@@ -25,8 +25,8 @@ public class DailyLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int studyTime;
-    private int restTime;
+    private long studyTime;
+    private long restTime;
     private int stretchScore;
     private long date;
 

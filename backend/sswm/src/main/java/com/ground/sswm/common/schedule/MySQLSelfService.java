@@ -41,8 +41,8 @@ public class MySQLSelfService {
                     .findByUserIdAndStudyroomId(x.getUser().getId(),x.getStudyroom().getId())
                     .orElse(null);
                 if(userStudyroom == null) return;
-                userStudyroom.setTotalRest(userStudyroom.getTotalRest() + x.getRestTime());
-                userStudyroom.setTotalStudy(userStudyroom.getTotalStudy() + x.getStudyTime());
+                userStudyroom.setTotalRest(userStudyroom.getTotalRest() );
+                userStudyroom.setTotalStudy(userStudyroom.getTotalStudy());
                 userStudyroomRepository.save(userStudyroom);
             }
         );
