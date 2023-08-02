@@ -16,6 +16,6 @@ public class ScheduledTasks {
 
     @Scheduled(cron = "0 0 4 * * ?") // Runs every 4 a.m.
     public void updateMySQLEveryDay() {
-        mySQLSelfService.performDailyAccumulate();
+        mySQLSelfService.dailyLogToUserStudyroom();
     }
 }
