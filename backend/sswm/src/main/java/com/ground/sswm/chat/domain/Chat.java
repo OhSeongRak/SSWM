@@ -45,11 +45,11 @@ public class Chat {
     private String content;
 
     @Column(updatable = false)
-    private int createdAt;
+    private long createdAt;
 
 
     @Builder
-    public Chat(Studyroom studyroom, User user, String content, int createdAt) {
+    public Chat(Studyroom studyroom, User user, String content, long createdAt) {
         this.studyroom = studyroom;
         this.user = user;
         this.content = content;
