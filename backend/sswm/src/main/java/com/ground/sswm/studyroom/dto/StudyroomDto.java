@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class StudyroomDto {
 
-    private Long id;
     private String name;
     private String notice;
     private boolean isPublic;
@@ -35,10 +34,8 @@ public class StudyroomDto {
     }
 
     @Builder
-    public StudyroomDto(Long id, String name, String notice, boolean isPublic, String enterCode,
-        int maxUserNum,
-        int maxRestTime, int studyAvgTime, String image, boolean isDeleted, long createdAt) {
-        this.id = id;
+    public StudyroomDto(String name, String notice, boolean isPublic, String enterCode,
+        int maxUserNum, int maxRestTime, int studyAvgTime, String image, boolean isDeleted, long createdAt) {
         this.name = name;
         this.notice = notice;
         this.isPublic = isPublic;
@@ -53,7 +50,6 @@ public class StudyroomDto {
 
     public static StudyroomDto from(Studyroom studyroom) {
         return StudyroomDto.builder()
-            .id(studyroom.getId())
             .name(studyroom.getName())
             .notice(studyroom.getNotice())
             .isPublic(studyroom.isPublic())

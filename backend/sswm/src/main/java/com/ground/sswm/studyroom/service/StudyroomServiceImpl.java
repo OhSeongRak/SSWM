@@ -123,7 +123,6 @@ public class StudyroomServiceImpl implements StudyroomService {
                 studyroomTag.setTag(tagRepository.findByName(tagDto.getName()));
                 studyRoomTagRepository.save(studyroomTag);
             }
-
         }
 
         return studyroom.getId();
@@ -141,6 +140,7 @@ public class StudyroomServiceImpl implements StudyroomService {
     public StudyroomDto select(Long studyroomId) {
 
         Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
+
         if (studyroom.isEmpty()) {
             return null;
         }

@@ -1,6 +1,7 @@
 package com.ground.sswm.studyroom.domain;
 
 import com.ground.sswm.studyroom.dto.StudyroomDto;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,35 +22,29 @@ public class Studyroom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ColumnDefault(value = "NULL")
     private String name;
 
-    @ColumnDefault(value = "NULL")
     private String notice;
 
-    @ColumnDefault(value = "FALSE")
     private boolean isPublic;
 
-    @ColumnDefault(value = "NULL")
     private String enterCode;
 
-    @ColumnDefault(value = "9")
     private int maxUserNum;
 
-    @ColumnDefault(value = "150")
     private int maxRestTime;
 
-    @ColumnDefault(value = "0")
+    @ColumnDefault("0")
     private int studyAvgTime;
 
-    @ColumnDefault("NULL")
     private String image;
 
-    @ColumnDefault(value = "FALSE")
+    @ColumnDefault("FALSE")
     private boolean isDeleted;
 
     @ColumnDefault(value = "0")
     private long createdAt;
+
 
     private int userNum;
 
@@ -62,9 +57,8 @@ public class Studyroom {
 //  }
 
     @Builder
-    public Studyroom(Long id, String name, String notice, boolean isPublic, String enterCode,
-        int maxUserNum,
-        int maxRestTime, int studyAvgTime, String image, boolean isDeleted, long createdAt) {
+    public Studyroom( String name, String notice, boolean isPublic, String enterCode,
+        int maxUserNum, int maxRestTime, int studyAvgTime, String image, boolean isDeleted, long createdAt) {
         this.id = id;
         this.name = name;
         this.notice = notice;
@@ -80,27 +74,24 @@ public class Studyroom {
 
     public static Studyroom from(StudyroomDto studyroomDto) {
         return Studyroom.builder()
-            .id(studyroomDto.getId())
             .name(studyroomDto.getName())
             .notice(studyroomDto.getNotice())
             .isPublic(studyroomDto.getIsPublic())
             .enterCode(studyroomDto.getEnterCode())
             .maxUserNum(studyroomDto.getMaxUserNum())
             .maxRestTime(studyroomDto.getMaxRestTime())
-            .studyAvgTime(studyroomDto.getStudyAvgTime())
             .image(studyroomDto.getImage())
-            .isDeleted(studyroomDto.getIsDeleted())
             .createdAt(studyroomDto.getCreatedAt())
             .build();
     }
 
     public void setUpdates(StudyroomDto studyroomDto) {
         this.setName(studyroomDto.getName());
+        this.setNotice(studyroomDto.getNotice());
         this.setPublic(studyroomDto.getIsPublic());
         this.setEnterCode(studyroomDto.getEnterCode());
         this.setMaxUserNum(studyroomDto.getMaxUserNum());
         this.setMaxRestTime(studyroomDto.getMaxRestTime());
         this.setImage(studyroomDto.getImage());
-        this.setNotice(studyroomDto.getNotice());
     }
 }
