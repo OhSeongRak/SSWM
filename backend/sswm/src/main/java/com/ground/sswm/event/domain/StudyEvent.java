@@ -13,23 +13,28 @@ import lombok.ToString;
 @NoArgsConstructor
 public class StudyEvent {
     private Long userId;
+    private Long studyroomId;
     private StudyEventType event; //LIVE, REST, STRETCH
     private StudyEventStatus studyEventStatus; // ON,OFF
-    private int time; //해당 이벤트가 발생한 시각
+    private long time; //해당 이벤트가 발생한 시각
     @Builder
-    public StudyEvent(Long userId, StudyEventType event, StudyEventStatus studyEventStatus,
-        int time) {
+    public StudyEvent(Long userId, Long studyroomId, StudyEventType event,
+        StudyEventStatus studyEventStatus, long time) {
         this.userId = userId;
+        this.studyroomId = studyroomId;
         this.event = event;
         this.studyEventStatus = studyEventStatus;
         this.time = time;
     }
-    public static StudyEvent from(Long userId,StudyEventDto studyEventDto){
+
+
+    public static StudyEvent from(Long userId,Long time, StudyEventDto studyEventDto){
         return StudyEvent.builder()
             .userId(userId)
+            .studyroomId(studyEventDto.getStudyroomId())
             .event(studyEventDto.getEvent())
             .studyEventStatus(studyEventDto.getStudyEventStatus())
-            .time(studyEventDto.getTime())
+            .time(time)
             .build();
     }
 }

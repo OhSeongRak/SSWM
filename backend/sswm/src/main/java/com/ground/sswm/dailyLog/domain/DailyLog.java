@@ -2,6 +2,7 @@ package com.ground.sswm.dailyLog.domain;
 
 import static javax.persistence.FetchType.LAZY;
 
+import com.ground.sswm.dailyLog.dto.DailyLogDto;
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ public class DailyLog {
     private int studyTime;
     private int restTime;
     private int stretchScore;
-    private int date;
+    private long date;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "USER_ID")
@@ -38,7 +39,7 @@ public class DailyLog {
     private Studyroom studyroom;
 
     @Builder
-    public DailyLog(Long id, int studyTime, int restTime, int stretchScore, int date, User user,
+    public DailyLog(Long id, int studyTime, int restTime, int stretchScore, long date, User user,
         Studyroom studyroom) {
         this.id = id;
         this.studyTime = studyTime;
@@ -49,7 +50,7 @@ public class DailyLog {
         this.studyroom = studyroom;
     }
 
-    public static DailyLog from(com.ground.sswm.dailyLog.dto.DailyLogDto dailyLogDto) {
+    public static DailyLog from(DailyLogDto dailyLogDto) {
         return com.ground.sswm.dailyLog.domain.DailyLog.builder()
             .studyTime(dailyLogDto.getStudyTime())
             .restTime(dailyLogDto.getRestTime())
