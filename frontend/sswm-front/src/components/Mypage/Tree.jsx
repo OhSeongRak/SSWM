@@ -3,9 +3,11 @@ import styled from "styled-components";
 
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import { useDispatch } from 'react-redux';
 
 
 const Tree = (props) => {
+  const dispatch = useDispatch();
   return(
     <ContainerWrap>
       <TitleWrap>
@@ -13,36 +15,18 @@ const Tree = (props) => {
       </TitleWrap>
       <ContentWrap>
         <TreeListWrap>
-          <TreeInfo>
-            <TreeImg>
-            </TreeImg>
-            <TreeName>
-              <div>은행 나무</div>
-              <div>LV.20 (250 / 250)</div>
-            </TreeName>
-          </TreeInfo>
-          <TreeInfo>
-            <TreeImg>
-            </TreeImg>
-            <TreeName>
-              <div>은행 나무</div>
-              <div>LV.20 (250 / 250)</div>
-            </TreeName>
-          </TreeInfo>
-          <TreeInfo>
-            <TreeImg>
-            </TreeImg>
-            <TreeName>
-              <div>은행 나무</div>
-              <div>LV.20 (250 / 250)</div>
-            </TreeName>
-          </TreeInfo>
-        </TreeListWrap>
-        <BtnWrap>
-          <IconButton aria-label="add" size="large">
+          
+          <IconButton aria-label="add" size="large"
+            onClick={() => {
+              dispatch({
+                type: "CREATE_SEED"
+              });
+            }}
+          >
             <AddIcon fontSize="inherit" />
           </IconButton>
-        </BtnWrap>
+        </TreeListWrap>
+        
       </ContentWrap>
     </ContainerWrap>
   );
@@ -71,38 +55,34 @@ const TreeListWrap = styled.div`
   height: 200px;
   width: 60%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   flex-direction: row;
-  gap: 5px;
+  gap: 3vw;
 `
-const TreeInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 30%;
-  height: 200px;
-  border: 2px solid orange;
-  border-radius: 15px;
-`
-const TreeImg = styled.img`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 70%;
-  size: 20%;
-`
-const TreeName = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 30%;
-`
-const BtnWrap = styled.div`
-  display: flex;
-  height: 200px;
-  width: 15%;
-  justify-content: center;
-  align-items: center;
-`
+// const TreeInfo = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   width: 30%;
+//   height: 200px;
+//   border: 2px solid orange;
+//   border-radius: 15px;
+// `
+// const TreeImg = styled.img`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   height: 70%;
+//   size: 20%;
+// `
+// const TreeName = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   height: 30%;
+// `
+
 export default Tree;
