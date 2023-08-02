@@ -52,12 +52,11 @@ const StudyRoomAdmin = () => {
 
   const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
-  
+
   const closeModalEvent = () => {
     setIsModalOpen(false);
     openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
-
 
   return (
     <div>
