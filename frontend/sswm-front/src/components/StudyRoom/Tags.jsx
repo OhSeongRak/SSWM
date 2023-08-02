@@ -49,6 +49,11 @@ export default function MultipleSelectChip() {
     const {
       target: { value },
     } = event;
+
+    if (personName.length > 2) {
+      setPersonName(personName.filter((n) => n !== personName));
+      event.target.personName = false;
+    }
     setPersonName(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
