@@ -24,18 +24,18 @@ const StudyRoom = (props) => {
           <CheckboxChip />
         </CheckChip>
         <StudyRoomBtn>
-          <span>
+          <SortBtn>
             <FadeMenu></FadeMenu>
-          </span>
+          </SortBtn>
           <FormGroup style={{ display: "inline-block" }}>
             <FormControlLabel
               sx={{ "& .MuiFormControlLabel-label": { fontFamily: "NanumSquareNeo" } }}
-              control={<Checkbox defaultChecked />}
+              control={<Checkbox />}
               label="비공개 스터디룸 표시"
             />
             <FormControlLabel
               sx={{ "& .MuiFormControlLabel-label": { fontFamily: "NanumSquareNeo" } }}
-              control={<Checkbox defaultChecked />}
+              control={<Checkbox />}
               label="꽉 찬 스터디룸 표시"
             />
           </FormGroup>
@@ -75,6 +75,8 @@ const StudyRoomBtn = styled.div`
   margin: 0 80px;
   margin-top: 30px;
 `;
+const SortBtn = styled.div`
+`
 const AddBtn = styled.div`
   position: fixed;
   bottom: 1vw;
