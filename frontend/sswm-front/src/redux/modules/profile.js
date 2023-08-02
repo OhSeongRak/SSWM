@@ -4,6 +4,7 @@ const initialState = {
   studyMin: 0,
   restMin: 0,
   stretchScore: 0,
+  
 };
 
 // counter 리듀서 : 'state에 변화를 일으키는' 함수
