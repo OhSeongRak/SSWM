@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import LockIcon from "@mui/icons-material/Lock";
@@ -15,10 +13,12 @@ import Paper from "@mui/material/Paper";
 import ForestIcon from "@mui/icons-material/Forest";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { styled as muistyled } from "@mui/material/styles";
+import { Snackbar } from "@mui/material";
+
 
 import def from "../assets/dolphin.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
-import { Box, Typography } from "@mui/material";
+import { Box, Switch, Typography } from "@mui/material";
 
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -33,6 +33,31 @@ const StudyRoomAdmin = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const [checked, setChecked] = useState(true);
+  const [disabled, setAble] = useState(true);
+
+  const handleChange = () => {
+    if (checked) {
+      setAble(false);
+      setChecked(false);
+    } else {
+      setAble(true);
+      setChecked(true);
+    }
+  };
+
+  // Snackbar
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+
+  const openSnackBar = () => setIsSnackBarOpen(true);
+  const closeSnackBar = () => setIsSnackBarOpen(false);
+
+  const closeModalEvent = () => {
+    setIsModalOpen(false);
+    openSnackBar(); // Open the CustomSnackBar after closing the modal
+  };
+
   return (
     <div>
       <Gnb />
@@ -44,7 +69,15 @@ const StudyRoomAdmin = () => {
               <CustomButton>중복확인</CustomButton>
             </HeaderBtn>
             <HeaderBtn>
-              <HeaderBtnText placeholder="입장 코드 " />
+              <HeaderBtnText
+                disabled={disabled}
+                hiddenLabel
+                id="filled-hidden-label-normal"
+                defaultValue=""
+                variant="filled"
+                size="small"
+                helperText="알파벳,숫자 포함한 8자리"
+              />
               <CustomButton>저장</CustomButton>
             </HeaderBtn>
           </HeaderBtnWrap>
@@ -62,8 +95,11 @@ const StudyRoomAdmin = () => {
                   공개 여부
                 </StudyRoomTitle>
                 <StudyRoomContent>
-                  <FormControlLabel control={<Checkbox />} label="공개" />
-                  <FormControlLabel control={<Checkbox />} label="비공개" />
+                  <Switch
+                    checked={checked}
+                    onChange={handleChange}
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
                 </StudyRoomContent>
               </StudyRoomWrap>
               <StudyRoomWrap>
@@ -142,10 +178,16 @@ const StudyRoomAdmin = () => {
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
-                  <Button onClick={() => setIsModalOpen(false)}>확인</Button>
+                  <Button onClick={() => closeModalEvent()}>확인</Button>
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
+              <Snackbar
+                open={isSnackBarOpen}
+                autoHideDuration={3000}
+                onClose={closeSnackBar}
+                message="정상적으로 삭제되었습니다."
+              />
             </div>
           </FooterBtnWrap>
         </FooterWrap>

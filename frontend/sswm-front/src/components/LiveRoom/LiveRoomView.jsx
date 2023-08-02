@@ -1,19 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 
+import LiveRoomViewItem from "./LiveRoomViewItem";
+
+
 const LiveRoomView = () => {
   return (
     <ContainerWrap>
       <ViewWrap>
-        <ViewContent />
-        <ViewContent />
-        <ViewContent />
-        <ViewContent />
-        <ViewContent />
-        <ViewContent />
-        <ViewContent />
-        <ViewContent />
-        <ViewContent />
+        <LiveRoomViewItem />
+        <LiveRoomViewItem />
+        <LiveRoomViewItem />
+        <LiveRoomViewItem />
+        <LiveRoomViewItem />
+        <LiveRoomViewItem />
+        <LiveRoomViewItem />
+        <LiveRoomViewItem />
+        <LiveRoomViewItem />
       </ViewWrap>
     </ContainerWrap>
   )
@@ -22,20 +25,15 @@ const LiveRoomView = () => {
 const ContainerWrap = styled.div`
   width: 95%;
   height: 90%;
-  border: 1px solid black;
 `
 const ViewWrap = styled.div`
   width: 100%;
   height: 100%;
   display:grid; 
-  grid-gap: 5px; 
+  grid-gap: 1vw; 
   grid-template-columns: repeat(3, minmax(auto, 1fr));
   align-items: center; 
   justify-content: space-around;
 `
-const ViewContent = styled.div`
-  width: 100%;  
-  height: 100%;
-  border: 1px solid black;
-`
+
 export default LiveRoomView;

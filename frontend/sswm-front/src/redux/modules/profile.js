@@ -12,7 +12,7 @@ const initialState = {
 // input : state와 action(type,value = state를 어떻게 사용할건지 action을 정함)
 const profile = (state = initialState, action) => {
   switch (action.type) {
-    case "PLUS_ONE":
+    case "LEVEL_PLUS_ONE":
       return{
         level: state.level + 1,
       };
