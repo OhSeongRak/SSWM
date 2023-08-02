@@ -15,7 +15,7 @@ const RoomList = styled.ul`
 `;
 
 const StudyRoomList = (props) => {
-  const [ref, inView] = useInView();
+  const [ref] = useInView();
   return (
     <RoomListLayout ref={ref}>
       <RoomList>

@@ -8,13 +8,15 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 
 import def from "../../assets/fubao.jpg";
-import tree from "../../assets/tree.JPG";
+// import tree from "../../assets/tree.JPG";
+// import seed from "../../assets/seed.jpg"
 // import tree2 from '../../assets/tree2.jpg';
-import { useDispatch, useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const MyProfile = (props) => {
-  const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
+  // const dispatch = useDispatch();
+  // const profile = useSelector((state) => state.profile);
+  // const default_seed = useSelector((state) => state.profile.default_seed)
 
   const currentExp = 75;
   const maxExp = 100;
@@ -44,21 +46,10 @@ const MyProfile = (props) => {
 
         <TreeWrap>
           <TreeInfo>
-            <TreeImg src={tree}></TreeImg>
+            <TreeImg>
 
+            </TreeImg>
             <TreeName>
-              <div>은행 나무</div>
-              <div>LV. {profile.level} (250 / 250)</div>
-              <button
-                onClick={() => {
-                  // dispatch에 action을 보내 => store에 전달해주기
-                  dispatch({
-                    type: "LEVEL_PLUS_ONE",
-                  });
-                }}
-              >
-                +
-              </button>
             </TreeName>
           </TreeInfo>
 

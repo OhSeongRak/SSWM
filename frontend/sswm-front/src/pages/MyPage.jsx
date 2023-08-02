@@ -7,7 +7,7 @@ import MyProfile from "../components/Mypage/MyProfile";
 import Tree from "../components/Mypage/Tree";
 import MyStudyRoom from "../components/Mypage/MyStudyRoom";
 import Calendar from "../components/Mypage/Calendar";
-import Piechart from "../components/Mypage/Chart";
+// import Piechart from "../components/Mypage/Chart";
 // import { useDispatch, useSelector } from "react-redux";
 // import { Redirect, useParams } from 'react-router-dom';
 
