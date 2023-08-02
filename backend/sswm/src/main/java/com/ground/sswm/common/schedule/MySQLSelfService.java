@@ -7,6 +7,7 @@ import com.ground.sswm.dailyLog.domain.DailyLog;
 import com.ground.sswm.dailyLog.domain.DailyLogRepository;
 import com.ground.sswm.userStudyroom.domain.UserStudyroom;
 import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
+import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +21,14 @@ public class MySQLSelfService {
 
     public void performDailyAccumulate(){
         // [0] 작업을 진행할 초기 시간 ~ 끝 시간 선택
-        int startTime = UnixTimeUtil.getStartOfPeriod();
-        int endTime = UnixTimeUtil.getEndOfPeriod(startTime);
-        log.debug("[오늘 새벽 4시에 작업 진행] : 전날04시 ~ 다음날 03시59분59초\t"+ toSeoulTime(startTime)+" "+ toSeoulTime(endTime));
+        Instant now = Instant.now();
+        Instant startTime = UnixTimeUtil.getStartOfPeriod(now);
+        Instant endTime = UnixTimeUtil.getEndOfPeriod(startTime);
+        log.debug("[오늘 새벽 N시에 작업 진행] : 전날0N시 ~ 다음날 (N-1)시59분59초\t"
+            + toSeoulTime(startTime)+" "+ toSeoulTime(endTime));
 
         // [1] DailyLog에서 (studyTime, restTime, stretchScore) 읽어오기
-        List<DailyLog> dailyLogList = dailyLogRepository.findAllDateBetween(startTime, endTime);
+        List<DailyLog> dailyLogList = dailyLogRepository.findAllDateBetween(startTime.getEpochSecond(), endTime.getEpochSecond());
 
 
         // TODO : UserStudyroom (totalStudy, totalRest)에 누적업데이트하기

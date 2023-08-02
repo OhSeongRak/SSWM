@@ -49,7 +49,7 @@ public class Studyroom {
     private boolean isDeleted;
 
     @ColumnDefault(value = "0")
-    private int createdAt;
+    private long createdAt;
 
     private int userNum;
 
@@ -64,7 +64,7 @@ public class Studyroom {
     @Builder
     public Studyroom(Long id, String name, String notice, boolean isPublic, String enterCode,
         int maxUserNum,
-        int maxRestTime, int studyAvgTime, String image, boolean isDeleted, int createdAt) {
+        int maxRestTime, int studyAvgTime, String image, boolean isDeleted, long createdAt) {
         this.id = id;
         this.name = name;
         this.notice = notice;

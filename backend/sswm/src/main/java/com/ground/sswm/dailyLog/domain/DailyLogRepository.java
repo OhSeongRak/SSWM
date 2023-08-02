@@ -12,7 +12,7 @@ public interface DailyLogRepository extends
 
     // [24시간마다 - 4am] MySQL -> MySQL 배치 작업에 사용
     @Query("select dl from DailyLog dl where dl.date >= :start and dl.date < :end")
-    List<DailyLog> findAllDateBetween(int start, int end);
+    List<DailyLog> findAllDateBetween(long start, long end);
 
     //해당하는 스터디룸에서 start부터 end날짜 사이에 유저가 공부한 기록 select(기간)
     Optional<List<DailyLog>> findAllByUserIdAndStudyroomIdAndDateBetween(Long userId, Long studyroomId, int startDate, int endDate);
