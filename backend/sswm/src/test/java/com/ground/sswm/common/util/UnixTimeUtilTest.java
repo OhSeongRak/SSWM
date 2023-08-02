@@ -19,7 +19,7 @@ public class UnixTimeUtilTest {
     }
     @Test
     public void instantTest_startOfPeriod() {
-        Instant now = Instant.now();
+        long now = getCurrentUnixTime();
         System.out.println(toSeoulTime(getStartOfPeriod(now)));
         assertThat(toSeoulTime(getStartOfPeriod(now))).contains("2023-08-01");
     }

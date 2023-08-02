@@ -29,8 +29,8 @@ public class StudyEventController {
         Long userId = authService.getUserIdFromToken(token);
         log.debug("[POST] token studyEventType studyEventStatus" + studyEventDto);
 
-        Instant intUnixTime = getCurrentUnixTime();
-        studyEventService.addEventLog(userId, intUnixTime.getEpochSecond(), studyEventDto);
+        long now = getCurrentUnixTime();
+        studyEventService.addEventLog(userId, now, studyEventDto);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 

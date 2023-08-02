@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class RedisToMySQLService {
     private final RedisTemplate<String, StudyEvent> redisEventTemplate;
     public void updateDataFromRedisToMySQL(){
+        //TODO : UserId_RoomId , 끝시각 Not Null
         Object dataFromRedis = fetchRedisData(1L);
         String processedData = processData(dataFromRedis);
         updateMySQLData(processedData);
