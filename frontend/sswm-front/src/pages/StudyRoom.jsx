@@ -12,6 +12,7 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FadeMenu from "../components/SortMenu";
+import CheckboxChip from "../components/StudyRoom/HashTags";
 
 const StudyRoom = (props) => {
   return (
@@ -19,7 +20,9 @@ const StudyRoom = (props) => {
       <Gnb />
       <ContainerWrap>
         <SearchBar />
-
+        <CheckChip>
+          <CheckboxChip />
+        </CheckChip>
         <StudyRoomBtn>
           <span>
             <FadeMenu></FadeMenu>
@@ -55,11 +58,22 @@ const ContainerWrap = styled.div`
   width: 100%;
   font-family: "NanumSquareNeo";
 `;
+
+const CheckChip = styled.div`
+  display: flex;
+  justify-content: center;
+  width: auto;
+  margin-top: 40px;
+  margin-left: 10%;
+  margin-right: 10%;
+  font-family: "NanumSquareNeo";
+`;
+
 const StudyRoomBtn = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0 80px;
-  margin-top: 20px;
+  margin-top: 30px;
 `;
 const AddBtn = styled.div`
   position: fixed;
