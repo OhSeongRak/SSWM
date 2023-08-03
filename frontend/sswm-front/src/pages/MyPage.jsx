@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Gnb from "../components/Gnb";
 
 import MyProfile from "../components/Mypage/MyProfile";
-import Tree from "../components/Mypage/Tree";
+// import Tree from "../components/Mypage/Tree";
 import MyStudyRoom from "../components/Mypage/MyStudyRoom";
 import Calendar from "../components/Mypage/Calendar";
 // import Piechart from "../components/Mypage/Chart";
@@ -30,9 +30,9 @@ const MyPage = () => {
       <ContainerWrap>
         <SidebarWrap>
           <SidebarItem href="#nav1">내 프로필</SidebarItem>
-          <SidebarItem href="#nav2">내 스터디룸</SidebarItem>
-          <SidebarItem href="#nav3">캘린더</SidebarItem>
-          <SidebarItem href="#nav4">내가 키운나무 도감</SidebarItem>
+          <SidebarItem href="#nav2">내가 키운나무 도감</SidebarItem>
+          <SidebarItem href="#nav3">내 스터디룸</SidebarItem>
+          <SidebarItem href="#nav4">캘린더</SidebarItem>
         </SidebarWrap>
 
         <ContentWrap>
@@ -40,15 +40,11 @@ const MyPage = () => {
             <MyProfile />
           </ProfileWrap>
 
-          <TreeWrap name="nav4">
-            <Tree />
-          </TreeWrap>
-
-          <MyStudyWrap name="nav2">
+          <MyStudyWrap name="nav3">
             <MyStudyRoom />
           </MyStudyWrap>
 
-          <CalendarWrap name="nav3">
+          <CalendarWrap name="nav4">
             <Calendar />
           </CalendarWrap>
         </ContentWrap>
@@ -80,7 +76,7 @@ const ContentWrap = styled.div`
 `;
 
 const ProfileWrap = styled.a``;
-const TreeWrap = styled.a``;
+// const TreeWrap = styled.a``;
 const MyStudyWrap = styled.a``;
 const CalendarWrap = styled.a``;
 
