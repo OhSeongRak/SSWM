@@ -1,9 +1,7 @@
 package com.ground.sswm.studyroom;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ground.sswm.auth.service.AuthService;
-import com.ground.sswm.chat.dto.ChatDto;
-import com.ground.sswm.chat.service.ChatService;
+import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.studyroom.dto.SearchStudyroomReqDto;
 import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
 import com.ground.sswm.studyroom.dto.StudyroomDto;
@@ -11,6 +9,7 @@ import com.ground.sswm.studyroom.service.StudyroomService;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,20 +20,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/studyrooms")
 public class StudyroomController {
 
     private final StudyroomService studyroomService;
-    private final ChatService chatService;
     private final AuthService authService;
 
-    private final ObjectMapper objectMapper;
+    private final FileManageUtil fileManageUtil;
 
     // 전체 조회 (아직 구현하지 않았습니다!!!!!!)
     @GetMapping
@@ -45,15 +45,38 @@ public class StudyroomController {
         return new ResponseEntity<List<SearchStudyroomResDto>>(studyrooms, HttpStatus.OK);
     }
 
+
     // 스터디룸 생성
     @PostMapping
     @ResponseBody
     public ResponseEntity<Long> add(@RequestHeader("Authorization") String token,
-        @RequestBody StudyroomDto studyroomDto) {
+        @RequestPart(value = "studyroomDto", required = false) StudyroomDto studyroomDto,
+        @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+        @RequestPart(value = "fileType", required = false) String fileType) {
+
+        System.out.println("여기까진오나?");
+        log.debug("[POST] /user : file " + multipartFile);
+        log.debug("[POST] /user : fileType " + fileType);
+        log.debug("[POST] /user : token " + token);
+        log.debug("[POST] /user : studyroomDto " + studyroomDto);
 
         // 실제로는 이렇게 해야함!
         Map<String, Object> claims = authService.getClaimsFromToken(token);
         Long userId = Long.valueOf(claims.get("id").toString());
+
+        log.debug("userId :" + userId);
+
+        // 이미지 저장
+        String filePath = null;
+        if (fileType != null && !fileType.isBlank() && multipartFile != null
+            && !multipartFile.isEmpty()) {
+            filePath = fileManageUtil.uploadFile(fileType, multipartFile);
+        }
+
+        log.debug("[filePath]>>>> " + filePath);
+
+        studyroomDto.setImage(filePath);
+
         Long studyroomId = studyroomService.add(userId, studyroomDto);
 
         return new ResponseEntity<Long>(studyroomId, HttpStatus.OK);
@@ -90,27 +113,5 @@ public class StudyroomController {
         boolean isExist = studyroomService.exists(studyroomDto.getName());
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
 
-    }
-
-    // 스터디룸 참여 -> 아직은 사용안함
-    @GetMapping("/enter/{studyroomId}")
-    public ResponseEntity<List<ChatDto>> enterStudyroom(
-        @PathVariable(required = false) Long studyroomId,
-        @RequestParam String userId) {
-
-        List<ChatDto> chatList = chatService.findAllChatByStudyroomId(studyroomId);
-
-        String chatListJson;
-        try {
-            chatListJson = objectMapper.writeValueAsString(chatList);
-        } catch (Exception e) {
-            // 처리 오류 처리
-            chatListJson = "[]"; // 혹은 다른 오류 처리 방법을 사용
-        }
-
-        for (ChatDto chatDto : chatList) {
-            System.out.println("chatDto = " + chatDto);
-        }
-        return new ResponseEntity<List<ChatDto>>(chatList, HttpStatus.OK);
     }
 }

@@ -1,7 +1,6 @@
 package com.ground.sswm.common.schedule;
 
 import com.ground.sswm.event.domain.StudyEvent;
-import com.ground.sswm.event.dto.StudyEventDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 public class RedisToMySQLService {
     private final RedisTemplate<String, StudyEvent> redisEventTemplate;
     public void updateDataFromRedisToMySQL(){
+        //TODO : UserId_RoomId , 끝시각 Not Null
         Object dataFromRedis = fetchRedisData(1L);
         String processedData = processData(dataFromRedis);
         updateMySQLData(processedData);

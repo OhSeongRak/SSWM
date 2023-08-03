@@ -70,7 +70,7 @@ public class StudyroomServiceImpl implements StudyroomService {
                     break;
                 case "CREATED":
                     searchStudyroomResDtos.sort(
-                        (o1, o2) -> o1.getCreatedTime() - o2.getCreatedTime());
+                        (o1, o2) -> Math.toIntExact(o1.getCreatedTime() - o2.getCreatedTime()));
                     break;
             }
         } else {
@@ -84,7 +84,7 @@ public class StudyroomServiceImpl implements StudyroomService {
                     break;
                 case "CREATED":
                     searchStudyroomResDtos.sort(
-                        (o1, o2) -> o2.getCreatedTime() - o1.getCreatedTime());
+                        (o1, o2) -> Math.toIntExact(o2.getCreatedTime() - o1.getCreatedTime()));
                     break;
             }
         }
@@ -123,7 +123,6 @@ public class StudyroomServiceImpl implements StudyroomService {
                 studyroomTag.setTag(tagRepository.findByName(tagDto.getName()));
                 studyRoomTagRepository.save(studyroomTag);
             }
-
         }
 
         return studyroom.getId();
@@ -141,6 +140,7 @@ public class StudyroomServiceImpl implements StudyroomService {
     public StudyroomDto select(Long studyroomId) {
 
         Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
+
         if (studyroom.isEmpty()) {
             return null;
         }

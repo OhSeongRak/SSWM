@@ -27,13 +27,13 @@ public class User {
     private String providerId;
     private Boolean isAdmin;
     private String image;
-    private int createdAt;
-    private int modifiedAt;
+    private long createdAt;
+    private long modifiedAt;
 
     @Builder
     public User(Long id, String name, String nickname, String email, String provider,
         String providerId,
-        boolean isAdmin, String image, int createdAt, int modifiedAt) {
+        boolean isAdmin, String image, long createdAt, long modifiedAt) {
         this.id = id;
         this.name = name;
         this.nickname = nickname;
