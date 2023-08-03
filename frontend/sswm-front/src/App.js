@@ -5,10 +5,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-
 import SignUp from './pages/SignUp';
 import SignUpName from './pages/SignUpName';
-import Login from './pages/Login'
+import Login from './pages/Login';
 import MyPage from './pages/MyPage';
 import EditInfo from './pages/EditInfo';
 import StudyRoom from './pages/StudyRoom';
@@ -16,15 +15,9 @@ import CreateStudyRoom from './pages/CreateStudyRoom';
 import StudyRoomAdmin from './pages/StudyRoomAdmin';
 import StudyRoomMember from './pages/StudyRoomMember';
 import LiveRoom from './pages/LiveRoom';
-import Streching from './pages/Stretching';
+import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
 
 function App() {
-  const data = useSelector((state) => {
-    // store의 state 전부를 객체로 받아옴
-    return state;
-  });
-  console.log(data)
-  
   return (
     <ContentWrap>
       <BrowserRouter>
@@ -39,8 +32,8 @@ function App() {
           <Route path="/StudyRoomAdmin" element={<StudyRoomAdmin />}></Route>
           <Route path="/StudyRoomMember" element={<StudyRoomMember />}></Route>
           <Route path="/LiveRoom" element={<LiveRoom />}></Route>
-          <Route path="/Streching" element={<Streching />}></Route>
-        </Routes>      
+          {/* <Route path="/VideoRoomComponent" element={<VideoRoomComponent />} /> */}
+        </Routes>
       </BrowserRouter>
     </ContentWrap>
   );
@@ -52,4 +45,4 @@ const ContentWrap = styled.div`
   min-height: 100%;
   margin: 0px;
   padding: 0px;
-`
+`;

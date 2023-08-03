@@ -8,6 +8,7 @@ import LiveRoomSnackbar from "../components/LiveRoom/LiveRoomSnackbar";
 import LiveRoomFooter from "../components/LiveRoom/LiveRoomFooter";
 import LiveRoomView from "../components/LiveRoom/LiveRoomView";
 import LiveRoomChat from "../components/LiveRoom/LiveRoomChat";
+import VideoRoomComponent from '../components/OpenVidu/VideoRoomComponent';
 
 const LiveRoom = () => {
   return (
@@ -18,12 +19,13 @@ const LiveRoom = () => {
           <LiveRoomSnackbar />
         </HeaderWrap>
         <ContentWrap>
-          <ContentLiveView>
+          <VideoRoomComponent />
+          {/* <ContentLiveView>
             <LiveRoomView />
           </ContentLiveView>
           <ContentLiveChat>
             <LiveRoomChat />
-          </ContentLiveChat>
+          </ContentLiveChat> */}
         </ContentWrap>
         <FooterWrap>
           <LiveRoomFooter />
