@@ -11,7 +11,7 @@ import UserModel from './models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
 import * as tmPose from '@teachablemachine/pose';
 
-let model, webcam, ctx, maxPredictions;
+let model, webcam;
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL = 'https://i9a206.p.ssafy.io:5443/';
 
@@ -505,7 +505,6 @@ class VideoRoomComponent extends Component {
         console.log("before model");
         model = await tmPose.load(modelURL, metadataURL);
         console.log("after model");
-        maxPredictions = model.getTotalClasses();
 
         const size = 200;
         const flip = true; 
@@ -524,7 +523,7 @@ class VideoRoomComponent extends Component {
 
     async predict() {
 
-        const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+        const { posenetOutput } = await model.estimatePose(webcam.canvas);
         const prediction = await model.predict(posenetOutput);
 
         if(prediction[0].probability > 0.9){
