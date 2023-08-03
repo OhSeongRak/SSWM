@@ -33,8 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final FileManageUtil fileManageUtil;
     private final AuthService authService;
+    private final FileManageUtil fileManageUtil;
 
     @Deprecated
     @PostMapping
@@ -64,19 +64,21 @@ public class UserController {
                                     @RequestPart(value = "fileType", required = false) String fileType,
                                     @RequestPart(value = "nickname", required = false) String nickname)
             throws NicknameAlreadyExistException {
-        log.debug("[PUT] /user : file " + multipartFile.getOriginalFilename());
+//        log.debug("[PUT] /user : file " + multipartFile.getOriginalFilename());
         log.debug("[PUT] /user : fileType " + fileType);
         log.debug("[PUT] /user : nickname " + nickname);
 
         Map<String, Object> claims = authService.getClaimsFromToken(token);
-        long userId = Long.valueOf(claims.get("id").toString());
+        Long userId = Long.valueOf(claims.get("id").toString());
 
         String filePath = null;
         if (fileType != null && !fileType.isBlank() && multipartFile != null
                 && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
         }
+
         log.debug("[filePath]>>>> " + filePath);
+
         userService.modifyUser(userId, nickname, filePath);
 
         return new ResponseEntity<>("닉네임 수정 성공", HttpStatus.OK);

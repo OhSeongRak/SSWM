@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -6,19 +6,33 @@ import ExpBar from "./ExpBar";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 
 import def from "../../assets/fubao.jpg";
 import tree from "../../assets/tree.JPG";
+import seed from "../../assets/seed.jpg"
 // import tree2 from '../../assets/tree2.jpg';
-import { useDispatch, useSelector } from "react-redux";
+// import { useSelector, useDispatch } from "react-redux";
 
 const MyProfile = (props) => {
-  const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
+  // const dispatch = useDispatch();
+  // const profile = useSelector((state) => state.profile);
+  // const defaultSeed = useSelector((state) => state.profile.default_seed);
 
   const currentExp = 75;
   const maxExp = 100;
+  const array = []
+  const [names, setNames] = useState(array);
+  const handleClick = () => {
+    const newItemName = '씨앗';
+    const nameExists = names.some((element) => element.name === newItemName);
 
+    if (!nameExists) {
+      const newItem = { img: seed, name: newItemName, level: 1, exp: 0 };
+      setNames((current) => [...current, newItem]);
+    }
+  };
   return (
     <ContainerWrap>
       <TitleWrap>
@@ -43,24 +57,21 @@ const MyProfile = (props) => {
         </UserWrap>
 
         <TreeWrap>
-          <TreeInfo>
-            <TreeImg src={tree}></TreeImg>
+              {/* <div>{defaultSeed.name}</div>
+              <div>{defaultSeed.level}</div> */}
+              {names.map((element, index) => {
+                return (
+                  <TreeInfo key={index}>
+                    <TreeImg src={element.img}>
+                    </TreeImg>
+                    <TreeName>
+                      <div>{element.name}</div>
+                      <div>LV.{element.level} ({element.exp}/250xp)</div>
+                    </TreeName>
+                  </TreeInfo>
+                );
+              })}
 
-            <TreeName>
-              <div>은행 나무</div>
-              <div>LV. {profile.level} (250 / 250)</div>
-              <button
-                onClick={() => {
-                  // dispatch에 action을 보내 => store에 전달해주기
-                  dispatch({
-                    type: "LEVEL_PLUS_ONE",
-                  });
-                }}
-              >
-                +
-              </button>
-            </TreeName>
-          </TreeInfo>
 
           <TreeBalanceWrap>
             <TreeBalanceText>전체 밸런스</TreeBalanceText>
@@ -75,6 +86,28 @@ const MyProfile = (props) => {
             </TreeBalanceContent>
           </TreeBalanceWrap>
         </TreeWrap>
+      </ContentWrap>
+
+      <TitleWrap>
+        <Title>나무도감</Title>
+      </TitleWrap>
+      <ContentWrap>
+        <TreeListWrap>
+          <TreeInfo2>
+            <TreeImg src={tree}>
+            </TreeImg>
+            <TreeName>
+              <div>나무</div>
+              <div>LV.20</div>
+            </TreeName>
+          </TreeInfo2>
+          <IconButton aria-label="add" size="large"
+            // onClick={() => dispatch({type: 'CREATE_SEED'})}
+            onClick={handleClick}
+          >
+            <AddIcon fontSize="inherit" />
+          </IconButton>
+        </TreeListWrap>
       </ContentWrap>
     </ContainerWrap>
   );
@@ -99,6 +132,7 @@ const Title = styled.span`
 const ContentWrap = styled.div`
   display: flex;
   gap: 5%;
+  justify-content: center;
 `;
 const UserWrap = styled.div`
   display: flex;
@@ -150,6 +184,17 @@ const TreeInfo = styled.div`
   align-items: center;
   width: 30%;
 `;
+const TreeInfo2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 200px;
+  border: 2px solid orange;
+  border-radius: 15px;
+`;
+
 const TreeImg = styled.img`
   display: flex;
   justify-content: center;
@@ -180,5 +225,13 @@ const TreeBalanceContent = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
+const TreeListWrap = styled.div`
+  height: 200px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-direction: row;
+  gap: 3vw;
+`
 export default MyProfile;
