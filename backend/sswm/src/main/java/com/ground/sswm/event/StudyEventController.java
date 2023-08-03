@@ -5,7 +5,6 @@ import static com.ground.sswm.common.util.UnixTimeUtil.getCurrentUnixTime;
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.event.dto.StudyEventDto;
 import com.ground.sswm.event.service.StudyEventService;
-import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,8 +28,7 @@ public class StudyEventController {
         Long userId = authService.getUserIdFromToken(token);
         log.debug("[POST] token studyEventType studyEventStatus" + studyEventDto);
 
-        long now = getCurrentUnixTime();
-        studyEventService.addEventLog(userId, now, studyEventDto);
+        studyEventService.addEventLog(userId, getCurrentUnixTime(), studyEventDto);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
