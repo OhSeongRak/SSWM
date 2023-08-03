@@ -18,7 +18,10 @@ public interface DailyLogRepository extends
     Optional<List<DailyLog>> findAllByUserIdAndStudyroomIdAndDateBetween(Long userId, Long studyroomId, long startDate, long endDate);
 
     //해당하는 스터디룸에서 해당 날짜에 유저가 공부한 기록 select(하루)
-    Optional<DailyLog> findByUserIdAndStudyroomIdAndDate(Long userId, Long studyroomId, long date);
+    @Query("select dl from DailyLog dl "
+        + "where dl.user.id=:userId and dl.studyroom.id=:studyroomId and "
+        + "dl.date >= :startOfDay and dl.date < :endOfDay")
+    Optional<DailyLog> findByUserIdAndStudyroomIdAndDateBetween(Long userId, Long studyroomId, long startOfDay, long endOfDay);
 
     //해당하는 스터디룸에서 해당 날짜에 유저가 얼마나 공부했는지로 정렬해서 3명 select(3명)
     //공부량 top3 조회에서 필요

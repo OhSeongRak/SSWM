@@ -9,12 +9,12 @@ import lombok.Setter;
 @Setter
 public class DailyLogDto {
 
-    private int studyTime;
-    private int restTime;
+    private long studyTime;
+    private long restTime;
     private long date;
 
     @Builder
-    public DailyLogDto(int studyTime, int restTime, long date) {
+    public DailyLogDto(long studyTime, long restTime, long date) {
         this.studyTime = studyTime;
         this.restTime = restTime;
         this.date = date;
