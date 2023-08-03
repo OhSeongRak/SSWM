@@ -195,7 +195,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             userStudyTimeResDto.setUserDto(UserDto.from(user));
 
             //UserStudyTimeResDto에 set studyTime
-            int studyTime = dailyLog.getStudyTime();
+            long studyTime = dailyLog.getStudyTime();
             userStudyTimeResDto.setStudyTime(studyTime);
 
             //리스트에 추가

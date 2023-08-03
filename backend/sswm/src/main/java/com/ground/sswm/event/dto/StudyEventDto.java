@@ -11,12 +11,12 @@ import lombok.ToString;
 @Setter
 public class StudyEventDto {
     private Long studyroomId;
-    private StudyEventType event; //LIVE, REST, STRETCH
-    private StudyEventStatus studyEventStatus; // ON,OFF
+    private StudyEventType type; //LIVE, REST, STRETCH
+    private StudyEventStatus status; // ON,OFF
 
-    public StudyEventDto(StudyEventType event, StudyEventStatus studyEventStatus, Long studyroomId) {
-        this.event = event;
-        this.studyEventStatus = studyEventStatus;
+    public StudyEventDto(StudyEventType type, StudyEventStatus status, Long studyroomId) {
+        this.type = type;
+        this.status = status;
         this.studyroomId = studyroomId;
     }
 }

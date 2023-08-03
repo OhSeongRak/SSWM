@@ -32,8 +32,8 @@ public class StudyEvent {
         return StudyEvent.builder()
             .userId(userId)
             .studyroomId(studyEventDto.getStudyroomId())
-            .event(studyEventDto.getEvent())
-            .studyEventStatus(studyEventDto.getStudyEventStatus())
+            .event(studyEventDto.getType())
+            .studyEventStatus(studyEventDto.getStatus())
             .time(time)
             .build();
     }

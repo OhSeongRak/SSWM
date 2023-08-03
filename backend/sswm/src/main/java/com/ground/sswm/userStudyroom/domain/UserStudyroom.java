@@ -32,8 +32,8 @@ public class UserStudyroom {
     private StudyMemberRole role;
     private boolean isBan;
     private boolean isDeleted;
-    private int totalStudy;
-    private int totalRest;
+    private long totalStudy;
+    private long totalRest;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -45,8 +45,8 @@ public class UserStudyroom {
 
 
     @Builder
-    public UserStudyroom(Long id, String role, boolean isBan, boolean isDeleted, int totalStudy,
-        int totalRest, User user, Studyroom studyroom) {
+    public UserStudyroom(Long id, String role, boolean isBan, boolean isDeleted, long totalStudy,
+        long totalRest, User user, Studyroom studyroom) {
         this.id = id;
         this.role = StudyMemberRole.valueOf(role);
         this.isBan = isBan;
