@@ -3,7 +3,6 @@ import './index.css';
 import styled from 'styled-components';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import SignUp from './pages/SignUp';
 import SignUpName from './pages/SignUpName';
@@ -15,7 +14,7 @@ import CreateStudyRoom from './pages/CreateStudyRoom';
 import StudyRoomAdmin from './pages/StudyRoomAdmin';
 import StudyRoomMember from './pages/StudyRoomMember';
 import LiveRoom from './pages/LiveRoom';
-import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
+//import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
 
 function App() {
   return (
