@@ -17,12 +17,12 @@ class CardHoverMenus extends React.Component {
     this.props.flashFn(msg);
   };
   render() {
-    const p = {
-      funcs: {
-        viewBoard: (e) => this.clkBtn(e, "viewBoard"),
-        notInterested: (e) => this.clkBtn(e, "notInterested"),
-      },
-    };
+    // const p = {
+    //   funcs: {
+    //     viewBoard: (e) => this.clkBtn(e, "viewBoard"),
+    //     notInterested: (e) => this.clkBtn(e, "notInterested"),
+    //   },
+    // };
     //Above is hardwired for demo. Normally, const p = this.props;
     return (
       <div className="whenhovered" onClick={this.toggle}>

@@ -3,11 +3,9 @@ import styled from "styled-components";
 
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import { useDispatch } from 'react-redux';
 
 
 const Tree = (props) => {
-  const dispatch = useDispatch();
   return(
     <ContainerWrap>
       <TitleWrap>
@@ -15,14 +13,15 @@ const Tree = (props) => {
       </TitleWrap>
       <ContentWrap>
         <TreeListWrap>
-          
-          <IconButton aria-label="add" size="large"
-            onClick={() => {
-              dispatch({
-                type: "CREATE_SEED"
-              });
-            }}
-          >
+          <TreeInfo>
+            <TreeImg>
+            </TreeImg>
+            <TreeName>
+              <div>씨앗</div>
+              <div>LV.20</div>
+            </TreeName>
+          </TreeInfo>
+          <IconButton aria-label="add" size="large">
             <AddIcon fontSize="inherit" />
           </IconButton>
         </TreeListWrap>
@@ -60,29 +59,29 @@ const TreeListWrap = styled.div`
   flex-direction: row;
   gap: 3vw;
 `
-// const TreeInfo = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-//   width: 30%;
-//   height: 200px;
-//   border: 2px solid orange;
-//   border-radius: 15px;
-// `
-// const TreeImg = styled.img`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 70%;
-//   size: 20%;
-// `
-// const TreeName = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-//   height: 30%;
-// `
+const TreeInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  height: 200px;
+  border: 2px solid orange;
+  border-radius: 15px;
+`
+const TreeImg = styled.img`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+  size: 20%;
+`
+const TreeName = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 30%;
+`
 
 export default Tree;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import StudyRoomItem from "./StudyRoomItem";
 import { useInView } from "react-intersection-observer";
 import RecipeReviewCard from "./StudyRoomItem2";
+import "./Style.css";
 
 const RoomListLayout = styled.div`
   flex: 1;
@@ -24,14 +24,18 @@ const StudyRoomList = (props) => {
         <RecipeReviewCard />
         <RecipeReviewCard />
         <RecipeReviewCard />
-        <StudyRoomItem />
-        <StudyRoomItem />
-        <StudyRoomItem />
-        <StudyRoomItem />
-        <StudyRoomItem />
-        <StudyRoomItem />
-        <StudyRoomItem />
-        <StudyRoomItem />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
+        <RecipeReviewCard />
       </RoomList>
     </RoomListLayout>
   );

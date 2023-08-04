@@ -1,30 +1,22 @@
-import "./App.css";
-import "./index.css";
-import styled from "styled-components";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+import './App.css';
+import './index.css';
+import styled from 'styled-components';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import SignUp from "./pages/SignUp";
-import SignUpName from "./pages/SignUpName";
-import Login from "./pages/Login";
-import MyPage from "./pages/MyPage";
-import EditInfo from "./pages/EditInfo";
-import StudyRoom from "./pages/StudyRoom";
-import CreateStudyRoom from "./pages/CreateStudyRoom";
-import StudyRoomAdmin from "./pages/StudyRoomAdmin";
-import StudyRoomMember from "./pages/StudyRoomMember";
-import LiveRoom from "./pages/LiveRoom";
-import Streching from "./pages/Stretching";
+import SignUp from './pages/SignUp';
+import SignUpName from './pages/SignUpName';
+import Login from './pages/Login';
+import MyPage from './pages/MyPage';
+import EditInfo from './pages/EditInfo';
+import StudyRoom from './pages/StudyRoom';
+import CreateStudyRoom from './pages/CreateStudyRoom';
+import StudyRoomAdmin from './pages/StudyRoomAdmin';
+import StudyRoomMember from './pages/StudyRoomMember';
+import LiveRoom from './pages/LiveRoom';
+//import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
 
 function App() {
-  const data = useSelector((state) => {
-    // store의 state 전부를 객체로 받아옴
-    return state;
-  });
-  console.log(data);
-
   return (
     <ContentWrap>
       <BrowserRouter>
@@ -39,7 +31,7 @@ function App() {
           <Route path="/StudyRoomAdmin" element={<StudyRoomAdmin />}></Route>
           <Route path="/StudyRoomMember" element={<StudyRoomMember />}></Route>
           <Route path="/LiveRoom" element={<LiveRoom />}></Route>
-          <Route path="/Streching" element={<Streching />}></Route>
+          {/* <Route path="/VideoRoomComponent" element={<VideoRoomComponent />} /> */}
         </Routes>
       </BrowserRouter>
     </ContentWrap>
