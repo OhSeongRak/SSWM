@@ -8,6 +8,8 @@ import com.ground.sswm.studyroom.dto.StudyroomDto;
 import com.ground.sswm.studyroom.service.StudyroomService;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
