@@ -39,8 +39,7 @@ public class StudyroomController {
     private final FileManageUtil fileManageUtil;
 
     // 전체 조회 (아직 구현하지 않았습니다!!!!!!)
-    @GetMapping
-    @ResponseBody
+    @PostMapping("/list")
     public ResponseEntity<List<SearchStudyroomResDto>> list(
         @RequestBody SearchStudyroomReqDto searchStudyroomReqDto) {
         List<SearchStudyroomResDto> studyrooms = studyroomService.list(searchStudyroomReqDto);
@@ -49,7 +48,7 @@ public class StudyroomController {
 
 
     // 스터디룸 생성
-    @PostMapping
+    @GetMapping
     @ResponseBody
     public ResponseEntity<Long> add(@RequestHeader("Authorization") String token,
         @RequestPart(value = "studyroomDto", required = false) StudyroomDto studyroomDto,

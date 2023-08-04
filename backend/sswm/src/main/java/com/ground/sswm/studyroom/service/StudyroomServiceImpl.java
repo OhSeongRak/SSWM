@@ -34,8 +34,13 @@ public class StudyroomServiceImpl implements StudyroomService {
 
     @Override
     public List<SearchStudyroomResDto> list(SearchStudyroomReqDto searchStudyroomReqDto) {
-        List<Studyroom> studyrooms = studyroomRepository.list(searchStudyroomReqDto.getTagNames(),
-            searchStudyroomReqDto.getSearchKeyword());
+        List<Studyroom> studyrooms;
+        if (searchStudyroomReqDto.getTagNames().isEmpty()) {
+            studyrooms = studyroomRepository.listNoTag(searchStudyroomReqDto.getSearchKeyword());
+        } else {
+            studyrooms = studyroomRepository.list(searchStudyroomReqDto.getTagNames(),
+                searchStudyroomReqDto.getSearchKeyword());
+        }
 
         List<SearchStudyroomResDto> searchStudyroomResDtos = new ArrayList<>();
         for (Studyroom studyroom : studyrooms) {

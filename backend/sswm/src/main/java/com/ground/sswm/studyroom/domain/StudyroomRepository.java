@@ -20,4 +20,9 @@ public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
         + " (s.name like %:searchKeyword%)")
     List<Studyroom> list(@Param("tagNames") List<String> tagNames,
         @Param("searchKeyword") String searchKeyword);
+
+    @Query("select s from Studyroom s where s.isPublic = true"
+        + " and"
+        + " (s.name like %:searchKeyword%)")
+    List<Studyroom> listNoTag(@Param("searchKeyword") String searchKeyword);
 }
