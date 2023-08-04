@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.time.LocalTime;
+
 @Slf4j
 @RestController
 @RequestMapping("/event")
@@ -28,7 +30,11 @@ public class StudyEventController {
         Long userId = authService.getUserIdFromToken(token);
         log.debug("[POST] token studyEventType studyEventStatus" + studyEventDto);
 
-        studyEventService.addEventLog(userId, getCurrentUnixTime(), studyEventDto);
+        LocalTime currentTime = LocalTime.now();
+        int hour = currentTime.getHour();
+        int minute = currentTime.getMinute();
+        int dayBefore = (hour < 4) ? 1 : 0;
+        studyEventService.addEventLog(userId, getCurrentUnixTime(), studyEventDto, dayBefore);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
