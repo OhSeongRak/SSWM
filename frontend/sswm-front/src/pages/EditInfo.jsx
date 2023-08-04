@@ -5,6 +5,7 @@ import Gnb from "../components/Gnb";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { Snackbar } from "@mui/material";
 
 import def from "../assets/fubao.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
@@ -34,6 +35,17 @@ const EditInfo = () => {
         resolve();
       };
     });
+  };
+
+  // Snackbar
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+
+  const openSnackBar = () => setIsSnackBarOpen(true);
+  const closeSnackBar = () => setIsSnackBarOpen(false);
+  
+  const closeModalEvent = () => {
+    setIsModalOpen(false);
+    openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
 
   return (
@@ -101,10 +113,16 @@ const EditInfo = () => {
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
-                  <Button onClick={() => setIsModalOpen(false)}>확인</Button>
+                  <Button onClick={() => closeModalEvent(false)}>확인</Button>
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
+              <Snackbar
+                open={isSnackBarOpen}
+                autoHideDuration={3000}
+                onClose={closeSnackBar}
+                message="정상적으로 삭제되었습니다."
+              />
             </div>
           </BtnLeftWrap>
           <BtnRightWrap>
