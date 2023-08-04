@@ -32,7 +32,7 @@ const LiveRoomFooter = () => {
   return (
     <ContainerWrap>
       <FooterTitle>
-        <Link to="/Streching">
+        <Link to="/Stretching">
           <Button sx={{ color: 'white' }}>
             스트레칭
           </Button>

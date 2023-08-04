@@ -113,7 +113,7 @@ const StudyRoom = (props) => {
         <StudyRoomList />
         <AddBtn>
           <Link to="/CreateStudyRoom">
-            <Fab color="primary" aria-label="add">
+            <Fab color="primary" aria-label="add" sx={{zIndex:'tooltip'}}>
               <AddIcon />
             </Fab>
           </Link>
