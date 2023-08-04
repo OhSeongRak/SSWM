@@ -20,6 +20,9 @@ import def from "../assets/dolphin.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
 import { Box, Switch, Typography } from "@mui/material";
 
+
+import MemberTable from "../components/StudyRoom/MemberTable";
+
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -157,7 +160,9 @@ const StudyRoomAdmin = () => {
             </ContentBottomLeft>
             <ContentBottomRight>
               <ContentBottomTitle>스터디원 관리</ContentBottomTitle>
-              <ContentBottomBoard></ContentBottomBoard>
+              <ContentBottomBoard>
+                 <MemberTable />
+              </ContentBottomBoard>
             </ContentBottomRight>
           </ContentBottom>
         </ContentWrap>
