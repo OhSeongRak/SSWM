@@ -5,6 +5,8 @@ import static javax.persistence.FetchType.LAZY;
 import com.ground.sswm.dailyLog.dto.DailyLogDto;
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,8 +27,8 @@ public class DailyLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int studyTime;
-    private int restTime;
+    private long studyTime;
+    private long restTime;
     private int stretchScore;
     private long date;
 
@@ -39,7 +41,7 @@ public class DailyLog {
     private Studyroom studyroom;
 
     @Builder
-    public DailyLog(Long id, int studyTime, int restTime, int stretchScore, long date, User user,
+    public DailyLog(Long id, long studyTime, long restTime, int stretchScore, long date, User user,
         Studyroom studyroom) {
         this.id = id;
         this.studyTime = studyTime;
