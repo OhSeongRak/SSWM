@@ -4,6 +4,7 @@ import com.ground.sswm.common.annotation.ForDebug;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class UnixTimeUtil {
@@ -21,18 +22,18 @@ public class UnixTimeUtil {
     public static long getCurrentUnixTime() { // 사용해서 현재시각 DB에 저장
         return Instant.now().getEpochSecond();
     }
-    public static long getStartOfPeriod(long time){
+    public static long[] getStartEndOfPeriod(long time, ZoneId zoneId, int dayBefore){
         Instant now = Instant.ofEpochSecond(time);
+        ZonedDateTime zonedDateTime = now.atZone(zoneId);
+
         // 현재 날짜를 기준으로 00:00:00 UTC로 설정
-        Instant dayBefore = now.minusSeconds(24 * 60 * 60);
-        return dayBefore.getEpochSecond();
+        ZonedDateTime startOfCurrentDate = zonedDateTime.toLocalDate().atStartOfDay(zoneId);
+        ZonedDateTime oneDayBefore = startOfCurrentDate.minusDays(dayBefore);
+        Instant dayBeforeInstant = oneDayBefore.toInstant();
+
+        ZonedDateTime oneDayAfter = startOfCurrentDate.plusDays(1);
+        Instant dayAfterInstant = oneDayAfter.toInstant();
+        return new long[]{dayBeforeInstant.getEpochSecond(),dayAfterInstant.getEpochSecond()};
     }
-    public static long getEndOfPeriod(long time){
-        Instant currentInstant = Instant.ofEpochSecond(time);
-        // currentTime 기준으로 00:00:00 UTC로 설정
-        Instant startOfCurrentDate = currentInstant.truncatedTo(java.time.temporal.ChronoUnit.DAYS);
-        // 현재 시간에서 1일을 더한 시간을 구함 (다음 날 00:00:00 UTC)
-        Instant startOfNextDate = startOfCurrentDate.plus(1, java.time.temporal.ChronoUnit.DAYS);
-        return startOfNextDate.getEpochSecond();
-    }
+
 }
