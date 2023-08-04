@@ -7,6 +7,7 @@ import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.exception.InvalidTokenException;
 import com.ground.sswm.auth.exception.UserAlreadyExistException;
 import com.ground.sswm.auth.exception.UserUnAuthorizedException;
+import com.ground.sswm.auth.jwt.JwtUtil;
 import com.ground.sswm.auth.oauth.GoogleUserInfo;
 import com.ground.sswm.auth.oauth.KakaoUserInfo;
 import com.ground.sswm.auth.oauth.OAuthProvider;
@@ -40,6 +41,7 @@ public class AuthController {
     private final GoogleAuthService googleAuthService;
     private final KakaoAuthService kakaoAuthService;
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/{SOCIAL_TYPE}/login") //login
     public ResponseEntity<JwtDto> login( @RequestBody Map<String, Object> data,
@@ -145,9 +147,13 @@ public class AuthController {
     public ResponseEntity<?> accessToken(@RequestHeader("Authorization") String accessToken)
         throws InvalidTokenException {
         log.debug("[POST] /access-token " + accessToken);
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (accessToken != null && jwtUtil.validateToken(accessToken)) {
+            log.info("토큰 사용 가능 : {}", accessToken);
+            return  new ResponseEntity<>("success",HttpStatus.OK);
+        } else {
+            log.info("토큰 사용 불가능 : {}", accessToken);
+            throw new InvalidTokenException("토큰 잘못됨");
+        }
     }
 
     @PostMapping("/refresh-access-token")
