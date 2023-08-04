@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Cal from "./Cal";
-import MyResponsivePie from "./Chart";
+import ScheduleCalendar from "./ScheduleCalendar";
+// import MyResponsivePie from "./Chart";
 import Piechart from "./Chart";
 
 const Calendar = (props) => {
@@ -12,7 +12,7 @@ const Calendar = (props) => {
       </TitleWrap>
       <ContentWrap>
         <CalendarWrap>
-          <Cal />
+          <ScheduleCalendar />
         </CalendarWrap>
         <GraphWrap>
           그래프

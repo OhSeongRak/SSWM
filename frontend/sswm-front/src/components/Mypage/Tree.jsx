@@ -17,32 +17,15 @@ const Tree = (props) => {
             <TreeImg>
             </TreeImg>
             <TreeName>
-              <div>은행 나무</div>
-              <div>LV.20 (250 / 250)</div>
+              <div>씨앗</div>
+              <div>LV.20</div>
             </TreeName>
           </TreeInfo>
-          <TreeInfo>
-            <TreeImg>
-            </TreeImg>
-            <TreeName>
-              <div>은행 나무</div>
-              <div>LV.20 (250 / 250)</div>
-            </TreeName>
-          </TreeInfo>
-          <TreeInfo>
-            <TreeImg>
-            </TreeImg>
-            <TreeName>
-              <div>은행 나무</div>
-              <div>LV.20 (250 / 250)</div>
-            </TreeName>
-          </TreeInfo>
-        </TreeListWrap>
-        <BtnWrap>
           <IconButton aria-label="add" size="large">
             <AddIcon fontSize="inherit" />
           </IconButton>
-        </BtnWrap>
+        </TreeListWrap>
+        
       </ContentWrap>
     </ContainerWrap>
   );
@@ -71,8 +54,10 @@ const TreeListWrap = styled.div`
   height: 200px;
   width: 60%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   flex-direction: row;
-  gap: 5px;
+  gap: 3vw;
 `
 const TreeInfo = styled.div`
   display: flex;
@@ -98,11 +83,5 @@ const TreeName = styled.div`
   align-items: center;
   height: 30%;
 `
-const BtnWrap = styled.div`
-  display: flex;
-  height: 200px;
-  width: 15%;
-  justify-content: center;
-  align-items: center;
-`
+
 export default Tree;

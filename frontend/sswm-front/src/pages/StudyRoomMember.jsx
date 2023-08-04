@@ -15,12 +15,27 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import CustomModal from "../components/StudyRoom/deleteModal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { Snackbar } from "@mui/material";
+
 
 const StudyRoomMember = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // Snackbar
+  const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
+
+  const openSnackBar = () => setIsSnackBarOpen(true);
+  const closeSnackBar = () => setIsSnackBarOpen(false);
+  
+  const closeModalEvent = () => {
+    setIsModalOpen(false);
+    openSnackBar(); // Open the CustomSnackBar after closing the modal
+  };
+
   return (
     <div>
       <Gnb />
@@ -48,14 +63,22 @@ const StudyRoomMember = () => {
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
-                  <Button onClick={() => setIsModalOpen(false)}>확인</Button>
+                  <Button onClick={() => closeModalEvent()}>확인</Button>
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
+              <Snackbar
+                open={isSnackBarOpen}
+                autoHideDuration={3000}
+                onClose={closeSnackBar}
+                message="정상적으로 탈퇴되었습니다."
+              />
             </div>
-            <Button variant="contained" color="primary">
-              라이브 입장
-            </Button>
+            <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
+              <Button variant="contained" color="primary">
+                라이브 입장 
+              </Button>
+            </Link>
           </HeaderBtn>
         </HeaderWrap>
 
