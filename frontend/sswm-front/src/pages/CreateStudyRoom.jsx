@@ -19,6 +19,8 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import def from "../assets/dolphin.jpg";
 import { Avatar, RadioGroup, Switch } from "@mui/material";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
@@ -35,6 +37,7 @@ const Item = muistyled(Paper)(({ theme }) => ({
 let formData = new FormData();
 
 const CreateStudyRoom = () => {
+  const navigate = useNavigate();
   const [studyroomDto, setStudyroomDto] = useState({
     name: "스터디룸 이름",
     isPublic: true,
@@ -43,7 +46,6 @@ const CreateStudyRoom = () => {
     maxRestTime: 90,
     tags: [],
   });
-
 
   // const dispatch = useDispatch();
   // const studyroom = useSelector((state) => state.studyroom);
@@ -135,17 +137,17 @@ const CreateStudyRoom = () => {
     setStudyroomDto({
       ...studyroomDto,
       tags: selectedTags,
-    })
-  }
+    });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const auth = localStorage.getItem("jwtToken");
     const jwtTokenData = JSON.parse(auth);
-   
+
     console.log(jwtTokenData.accessToken);
-  
+
     formData.append(
       "studyroomDto",
       new Blob([JSON.stringify(studyroomDto)], { type: "application/json" })
@@ -172,8 +174,9 @@ const CreateStudyRoom = () => {
       })
       .catch((error) => {
         // 오류 처리
-        console.log(Error)
+        console.log(Error);
       });
+      navigate("/");
   };
 
   // const [checked, setChecked] = useState(true);
@@ -323,17 +326,23 @@ const CreateStudyRoom = () => {
                   태그
                 </StudyRoomTitle2>
                 <StudyRoomContent>
-                  <MultipleSelectChip selectedTags={studyroomDto.tags} setSelectedTags={handleTagsChange} />
+                  <MultipleSelectChip
+                    selectedTags={studyroomDto.tags}
+                    setSelectedTags={handleTagsChange}
+                  />
                 </StudyRoomContent>
               </StudyRoomWrap>
             </ContentWrap2>
           </CreateContent>
-
-          <CreateBtn>
-            <Button variant="contained" color="success" onClick={handleSubmit}>
-              스터디 룸 생성하기
-            </Button>
-          </CreateBtn>
+            <CreateBtn>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleSubmit}
+              >
+                스터디 룸 생성하기
+              </Button>
+            </CreateBtn>
         </CreateWrap>
       </ContainerWrap>
     </div>
