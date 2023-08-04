@@ -42,8 +42,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/{SOCIAL_TYPE}/login") //login
-    public ResponseEntity<JwtDto> login(@RequestBody Map<String, Object> data,
+    public ResponseEntity<JwtDto> login( @RequestBody Map<String, Object> data,
         @PathVariable("SOCIAL_TYPE") String socialType) {
+
         log.debug("[POST] /auth/" + socialType + "/login");
         // 회원가입 -> code 받아와서 회원 정보 요청 보내고, (신규사용자) 데이터베이스 정보 저장 후, sswm 만의 토큰 발급
         // 로그인 -> code 받아와서 회원 정보 요청 보내고, 데이터베이스 정보 확인해서,  sswm 만의 토큰 발급
@@ -79,6 +80,7 @@ public class AuthController {
         if (userEntity == null) {
             throw new UserNotFoundException("유저가 존재하지 않습니다");
         }
+
         JwtDto jwtDto = authService.createTokens(userEntity);
         Auth authEntity = authService.getSavedTokenByUserId(userEntity.getId());
         if (authEntity != null) {// 기존 유저 -> Auth 테이블의 Token update
@@ -139,8 +141,17 @@ public class AuthController {
         return new ResponseEntity<>(jwtDto, HttpStatus.OK);
     }
 
+    @PostMapping("/access-token")
+    public ResponseEntity<?> accessToken(@RequestHeader("Authorization") String accessToken)
+        throws InvalidTokenException {
+        log.debug("[POST] /access-token " + accessToken);
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/refresh-access-token")
-    public ResponseEntity<JwtDto> refreshToken(@RequestHeader("refresh-token") String refreshToken)
+    public ResponseEntity<JwtDto> refreshToken(@RequestHeader("Authorization") String refreshToken)
         throws InvalidTokenException {
         log.debug("[POST] /refresh-access-token " + refreshToken);
         Map<String, Object> claims = authService.getClaimsFromToken(refreshToken);
@@ -153,7 +164,7 @@ public class AuthController {
                 .build();
             return new ResponseEntity<>(generated, HttpStatus.OK);
         }
-        throw new InvalidTokenException("RefreshToken 이상함");
+        throw new InvalidTokenException("RefreshToken 만료됨");
     }
 
 }
