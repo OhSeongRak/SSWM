@@ -16,7 +16,6 @@ const RoomList = styled.ul`
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 5px;
 `;
-
 const StudyRoomList = (props) => {
   console.log("왜이리 호출할까")
   const [ref] = useInView();
