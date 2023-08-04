@@ -53,6 +53,9 @@ class VideoRoomComponent extends Component {
         this.predict = this.predict.bind(this);
         this.loop = this.loop.bind(this);
         this.init = this.init.bind(this);
+        this.sendAlarm = this.sendAlarm.bind(this);
+        this.getAlarmMessage = this.getAlarmMessage.bind(this);
+        this.displayAlarmMessage = this.displayAlarmMessage.bind(this);
     }
 
     componentDidMount() {
@@ -75,7 +78,6 @@ class VideoRoomComponent extends Component {
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
         this.init();
-
     }
 
     componentWillUnmount() {
@@ -534,8 +536,47 @@ class VideoRoomComponent extends Component {
 
     }
 
+    //알람 전송
+    sendAlarm() {
+        console.log("send alarm");
+        const data = {
+            type: 'alarm',
+            message: 'Wake up! It is time!'
+        };
+        //subscribes[i].getConnectionId();
+        // 연결된 사용자들에게 데이터 메시지를 보냅니다.
+        console.log("state:::::::");
+        console.log(this.state);
+        this.state.session.signal({
+            type: 'alarm', // WebRTC 데이터 채널 신호 타입
+            data: JSON.stringify(data), // 데이터를 JSON 형식으로 변환하여 보냅니다.
+            to: [], // 비어있으면 모든 사용자에게 메시지를 보냅니다.
+        });
+    }
 
+    //알람 수신
 
+    getAlarmMessage(){
+
+        this.state.session.on('signal:alarm', (event) => {
+            const data = JSON.parse(event.data); // JSON 형식의 데이터를 파싱합니다.
+            console.log("type", data.type);
+            if (data.type === 'alarm') {
+                // 알람 메시지를 화면에 표시합니다.
+                console.log("get alarm");
+
+                this.displayAlarmMessage(data.message);
+            }
+        });
+    }
+    displayAlarmMessage(message) {
+        console.log("get alarm");
+
+        const alarmDiv = document.createElement('div');
+        alarmDiv.innerText = message;
+    
+        document.body.appendChild(alarmDiv);
+    }
     render() {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
@@ -580,6 +621,8 @@ class VideoRoomComponent extends Component {
                             />
                         </div>
                     )}
+                                    <button onClick={this.sendAlarm}>알람 보내기</button>
+
                 </div>
             </div>
         );
