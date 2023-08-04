@@ -60,6 +60,7 @@ public class StudyroomController {
         log.debug("[POST] /user : fileType " + fileType);
         log.debug("[POST] /user : token " + token);
         log.debug("[POST] /user : studyroomDto " + studyroomDto);
+        log.debug("[POST] /user : studyroomDto " + studyroomDto.getTags());
 
         // 실제로는 이렇게 해야함!
         Map<String, Object> claims = authService.getClaimsFromToken(token);
