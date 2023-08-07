@@ -19,20 +19,19 @@ const StudyRoom = (props) => {
   const [isTokenValid, setIsTokenValid] = useState(false);
 
   const checkTokenValidity = () => {
-    const token = JSON.parse(localStorage.getItem("jwtToken"));
-
-    console.log(token);
+    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+    const refreshToken = JSON.parse(localStorage.getItem("refreshToken"));
+    console.log(accessToken);
     // 로그인 안했을 때
-    if (token === null) {
+    if (accessToken === null) {
       setIsTokenValid(false);
       return;
     }
-    console.log(token.accessToken);
 
     axios
-      .post("http://localhost:8080/api/auth/access-token", token.accessToken, {
+      .post("http://localhost:8080/api/auth/access-token", accessToken, {
         headers: {
-          Authorization: token.accessToken,
+          Authorization: accessToken,
         },
       })
       .then((response) => {
@@ -45,22 +44,30 @@ const StudyRoom = (props) => {
         axios
           .post(
             "http://localhost:8080/api/auth/refresh-access-token",
-            token.refreshToken,
+            refreshToken,
             {
               headers: {
-                Authorization: token.refreshToken,
+                Authorization: refreshToken,
               },
             }
           )
           .then((response) => {
             console.log("refresh토큰을 이용해 토큰 재발급: ", response.data);
-            localStorage.setItem("jwtToken", JSON.stringify(response.data));
+            localStorage.setItem(
+              "accessToken",
+              JSON.stringify(response.data.accessToken)
+            );
+            localStorage.setItem(
+              "refreshToken",
+              JSON.stringify(response.data.refreshToken)
+            );
             setIsTokenValid(true);
           })
           .catch((error) => {
-            console.error("refresh토큰을 이용해 토큰 만료:", error);
+            console.error("refresh 토큰 만료 :", error);
             setIsTokenValid(false);
-            localStorage.setItem("jwtToken", null);
+            localStorage.setItem("accessToken", null);
+            localStorage.setItem("refreshToken", null);
           });
       });
   };

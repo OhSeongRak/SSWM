@@ -5,7 +5,6 @@ import { KAKAO_AUTH_URL } from "../shared/kakaoApi";
 
 import Gnb from "../components/Gnb";
 
-import GoogleLogo from "../assets/Google_Logo.svg";
 import KakaoLogo from "../assets/Kakao_Logo.svg";
 
 import Box from "@mui/material/Box";
@@ -42,11 +41,14 @@ const Login = () => {
               <KakaoLogin
                 JS_KEY="7d0b480cb467b756260e2f69512b54f6"
                 REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
-                REDIRECT_URI="https://i9a206.p.ssafy.io"
+                // REDIRECT_URI="https://i9a206.p.ssafy.io"
+                REDIRECT_URI="http://localhost:3000"
               />
               <KakaoCallback
                 REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
-                REDIRECT_URI="https://i9a206.p.ssafy.io"
+                // REDIRECT_URI="https://i9a206.p.ssafy.io"
+                REDIRECT_URI="http://localhost:3000"
+    
               />
             </SocialWrap>
             <ButtonWrap>

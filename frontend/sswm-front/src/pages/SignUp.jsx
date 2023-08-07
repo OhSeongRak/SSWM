@@ -22,11 +22,9 @@ const SignUp = () => {
           <SignUpWrap>
             <Text> 회원가입 </Text>
             <SocialWrap>
-              {/* <Link to="/SignUpName"> */}
-                <GoogleOAuthProvider clientId="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com">
-                  <GoogleSignIn />
-                </GoogleOAuthProvider>
-              {/* </Link> */}
+              <GoogleOAuthProvider clientId="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com">
+                <GoogleSignIn />
+              </GoogleOAuthProvider>
               <LogoImg src={KakaoLogo} />
             </SocialWrap>
             <ButtonWrap>
