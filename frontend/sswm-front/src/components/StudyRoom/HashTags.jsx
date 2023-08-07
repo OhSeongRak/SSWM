@@ -4,32 +4,31 @@ import Chip from "@mui/joy/Chip";
 import Checkbox from "@mui/joy/Checkbox";
 import * as React from "react";
 import { Typography } from "@mui/material";
+import { useState, useEffect } from 'react';
+import axios from "../../utils/api";
 
-export default function CheckboxChip() {
+export default function CheckboxChip({ onTagClick }) {
   const [selected, setSelected] = React.useState([]);
+  const [tagList, setTagList] = React.useState([]);
+  const token = JSON.parse(localStorage.getItem("jwtToken"));
 
-  const tag = [
-    "Star trek",
-    "Batman",
-    "Spider man",
-    "Eternals",
-    "Shang chi",
-    "Jungle cruise",
-    "No time to die",
-    "Thor",
-    "The hulk",
-    "Star trek2",
-    "Batman2",
-    "Spider man2",
-    "Eternals2",
-    "Shang chi2",
-    "Jungle cruise2",
-    "No time to die2",
-    "Thor2",
-    "The hulk2",
-    "Thor3",
-    "The hulk3",
-  ];
+  useEffect(() => {
+    axios
+      .get(`/api/tags`, {
+        headers: {
+          Authorization: token.accessToken,
+        },
+      })
+      .then((response) => {
+        const extractedTags = response.data.map((tag) => tag.name); // name 필드만 추출
+        setTagList(extractedTags);
+      });
+  }, [token.accessToken]);
+
+  useEffect(() => {
+    // selected 값이 변경될 때마다 부모로 새로운 selected 값을 전달
+    onTagClick(selected);
+  }, [selected]);
 
   return (
     <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
@@ -51,7 +50,7 @@ export default function CheckboxChip() {
         aria-labelledby="fav-movie"
         sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}
       >
-        {tag.map((name) => {
+        {tagList.map((name) => {
           const checked = selected.includes(name);
           return (
             <Chip

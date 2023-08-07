@@ -9,6 +9,6 @@ import lombok.Setter;
 public class UserStudyTimeResDto {
 
     private UserDto userDto;
-    private int studyTime;
+    private long studyTime;
 
 }
