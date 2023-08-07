@@ -1,6 +1,7 @@
 package com.ground.sswm.user.service;
 
 import com.ground.sswm.auth.oauth.model.OAuthUserInfo;
+import com.ground.sswm.common.util.UnixTimeUtil;
 import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.user.exception.NicknameAlreadyExistException;
 import com.ground.sswm.user.exception.UserNotFoundException;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(UserDto userDto) {
         User user = User.from(userDto);
+        user.setCreatedAt(UnixTimeUtil.getCurrentUnixTime());
         userRepository.save(user);
     }
 
@@ -112,6 +114,7 @@ public class UserServiceImpl implements UserService {
             log.debug("[modifyUser] (3)");
             user.setImage(imagePath);
         }
+        user.setModifiedAt(UnixTimeUtil.getCurrentUnixTime());
         // DB에 저장한다.
         userRepository.save(user);
     }
