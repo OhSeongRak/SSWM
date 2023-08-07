@@ -24,6 +24,6 @@ public interface UserService {
 
   void modifyUser(Long id, String nickname, String imagePath);
 
-
+  boolean exists(String nickname);
 }
 

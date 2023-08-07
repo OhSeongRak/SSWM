@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -110,10 +111,9 @@ public class StudyroomController {
 
     // 룸 제목 중복 확인
     @GetMapping("/exists")
-    @ResponseBody
-    public ResponseEntity<Boolean> exists(@RequestBody StudyroomDto studyroomDto) {
-        boolean isExist = studyroomService.exists(studyroomDto.getName());
+    public ResponseEntity<Boolean> exists(@RequestParam String name) {
+        log.debug("스터디룸이름 : "+ name);
+        boolean isExist = studyroomService.exists(name);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
-
     }
 }
