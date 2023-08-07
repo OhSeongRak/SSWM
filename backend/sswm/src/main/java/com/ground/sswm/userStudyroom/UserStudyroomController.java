@@ -3,12 +3,12 @@ package com.ground.sswm.userStudyroom;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ground.sswm.auth.service.AuthService;
-import com.ground.sswm.chat.dto.ChatDto;
+import com.ground.sswm.chat.model.dto.ChatDto;
 import com.ground.sswm.chat.service.ChatServiceImpl;
-import com.ground.sswm.user.dto.UserDto;
-import com.ground.sswm.userStudyroom.dto.OnAirResDto;
-import com.ground.sswm.userStudyroom.dto.UserAttendResDto;
-import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
+import com.ground.sswm.user.model.dto.UserDto;
+import com.ground.sswm.userStudyroom.model.dto.OnAirResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserAttendResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,7 @@ public class UserStudyroomController {
 
         return new ResponseEntity<>("", HttpStatus.OK);
     }
-    
+
     // 유저가 화상채팅에 참여할 때 채팅 리스트 반환
     @GetMapping("/{studyroomId}/enter/chat")
     public ResponseEntity<List<ChatDto>> enterStudyroom(

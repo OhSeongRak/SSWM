@@ -1,6 +1,6 @@
 package com.ground.sswm.tag;
 
-import com.ground.sswm.tag.dto.TagDto;
+import com.ground.sswm.tag.model.dto.TagDto;
 import com.ground.sswm.tag.service.TagService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TagController {
 
     private final TagService tagService;
+
     @GetMapping
-    public ResponseEntity<List<TagDto>> findAllTag( ){
+    public ResponseEntity<List<TagDto>> findAllTag() {
 
         List<TagDto> tagDtos = tagService.findAllTag();
 

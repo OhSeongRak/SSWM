@@ -1,9 +1,9 @@
 package com.ground.sswm.chat;
 
-import com.ground.sswm.chat.dto.ChatDto;
-import com.ground.sswm.chat.pubsub.RedisPublisher;
+import com.ground.sswm.chat.config.RedisPublisher;
+import com.ground.sswm.chat.model.dto.ChatDto;
 import com.ground.sswm.chat.service.ChatServiceImpl;
-import com.ground.sswm.user.dto.UserDto;
+import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,27 +25,24 @@ public class ChatController {
     // 여기서 채팅 저장
     @MessageMapping("/chat/message")
     public void message(ChatDto chatDto) {
-        // 유저를 찾아와서
-        UserDto userDto = userService.getUserDto(chatDto.getUserId());
+        chatDto.setNickname(userService.getUserDto(chatDto.getUserId()).getNickname());
 
-        // 닉네임을 넣어준다
-        chatDto.setNickname(userDto.getNickname());
-
-        log.debug("ChatDto :" + chatDto );
+        log.debug("ChatDto :" + chatDto);
 
         if (chatDto.getStudyroomId() == null) {
-            return;
+            throw new StudyroomNotFoundException("스터디룸 없음");
         }
+
         if (ChatDto.MessageType.ENTER.equals(chatDto.getType())) {
             chatServiceImpl.enterChatRoom(Long.valueOf(chatDto.getStudyroomId()));
-
-            chatDto.setContent("["+chatDto.getNickname() +"]"+"님이 입장하셨습니다.");
+            chatDto.setContent("[" + chatDto.getNickname() + "]" + "님이 입장하셨습니다.");
         }
 
-        chatServiceImpl.createChat(Long.valueOf(chatDto.getStudyroomId()), chatDto.getUserId(), chatDto.getContent(), chatDto.getType());
-
+        chatServiceImpl.createChat(Long.valueOf(chatDto.getStudyroomId()), chatDto.getUserId(),
+            chatDto.getContent(), chatDto.getType());
 
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
-        redisPublisher.publish(chatServiceImpl.getTopic(Long.valueOf(chatDto.getStudyroomId())), chatDto);
+        redisPublisher.publish(chatServiceImpl.getTopic(Long.valueOf(chatDto.getStudyroomId())),
+            chatDto);
     }
 }

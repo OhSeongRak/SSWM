@@ -5,6 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 public abstract class SswmApiException extends ResponseStatusException {
+
     public SswmApiException(HttpStatus status, String reason) {
         super(status, reason);
     }
