@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 
@@ -32,9 +32,13 @@ const Item = muistyled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+let formData;
 // const로 정의하면 재정의가 불가능해서 let으로 저장
 const CreateStudyRoom = () => {
-  let formData = new FormData();
+  useEffect(() => {
+    formData = new FormData();
+  }, []);
+
   const [isExist, setIsExist] = useState(true);
 
   const [checkedStudyroomName, setCheckedStudyroomName] = useState("");
@@ -229,6 +233,8 @@ const CreateStudyRoom = () => {
         alert("스터디방 개설이 되지 않았습니다.");
         console.log(Error);
       });
+      navigate("/");
+      window.location.reload();
   };
 
   // const [checked, setChecked] = useState(true);
