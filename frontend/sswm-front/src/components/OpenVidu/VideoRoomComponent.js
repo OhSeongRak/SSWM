@@ -9,7 +9,8 @@ import './VideoRoomComponent.css';
 import OpenViduLayout from './layout/openvidu-layout';
 import UserModel from './models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
-import * as tmPose from '@teachablemachine/pose';
+//import * as tmPose from '@teachablemachine/pose';
+import * as tmImage from '@teachablemachine/image';
 import sound from '../../assets/Dingdong.mp3'
 let model, webcam;
 var localUser = new UserModel();
@@ -499,17 +500,17 @@ class VideoRoomComponent extends Component {
         }
     }
     async init() {
-        const URL = "https://teachablemachine.withgoogle.com/models/jHt4eMwtl/";
+        const URL = "https://teachablemachine.withgoogle.com/models/xtvI2r9Ck/";
         const modelURL = URL+"model.json";
         const metadataURL = URL+"metadata.json";
 
         console.log("before model");
-        model = await tmPose.load(modelURL, metadataURL);
+        model = await tmImage.load(modelURL, metadataURL);
         console.log("after model");
 
         const size = 200;
         const flip = true; 
-        webcam = new tmPose.Webcam(size, size, flip); 
+        webcam = new tmImage.Webcam(size, size, flip); 
         await webcam.setup(); 
         await webcam.play();
         window.requestAnimationFrame(this.loop);
@@ -523,11 +524,8 @@ class VideoRoomComponent extends Component {
     }
 
     async predict() {
-
-        const { posenetOutput } = await model.estimatePose(webcam.canvas);
-        const prediction = await model.predict(posenetOutput);
-
-        if(prediction[0].probability > 0.9){
+        const prediction = await model.predict(webcam.canvas);
+        if(prediction[1].probability > 0.9){
             console.log("startRest");
         //     this.leaveSession();
         //     //this.startRest();
