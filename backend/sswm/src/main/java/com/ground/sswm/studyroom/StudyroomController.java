@@ -39,8 +39,7 @@ public class StudyroomController {
     private final FileManageUtil fileManageUtil;
 
     // 전체 조회 (아직 구현하지 않았습니다!!!!!!)
-    @GetMapping
-    @ResponseBody
+    @PostMapping("/list")
     public ResponseEntity<List<SearchStudyroomResDto>> list(
         @RequestBody SearchStudyroomReqDto searchStudyroomReqDto) {
         List<SearchStudyroomResDto> studyrooms = studyroomService.list(searchStudyroomReqDto);
@@ -70,7 +69,7 @@ public class StudyroomController {
         log.debug("userId :" + userId);
 
         // 이미지 저장
-        String filePath = null;
+        String filePath = "image/jpeg/2023/08/06/ae34df9e-d6b9-46f9-9433-55f723620c8e.jpg";
         if (fileType != null && !fileType.isBlank() && multipartFile != null
             && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
