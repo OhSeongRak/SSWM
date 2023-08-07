@@ -475,28 +475,6 @@ const HeaderBtn = styled.div`
   justify-content: center;
   gap: 1vw;
 `;
-const HeaderBtnText = styled.input`
-  max-width: 190px;
-  padding: 10px;
-  font-size: 15px;
-  color: black;
-  border-top-left-radius: 0.5em;
-  border-bottom-left-radius: 0.5em;
-  border: 2px solid #fff;
-  margin-right: -10px;
-  border: 1px solid black;
-`;
-const CustomButton = styled.button`
-  border: none;
-  background-color: #5b8d27;
-  text-decoration: none;
-  padding: 10px;
-  font-size: 15px;
-  color: #fff;
-  border-top-right-radius: 0.5em;
-  border-bottom-right-radius: 0.5em;
-  cursor: pointer;
-`;
 
 const ContentWrap = styled.div`
   width: 80%;
@@ -514,10 +492,6 @@ const ContentTopLeftWrap = styled.div`
   justify-content: center;
   width: 35%;
   height: 100%;
-`;
-const StudyRoomImg = styled.img`
-  width: 90%;
-  height: 90%;
 `;
 const ContentTopRightWrap = styled.div`
   display: flex;
