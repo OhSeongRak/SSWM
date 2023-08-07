@@ -83,6 +83,7 @@ public class UserServiceImpl implements UserService {
             .provider(oauthUser.getProvider())
             .providerId(oauthUser.getProviderId())
             .isAdmin(false)
+            .createdAt(UnixTimeUtil.getCurrentUnixTime())
             .build();
         return userRepository.save(newUser);
     }
