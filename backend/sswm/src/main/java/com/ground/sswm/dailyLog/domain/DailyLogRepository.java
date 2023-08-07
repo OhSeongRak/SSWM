@@ -17,6 +17,7 @@ public interface DailyLogRepository extends
     //해당하는 스터디룸에서 start부터 end날짜 사이에 유저가 공부한 기록 select(기간)
     Optional<List<DailyLog>> findAllByUserIdAndStudyroomIdAndDateBetween(Long userId, Long studyroomId, long startDate, long endDate);
 
+    //TODO: 왜 하루를 가져오는데 between이 필요한건지?
     //해당하는 스터디룸에서 해당 날짜에 유저가 공부한 기록 select(하루)
     @Query("select dl from DailyLog dl "
         + "where dl.user.id=:userId and dl.studyroom.id=:studyroomId and "

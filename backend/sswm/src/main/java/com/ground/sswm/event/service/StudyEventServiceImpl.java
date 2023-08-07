@@ -28,24 +28,24 @@ public class StudyEventServiceImpl implements StudyEventService {
     private final StudyEventRepository studyEventRepository;
     private final DailyLogRepository dailyLogRepository;
 
-    private final UserRepository userRepository;
-    private final StudyroomRepository studyroomRepository;
+//    private final UserRepository userRepository;
+//    private final StudyroomRepository studyroomRepository;
     @Override
-    public void addEventLog(Long userId, Long eventOccurTime, StudyEventDto studyEventDto) {
+    public void addEventLog(Long userId, Long eventOccurTime, StudyEventDto studyEventDto, int dayBefore) {
         if (studyEventDto.getStatus() == StudyEventStatus.OFF) { // 이벤트 종료 요청
             Long prevTime = studyEventRepository.findById(keyBuilder(userId, studyEventDto.getStudyroomId(),studyEventDto.getType()));
             if (prevTime == null) {
                 throw new BadEventRequestException("잘못된 이벤트 요청입니다.");
             }
-            // 총 공부시간 = 순수 공부시간 + 휴식 시간 + 스트레칭 시간
-            // 해당 날짜의 데이터가 존재한다면,
-            // 해당 날짜인지 확인
-            long[] days = getStartEndOfPeriod(eventOccurTime,ZoneId.of("Asia/Seoul"),0);
+            //TODO:총 공부시간 관련 확인
+            // 총 공부시간 = 순수 공부시간[study_time]  + 휴식 시간[rest_time : 순수 휴식 시간 + 스트레칭 시간]
+
+            long[] days = getStartEndOfPeriod(eventOccurTime,ZoneId.of("Asia/Seoul"),dayBefore); //
             long duration = eventOccurTime - prevTime;
 
             dailyLogRepository.findByUserIdAndStudyroomIdAndDateBetween(
                     userId, studyEventDto.getStudyroomId(), days[0],days[1])
-                .ifPresentOrElse(dailyLog -> {
+                .ifPresent(dailyLog -> {
                     if (studyEventDto.getType() == StudyEventType.LIVE) {
                         dailyLog.setStudyTime( duration + dailyLog.getStudyTime());
                     } else if (studyEventDto.getType() == StudyEventType.REST) {
@@ -54,29 +54,14 @@ public class StudyEventServiceImpl implements StudyEventService {
                         dailyLog.setRestTime(duration + dailyLog.getRestTime());
                     }
                         // 현재 날짜의 시작 시간으로 설정
-                        dailyLog.setDate(getStartEndOfPeriod(getCurrentUnixTime(),ZoneId.of("Asia/Seoul"),0)[0]);
+                        dailyLog.setDate(getStartEndOfPeriod(getCurrentUnixTime(),ZoneId.of("Asia/Seoul"),dayBefore)[0]);
                     dailyLogRepository.save(dailyLog);
-                },
-                    ()->{
-                        DailyLog dailyLog = new DailyLog();
-                        if (studyEventDto.getType() == StudyEventType.LIVE) {
-                            dailyLog.setStudyTime(duration);
-                        } else if (studyEventDto.getType() == StudyEventType.REST) {
-                            dailyLog.setRestTime(duration);
-                        } else if (studyEventDto.getType() == StudyEventType.STRETCH) {
-                            dailyLog.setRestTime(duration);
-                        }
-                        // 현재 날짜의 시작 시간으로 설정
-                        dailyLog.setDate(getStartEndOfPeriod(getCurrentUnixTime(),ZoneId.of("Asia/Seoul"),0)[0]);
-                        User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("유저없음"));
-                        Studyroom studyroom = studyroomRepository.findById(studyEventDto.getStudyroomId()).orElseThrow(()->new StudyroomNotFoundException("스터디룸없음"));
-                        dailyLog.setUser(user);
-                        dailyLog.setStudyroom(studyroom);
-                        dailyLogRepository.save(dailyLog);
+
                 });
             studyEventRepository.delete(keyBuilder(userId, studyEventDto.getStudyroomId(),studyEventDto.getType()));
         }
-        if(studyEventDto.getStatus() == StudyEventStatus.ON){ // O
+
+        else if(studyEventDto.getStatus() == StudyEventStatus.ON){ // O
             if(studyEventDto.getType() == StudyEventType.LIVE){
                 // 기존 LIVE가 없어야함
                 Long time = studyEventRepository.findById(keyBuilder(userId, studyEventDto.getStudyroomId(),StudyEventType.LIVE));
