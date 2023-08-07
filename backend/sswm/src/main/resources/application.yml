@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3316/sswm
+    url: jdbc:mysql://i9a206.p.ssafy.io:3316/sswm
     username: root
     password: ssjjmt206
   sql: # data.sql을 사용하기 위해 추가
