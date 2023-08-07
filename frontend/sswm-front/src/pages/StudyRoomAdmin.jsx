@@ -235,7 +235,7 @@ const StudyRoomAdmin = () => {
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .post("/api/studyrooms/{studyroom.id}", formData, {
+      .post("/api/studyrooms", formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",

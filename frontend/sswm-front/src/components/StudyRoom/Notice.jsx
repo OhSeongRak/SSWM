@@ -12,17 +12,13 @@ const Notice = () => {
   const handleEnterCodeChange = (event) => {
     setStudyroomDto({
       ...studyroomDto,
-      enterCode: event.target.value, // 사용자가 입력한 값으로 업데이트
+      notice: event.target.value, // 사용자가 입력한 값으로 업데이트
     });
   };
 
   return (
     <ContainerWrap>
-      <ContentWrap
-        value={studyroomDto.notice}
-        maxLength={CHARACTER_LIMIT}
-        onChange={handleEnterCodeChange}
-      >
+      <ContentWrap maxLength={CHARACTER_LIMIT} onChange={handleEnterCodeChange}>
         {studyroomDto.notice}
       </ContentWrap>
       <BtnWrap>
