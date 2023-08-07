@@ -28,8 +28,8 @@ public class StudyEventServiceImpl implements StudyEventService {
     private final StudyEventRepository studyEventRepository;
     private final DailyLogRepository dailyLogRepository;
 
-    private final UserRepository userRepository;
-    private final StudyroomRepository studyroomRepository;
+//    private final UserRepository userRepository;
+//    private final StudyroomRepository studyroomRepository;
     @Override
     public void addEventLog(Long userId, Long eventOccurTime, StudyEventDto studyEventDto, int dayBefore) {
         if (studyEventDto.getStatus() == StudyEventStatus.OFF) { // 이벤트 종료 요청
@@ -38,17 +38,14 @@ public class StudyEventServiceImpl implements StudyEventService {
                 throw new BadEventRequestException("잘못된 이벤트 요청입니다.");
             }
             //TODO:총 공부시간 관련 확인
+            // 총 공부시간 = 순수 공부시간[study_time]  + 휴식 시간[rest_time : 순수 휴식 시간 + 스트레칭 시간]
 
-            // 총 공부시간 = 순수 공부시간 + 휴식 시간 + 스트레칭 시간
-            // 해당 날짜의 데이터가 존재한다면,
-            // 해당 날짜인지 확인
-            long[] days = getStartEndOfPeriod(eventOccurTime,ZoneId.of("Asia/Seoul"),dayBefore);
+            long[] days = getStartEndOfPeriod(eventOccurTime,ZoneId.of("Asia/Seoul"),dayBefore); //
             long duration = eventOccurTime - prevTime;
 
             dailyLogRepository.findByUserIdAndStudyroomIdAndDateBetween(
                     userId, studyEventDto.getStudyroomId(), days[0],days[1])
                 .ifPresent(dailyLog -> {
-//                .ifPresentOrElse(dailyLog -> {
                     if (studyEventDto.getType() == StudyEventType.LIVE) {
                         dailyLog.setStudyTime( duration + dailyLog.getStudyTime());
                     } else if (studyEventDto.getType() == StudyEventType.REST) {
@@ -60,25 +57,6 @@ public class StudyEventServiceImpl implements StudyEventService {
                         dailyLog.setDate(getStartEndOfPeriod(getCurrentUnixTime(),ZoneId.of("Asia/Seoul"),dayBefore)[0]);
                     dailyLogRepository.save(dailyLog);
 
-//                },
-//                    //TODO: 이 부분은 24시간 초기화 할 때 라이브 접속되어 있으면, 라이브 입장할 때 dailylog를 생성하면 여기서는 필요 없을 것 같음
-//                    //TODO: 만약 이 부분을 남긴다면 어제의 dailylog가 가져와지지 않아서 찾지 못할듯
-//                    ()->{
-//                        DailyLog dailyLog = new DailyLog();
-//                        if (studyEventDto.getType() == StudyEventType.LIVE) {
-//                            dailyLog.setStudyTime(duration);
-//                        } else if (studyEventDto.getType() == StudyEventType.REST) {
-//                            dailyLog.setRestTime(duration);
-//                        } else if (studyEventDto.getType() == StudyEventType.STRETCH) {
-//                            dailyLog.setRestTime(duration);
-//                        }
-//                        // 현재 날짜의 시작 시간으로 설정
-//                        dailyLog.setDate(getStartEndOfPeriod(getCurrentUnixTime(),ZoneId.of("Asia/Seoul"),0)[0]);
-//                        User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("유저없음"));
-//                        Studyroom studyroom = studyroomRepository.findById(studyEventDto.getStudyroomId()).orElseThrow(()->new StudyroomNotFoundException("스터디룸없음"));
-//                        dailyLog.setUser(user);
-//                        dailyLog.setStudyroom(studyroom);
-//                        dailyLogRepository.save(dailyLog);
                 });
             studyEventRepository.delete(keyBuilder(userId, studyEventDto.getStudyroomId(),studyEventDto.getType()));
         }

@@ -30,10 +30,10 @@ public class StudyEventController {
         Long userId = authService.getUserIdFromToken(token);
         log.debug("[POST] token studyEventType studyEventStatus" + studyEventDto);
 
-        LocalTime currentTime = LocalTime.now();
+        LocalTime currentTime = LocalTime.now(); // 현재시각 가져옴
         int hour = currentTime.getHour();
         int minute = currentTime.getMinute();
-        int dayBefore = (hour < 4) ? 1 : 0;
+        int dayBefore = (hour < 4) ? 1 : 0; // [새벽4시 - 익일 0 - 익일 3시59분]
         studyEventService.addEventLog(userId, getCurrentUnixTime(), studyEventDto, dayBefore);
         return new ResponseEntity<>("", HttpStatus.OK);
     }

@@ -36,11 +36,9 @@ public class RedisToMySQLService {
     private final UserRepository userRepository;
     private final StudyroomRepository studyroomRepository;
     public void updateDataFromRedisToMySQL(int dayBefore){
-        //TODO : UserId_RoomId , 끝시각 Not Null
         updateMySQLDataUsingRedisData(fetchRedisKeys(), dayBefore);
     }
     public void updateDataFromRedisToMySQL4(){
-        //TODO : UserId_RoomId , 끝시각 Not Null
         updateMySQLDataUsingRedisData4(fetchRedisKeys());
     }
 
@@ -65,7 +63,6 @@ public class RedisToMySQLService {
 
     //30분마다 현재 redis 데이터들을 토대로 mysql에 추가해주고 새로운 redis 만듬
     private void updateMySQLDataUsingRedisData(List<String> keys, int dayBefore) {
-        // For example: mySqlRepository.updateData(data);
         long now = UnixTimeUtil.getCurrentUnixTime();
 
         //redis정보들 전부 처리
@@ -75,7 +72,7 @@ public class RedisToMySQLService {
             long startTime = redisEventTemplate.opsForValue().get(key);
             EventKeyDto dto = keySpliter(key);
 
-            //현재 시간 기준으로 4시 이전이면 어제 00시00분, 내일 00시00분 가져옴
+            //현재 시간 기준으로 4시 이전이면 어제 00시00분, 오늘 00시00분 가져옴
             //                4시 이후이면 오늘 00시00분, 내일 00시00분 가져옴
             long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
 
@@ -96,12 +93,11 @@ public class RedisToMySQLService {
                         } else if (dto.getType() == StudyEventType.STRETCH) { //이벤트가 스트레칭이면
                             dailyLog.setRestTime(duration + dailyLog.getRestTime());
                         }
-                        //dailyLog.setDate(days[0]);
                         dailyLogRepository.save(dailyLog);
                     });
             redisEventTemplate.opsForValue().set(key, now);
         });
-        System.out.println("Updating MySQL data: " + keys);
+        log.debug("Updating MySQL data: " + keys);
     }
 
     private void updateMySQLDataUsingRedisData4(List<String> keys) {
@@ -115,7 +111,6 @@ public class RedisToMySQLService {
         updateMySQLDataUsingRedisData(keys, 1);
         
         
-        // For example: mySqlRepository.updateData(data);
         long now = UnixTimeUtil.getCurrentUnixTime();
 
         //redis정보들 전부 처리
@@ -145,7 +140,7 @@ public class RedisToMySQLService {
 
             redisEventTemplate.opsForValue().set(key, now);
 
-            System.out.println("Updating MySQL data(24): " + keys);
+            log.debug("Updating MySQL data(24): " + keys);
         });
     }
 }

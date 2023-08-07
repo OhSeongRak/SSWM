@@ -1,10 +1,11 @@
 package com.ground.sswm.common.schedule;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ScheduledTasks {
@@ -17,7 +18,7 @@ public class ScheduledTasks {
         int minute = currentTime.getMinute();
 
         if (hour == 4 && minute >= 0 && minute < 2) {
-            System.out.println("작업: 4am에만 실행");
+            log.debug("작업: 4am에만 실행");
             redisToMySQLService.updateDataFromRedisToMySQL4();
             mySQLSelfService.dailyLogToUserStudyroom();
         } else{
