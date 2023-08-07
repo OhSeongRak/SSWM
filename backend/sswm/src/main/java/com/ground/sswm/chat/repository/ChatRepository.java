@@ -1,4 +1,4 @@
-package com.ground.sswm.chat.repo;
+package com.ground.sswm.chat.repository;
 
 
 import com.ground.sswm.chat.domain.Chat;

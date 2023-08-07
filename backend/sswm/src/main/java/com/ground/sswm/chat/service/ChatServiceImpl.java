@@ -3,12 +3,15 @@ package com.ground.sswm.chat.service;
 import com.ground.sswm.chat.domain.Chat;
 import com.ground.sswm.chat.dto.ChatDto;
 import com.ground.sswm.chat.dto.ChatDto.MessageType;
+import com.ground.sswm.chat.exception.ChatroomNotFoundException;
 import com.ground.sswm.chat.pubsub.RedisSubscriber;
-import com.ground.sswm.chat.repo.ChatRepository;
+import com.ground.sswm.chat.repository.ChatRepository;
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.studyroom.domain.StudyroomRepository;
+import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.domain.UserRepository;
+import com.ground.sswm.user.exception.UserNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,8 +62,7 @@ public class ChatServiceImpl implements ChatService{
     public void enterChatRoom(Long studyroomId) {
         Optional<Studyroom> findRoom = studyroomRepository.findById(studyroomId);
         if (findRoom.isEmpty()) {
-            // 방이 존재하지 않는다고 알려줘야하는데..??
-            return;
+            throw new ChatroomNotFoundException("채팅룸이 존재하지 않습니다.");
         }
 
         ChannelTopic topic = topics.get(studyroomId);
@@ -85,17 +87,12 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public ChatDto createChat(Long studyroomId, Long userId, String content, MessageType type) {
         //방 찾기 -> 없는 방일 경우 여기서 예외처리
-        Optional<Studyroom> findStudyroom = studyroomRepository.findById(studyroomId);
-        Optional<User> findUser = userRepository.findById(userId);
+        Studyroom findStudyroom = studyroomRepository.findById(studyroomId)
+            .orElseThrow(()-> new StudyroomNotFoundException("없는 스터디룸입니다."));
+        User findUser = userRepository.findById(userId)
+            .orElseThrow(()-> new UserNotFoundException("없는 유저입니다."));
 
-        if (findStudyroom.isEmpty()) {
-            return null;
-        }
-        if (findUser.isEmpty()) {
-            return null;
-        }
-
-        chatRepository.save(Chat.createChat(findStudyroom.get(), findUser.get(), content));
+        chatRepository.save(Chat.createChat(findStudyroom, findUser, content));
 
         return ChatDto.builder()
             .studyroomId(studyroomId)
@@ -113,16 +110,9 @@ public class ChatServiceImpl implements ChatService{
     public List<ChatDto> findAllChatByStudyroomId(Long studyroomId) {
         List<Chat> findChats = chatRepository.findAllByStudyroomId(studyroomId);
 
-        List<ChatDto> findChatDtos = new ArrayList<>();
-        for (Chat findChat : findChats) {
-            ChatDto chatDto = new ChatDto();
-
-            chatDto.setContent(findChat.getContent());
-            chatDto.setUserId(findChat.getUser().getId());
-            chatDto.setStudyroomId(findChat.getStudyroom().getId());
-
-            findChatDtos.add(chatDto);
-        }
+        List<ChatDto> findChatDtos = findChats.stream()
+            .map(x-> ChatDto.from(x))
+            .toList();
 
         return findChatDtos;
     }

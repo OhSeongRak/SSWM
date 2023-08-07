@@ -2,6 +2,7 @@ package com.ground.sswm.chat.domain;
 
 import static javax.persistence.FetchType.LAZY;
 
+import com.ground.sswm.chat.dto.ChatDto;
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.user.domain.User;
 import java.time.LocalDateTime;
@@ -77,4 +78,5 @@ public class Chat {
             .user(user)
             .build();
     }
+
 }

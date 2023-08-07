@@ -3,6 +3,7 @@ package com.ground.sswm.chat;
 import com.ground.sswm.chat.dto.ChatDto;
 import com.ground.sswm.chat.pubsub.RedisPublisher;
 import com.ground.sswm.chat.service.ChatServiceImpl;
+import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.user.dto.UserDto;
 import com.ground.sswm.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +26,16 @@ public class ChatController {
     // 여기서 채팅 저장
     @MessageMapping("/chat/message")
     public void message(ChatDto chatDto) {
-        // 유저를 찾아와서
-        UserDto userDto = userService.getUserDto(chatDto.getUserId());
-
-        // 닉네임을 넣어준다
-        chatDto.setNickname(userDto.getNickname());
+        chatDto.setNickname(userService.getUserDto(chatDto.getUserId()).getNickname());
 
         log.debug("ChatDto :" + chatDto );
 
         if (chatDto.getStudyroomId() == null) {
-            return;
+            throw new StudyroomNotFoundException("스터디룸 없음");
         }
+
         if (ChatDto.MessageType.ENTER.equals(chatDto.getType())) {
             chatServiceImpl.enterChatRoom(Long.valueOf(chatDto.getStudyroomId()));
-
             chatDto.setContent("["+chatDto.getNickname() +"]"+"님이 입장하셨습니다.");
         }
 

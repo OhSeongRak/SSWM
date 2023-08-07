@@ -1,16 +1,15 @@
 package com.ground.sswm.chat.dto;
 
+import com.ground.sswm.chat.domain.Chat;
 import javax.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
 @Setter
 public class ChatDto {
 
@@ -19,9 +18,6 @@ public class ChatDto {
         ENTER, TALK
     }
 
-    public MessageType getType() {
-        return type;
-    }
 
     private MessageType type; // 메시지 타입
 
@@ -30,4 +26,21 @@ public class ChatDto {
     private String nickname; // 유저닉네임
     private String content; // 메시지
     private long createdAt;
+    @Builder
+    public ChatDto(MessageType type, Long studyroomId, Long userId, String nickname, String content,
+        long createdAt) {
+        this.type = type;
+        this.studyroomId = studyroomId;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
+    public static ChatDto from(Chat chat){
+        return ChatDto.builder()
+            .content(chat.getContent())
+            .userId(chat.getUser().getId())
+            .studyroomId(chat.getStudyroom().getId())
+            .build();
+    }
 }
