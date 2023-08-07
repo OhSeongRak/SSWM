@@ -1,10 +1,10 @@
 package com.ground.sswm.auth.service;
 
-import com.ground.sswm.auth.domain.Auth;
-import com.ground.sswm.auth.domain.AuthRepository;
-import com.ground.sswm.auth.dto.JwtDto;
-import com.ground.sswm.auth.jwt.JwtUtil;
-import com.ground.sswm.user.domain.User;
+import com.ground.sswm.auth.jwt.model.JwtDto;
+import com.ground.sswm.auth.jwt.util.JwtUtil;
+import com.ground.sswm.auth.model.Auth;
+import com.ground.sswm.auth.repository.AuthRepository;
+import com.ground.sswm.user.model.User;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -40,11 +40,13 @@ public class AuthServiceImpl implements AuthService {
         Long userId = Long.valueOf(claims.get("id").toString());
         return userId;
     }
+
     @Override
     public Map<String, Object> getClaimsFromToken(String token) {
         Map<String, Object> headerToken = jwtUtil.getClaims(token);
         return headerToken;
     }
+
     @Override
     public Auth getSavedTokenByUserId(Long userId) {
         return authRepository.findById(userId);

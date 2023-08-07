@@ -1,7 +1,7 @@
 package com.ground.sswm.chat.repository;
 
 
-import com.ground.sswm.chat.domain.Chat;
+import com.ground.sswm.chat.model.Chat;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 

@@ -1,7 +1,7 @@
 package com.ground.sswm.dailyLog.service;
 
 
-import com.ground.sswm.dailyLog.domain.DailyLogRepository;
+import com.ground.sswm.dailyLog.repository.DailyLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

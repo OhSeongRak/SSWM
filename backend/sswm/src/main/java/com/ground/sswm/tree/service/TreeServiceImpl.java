@@ -1,9 +1,9 @@
 package com.ground.sswm.tree.service;
 
-import com.ground.sswm.tree.domain.Tree;
-import com.ground.sswm.tree.domain.TreeRepository;
-import com.ground.sswm.tree.dto.TreeDto;
-import com.ground.sswm.user.dto.UserDto;
+import com.ground.sswm.tree.model.Tree;
+import com.ground.sswm.tree.model.dto.TreeDto;
+import com.ground.sswm.tree.repository.TreeRepository;
+import com.ground.sswm.user.model.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -2,14 +2,12 @@ package com.ground.sswm.studyroom;
 
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.image.util.FileManageUtil;
-import com.ground.sswm.studyroom.dto.SearchStudyroomReqDto;
-import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
-import com.ground.sswm.studyroom.dto.StudyroomDto;
+import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
+import com.ground.sswm.studyroom.model.dto.SearchStudyroomResDto;
+import com.ground.sswm.studyroom.model.dto.StudyroomDto;
 import com.ground.sswm.studyroom.service.StudyroomService;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -112,7 +110,7 @@ public class StudyroomController {
     // 룸 제목 중복 확인
     @GetMapping("/exists")
     public ResponseEntity<Boolean> exists(@RequestParam String name) {
-        log.debug("스터디룸이름 : "+ name);
+        log.debug("스터디룸이름 : " + name);
         boolean isExist = studyroomService.exists(name);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }

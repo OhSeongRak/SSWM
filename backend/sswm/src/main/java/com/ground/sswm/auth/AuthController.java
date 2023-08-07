@@ -1,23 +1,23 @@
 package com.ground.sswm.auth;
 
-import com.ground.sswm.auth.domain.Auth;
-import com.ground.sswm.auth.dto.JwtDto;
-import com.ground.sswm.auth.dto.OAuthTokenDto;
-import com.ground.sswm.auth.dto.OAuthUserInfoDto;
-import com.ground.sswm.auth.exception.InvalidTokenException;
 import com.ground.sswm.auth.exception.UserAlreadyExistException;
 import com.ground.sswm.auth.exception.UserUnAuthorizedException;
-import com.ground.sswm.auth.jwt.JwtUtil;
-import com.ground.sswm.auth.oauth.GoogleUserInfo;
-import com.ground.sswm.auth.oauth.KakaoUserInfo;
-import com.ground.sswm.auth.oauth.OAuthProvider;
-import com.ground.sswm.auth.oauth.OAuthUserInfo;
+import com.ground.sswm.auth.jwt.exception.InvalidTokenException;
+import com.ground.sswm.auth.jwt.model.JwtDto;
+import com.ground.sswm.auth.jwt.util.JwtUtil;
+import com.ground.sswm.auth.model.Auth;
+import com.ground.sswm.auth.oauth.model.GoogleUserInfo;
+import com.ground.sswm.auth.oauth.model.KakaoUserInfo;
+import com.ground.sswm.auth.oauth.model.OAuthProvider;
+import com.ground.sswm.auth.oauth.model.OAuthUserInfo;
+import com.ground.sswm.auth.oauth.model.dto.OAuthTokenDto;
+import com.ground.sswm.auth.oauth.model.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.oauth.service.GoogleAuthService;
 import com.ground.sswm.auth.oauth.service.KakaoAuthService;
 import com.ground.sswm.auth.oauth.service.SocialAuthService;
 import com.ground.sswm.auth.service.AuthService;
-import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.exception.UserNotFoundException;
+import com.ground.sswm.user.model.User;
 import com.ground.sswm.user.service.UserService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/{SOCIAL_TYPE}/login") //login
-    public ResponseEntity<JwtDto> login( @RequestBody Map<String, Object> data,
+    public ResponseEntity<JwtDto> login(@RequestBody Map<String, Object> data,
         @PathVariable("SOCIAL_TYPE") String socialType) {
 
         log.debug("[POST] /auth/" + socialType + "/login");
@@ -149,7 +149,7 @@ public class AuthController {
         log.debug("[POST] /access-token " + accessToken);
         if (accessToken != null && jwtUtil.validateToken(accessToken)) {
             log.info("토큰 사용 가능 : {}", accessToken);
-            return  new ResponseEntity<>("success",HttpStatus.OK);
+            return new ResponseEntity<>("success", HttpStatus.OK);
         } else {
             log.info("토큰 사용 불가능 : {}", accessToken);
             throw new InvalidTokenException("토큰 잘못됨");
