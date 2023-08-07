@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,6 +83,14 @@ public class UserController {
         userService.modifyUser(userId, nickname, filePath);
 
         return new ResponseEntity<>("닉네임 수정 성공", HttpStatus.OK);
+    }
+
+    // 닉네임 중복 확인
+    @GetMapping("/exists")
+    public ResponseEntity<Boolean> exists(@RequestParam String nickname) {
+        log.debug("스터디룸이름 : "+ nickname);
+        boolean isExist = userService.exists(nickname);
+        return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }
 
     @DeleteMapping

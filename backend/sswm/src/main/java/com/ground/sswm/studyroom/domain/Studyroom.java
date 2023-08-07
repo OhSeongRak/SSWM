@@ -45,7 +45,6 @@ public class Studyroom {
     @ColumnDefault(value = "0")
     private long createdAt;
 
-
     private int userNum;
 
 //  public boolean getIsPublic() {

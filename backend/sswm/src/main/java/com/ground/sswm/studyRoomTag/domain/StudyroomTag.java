@@ -21,7 +21,7 @@ public class StudyroomTag {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STUDTYROOM_ID")
+    @JoinColumn(name = "STUDYROOM_ID")
     private Studyroom studyroom;
 
     @ManyToOne(fetch = FetchType.LAZY)
