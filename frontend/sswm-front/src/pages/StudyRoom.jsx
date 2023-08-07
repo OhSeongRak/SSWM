@@ -48,12 +48,13 @@ const StudyRoom = (props) => {
   const checkTokenValidity = () => {
     const accessToken = JSON.parse(localStorage.getItem("accessToken"));
     const refreshToken = JSON.parse(localStorage.getItem("refreshToken"));
-    
+
     // 로그인 안했을 때
     if (accessToken === null) {
       setIsTokenValid(false);
       return;
     }
+
     
     axios
     .post("/api/auth/access-token", accessToken, {
@@ -64,6 +65,7 @@ const StudyRoom = (props) => {
     .then((response) => {
       console.log("Access 토큰 유효: ", response.data);
       setIsTokenValid(true);
+
       })
       .catch((error) => {
         // 로그인 했지만 access 토큰 만료 재발급 필요

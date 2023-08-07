@@ -4,8 +4,9 @@ const KakaoCallback  = ({REST_API_KEY,REDIRECT_URI}) => {
     const getCallBack=() => {
         const params= new URL(document.location.toString()).searchParams;
         const code = params.get('code');
+        console.log(code);
         axios.post(
-            `https://i9a206.p.ssafy.io/api/auth/kakao`,
+            `https://localhost:8080/api/auth/kakao/signin`,
               {"code":code},
               { headers: {"Content-Type": "application/json; charset=utf-8"} }
           )

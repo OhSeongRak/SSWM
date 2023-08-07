@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sswm
+    url: jdbc:mysql://i9a206.p.ssafy.io:3316/sswm
     username: root
     password: ssjjmt206
 

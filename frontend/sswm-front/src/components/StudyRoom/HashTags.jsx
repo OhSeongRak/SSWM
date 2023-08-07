@@ -10,20 +10,20 @@ import axios from "../../utils/api";
 export default function CheckboxChip({ onTagClick }) {
   const [selected, setSelected] = React.useState([]);
   const [tagList, setTagList] = React.useState([]);
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = JSON.parse(localStorage.getItem("accessToken"));
 
   useEffect(() => {
     axios
       .get(`/api/tags`, {
         headers: {
-          Authorization: token.accessToken,
+          Authorization: token,
         },
       })
       .then((response) => {
         const extractedTags = response.data.map((tag) => tag.name); // name 필드만 추출
         setTagList(extractedTags);
       });
-  }, [token.accessToken]);
+  }, [token]);
 
   useEffect(() => {
     // selected 값이 변경될 때마다 부모로 새로운 selected 값을 전달
