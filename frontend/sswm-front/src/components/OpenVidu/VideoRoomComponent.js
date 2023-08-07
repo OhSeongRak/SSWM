@@ -10,7 +10,7 @@ import OpenViduLayout from './layout/openvidu-layout';
 import UserModel from './models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
 import * as tmPose from '@teachablemachine/pose';
-
+import sound from '../../assets/Dingdong.mp3'
 let model, webcam;
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL = 'https://i9a206.p.ssafy.io:5443/';
@@ -54,7 +54,6 @@ class VideoRoomComponent extends Component {
         this.loop = this.loop.bind(this);
         this.init = this.init.bind(this);
         this.sendAlarm = this.sendAlarm.bind(this);
-        this.getAlarmMessage = this.getAlarmMessage.bind(this);
         this.displayAlarmMessage = this.displayAlarmMessage.bind(this);
     }
 
@@ -176,7 +175,7 @@ class VideoRoomComponent extends Component {
         this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
         this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
-
+        this.getAlarmMessage();
         this.setState({ currentVideoDevice: videoDevices[0], localUser: localUser }, () => {
             this.state.localUser.getStreamManager().on('streamPlaying', (e) => {
                 this.updateLayout();
@@ -537,21 +536,37 @@ class VideoRoomComponent extends Component {
     }
 
     //알람 전송
-    sendAlarm() {
-        console.log("send alarm");
-        const data = {
-            type: 'alarm',
-            message: 'Wake up! It is time!'
-        };
-        //subscribes[i].getConnectionId();
-        // 연결된 사용자들에게 데이터 메시지를 보냅니다.
-        console.log("state:::::::");
-        console.log(this.state);
-        this.state.session.signal({
-            type: 'alarm', // WebRTC 데이터 채널 신호 타입
-            data: JSON.stringify(data), // 데이터를 JSON 형식으로 변환하여 보냅니다.
-            to: [], // 비어있으면 모든 사용자에게 메시지를 보냅니다.
+    sendAlarm(connectionId) {
+        //this.state.session.remoteConnections에서 for문 돌면서 맞는 connectionId에서 connection을 가져와서 to에 넣어주자
+        var con = undefined;
+        this.state.session.remoteConnections.forEach(function(Connection){
+            if (Connection.connectionId === connectionId){
+                con = Connection;
+            }
         });
+        if(con){
+        this.state.session.signal({
+            data: 'My custom message',  // Any string (optional)
+            to: [con],        // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: 'alarm'             // The type of message (optional)
+          });
+
+          var currentSound = undefined;
+          if(currentSound) {
+              currentSound.pause();
+              currentSound.currentTime = 0;
+          }
+      
+          // TODO: mp3 파일 경로는 맞게 수정해주세요!
+          currentSound = new Audio(sound);
+          currentSound.play();
+        }
+        else{
+            console.log("알람 전송 실패");
+        }
+        
+
+          
     }
 
     //알람 수신
@@ -559,23 +574,24 @@ class VideoRoomComponent extends Component {
     getAlarmMessage(){
 
         this.state.session.on('signal:alarm', (event) => {
-            const data = JSON.parse(event.data); // JSON 형식의 데이터를 파싱합니다.
-            console.log("type", data.type);
-            if (data.type === 'alarm') {
                 // 알람 메시지를 화면에 표시합니다.
                 console.log("get alarm");
-
-                this.displayAlarmMessage(data.message);
+                this.displayAlarmMessage(event.data);
             }
-        });
+        );
+        
     }
     displayAlarmMessage(message) {
-        console.log("get alarm");
 
-        const alarmDiv = document.createElement('div');
-        alarmDiv.innerText = message;
+        var currentSound = undefined;
+        if(currentSound) {
+            currentSound.pause();
+            currentSound.currentTime = 0;
+        }
     
-        document.body.appendChild(alarmDiv);
+        // TODO: mp3 파일 경로는 맞게 수정해주세요!
+        currentSound = new Audio(sound);
+        currentSound.play();
     }
     render() {
         const mySessionId = this.state.mySessionId;
@@ -608,7 +624,7 @@ class VideoRoomComponent extends Component {
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers">
-                            <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+                            <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} onHandleNotification={this.sendAlarm} />
                         </div>
                     ))}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
@@ -621,7 +637,6 @@ class VideoRoomComponent extends Component {
                             />
                         </div>
                     )}
-                                    <button onClick={this.sendAlarm}>알람 보내기</button>
 
                 </div>
             </div>
