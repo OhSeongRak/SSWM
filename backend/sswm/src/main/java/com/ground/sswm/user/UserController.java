@@ -1,12 +1,11 @@
 package com.ground.sswm.user;
 
 
-import com.ground.sswm.auth.jwt.JwtUtil;
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.image.util.FileManageUtil;
-import com.ground.sswm.user.dto.UserDto;
-import com.ground.sswm.user.dto.UserResDto;
 import com.ground.sswm.user.exception.NicknameAlreadyExistException;
+import com.ground.sswm.user.model.dto.UserDto;
+import com.ground.sswm.user.model.dto.UserResDto;
 import com.ground.sswm.user.service.UserService;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +60,10 @@ public class UserController {
     // 토큰의 유효성 검사는 프론트에서 하나?
     @PutMapping
     public ResponseEntity<?> modify(@RequestHeader("Authorization") String token,
-                                    @RequestPart(value = "file", required = false) MultipartFile multipartFile,
-                                    @RequestPart(value = "fileType", required = false) String fileType,
-                                    @RequestPart(value = "nickname", required = false) String nickname)
-            throws NicknameAlreadyExistException {
+        @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+        @RequestPart(value = "fileType", required = false) String fileType,
+        @RequestPart(value = "nickname", required = false) String nickname)
+        throws NicknameAlreadyExistException {
 //        log.debug("[PUT] /user : file " + multipartFile.getOriginalFilename());
         log.debug("[PUT] /user : fileType " + fileType);
         log.debug("[PUT] /user : nickname " + nickname);
@@ -74,7 +73,7 @@ public class UserController {
 
         String filePath = null;
         if (fileType != null && !fileType.isBlank() && multipartFile != null
-                && !multipartFile.isEmpty()) {
+            && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
         }
 
@@ -88,7 +87,7 @@ public class UserController {
     // 닉네임 중복 확인
     @GetMapping("/exists")
     public ResponseEntity<Boolean> exists(@RequestParam String nickname) {
-        log.debug("스터디룸이름 : "+ nickname);
+        log.debug("스터디룸이름 : " + nickname);
         boolean isExist = userService.exists(nickname);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }

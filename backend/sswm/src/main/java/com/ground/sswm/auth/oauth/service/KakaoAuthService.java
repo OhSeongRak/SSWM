@@ -1,8 +1,8 @@
 package com.ground.sswm.auth.oauth.service;
 
-import com.ground.sswm.auth.dto.OAuthTokenDto;
-import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.exception.KakaoAuthenticateException;
+import com.ground.sswm.auth.oauth.model.dto.OAuthTokenDto;
+import com.ground.sswm.auth.oauth.model.dto.OAuthUserInfoDto;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -117,12 +117,12 @@ public class KakaoAuthService implements SocialAuthService {
             log.debug("[UserInfo-JsonObject-properties] " + properties);
 
             return OAuthUserInfoDto.builder()
-                    .providerId(userInfo.get("id").toString())
-                    .email(email)
-                    .name(properties.get("nickname").toString())
-                    .nickname(properties.get("nickname").toString())
-                    .profileImg(properties.get("profile_image").toString())
-                    .build();
+                .providerId(userInfo.get("id").toString())
+                .email(email)
+                .name(properties.get("nickname").toString())
+                .nickname(properties.get("nickname").toString())
+                .profileImg(properties.get("profile_image").toString())
+                .build();
 
         } catch (ParseException e) {
             log.debug("파싱 실패: {}", e.getMessage());

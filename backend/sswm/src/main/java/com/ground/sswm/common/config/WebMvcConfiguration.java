@@ -25,13 +25,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-         registry.addInterceptor(jwtInterceptor).addPathPatterns(PATTERNS);
+        registry.addInterceptor(jwtInterceptor).addPathPatterns(PATTERNS);
     }
 
     @Override
     @CrossOrigin
     public void addCorsMappings(CorsRegistry registry) {
-        // TODO: setting pattern CORS
         registry.addMapping("/**")
             .allowedOriginPatterns("*")
             .allowedOrigins("http://localhost:3000")

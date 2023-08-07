@@ -1,16 +1,15 @@
 package com.ground.sswm.user.service;
 
-import com.ground.sswm.auth.oauth.OAuthUserInfo;
+import com.ground.sswm.auth.oauth.model.OAuthUserInfo;
 import com.ground.sswm.image.util.FileManageUtil;
-import com.ground.sswm.user.domain.User;
-import com.ground.sswm.user.domain.UserRepository;
-import com.ground.sswm.user.dto.UserDto;
-import com.ground.sswm.user.dto.UserResDto;
 import com.ground.sswm.user.exception.NicknameAlreadyExistException;
 import com.ground.sswm.user.exception.UserNotFoundException;
+import com.ground.sswm.user.model.User;
+import com.ground.sswm.user.model.dto.UserDto;
+import com.ground.sswm.user.model.dto.UserResDto;
+import com.ground.sswm.user.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResDto getUserResDto(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("" + userId)
+            () -> new UserNotFoundException("" + userId)
         );
         return UserResDto.from(user);
     }
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserDto(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("" + userId)
+            () -> new UserNotFoundException("" + userId)
         );
         return UserDto.from(user);
     }
@@ -49,15 +48,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUser() {
         List<UserDto> userList = userRepository.findAll().stream()
-                .map(UserDto::from)
-                .collect(Collectors.toList());
+            .map(UserDto::from)
+            .collect(Collectors.toList());
         return userList;
     }
 
     @Override
     public void delete(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException("" + id));
+            () -> new UserNotFoundException("" + id));
 
         userRepository.delete(user);
 
@@ -75,14 +74,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addOAuthUser(OAuthUserInfo oauthUser) {
         User newUser = User.builder()
-                .name(oauthUser.getName())
-                .nickname(oauthUser.getNickname() != "" ? oauthUser.getNickname() : oauthUser.getName())
-                .image(oauthUser.getProfileImg())
-                .email(oauthUser.getEmail())
-                .provider(oauthUser.getProvider())
-                .providerId(oauthUser.getProviderId())
-                .isAdmin(false)
-                .build();
+            .name(oauthUser.getName())
+            .nickname(oauthUser.getNickname() != "" ? oauthUser.getNickname() : oauthUser.getName())
+            .image(oauthUser.getProfileImg())
+            .email(oauthUser.getEmail())
+            .provider(oauthUser.getProvider())
+            .providerId(oauthUser.getProviderId())
+            .isAdmin(false)
+            .build();
         return userRepository.save(newUser);
     }
 
@@ -90,7 +89,7 @@ public class UserServiceImpl implements UserService {
     public void modifyUser(Long id, String nickname, String imagePath) {
         log.debug("modifyUser " + id + " " + nickname + " " + imagePath);
         User user = userRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException("" + id));
+            () -> new UserNotFoundException("" + id));
 
         // 닉네임 바꾸는 경우
         if (nickname != null && !nickname.isBlank()) {
@@ -117,7 +116,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public boolean exists(String nickname){return  userRepository.existsByNickname(nickname);}
+    public boolean exists(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
 
 
 }

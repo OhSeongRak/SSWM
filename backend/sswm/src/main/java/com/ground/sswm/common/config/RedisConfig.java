@@ -1,7 +1,6 @@
 package com.ground.sswm.common.config;
 
-import com.ground.sswm.auth.domain.Auth;
-import com.ground.sswm.event.domain.StudyEvent;
+import com.ground.sswm.auth.model.Auth;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +10,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -35,7 +33,8 @@ public class RedisConfig {
         redisConfiguration.setHostName(host);
         redisConfiguration.setPort(port);
         redisConfiguration.setPassword(password);
-        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisConfiguration);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(
+            redisConfiguration);
 
         return lettuceConnectionFactory;
     }
@@ -44,7 +43,8 @@ public class RedisConfig {
      * redis pub/sub 메시지를 처리하는 listener 설정
      */
     @Bean
-    public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory) {
+    public RedisMessageListenerContainer redisMessageListener(
+        RedisConnectionFactory connectionFactory) {
 
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 
@@ -89,17 +89,16 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Long> redisEventTemplate(RedisConnectionFactory connectionFactory){
+    public RedisTemplate<String, Long> redisEventTemplate(
+        RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Long> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-
 
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
 
         template.setValueSerializer(new GenericToStringSerializer<>(Long.class));
         template.setHashValueSerializer(new GenericToStringSerializer<>(Long.class));
-
 
         return template;
     }

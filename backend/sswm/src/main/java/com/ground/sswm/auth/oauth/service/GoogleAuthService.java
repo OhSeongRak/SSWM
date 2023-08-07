@@ -1,8 +1,8 @@
 package com.ground.sswm.auth.oauth.service;
 
-import com.ground.sswm.auth.dto.OAuthTokenDto;
-import com.ground.sswm.auth.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.exception.GoogleAuthenticateException;
+import com.ground.sswm.auth.oauth.model.dto.OAuthTokenDto;
+import com.ground.sswm.auth.oauth.model.dto.OAuthUserInfoDto;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
