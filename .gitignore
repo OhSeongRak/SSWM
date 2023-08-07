@@ -1,0 +1,64 @@
+backend/sswm/HELP.md
+backend/sswm/.gradle
+backend/sswm/build/
+!backend/sswm/gradle/wrapper/gradle-wrapper.jar
+!backend/sswm/src/main/**/build/
+!backend/sswm/src/test/**/build/
+!backend/sswm/src/main/resources/application.yml
+
+### STS ###
+backend/sswm/.apt_generated
+backend/sswm/.classpath
+backend/sswm/.factorypath
+backend/sswm/.project
+backend/sswm/.settings
+backend/sswm/.springBeans
+backend/sswm/.sts4-cache
+backend/sswm/bin/
+!backend/sswm/**/src/main/**/bin/
+!backend/sswm/**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+backend/sswm/.idea
+backend/sswm/*.iws
+backend/sswm/*.iml
+backend/sswm/*.ipr
+backend/sswm/out/
+!backend/sswm/**/src/main/**/out/
+!backend/sswm/**/src/test/**/out/
+
+### NetBeans ###
+backend/sswm/nbproject/private/
+backend/sswm/nbbuild/
+backend/sswm/dist/
+backend/sswm/nbdist/
+backend/sswm/.nb-gradle/
+
+### VS Code ###
+backend/sswm/.vscode/
+
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+frontend/sswm-front/node_modules
+frontend/sswm-front/.pnp
+frontend/sswm-front/.pnp.js
+
+# testing
+frontend/sswm-front/coverage
+
+# production
+frontend/sswm-front/build
+
+# misc
+frontend/sswm-front/.DS_Store
+frontend/sswm-front/.env.local
+frontend/sswm-front/.env.development.local
+frontend/sswm-front/.env.test.local
+frontend/sswm-front/.env.production.local
+
+frontend/sswm-front/npm-debug.log*
+frontend/sswm-front/yarn-debug.log*
+frontend/sswm-front/yarn-error.log*
+
