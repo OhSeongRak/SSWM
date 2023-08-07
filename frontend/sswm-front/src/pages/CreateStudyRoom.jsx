@@ -177,6 +177,7 @@ const CreateStudyRoom = () => {
         console.log(Error);
       });
       navigate("/");
+      window.location.reload();
   };
 
   // const [checked, setChecked] = useState(true);
