@@ -2,6 +2,7 @@ package com.ground.sswm.userStudyroom.service;
 
 import com.ground.sswm.dailyLog.domain.DailyLog;
 import com.ground.sswm.dailyLog.domain.DailyLogRepository;
+import com.ground.sswm.event.domain.StudyEventRepository;
 import com.ground.sswm.studyroom.domain.Studyroom;
 import com.ground.sswm.studyroom.domain.StudyroomRepository;
 import com.ground.sswm.user.domain.User;
@@ -33,6 +34,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     private final StudyroomRepository studyroomRepository;
     private final UserStudyroomRepository userStudyroomRepository;
     private final DailyLogRepository dailyLogRepository;
+    private final StudyEventRepository studyEventRepository;
 
     @Override
     @Transactional
@@ -43,7 +45,8 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         User user = userRepository.findById(userId).get();
         Studyroom studyroom = studyroomRepository.findById(studyroomId).orElseThrow(
             () -> new UserStudyroomNotFoundException("해당 스터디룸이 없습니다.")
-        );;
+        );
+        ;
 
         //userstudyroom에서 찾아옴
         Optional<UserStudyroom> OpUserStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
@@ -88,20 +91,20 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     public void leaveUser(Long userId, Long studyroomId) {
         //userId와 studyroomId로 검색
         UserStudyroom userStudyroom = userStudyroomRepository
-            .findByUserIdAndStudyroomId(userId,studyroomId).orElseThrow(
+            .findByUserIdAndStudyroomId(userId, studyroomId).orElseThrow(
                 () -> new UserStudyroomNotFoundException("" + userId)
             );
 
         //이미 삭제되었다면
-        if(userStudyroom.isDeleted()){
+        if (userStudyroom.isDeleted()) {
             throw new UserStudyroomUnauthorizedException("해당 스터디룸에 가입되어 있지 않습니다.");
         }
 
         //호스트라면
         if (userStudyroom.getRole() == StudyMemberRole.HOST) {
-            throw new UserStudyroomUnauthorizedException("호스트는 스터디룸에서 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
+            throw new UserStudyroomUnauthorizedException(
+                "호스트는 스터디룸에서 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
         }
-
 
         userStudyroom.setDeleted(true);
     }
@@ -121,7 +124,10 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             User userInStudyroom = userStudyroom.getUser();
 
             //****isInLive에 대한 정보는 이후 레디스에서 가져옴****
-            boolean isInLive = true;
+            List<Long> inLiveUsers = studyEventRepository.findUserIdsInLive(studyroomId);
+            boolean isInLive =
+                inLiveUsers.stream().filter(x -> x == userInStudyroom.getId()).count() == 1 ?
+                    true : false;
 
             //새로운 유저 생성
             OnAirResDto nowOnAirResDto = new OnAirResDto(UserDto.from(userInStudyroom), isInLive);
@@ -157,7 +163,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         );
 
         //자기 자신 차단하려고 할 때
-        if(userId == targetId){
+        if (userId == targetId) {
             throw new UserStudyroomForbiddenException("호스트는 차단될 수 없습니다.");
         }
 
@@ -189,12 +195,12 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             );
 
             //게스트가 맞는지 판단(자기 자신 권한 못넘기게)
-            if(userId == targetId){
+            if (userId == targetId) {
                 throw new UserStudyroomForbiddenException("본인 외 다른 사용자를 선택해주세요");
             }
 
             //****게스트가 탈퇴되지 않았는지 판단****
-            if(guestStudyroom.isDeleted()){
+            if (guestStudyroom.isDeleted()) {
                 throw new UserStudyroomNotFoundException("해당 사용자가 스터디룸에 가입되어 있지 않습니다.");
             }
 
