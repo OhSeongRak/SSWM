@@ -1,9 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sswm
+    url: jdbc:mysql://i9a206.p.ssafy.io:3316/sswm
     username: root
     password: ssjjmt206
-
   sql: # data.sql을 사용하기 위해 추가
     init:
       mode: always
@@ -11,7 +10,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
 
     properties:
       hibernate:
@@ -39,7 +38,7 @@ server:
   servlet:
     context-path: /api
   port:
-    9001
+    8080
 
 cloud:
   aws:

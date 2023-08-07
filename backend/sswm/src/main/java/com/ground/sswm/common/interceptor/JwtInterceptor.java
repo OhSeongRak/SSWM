@@ -22,7 +22,12 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler)
         throws Exception {
+
+        log.debug("request : " + request.getHeader(HEADER_AUTH));
+
         final String token = request.getHeader(HEADER_AUTH);
+
+        log.debug("Interceptor token = " + token);
 
         if (token != null && jwtUtil.validateToken(token)) {
             log.info("토큰 사용 가능 : {}", token);
