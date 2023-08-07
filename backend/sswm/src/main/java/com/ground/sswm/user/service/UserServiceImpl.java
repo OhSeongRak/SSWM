@@ -117,5 +117,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    public boolean exists(String nickname){return  userRepository.existsByNickname(nickname);}
+
 
 }

@@ -18,9 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -34,8 +36,14 @@ public class StudyroomServiceImpl implements StudyroomService {
 
     @Override
     public List<SearchStudyroomResDto> list(SearchStudyroomReqDto searchStudyroomReqDto) {
-        List<Studyroom> studyrooms = studyroomRepository.list(searchStudyroomReqDto.getTagNames(),
-            searchStudyroomReqDto.getSearchKeyword());
+        List<Studyroom> studyrooms;
+
+        if (searchStudyroomReqDto.getTagNames().isEmpty()) {
+            studyrooms = studyroomRepository.listNoTag(searchStudyroomReqDto.getSearchKeyword());
+        } else {
+            studyrooms = studyroomRepository.list(searchStudyroomReqDto.getTagNames(),
+                searchStudyroomReqDto.getSearchKeyword());
+        }
 
         List<SearchStudyroomResDto> searchStudyroomResDtos = new ArrayList<>();
         for (Studyroom studyroom : studyrooms) {
