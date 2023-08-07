@@ -2,6 +2,7 @@ package com.ground.sswm.userStudyroom.service;
 
 import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
+import com.ground.sswm.event.repository.StudyEventRepository;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.repository.StudyroomRepository;
 import com.ground.sswm.user.model.User;
@@ -33,6 +34,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     private final StudyroomRepository studyroomRepository;
     private final UserStudyroomRepository userStudyroomRepository;
     private final DailyLogRepository dailyLogRepository;
+    private final StudyEventRepository studyEventRepository;
 
     @Override
     @Transactional
@@ -44,7 +46,6 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         Studyroom studyroom = studyroomRepository.findById(studyroomId).orElseThrow(
             () -> new UserStudyroomNotFoundException("해당 스터디룸이 없습니다.")
         );
-        ;
 
         //userstudyroom에서 찾아옴
         Optional<UserStudyroom> OpUserStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
@@ -122,7 +123,10 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             User userInStudyroom = userStudyroom.getUser();
 
             //****isInLive에 대한 정보는 이후 레디스에서 가져옴****
-            boolean isInLive = true;
+            List<Long> inLiveUsers = studyEventRepository.findUserIdsInLive(studyroomId);
+            boolean isInLive =
+                inLiveUsers.stream().filter(x -> x == userInStudyroom.getId()).count() == 1 ?
+                    true : false;
 
             //새로운 유저 생성
             OnAirResDto nowOnAirResDto = new OnAirResDto(UserDto.from(userInStudyroom), isInLive);
