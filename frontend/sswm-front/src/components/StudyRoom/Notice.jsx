@@ -1,23 +1,43 @@
-import React from "react";
+import { Typography } from "@mui/material";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Notice = () => {
-  return(
+  const CHARACTER_LIMIT = 300;
+
+  const [studyroomDto, setStudyroomDto] = useState({
+    notice: "오늘은 금요일입니다~",
+  });
+
+  const handleEnterCodeChange = (event) => {
+    setStudyroomDto({
+      ...studyroomDto,
+      enterCode: event.target.value, // 사용자가 입력한 값으로 업데이트
+    });
+  };
+
+  return (
     <ContainerWrap>
-      <ContentWrap>
-        오늘은 금요일입니다~
+      <ContentWrap
+        value={studyroomDto.notice}
+        maxLength={CHARACTER_LIMIT}
+        onChange={handleEnterCodeChange}
+      >
+        {studyroomDto.notice}
       </ContentWrap>
       <BtnWrap>
-        <Button>저장</Button>
+        <Typography sx={{ marginRight: "10px" }}>
+          {studyroomDto.notice.length ? studyroomDto.notice.length : 0}/{CHARACTER_LIMIT}
+        </Typography>
       </BtnWrap>
     </ContainerWrap>
-  )
-}
+  );
+};
 const ContainerWrap = styled.div`
   width: 100%;
   height: 100%;
   background-color: #eee;
-`
+`;
 const ContentWrap = styled.textarea`
   type: text;
   width: 100%;
@@ -27,8 +47,8 @@ const ContentWrap = styled.textarea`
   outline: none;
   resize: none;
   background-color: #eee;
-  font-family: 'NanumSquareNeo';
-`
+  font-family: "NanumSquareNeo";
+`;
 const BtnWrap = styled.div`
   display: flex;
   align-items: center;
@@ -37,9 +57,5 @@ const BtnWrap = styled.div`
   height: 15%;
   margin: 0;
   padding: 0;
-`
-const Button = styled.button`
-  font-family: 'NanumSquareNeo';
-  margin-right: 1vw;
-`
+`;
 export default Notice;
