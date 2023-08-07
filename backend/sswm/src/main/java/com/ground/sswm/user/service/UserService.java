@@ -1,29 +1,29 @@
 package com.ground.sswm.user.service;
 
-import com.ground.sswm.auth.oauth.OAuthUserInfo;
-import com.ground.sswm.user.domain.User;
-import com.ground.sswm.user.dto.UserDto;
-import com.ground.sswm.user.dto.UserResDto;
+import com.ground.sswm.auth.oauth.model.OAuthUserInfo;
+import com.ground.sswm.user.model.User;
+import com.ground.sswm.user.model.dto.UserDto;
+import com.ground.sswm.user.model.dto.UserResDto;
 import java.util.List;
 
 public interface UserService {
 
-  void addUser(UserDto userReqDto);
+    void addUser(UserDto userReqDto);
 
-  UserResDto getUserResDto(Long userId);
+    UserResDto getUserResDto(Long userId);
 
-  UserDto getUserDto(Long userId);
+    UserDto getUserDto(Long userId);
 
-  List<UserDto> getAllUser();
+    List<UserDto> getAllUser();
 
-  void delete(Long userId);
+    void delete(Long userId);
 
-  User getUserByProviderId(String provider, String providerId);
+    User getUserByProviderId(String provider, String providerId);
 
-  User addOAuthUser(OAuthUserInfo oauthUser);
+    User addOAuthUser(OAuthUserInfo oauthUser);
 
-  void modifyUser(Long id, String nickname, String imagePath);
+    void modifyUser(Long id, String nickname, String imagePath);
 
-
+    boolean exists(String nickname);
 }
 

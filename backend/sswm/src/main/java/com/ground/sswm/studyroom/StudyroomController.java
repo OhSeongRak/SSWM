@@ -2,14 +2,12 @@ package com.ground.sswm.studyroom;
 
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.image.util.FileManageUtil;
-import com.ground.sswm.studyroom.dto.SearchStudyroomReqDto;
-import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
-import com.ground.sswm.studyroom.dto.StudyroomDto;
+import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
+import com.ground.sswm.studyroom.model.dto.SearchStudyroomResDto;
+import com.ground.sswm.studyroom.model.dto.StudyroomDto;
 import com.ground.sswm.studyroom.service.StudyroomService;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,7 +47,7 @@ public class StudyroomController {
 
 
     // 스터디룸 생성
-    @GetMapping
+    @PostMapping
     @ResponseBody
     public ResponseEntity<Long> add(@RequestHeader("Authorization") String token,
         @RequestPart(value = "studyroomDto", required = false) StudyroomDto studyroomDto,
@@ -69,7 +68,7 @@ public class StudyroomController {
         log.debug("userId :" + userId);
 
         // 이미지 저장
-        String filePath = null;
+        String filePath = "image/jpeg/2023/08/06/ae34df9e-d6b9-46f9-9433-55f723620c8e.jpg";
         if (fileType != null && !fileType.isBlank() && multipartFile != null
             && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
@@ -110,10 +109,9 @@ public class StudyroomController {
 
     // 룸 제목 중복 확인
     @GetMapping("/exists")
-    @ResponseBody
-    public ResponseEntity<Boolean> exists(@RequestBody StudyroomDto studyroomDto) {
-        boolean isExist = studyroomService.exists(studyroomDto.getName());
+    public ResponseEntity<Boolean> exists(@RequestParam String name) {
+        log.debug("스터디룸이름 : " + name);
+        boolean isExist = studyroomService.exists(name);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
-
     }
 }

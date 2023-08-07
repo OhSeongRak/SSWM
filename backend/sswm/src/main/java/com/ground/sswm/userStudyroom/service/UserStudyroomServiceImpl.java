@@ -1,22 +1,22 @@
 package com.ground.sswm.userStudyroom.service;
 
-import com.ground.sswm.dailyLog.domain.DailyLog;
-import com.ground.sswm.dailyLog.domain.DailyLogRepository;
-import com.ground.sswm.event.domain.StudyEventRepository;
-import com.ground.sswm.studyroom.domain.Studyroom;
-import com.ground.sswm.studyroom.domain.StudyroomRepository;
-import com.ground.sswm.user.domain.User;
-import com.ground.sswm.user.domain.UserRepository;
-import com.ground.sswm.user.dto.UserDto;
-import com.ground.sswm.userStudyroom.domain.StudyMemberRole;
-import com.ground.sswm.userStudyroom.domain.UserStudyroom;
-import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
-import com.ground.sswm.userStudyroom.dto.OnAirResDto;
-import com.ground.sswm.userStudyroom.dto.UserAttendResDto;
-import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
+import com.ground.sswm.dailyLog.model.DailyLog;
+import com.ground.sswm.dailyLog.repository.DailyLogRepository;
+import com.ground.sswm.event.repository.StudyEventRepository;
+import com.ground.sswm.studyroom.model.Studyroom;
+import com.ground.sswm.studyroom.repository.StudyroomRepository;
+import com.ground.sswm.user.model.User;
+import com.ground.sswm.user.model.dto.UserDto;
+import com.ground.sswm.user.repository.UserRepository;
 import com.ground.sswm.userStudyroom.exception.UserStudyroomForbiddenException;
 import com.ground.sswm.userStudyroom.exception.UserStudyroomNotFoundException;
 import com.ground.sswm.userStudyroom.exception.UserStudyroomUnauthorizedException;
+import com.ground.sswm.userStudyroom.model.StudyMemberRole;
+import com.ground.sswm.userStudyroom.model.UserStudyroom;
+import com.ground.sswm.userStudyroom.model.dto.OnAirResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserAttendResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserStudyTimeResDto;
+import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +46,6 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         Studyroom studyroom = studyroomRepository.findById(studyroomId).orElseThrow(
             () -> new UserStudyroomNotFoundException("해당 스터디룸이 없습니다.")
         );
-        ;
 
         //userstudyroom에서 찾아옴
         Optional<UserStudyroom> OpUserStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
