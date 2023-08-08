@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -141,7 +142,7 @@ public class StudyroomServiceImpl implements StudyroomService {
     }
 
     @Override
-    public StudyroomDto select(Long studyroomId) {
+    public StudyroomDto selectByStudyroomId(Long studyroomId) {
 
         Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
 
@@ -151,6 +152,21 @@ public class StudyroomServiceImpl implements StudyroomService {
         StudyroomDto studyroomDto = StudyroomDto.from(studyroom.get());
 
         return studyroomDto;
+    }
+
+    @Override
+    public List<SearchStudyroomResDto> selectByUserId(Long userId) {
+        List<Studyroom> studyrooms = studyroomRepository.findByUserId(userId);
+
+        if (studyrooms.isEmpty())
+            return null;
+
+        List<SearchStudyroomResDto> searchStudyroomResDtoList=new ArrayList<>();
+        for (Studyroom studyroom : studyrooms) {
+            searchStudyroomResDtoList.add(SearchStudyroomResDto.from(studyroom));
+        }
+
+        return searchStudyroomResDtoList;
     }
 
     @Override
