@@ -1,8 +1,8 @@
 package com.ground.sswm.tree;
 
-import com.ground.sswm.tree.dto.TreeDto;
+import com.ground.sswm.tree.model.dto.TreeDto;
 import com.ground.sswm.tree.service.TreeService;
-import com.ground.sswm.user.dto.UserDto;
+import com.ground.sswm.user.model.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

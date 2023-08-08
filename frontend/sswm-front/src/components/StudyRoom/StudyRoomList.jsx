@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 import RecipeReviewCard from "./StudyRoomItem2";
 import "./Style.css";
 import axios from "axios";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const RoomListLayout = styled.div`
   flex: 1;
@@ -24,11 +24,11 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
   const token = JSON.parse(localStorage.getItem("accessToken"));
 
   const data = {
-    "sortBy" : option === "인원순" ? "USER_NUM" : option === "최근순" ? "CREATED" : "STUDY_TIME", // 공부시간(STUDY_TIME), 인원(USER_NUM), 생성시간(CREATED), 
-    "orderBy" : "DESC", // ASC
-    "searchKeyword" : searchKeyword, // 방제목, 방아이디
-    "tagNames" : selectedTags,
-    "isPublic" : 1,
+    sortBy: option === "인원순" ? "USER_NUM" : option === "최근순" ? "CREATED" : "STUDY_TIME", // 공부시간(STUDY_TIME), 인원(USER_NUM), 생성시간(CREATED),
+    orderBy: "DESC", // ASC
+    searchKeyword: searchKeyword, // 방제목, 방아이디
+    tagNames: selectedTags,
+    isPublic: 1,
   };
   console.log(token);
   useEffect(() => {
@@ -45,13 +45,12 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
         // 오류 처리
         console.log(error);
       });
-      
   }, [option, searchKeyword, selectedTags, isPublic]);
-    
+
   return (
     <RoomListLayout ref={ref}>
       <RoomList>
-      {studyrooms.map((studyroom) => (
+        {studyrooms.map((studyroom) => (
           <RecipeReviewCard key={studyroom.id} studyroom={studyroom} />
         ))}
       </RoomList>

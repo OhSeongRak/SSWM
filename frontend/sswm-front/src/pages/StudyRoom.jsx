@@ -14,7 +14,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FadeMenu from "../components/SortMenu";
 import CheckboxChip from "../components/StudyRoom/HashTags";
-import { token } from 'stylis';
 
 const StudyRoom = (props) => {
   const [isTokenValid, setIsTokenValid] = useState(false);
@@ -34,13 +33,11 @@ const StudyRoom = (props) => {
   const handleSelectedTagsChange = (newSelectedTags) => {
     setSelectedTags(newSelectedTags);
   };
-  
+
   const handleShowPrivateRoomsChange = (event) => {
     const isChecked = event.target.checked;
-    if (isChecked)
-      setIsPublic(1)
-    else
-      setIsPublic(0)
+    if (isChecked) setIsPublic(1);
+    else setIsPublic(0);
     // isChecked 값이 true면 비공개 스터디룸을 보여줄 때 처리할 작업
     // isChecked 값이 false면 비공개 스터디룸을 숨길 때 처리할 작업
   };
@@ -55,43 +52,30 @@ const StudyRoom = (props) => {
       return;
     }
 
-    
     axios
-    .post("/api/auth/access-token", accessToken, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log("Access 토큰 유효: ", response.data);
-      setIsTokenValid(true);
-
+      .post("/api/auth/access-token", accessToken, {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        console.log("Access 토큰 유효: ", response.data);
+        setIsTokenValid(true);
       })
       .catch((error) => {
         // 로그인 했지만 access 토큰 만료 재발급 필요
         console.error("Access 토큰 만료: ", error);
         axios
-          .post(
-            "/api/auth/refresh-access-token",
-            refreshToken,
-            {
-              headers: {
-                Authorization: refreshToken,
-              },
-            }
-          )
+          .post("/api/auth/refresh-access-token", refreshToken, {
+            headers: {
+              Authorization: refreshToken,
+            },
+          })
           .then((response) => {
             console.log("refresh토큰을 이용해 토큰 재발급: ", response.data);
-            localStorage.setItem(
-              "accessToken",
-              JSON.stringify(response.data.accessToken)
-            );
-            localStorage.setItem(
-              "refreshToken",
-              JSON.stringify(response.data.refreshToken)
-            );
+            localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+            localStorage.setItem("refreshToken", JSON.stringify(response.data.refreshToken));
             setIsTokenValid(true);
-
           })
           .catch((error) => {
             console.error("refresh 토큰 만료 :", error);
@@ -111,7 +95,6 @@ const StudyRoom = (props) => {
 
     // 언마운트 시 인터벌 클리어
     return () => clearInterval(intervalId);
-
   }, []);
 
   return (
@@ -120,7 +103,7 @@ const StudyRoom = (props) => {
       <ContainerWrap>
         <SearchBar onSearchKeywordChange={handleSearchKeywordChange} />
         <CheckChip>
-        <CheckboxChip onTagClick={handleSelectedTagsChange} />
+          <CheckboxChip onTagClick={handleSelectedTagsChange} />
         </CheckChip>
         <StudyRoomBtn>
           <SortBtn>
@@ -133,8 +116,7 @@ const StudyRoom = (props) => {
                   fontFamily: "NanumSquareNeo",
                 },
               }}
-              control={<Checkbox
-                onChange={handleShowPrivateRoomsChange} />}
+              control={<Checkbox onChange={handleShowPrivateRoomsChange} />}
               label="비공개 스터디룸 표시"
             />
             <FormControlLabel
@@ -149,10 +131,15 @@ const StudyRoom = (props) => {
           </FormGroup>
         </StudyRoomBtn>
 
-        <StudyRoomList option={selectedOption} searchKeyword={searchKeyword} selectedTags={selectedTags} isPublic={isPublic}/>
+        <StudyRoomList
+          option={selectedOption}
+          searchKeyword={searchKeyword}
+          selectedTags={selectedTags}
+          isPublic={isPublic}
+        />
         <AddBtn>
           <Link to="/CreateStudyRoom">
-            <Fab color="primary" aria-label="add" sx={{zIndex:'tooltip'}}>
+            <Fab color="primary" aria-label="add" sx={{ zIndex: "tooltip" }}>
               <AddIcon />
             </Fab>
           </Link>

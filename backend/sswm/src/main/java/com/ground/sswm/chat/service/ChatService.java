@@ -1,7 +1,7 @@
 package com.ground.sswm.chat.service;
 
-import com.ground.sswm.chat.dto.ChatDto;
-import com.ground.sswm.chat.dto.ChatDto.MessageType;
+import com.ground.sswm.chat.model.dto.ChatDto;
+import com.ground.sswm.chat.model.dto.ChatDto.MessageType;
 import java.util.List;
 import org.springframework.data.redis.listener.ChannelTopic;
 

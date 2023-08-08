@@ -1,8 +1,8 @@
 package com.ground.sswm.auth.service;
 
-import com.ground.sswm.auth.domain.Auth;
-import com.ground.sswm.auth.dto.JwtDto;
-import com.ground.sswm.user.domain.User;
+import com.ground.sswm.auth.jwt.model.JwtDto;
+import com.ground.sswm.auth.model.Auth;
+import com.ground.sswm.user.model.User;
 import java.util.Map;
 
 public interface AuthService {
