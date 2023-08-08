@@ -181,6 +181,12 @@ public class StudyroomServiceImpl implements StudyroomService {
         return studyroomRepository.findByName(name).isPresent();
     }
 
+    @Override
+    public boolean checkEnterCode(Long studyroomId, String enterCode) {
+        Studyroom studyroom = studyroomRepository.findByIdAndEnterCode(studyroomId, enterCode);
+        return (studyroom == null) ? false : true;
+    }
+
 }
 
 

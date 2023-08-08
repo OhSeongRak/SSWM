@@ -36,4 +36,5 @@ public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
     List<Studyroom> listTagPublic(@Param("tagNames") List<String> tagNames,
         @Param("searchKeyword") String searchKeyword);
 
+    Studyroom findByIdAndEnterCode(Long id, String enterCode);
 }
