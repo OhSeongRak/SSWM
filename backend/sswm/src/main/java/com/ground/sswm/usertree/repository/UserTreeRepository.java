@@ -2,6 +2,7 @@ package com.ground.sswm.usertree.repository;
 
 import com.ground.sswm.usertree.model.UserTree;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +15,10 @@ public interface UserTreeRepository extends JpaRepository<UserTree, Long> {
         + "(select ut.tree.id from UserTree ut where ut.user.id = :userId)")
     List<Long> findByUserIdNotIn(@Param("userId") Long userId);
 
-    List<UserTree> findAllByUserIdAndTreeId(Long userId, Long treeId);
+    @Query("select t.id from Tree t where t.id in (select ut.tree.id from UserTree ut where ut.exp = 20)")
+    List<UserTree> findAllByUserId(Long userId);
+
+    @Query("select t.id from Tree t where t.id in (select ut.tree.id from UserTree ut where ut.exp < 20)")
+    Optional<UserTree> findByUserId(Long userId);
 
 }
