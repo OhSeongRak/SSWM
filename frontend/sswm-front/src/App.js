@@ -30,7 +30,7 @@ function App() {
           <Route path="/EditInfo" element={<EditInfo />}></Route>
           <Route path="/CreateStudyRoom" element={<CreateStudyRoom />}></Route>
           <Route path="/StudyRoomAdmin" element={<StudyRoomAdmin />}></Route>
-          <Route path="/StudyRoomMember" element={<StudyRoomMember />}></Route>
+          <Route path="/StudyRoomMember/:studyroomId" element={<StudyRoomMember />}></Route>
           <Route path="/LiveRoom" element={<LiveRoom />}></Route>
           <Route path="/Stretching" element={<Stretching />}></Route>
           {/* <Route path="/VideoRoomComponent" element={<VideoRoomComponent />} /> */}
