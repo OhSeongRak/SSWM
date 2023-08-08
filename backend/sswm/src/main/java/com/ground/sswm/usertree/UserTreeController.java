@@ -34,13 +34,23 @@ public class UserTreeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserTreeDto>> searchTree(
-        @RequestHeader("Authorization") String token, Long treeId) {
+    public ResponseEntity<List<UserTreeDto>> searchMaxTree(
+        @RequestHeader("Authorization") String token) {
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
         Long userId = Long.valueOf(headerToken.get("id").toString());
 
-        List<UserTreeDto> userTreeDtos = userTreeService.searchTree(userId, treeId);
+        List<UserTreeDto> userTreeDtos = userTreeService.searchMaxTree(userId);
 
         return new ResponseEntity<List<UserTreeDto>>(userTreeDtos, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<UserTreeDto> nowTree(@RequestHeader("Authorization") String token){
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = Long.valueOf(headerToken.get("id").toString());
+
+        UserTreeDto userTreeDto = userTreeService.nowTree(userId);
+
+        return new ResponseEntity<UserTreeDto>(userTreeDto, HttpStatus.OK);
     }
 }

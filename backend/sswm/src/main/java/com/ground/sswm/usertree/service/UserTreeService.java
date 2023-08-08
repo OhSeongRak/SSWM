@@ -7,6 +7,8 @@ public interface UserTreeService {
 
     String randTree(Long userId);
 
-    List<UserTreeDto> searchTree(Long userId, Long treeId);
+    List<UserTreeDto> searchMaxTree(Long userId);
+
+    UserTreeDto nowTree (Long userId);
 
 }
