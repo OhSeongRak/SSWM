@@ -40,15 +40,6 @@ server:
   port:
     8080
 
-cloud:
-  aws:
-    credentials:
-      accessKey: AKIAZPPUJPXAEPPKBU4Z       # AWS IAM AccessKey 적기
-      secretKey: 3Kgaf4A2pddtxT6bfH8Nr8pcsCT5OsoOjfQt/E/w   # AWS IAM SecretKey 적기
-    s3:
-      bucket: sswm-image    # ex) marryting-gyunny
-    #      dir: /image # ex) /gyunny
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
+spring:
+  profiles:
+    active: prod
