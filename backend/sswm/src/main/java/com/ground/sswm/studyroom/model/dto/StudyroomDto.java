@@ -46,13 +46,13 @@ public class StudyroomDto {
         return StudyroomDto.builder()
             .name(studyroom.getName())
             .notice(studyroom.getNotice())
-            .isPublic(studyroom.isPublic())
+            .isPublic(studyroom.getIsPublic())
             .enterCode(studyroom.getEnterCode())
             .maxUserNum(studyroom.getMaxUserNum())
             .maxRestTime(studyroom.getMaxRestTime())
             .studyAvgTime(studyroom.getStudyAvgTime())
             .image(studyroom.getImage())
-            .isDeleted(studyroom.isDeleted())
+            .isDeleted(studyroom.getIsDeleted())
             .createdAt(studyroom.getCreatedAt())
             .build();
     }

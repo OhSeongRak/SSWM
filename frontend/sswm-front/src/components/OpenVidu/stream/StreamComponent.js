@@ -21,6 +21,7 @@ export default class StreamComponent extends Component {
         this.handlePressKey = this.handlePressKey.bind(this);
         this.toggleNicknameForm = this.toggleNicknameForm.bind(this);
         this.toggleSound = this.toggleSound.bind(this);
+        this.handleNotificationButtonClick = this.handleNotificationButtonClick.bind(this);
     }
 
     handleChange(event) {
@@ -50,6 +51,12 @@ export default class StreamComponent extends Component {
             }
         }
     }
+
+    handleNotificationButtonClick = () => {
+        if (this.props.onHandleNotification) {
+            this.props.onHandleNotification(this.props.user.connectionId);
+          }
+    };
 
     render() {
         return (
@@ -88,7 +95,7 @@ export default class StreamComponent extends Component {
 
                 {this.props.user !== undefined && this.props.user.getStreamManager() !== undefined ? (
                     <div className="streamComponent">
-                        <OvVideoComponent user={this.props.user} mutedSound={this.state.mutedSound} />
+                        <OvVideoComponent user={this.props.user} mutedSound={this.state.mutedSound} localUser={this.props.localUser} onNotificationButtonClick={this.handleNotificationButtonClick}/>
                         <div id="statusIcons">
                             {!this.props.user.isVideoActive() ? (
                                 <div id="camIcon">

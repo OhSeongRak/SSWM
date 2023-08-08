@@ -11,19 +11,25 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
 
-    // Studyroom findById(Long studyroomId);
     Optional<Studyroom> findByName(String name);
+
+    @Query("select s from Studyroom s where s.name like %:searchKeyword%")
+    List<Studyroom> list(@Param("searchKeyword") String searchKeyword);
+    @Query("select s from Studyroom s where s.isPublic = true"
+        + " and s.name like %:searchKeyword%")
+    List<Studyroom> listPublic(@Param("searchKeyword") String searchKeyword);
+
+    @Query("select s from Studyroom s where s.id in"
+        + " (select st.studyroom.id from StudyroomTag st where st.tag.id in"
+        + " (select t.id from Tag t where t.name in :tagNames))"
+        + " and s.name like %:searchKeyword%")
+    List<Studyroom> listTag(@Param("tagNames") List<String> tagNames, @Param("searchKeyword") String searchKeyword);
 
     @Query("select s from Studyroom s where s.isPublic = true and s.id in"
         + " (select st.studyroom.id from StudyroomTag st where st.tag.id in"
         + " (select t.id from Tag t where t.name in :tagNames))"
-        + " and"
-        + " (s.name like %:searchKeyword%)")
-    List<Studyroom> list(@Param("tagNames") List<String> tagNames,
+        + " and (s.name like %:searchKeyword%)")
+    List<Studyroom> listTagPublic(@Param("tagNames") List<String> tagNames,
         @Param("searchKeyword") String searchKeyword);
 
-    @Query("select s from Studyroom s where s.isPublic = true"
-        + " and"
-        + " (s.name like %:searchKeyword%)")
-    List<Studyroom> listNoTag(@Param("searchKeyword") String searchKeyword);
 }
