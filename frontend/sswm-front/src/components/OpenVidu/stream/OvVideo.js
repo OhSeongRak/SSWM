@@ -6,6 +6,7 @@ export default class OvVideoComponent extends Component {
         super(props);
         this.videoRef = React.createRef();
         this.handleNotificationButtonClick = this.handleNotificationButtonClick.bind(this);
+        
     }
 
     componentDidMount() {
@@ -38,7 +39,7 @@ export default class OvVideoComponent extends Component {
 
     render() {
         return (
-            <div style={{ position: 'relative' }}>
+            <div id="d" style={{ position: 'relative' }}>
             <video
                 autoPlay={true}
                 id={'video-' + this.props.user.getStreamManager().stream.streamId}
@@ -46,21 +47,23 @@ export default class OvVideoComponent extends Component {
                 muted={this.props.mutedSound}
             />
             
-            <button
-                style={{
-                position: 'absolute',
-                top: '10px',
-                right: '10px',
-                zIndex: 100, // 비디오 위에 버튼이 보이도록 설정
-                backgroundColor: 'transparent',
-                border: 'none',
-                color: 'white',
-                fontSize: '16px',
-                }}
-                onClick={() => this.handleNotificationButtonClick()}
-            >
-            알림
-            </button>
+            {this.props.localUser !== this.props.user && (
+                    <button
+                        style={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: '10px',
+                            zIndex: 100, // 버튼이 비디오 위에 보이도록 설정
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            color: 'white',
+                            fontSize: '16px',
+                        }}
+                        onClick={() => this.handleNotificationButtonClick()}
+                    >
+                        알림
+                    </button>
+                )}
             </div>
         );
     }
