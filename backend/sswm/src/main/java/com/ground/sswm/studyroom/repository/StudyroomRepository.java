@@ -13,6 +13,10 @@ public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
 
     Optional<Studyroom> findByName(String name);
 
+    @Query("select s from Studyroom s where s.id in"
+        + " (select us.studyroom.id from UserStudyroom us where us.user.id = :userId)")
+    List<Studyroom> findByUserId(@Param("userId") Long userId);
+
     @Query("select s from Studyroom s where s.name like %:searchKeyword%")
     List<Studyroom> list(@Param("searchKeyword") String searchKeyword);
     @Query("select s from Studyroom s where s.isPublic = true"
