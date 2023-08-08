@@ -3,8 +3,10 @@ package com.ground.sswm.userStudyroom.service;
 import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
 import com.ground.sswm.event.repository.StudyEventRepository;
+import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.repository.StudyroomRepository;
+import com.ground.sswm.user.exception.UserNotFoundException;
 import com.ground.sswm.user.model.User;
 import com.ground.sswm.user.model.dto.UserDto;
 import com.ground.sswm.user.repository.UserRepository;
@@ -42,9 +44,11 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     public String joinUser(Long userId, Long studyroomId) {
 
         //엔티티 조회
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new UserNotFoundException("회원이 아닙니다.")
+        );
         Studyroom studyroom = studyroomRepository.findById(studyroomId).orElseThrow(
-            () -> new UserStudyroomNotFoundException("해당 스터디룸이 없습니다.")
+            () -> new StudyroomNotFoundException("해당 스터디룸이 없습니다.")
         );
 
         //userstudyroom에서 찾아옴
