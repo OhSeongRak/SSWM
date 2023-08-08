@@ -21,5 +21,5 @@ public interface StudyroomService {
 
     boolean exists(String name);
 
-
+    boolean checkEnterCode(Long studyroomId, String enterCode);
 }

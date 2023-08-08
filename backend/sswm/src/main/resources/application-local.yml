@@ -3,13 +3,13 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:mysql://localhost:3306/sswm
+    url: jdbc:mysql://localhost:3316/sswm
     username: root
-    password: root
+    password: ssjjmt206
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
 
     properties:
       hibernate:
