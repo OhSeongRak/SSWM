@@ -22,6 +22,7 @@ import { Box, Switch, Typography } from "@mui/material";
 
 
 import MemberTable from "../components/StudyRoom/MemberTable";
+import Notice from "../components/StudyRoom/Notice";
 
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -155,8 +156,9 @@ const StudyRoomAdmin = () => {
           <ContentBottom>
             <ContentBottomLeft>
               <ContentBottomTitle>공지사항 관리</ContentBottomTitle>
-              <ContentBottomBoard></ContentBottomBoard>
-              <ContentBottomBtn></ContentBottomBtn>
+              <ContentBottomBoard>
+                <Notice />
+              </ContentBottomBoard>
             </ContentBottomLeft>
             <ContentBottomRight>
               <ContentBottomTitle>스터디원 관리</ContentBottomTitle>
@@ -345,16 +347,9 @@ const ContentBottomTitle = styled.div`
 `;
 const ContentBottomBoard = styled.div`
   width: 100%;
-  height: 70%;
+  height: 85%;
 `;
-const ContentBottomBtn = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  width: 100%;
-  height: 15%;
-  margin-right: 2vw;
-`;
+
 
 const FooterWrap = styled.div`
   display: flex;
