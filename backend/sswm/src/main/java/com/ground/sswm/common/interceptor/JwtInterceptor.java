@@ -1,7 +1,7 @@
 package com.ground.sswm.common.interceptor;
 
-import com.ground.sswm.auth.exception.InvalidTokenException;
-import com.ground.sswm.auth.jwt.JwtUtil;
+import com.ground.sswm.auth.jwt.exception.InvalidTokenException;
+import com.ground.sswm.auth.jwt.util.JwtUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,12 @@ public class JwtInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler)
         throws Exception {
+
+        log.debug("request : " + request.getHeader(HEADER_AUTH));
+
         final String token = request.getHeader(HEADER_AUTH);
+
+        log.debug("Interceptor token = " + token);
 
         if (token != null && jwtUtil.validateToken(token)) {
             log.info("토큰 사용 가능 : {}", token);

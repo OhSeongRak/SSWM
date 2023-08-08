@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 
@@ -17,8 +17,9 @@ import ForestIcon from "@mui/icons-material/Forest";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 import def from "../assets/dolphin.jpg";
-import { Avatar, RadioGroup, Switch } from "@mui/material";
+import { Avatar, RadioGroup, Switch, Typography } from "@mui/material";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
+import { useNavigate } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
@@ -31,10 +32,21 @@ const Item = muistyled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+let formData;
 // const로 정의하면 재정의가 불가능해서 let으로 저장
-let formData = new FormData();
-
 const CreateStudyRoom = () => {
+  useEffect(() => {
+    formData = new FormData();
+  }, []);
+
+  const [isExist, setIsExist] = useState(true);
+
+  const [checkedStudyroomName, setCheckedStudyroomName] = useState("");
+
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+  const navigate = useNavigate();
+
   const [studyroomDto, setStudyroomDto] = useState({
     name: "스터디룸 이름",
     isPublic: true,
@@ -43,7 +55,6 @@ const CreateStudyRoom = () => {
     maxRestTime: 90,
     tags: [],
   });
-
 
   // const dispatch = useDispatch();
   // const studyroom = useSelector((state) => state.studyroom);
@@ -84,6 +95,40 @@ const CreateStudyRoom = () => {
       ...studyroomDto,
       name: event.target.value, // 사용자가 입력한 값으로 업데이트
     });
+  };
+
+  // 스터디룸 이름 중복 확인 함수
+  const checkStudyroomName = (event) => {
+    // 여기에 스터디룸 이름 중복 확인 요청을 보내는 코드 작성
+    console.log("스터디룸 이름 : " + studyroomDto.name);
+
+    setCheckedStudyroomName(studyroomDto.name);
+
+    axios
+      .get("/api/studyrooms/exists", {
+        headers: {
+          Authorization: accessToken,
+        },
+        params: {
+          name: studyroomDto.name,
+        },
+      })
+      .then((response) => {
+        setIsExist(response.data);
+        console.log(response.data);
+        // isExist 값에 따라 중복 확인 로직을 수행
+        if (response.data) {
+          alert("중복된 스터디룸 이름입니다.");
+        } else {
+          alert("사용 가능한 스터디룸 이름입니다.");
+        }
+        console.log("중복 확인" + response.data);
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.log(error);
+        alert("스터디룸 이름 확인 중 오류가 발생했습니다.");
+      });
   };
 
   // 공개 설정
@@ -135,17 +180,29 @@ const CreateStudyRoom = () => {
     setStudyroomDto({
       ...studyroomDto,
       tags: selectedTags,
-    })
-  }
+    });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const auth = localStorage.getItem("jwtToken");
-    const jwtTokenData = JSON.parse(auth);
-   
-    console.log(jwtTokenData.accessToken);
-  
+    // 스터디룸 제목 중복확인
+    if (isExist || studyroomDto.name !== checkedStudyroomName) {
+      alert("스터디룸 제목의 중복 확인이 필요합니다.");
+      return;
+    }
+
+    // 코드 유효성 검사
+    const codeValidationError = codeValidation();
+
+    if (codeValidationError) {
+      alert(codeValidationError); // 오류 메시지를 사용자에게 알려줌
+      return;
+    }
+
+    console.log(accessToken);
+
+    console.log("태그 : " + studyroomDto.tags);
     formData.append(
       "studyroomDto",
       new Blob([JSON.stringify(studyroomDto)], { type: "application/json" })
@@ -161,19 +218,23 @@ const CreateStudyRoom = () => {
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .post("http://localhost:8080/api/studyrooms", formData, {
+      .post("/api/studyrooms", formData, {
         headers: {
-          Authorization: jwtTokenData.accessToken,
+          Authorization: accessToken,
           "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
         console.log(response.data);
+        navigate("/");
       })
       .catch((error) => {
         // 오류 처리
-        console.log(Error)
+        alert("스터디방 개설이 되지 않았습니다.");
+        console.log(Error);
       });
+    navigate("/");
+    window.location.reload();
   };
 
   // const [checked, setChecked] = useState(true);
@@ -188,6 +249,24 @@ const CreateStudyRoom = () => {
   //     setChecked(true);
   //   }
   // };
+
+  // const [value, setValue] = useState("");
+
+  // const onChange = (e) => {
+  //   setValue(e.target.value);
+  // };
+
+  const CHARACTER_LIMIT = 8;
+
+  const codeValidation = () => {
+    let check = /[~!@#$%^&*()_+|<>?:{}.,/;='"ㄱ-ㅎ | ㅏ-ㅣ |가-힣]/;
+    const comment = "알파벳,숫자 포함하여 8자리로 설정해주세요";
+
+    if (check.size !== 8 && check.test(studyroomDto.enterCode)) {
+      return comment;
+    }
+    return null;
+  };
 
   return (
     <div>
@@ -229,6 +308,14 @@ const CreateStudyRoom = () => {
                       placeholder={studyroomDto.name} // 상태값으로 설정
                       onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
                     />
+                    <Button
+                      sx={{ width: "50px", marginLeft: "10px" }}
+                      variant="contained"
+                      color="success"
+                      onClick={checkStudyroomName}
+                    >
+                      중복확인
+                    </Button>
                   </StudyRoomContent>
                 </StudyRoomWrap>
                 <StudyRoomWrap>
@@ -238,16 +325,13 @@ const CreateStudyRoom = () => {
                   </StudyRoomTitle>
                   <StudyRoomContent>
                     <RadioGroup row defaultValue="공개">
-                      <Switch
-                        checked={studyroomDto.isPublic}
-                        onChange={handleIsPublicChange}
-                      />
+                      <Switch checked={studyroomDto.isPublic} onChange={handleIsPublicChange} />
                     </RadioGroup>
                   </StudyRoomContent>
                 </StudyRoomWrap>
                 <StudyRoomWrap>
                   <StudyRoomTitle>
-                    <QrCode2Icon fontSize="large" />
+                    <QrCode2Icon error={codeValidation()} fontSize="large" />
                     입장코드
                   </StudyRoomTitle>
                   <StudyRoomContent>
@@ -257,10 +341,19 @@ const CreateStudyRoom = () => {
                       id="filled-hidden-label-normal"
                       defaultValue=""
                       variant="filled"
+                      value={studyroomDto.enterCode}
                       size="small"
-                      helperText="알파벳,숫자 포함한 8자리"
+                      helperText={
+                        codeValidation() ? "알파벳,숫자 포함하여 8자리로 설정해주세요" : ""
+                      }
+                      inputProps={{
+                        maxLength: CHARACTER_LIMIT,
+                      }}
                       onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
                     />
+                    <Typography sx={{ marginLeft: "10px" }}>
+                      {(studyroomDto.enterCode !== null) ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
+                    </Typography>
                   </StudyRoomContent>
                 </StudyRoomWrap>
               </ContentRightWrap>
@@ -275,18 +368,14 @@ const CreateStudyRoom = () => {
                 <StudyRoomContent>
                   <IconButton
                     aria-label="minus"
-                    onClick={() =>
-                      handleMaxUserNumChange(studyroomDto.maxUserNum - 1)
-                    }
+                    onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum - 1)}
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
                   <Item>{studyroomDto.maxUserNum}</Item>
                   <IconButton
                     aria-label="plus"
-                    onClick={() =>
-                      handleMaxUserNumChange(studyroomDto.maxUserNum + 1)
-                    }
+                    onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum + 1)}
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
@@ -300,18 +389,14 @@ const CreateStudyRoom = () => {
                 <StudyRoomContent>
                   <IconButton
                     aria-label="minus"
-                    onClick={() =>
-                      handleMaxRestTimeChange(studyroomDto.maxRestTime - 10)
-                    }
+                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime - 10)}
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
                   <Item>{studyroomDto.maxRestTime}</Item>
                   <IconButton
                     aria-label="plus"
-                    onClick={() =>
-                      handleMaxRestTimeChange(studyroomDto.maxRestTime + 10)
-                    }
+                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime + 10)}
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
@@ -323,12 +408,14 @@ const CreateStudyRoom = () => {
                   태그
                 </StudyRoomTitle2>
                 <StudyRoomContent>
-                  <MultipleSelectChip selectedTags={studyroomDto.tags} setSelectedTags={handleTagsChange} />
+                  <MultipleSelectChip
+                    selectedTags={studyroomDto.tags}
+                    setSelectedTags={handleTagsChange}
+                  />
                 </StudyRoomContent>
               </StudyRoomWrap>
             </ContentWrap2>
           </CreateContent>
-
           <CreateBtn>
             <Button variant="contained" color="success" onClick={handleSubmit}>
               스터디 룸 생성하기

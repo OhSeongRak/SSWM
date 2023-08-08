@@ -1,22 +1,23 @@
 package com.ground.sswm.auth;
 
-import com.ground.sswm.auth.domain.Auth;
-import com.ground.sswm.auth.dto.JwtDto;
-import com.ground.sswm.auth.dto.OAuthTokenDto;
-import com.ground.sswm.auth.dto.OAuthUserInfoDto;
-import com.ground.sswm.auth.exception.InvalidTokenException;
 import com.ground.sswm.auth.exception.UserAlreadyExistException;
 import com.ground.sswm.auth.exception.UserUnAuthorizedException;
-import com.ground.sswm.auth.oauth.GoogleUserInfo;
-import com.ground.sswm.auth.oauth.KakaoUserInfo;
-import com.ground.sswm.auth.oauth.OAuthProvider;
-import com.ground.sswm.auth.oauth.OAuthUserInfo;
+import com.ground.sswm.auth.jwt.exception.InvalidTokenException;
+import com.ground.sswm.auth.jwt.model.JwtDto;
+import com.ground.sswm.auth.jwt.util.JwtUtil;
+import com.ground.sswm.auth.model.Auth;
+import com.ground.sswm.auth.oauth.model.GoogleUserInfo;
+import com.ground.sswm.auth.oauth.model.KakaoUserInfo;
+import com.ground.sswm.auth.oauth.model.OAuthProvider;
+import com.ground.sswm.auth.oauth.model.OAuthUserInfo;
+import com.ground.sswm.auth.oauth.model.dto.OAuthTokenDto;
+import com.ground.sswm.auth.oauth.model.dto.OAuthUserInfoDto;
 import com.ground.sswm.auth.oauth.service.GoogleAuthService;
 import com.ground.sswm.auth.oauth.service.KakaoAuthService;
 import com.ground.sswm.auth.oauth.service.SocialAuthService;
 import com.ground.sswm.auth.service.AuthService;
-import com.ground.sswm.user.domain.User;
 import com.ground.sswm.user.exception.UserNotFoundException;
+import com.ground.sswm.user.model.User;
 import com.ground.sswm.user.service.UserService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +41,12 @@ public class AuthController {
     private final GoogleAuthService googleAuthService;
     private final KakaoAuthService kakaoAuthService;
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/{SOCIAL_TYPE}/login") //login
     public ResponseEntity<JwtDto> login(@RequestBody Map<String, Object> data,
         @PathVariable("SOCIAL_TYPE") String socialType) {
+
         log.debug("[POST] /auth/" + socialType + "/login");
         // 회원가입 -> code 받아와서 회원 정보 요청 보내고, (신규사용자) 데이터베이스 정보 저장 후, sswm 만의 토큰 발급
         // 로그인 -> code 받아와서 회원 정보 요청 보내고, 데이터베이스 정보 확인해서,  sswm 만의 토큰 발급
@@ -79,6 +82,7 @@ public class AuthController {
         if (userEntity == null) {
             throw new UserNotFoundException("유저가 존재하지 않습니다");
         }
+
         JwtDto jwtDto = authService.createTokens(userEntity);
         Auth authEntity = authService.getSavedTokenByUserId(userEntity.getId());
         if (authEntity != null) {// 기존 유저 -> Auth 테이블의 Token update
@@ -139,8 +143,21 @@ public class AuthController {
         return new ResponseEntity<>(jwtDto, HttpStatus.OK);
     }
 
+    @PostMapping("/access-token")
+    public ResponseEntity<?> accessToken(@RequestHeader("Authorization") String accessToken)
+        throws InvalidTokenException {
+        log.debug("[POST] /access-token " + accessToken);
+        if (accessToken != null && jwtUtil.validateToken(accessToken)) {
+            log.info("토큰 사용 가능 : {}", accessToken);
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        } else {
+            log.info("토큰 사용 불가능 : {}", accessToken);
+            throw new InvalidTokenException("토큰 잘못됨");
+        }
+    }
+
     @PostMapping("/refresh-access-token")
-    public ResponseEntity<JwtDto> refreshToken(@RequestHeader("refresh-token") String refreshToken)
+    public ResponseEntity<JwtDto> refreshToken(@RequestHeader("Authorization") String refreshToken)
         throws InvalidTokenException {
         log.debug("[POST] /refresh-access-token " + refreshToken);
         Map<String, Object> claims = authService.getClaimsFromToken(refreshToken);
@@ -153,7 +170,7 @@ public class AuthController {
                 .build();
             return new ResponseEntity<>(generated, HttpStatus.OK);
         }
-        throw new InvalidTokenException("RefreshToken 이상함");
+        throw new InvalidTokenException("RefreshToken 만료됨");
     }
 
 }

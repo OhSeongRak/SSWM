@@ -9,8 +9,9 @@ import './VideoRoomComponent.css';
 import OpenViduLayout from './layout/openvidu-layout';
 import UserModel from './models/user-model';
 import ToolbarComponent from './toolbar/ToolbarComponent';
-import * as tmPose from '@teachablemachine/pose';
-
+//import * as tmPose from '@teachablemachine/pose';
+import * as tmImage from '@teachablemachine/image';
+import sound from '../../assets/Dingdong.mp3'
 let model, webcam;
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL = 'https://i9a206.p.ssafy.io:5443/';
@@ -53,6 +54,8 @@ class VideoRoomComponent extends Component {
         this.predict = this.predict.bind(this);
         this.loop = this.loop.bind(this);
         this.init = this.init.bind(this);
+        this.sendAlarm = this.sendAlarm.bind(this);
+        this.displayAlarmMessage = this.displayAlarmMessage.bind(this);
     }
 
     componentDidMount() {
@@ -75,7 +78,6 @@ class VideoRoomComponent extends Component {
         window.addEventListener('resize', this.checkSize);
         this.joinSession();
         this.init();
-
     }
 
     componentWillUnmount() {
@@ -174,7 +176,7 @@ class VideoRoomComponent extends Component {
         this.subscribeToUserChanged();
         this.subscribeToStreamDestroyed();
         this.sendSignalUserChanged({ isScreenShareActive: localUser.isScreenShareActive() });
-
+        this.getAlarmMessage();
         this.setState({ currentVideoDevice: videoDevices[0], localUser: localUser }, () => {
             this.state.localUser.getStreamManager().on('streamPlaying', (e) => {
                 this.updateLayout();
@@ -498,17 +500,17 @@ class VideoRoomComponent extends Component {
         }
     }
     async init() {
-        const URL = "https://teachablemachine.withgoogle.com/models/jHt4eMwtl/";
+        const URL = "https://teachablemachine.withgoogle.com/models/xtvI2r9Ck/";
         const modelURL = URL+"model.json";
         const metadataURL = URL+"metadata.json";
 
         console.log("before model");
-        model = await tmPose.load(modelURL, metadataURL);
+        model = await tmImage.load(modelURL, metadataURL);
         console.log("after model");
 
         const size = 200;
         const flip = true; 
-        webcam = new tmPose.Webcam(size, size, flip); 
+        webcam = new tmImage.Webcam(size, size, flip); 
         await webcam.setup(); 
         await webcam.play();
         window.requestAnimationFrame(this.loop);
@@ -522,11 +524,8 @@ class VideoRoomComponent extends Component {
     }
 
     async predict() {
-
-        const { posenetOutput } = await model.estimatePose(webcam.canvas);
-        const prediction = await model.predict(posenetOutput);
-
-        if(prediction[0].probability > 0.9){
+        const prediction = await model.predict(webcam.canvas);
+        if(prediction[1].probability > 0.9){
             console.log("startRest");
         //     this.leaveSession();
         //     //this.startRest();
@@ -534,8 +533,64 @@ class VideoRoomComponent extends Component {
 
     }
 
+    //알람 전송
+    sendAlarm(connectionId) {
+        //this.state.session.remoteConnections에서 for문 돌면서 맞는 connectionId에서 connection을 가져와서 to에 넣어주자
+        var con = undefined;
+        this.state.session.remoteConnections.forEach(function(Connection){
+            if (Connection.connectionId === connectionId){
+                con = Connection;
+            }
+        });
+        if(con){
+        this.state.session.signal({
+            data: 'My custom message',  // Any string (optional)
+            to: [con],        // Array of Connection objects (optional. Broadcast to everyone if empty)
+            type: 'alarm'             // The type of message (optional)
+          });
 
+          var currentSound = undefined;
+          if(currentSound) {
+              currentSound.pause();
+              currentSound.currentTime = 0;
+          }
+      
+          // TODO: mp3 파일 경로는 맞게 수정해주세요!
+          currentSound = new Audio(sound);
+          currentSound.play();
+        }
+        else{
+            console.log("알람 전송 실패");
+        }
+        
 
+          
+    }
+
+    //알람 수신
+
+    getAlarmMessage(){
+
+        this.state.session.on('signal:alarm', (event) => {
+                // 알람 메시지를 화면에 표시합니다.
+                console.log("get alarm");
+                this.displayAlarmMessage(event.data);
+            }
+        );
+        
+    }
+    displayAlarmMessage(message) {
+
+        var currentSound = undefined;
+        if(currentSound) {
+            currentSound.pause();
+            currentSound.currentTime = 0;
+        }
+    
+        // TODO: mp3 파일 경로는 맞게 수정해주세요!
+        currentSound = new Audio(sound);
+        currentSound.play();
+    }
     render() {
         const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
@@ -562,12 +617,12 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         <div className="OT_root OT_publisher custom-class" id="localUser">
-                            <StreamComponent user={localUser} handleNickname={this.nicknameChanged} />
+                            <StreamComponent user={localUser} handleNickname={this.nicknameChanged} localUser={localUser}/>
                         </div>
                     )}
                     {this.state.subscribers.map((sub, i) => (
                         <div key={i} className="OT_root OT_publisher custom-class" id="remoteUsers">
-                            <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+                            <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} localUser={localUser} onHandleNotification={this.sendAlarm} />
                         </div>
                     ))}
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
@@ -580,6 +635,7 @@ class VideoRoomComponent extends Component {
                             />
                         </div>
                     )}
+
                 </div>
             </div>
         );

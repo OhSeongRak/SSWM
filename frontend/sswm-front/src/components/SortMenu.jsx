@@ -3,10 +3,11 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
+import { useEffect } from "react";
 
-export default function FadeMenu() {
+export default function FadeMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedOption, setSelectedOption] = React.useState("정렬");
+  const [selectedOption, setSelectedOption] = React.useState("인원순");
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -20,6 +21,11 @@ export default function FadeMenu() {
     setSelectedOption(option);
     handleClose();
   };
+
+  useEffect(() => {
+    // 부모 컴포넌트인 StudyRoom 컴포넌트에 선택된 메뉴 옵션을 전달하는 콜백 함수 호출
+    props.onMenuItemClick(selectedOption);
+  }, [selectedOption]);
 
   return (
     <div>

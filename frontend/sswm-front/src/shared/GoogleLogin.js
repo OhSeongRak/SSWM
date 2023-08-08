@@ -1,7 +1,12 @@
+import styled from "styled-components";
+
 import React from "react";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import { useGoogleLogin } from "@react-oauth/google";
+
+import GoogleLogo from "../assets/Google_Logo.svg";
 
 const GoogleLogin = () => {
   const config = {
@@ -9,29 +14,56 @@ const GoogleLogin = () => {
       "Content-Type": "application/json; charset=utf-8",
     },
   };
+
+  const navigate = useNavigate();
+
   const login = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       console.log(codeResponse);
 
-      let jwtToken = await Axios.post(
-        "https://i9a206.p.ssafy.io/api/auth/google/signin",
-        // "http://localhost:8080/api/auth/google/signin",
+      await Axios.post(
+        // "https://i9a206.p.ssafy.io/api/auth/google/login",
+        "/api/auth/google/login",
         JSON.stringify(codeResponse),
         config
-      );
-
-      if (jwtToken.status === 200) {
-        console.log(2, jwtToken.data);
-         // 데이터를 저장할 때는 JSON.stringify()를 사용하여 
-        // JavaScript 객체를 JSON 형식의 문자열로 변환하여 저장해야 합니다.
-        localStorage.setItem("jwtToken", JSON.stringify(jwtToken.data));
-      }
+      )
+        .then((jwtToken) => {
+          console.log(2, jwtToken.data);
+          // 데이터를 저장할 때는 JSON.stringify()를 사용하여
+          // JavaScript 객체를 JSON 형식의 문자열로 변환하여 저장해야 합니다.
+          localStorage.setItem(
+            "accessToken",
+            JSON.stringify(jwtToken.data.accessToken)
+          );
+          localStorage.setItem(
+            "refreshToken",
+            JSON.stringify(jwtToken.data.refreshToken)
+          );
+          console.log(JSON.parse(localStorage.getItem("accessToken")));
+          console.log(JSON.parse(localStorage.getItem("refreshToken")));
+          navigate("/");
+        })
+        .catch((error) => {
+          alert("회원정보가 존재 하지 않습니다.");
+          navigate("/Login");
+        });
     },
     flow: "auth-code",
   });
 
-  return <button onClick={() => login()}>Sign in with Google 🚀 </button>;
-
+  return (
+    <LogoImg
+      src={GoogleLogo}
+      alt="Google 로그인"
+      style={{ cursor: "pointer" }}
+      onClick={() => login()}
+    />
+  );
 };
 
 export default GoogleLogin;
+
+const LogoImg = styled.img`
+  width: 240px;
+  height: 100px;
+`;
