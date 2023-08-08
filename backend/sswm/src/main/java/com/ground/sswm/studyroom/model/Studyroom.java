@@ -75,7 +75,7 @@ public class Studyroom {
         return Studyroom.builder()
             .name(studyroomDto.getName())
             .notice(studyroomDto.getNotice())
-            .isPublic(studyroomDto.isPublic())
+            .isPublic(studyroomDto.getIsPublic())
             .enterCode(studyroomDto.getEnterCode())
             .maxUserNum(studyroomDto.getMaxUserNum())
             .maxRestTime(studyroomDto.getMaxRestTime())
@@ -87,7 +87,7 @@ public class Studyroom {
     public void setUpdates(StudyroomDto studyroomDto) {
         this.setName(studyroomDto.getName());
         this.setNotice(studyroomDto.getNotice());
-        this.setPublic(studyroomDto.isPublic());
+        this.setPublic(studyroomDto.getIsPublic());
         this.setEnterCode(studyroomDto.getEnterCode());
         this.setMaxUserNum(studyroomDto.getMaxUserNum());
         this.setMaxRestTime(studyroomDto.getMaxRestTime());
