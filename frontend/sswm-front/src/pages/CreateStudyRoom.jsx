@@ -19,6 +19,8 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import def from "../assets/dolphin.jpg";
 import { Avatar, RadioGroup, Switch, Typography } from "@mui/material";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
@@ -35,6 +37,7 @@ const Item = muistyled(Paper)(({ theme }) => ({
 let formData = new FormData();
 
 const CreateStudyRoom = () => {
+  const navigate = useNavigate();
   const [studyroomDto, setStudyroomDto] = useState({
     name: "스터디룸 이름",
     isPublic: true,
@@ -173,6 +176,7 @@ const CreateStudyRoom = () => {
         // 오류 처리
         console.log(Error);
       });
+      navigate("/");
   };
 
   // const [checked, setChecked] = useState(true);
@@ -352,12 +356,15 @@ const CreateStudyRoom = () => {
               </StudyRoomWrap>
             </ContentWrap2>
           </CreateContent>
-
-          <CreateBtn>
-            <Button variant="contained" color="success" onClick={handleSubmit}>
-              스터디 룸 생성하기
-            </Button>
-          </CreateBtn>
+            <CreateBtn>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleSubmit}
+              >
+                스터디 룸 생성하기
+              </Button>
+            </CreateBtn>
         </CreateWrap>
       </ContainerWrap>
     </div>
