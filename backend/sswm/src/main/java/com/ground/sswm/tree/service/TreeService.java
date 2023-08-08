@@ -1,7 +1,7 @@
 package com.ground.sswm.tree.service;
 
-import com.ground.sswm.tree.dto.TreeDto;
-import com.ground.sswm.user.dto.UserDto;
+import com.ground.sswm.tree.model.dto.TreeDto;
+import com.ground.sswm.user.model.dto.UserDto;
 
 public interface TreeService {
 

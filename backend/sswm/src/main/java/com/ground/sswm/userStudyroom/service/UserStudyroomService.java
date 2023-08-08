@@ -1,9 +1,9 @@
 package com.ground.sswm.userStudyroom.service;
 
 
-import com.ground.sswm.userStudyroom.dto.OnAirResDto;
-import com.ground.sswm.userStudyroom.dto.UserAttendResDto;
-import com.ground.sswm.userStudyroom.dto.UserStudyTimeResDto;
+import com.ground.sswm.userStudyroom.model.dto.OnAirResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserAttendResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserStudyTimeResDto;
 import java.util.List;
 
 public interface UserStudyroomService {
