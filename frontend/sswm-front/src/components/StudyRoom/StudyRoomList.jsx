@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 import RecipeReviewCard from "./StudyRoomItem2";
 import "./Style.css";
 import axios from "axios";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const RoomListLayout = styled.div`
   flex: 1;
@@ -46,13 +46,12 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
         // 오류 처리
         console.log(error);
       });
-      
   }, [option, searchKeyword, selectedTags, isPublic]);
-    
+
   return (
     <RoomListLayout ref={ref}>
       <RoomList>
-      {studyrooms.map((studyroom) => (
+        {studyrooms.map((studyroom) => (
           <RecipeReviewCard key={studyroom.id} studyroom={studyroom} />
         ))}
       </RoomList>

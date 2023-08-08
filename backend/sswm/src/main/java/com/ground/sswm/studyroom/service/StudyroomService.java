@@ -1,9 +1,9 @@
 package com.ground.sswm.studyroom.service;
 
 
-import com.ground.sswm.studyroom.dto.SearchStudyroomReqDto;
-import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
-import com.ground.sswm.studyroom.dto.StudyroomDto;
+import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
+import com.ground.sswm.studyroom.model.dto.SearchStudyroomResDto;
+import com.ground.sswm.studyroom.model.dto.StudyroomDto;
 import java.util.List;
 
 public interface StudyroomService {

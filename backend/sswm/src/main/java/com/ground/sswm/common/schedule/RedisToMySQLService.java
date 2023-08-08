@@ -5,18 +5,16 @@ import static com.ground.sswm.common.util.UnixTimeUtil.getStartEndOfPeriod;
 import static com.ground.sswm.event.util.RedisKeyUtil.keySpliter;
 
 import com.ground.sswm.common.util.UnixTimeUtil;
-import com.ground.sswm.dailyLog.domain.DailyLog;
-import com.ground.sswm.dailyLog.domain.DailyLogRepository;
+import com.ground.sswm.dailyLog.model.DailyLog;
+import com.ground.sswm.dailyLog.repository.DailyLogRepository;
 import com.ground.sswm.event.domain.StudyEventType;
 import com.ground.sswm.event.util.RedisKeyUtil.EventKeyDto;
-import com.ground.sswm.studyroom.domain.Studyroom;
-import com.ground.sswm.studyroom.domain.StudyroomRepository;
 import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
-import com.ground.sswm.user.domain.User;
-import com.ground.sswm.user.domain.UserRepository;
+import com.ground.sswm.studyroom.model.Studyroom;
+import com.ground.sswm.studyroom.repository.StudyroomRepository;
 import com.ground.sswm.user.exception.UserNotFoundException;
-import com.ground.sswm.userStudyroom.domain.UserStudyroom;
-import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
+import com.ground.sswm.user.model.User;
+import com.ground.sswm.user.repository.UserRepository;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,24 +24,28 @@ import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RedisToMySQLService {
+
     private final RedisTemplate<String, Long> redisEventTemplate;
     private final DailyLogRepository dailyLogRepository;
 
     private final UserRepository userRepository;
     private final StudyroomRepository studyroomRepository;
-    public void updateDataFromRedisToMySQL(int dayBefore){
+
+    public void updateDataFromRedisToMySQL(int dayBefore) {
         updateMySQLDataUsingRedisData(fetchRedisKeys(), dayBefore);
     }
-    public void updateDataFromRedisToMySQL4(){
+
+    public void updateDataFromRedisToMySQL4() {
         updateMySQLDataUsingRedisData4(fetchRedisKeys());
     }
 
 
-    private List<String> fetchRedisKeys(){
+    private List<String> fetchRedisKeys() {
         String pattern = "*_*_*";
 
         ScanOptions scanOptions = ScanOptions.scanOptions()
@@ -57,7 +59,7 @@ public class RedisToMySQLService {
             String key = cursor.next();
             keys.add(key);
         }
-        log.debug("[FETCH REDIS KEYS] >>"+keys.size());
+        log.debug("[FETCH REDIS KEYS] >>" + keys.size());
         return keys;
     }
 
@@ -85,16 +87,16 @@ public class RedisToMySQLService {
                     dto.getUserId(), dto.getStudyroomId(), days[0], days[1])
                 .ifPresent(dailyLog -> {
 
-                        //redis의 이벤트에 따라 분기
-                        if (dto.getType() == StudyEventType.LIVE) { //이벤트가 공부이면
-                            dailyLog.setStudyTime( duration + dailyLog.getStudyTime());
-                        } else if (dto.getType() == StudyEventType.REST) { //이벤트가 휴식이면
-                            dailyLog.setRestTime(duration + dailyLog.getRestTime());
-                        } else if (dto.getType() == StudyEventType.STRETCH) { //이벤트가 스트레칭이면
-                            dailyLog.setRestTime(duration + dailyLog.getRestTime());
-                        }
-                        dailyLogRepository.save(dailyLog);
-                    });
+                    //redis의 이벤트에 따라 분기
+                    if (dto.getType() == StudyEventType.LIVE) { //이벤트가 공부이면
+                        dailyLog.setStudyTime(duration + dailyLog.getStudyTime());
+                    } else if (dto.getType() == StudyEventType.REST) { //이벤트가 휴식이면
+                        dailyLog.setRestTime(duration + dailyLog.getRestTime());
+                    } else if (dto.getType() == StudyEventType.STRETCH) { //이벤트가 스트레칭이면
+                        dailyLog.setRestTime(duration + dailyLog.getRestTime());
+                    }
+                    dailyLogRepository.save(dailyLog);
+                });
             redisEventTemplate.opsForValue().set(key, now);
         });
         log.debug("Updating MySQL data: " + keys);
@@ -109,8 +111,7 @@ public class RedisToMySQLService {
 
         //전날 dailylog에 업데이트
         updateMySQLDataUsingRedisData(keys, 1);
-        
-        
+
         long now = UnixTimeUtil.getCurrentUnixTime();
 
         //redis정보들 전부 처리
