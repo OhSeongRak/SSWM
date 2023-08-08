@@ -24,13 +24,14 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
   const token = JSON.parse(localStorage.getItem("accessToken"));
 
   const data = {
-    sortBy: option === "인원순" ? "USER_NUM" : option === "최근순" ? "CREATED" : "STUDY_TIME", // 공부시간(STUDY_TIME), 인원(USER_NUM), 생성시간(CREATED),
-    orderBy: "DESC", // ASC
-    searchKeyword: searchKeyword, // 방제목, 방아이디
-    tagNames: selectedTags,
-    isPublic: 1,
+    "sortBy" : option === "인원순" ? "USER_NUM" : option === "최근순" ? "CREATED" : "STUDY_TIME", // 공부시간(STUDY_TIME), 인원(USER_NUM), 생성시간(CREATED), 
+    "orderBy" : "DESC", // ASC
+    "searchKeyword" : searchKeyword, // 방제목, 방아이디
+    "tagNames" : selectedTags,
+    "isPublic" : isPublic,
   };
   console.log(token);
+  console.log("isPublic::", isPublic)
   useEffect(() => {
     axios
       .post("/api/studyrooms/list", data, {
