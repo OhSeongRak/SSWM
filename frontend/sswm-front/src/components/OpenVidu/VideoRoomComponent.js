@@ -5,13 +5,32 @@ import ChatComponent from './chat/ChatComponent';
 import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
-
+import styled from "styled-components";
 import OpenViduLayout from './layout/openvidu-layout';
 import UserModel from './models/user-model';
-import ToolbarComponent from './toolbar/ToolbarComponent';
+//import ToolbarComponent from './toolbar/ToolbarComponent';
 //import * as tmPose from '@teachablemachine/pose';
 import * as tmImage from '@teachablemachine/image';
 import sound from '../../assets/Dingdong.mp3'
+import LiveRoomSnackbar from '../LiveRoom/LiveRoomSnackbar';
+//import LiveRoomFooter from '../LiveRoom/LiveRoomFooter';
+
+import BedIcon from '@mui/icons-material/Bed';
+import Mic from '@material-ui/icons/Mic';
+import MicOff from '@material-ui/icons/MicOff';
+import Videocam from '@material-ui/icons/Videocam';
+import VideocamOff from '@material-ui/icons/VideocamOff';
+import Fullscreen from '@material-ui/icons/Fullscreen';
+import FullscreenExit from '@material-ui/icons/FullscreenExit';
+//import SwitchVideoIcon from '@material-ui/icons/SwitchVideo';
+import PictureInPicture from '@material-ui/icons/PictureInPicture';
+import ScreenShare from '@material-ui/icons/ScreenShare';
+import StopScreenShare from '@material-ui/icons/StopScreenShare';
+import Tooltip from '@material-ui/core/Tooltip';
+import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
+import QuestionAnswer from '@material-ui/icons/QuestionAnswer';
+import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
+import IconButton from '@material-ui/core/IconButton';
 let model, webcam;
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL = 'https://i9a206.p.ssafy.io:5443/';
@@ -471,14 +490,17 @@ class VideoRoomComponent extends Component {
     }
 
     toggleChat(property) {
-        let display = property;
-
+        let display = undefined;
+         
         if (display === undefined) {
+            console.log(this.state.chatDisplay);
             display = this.state.chatDisplay === 'none' ? 'block' : 'none';
         }
         if (display === 'block') {
+            console.log("block");
             this.setState({ chatDisplay: display, messageReceived: false });
         } else {
+            console.log("else");
             console.log('chat', display);
             this.setState({ chatDisplay: display });
         }
@@ -592,12 +614,19 @@ class VideoRoomComponent extends Component {
         currentSound.play();
     }
     render() {
-        const mySessionId = this.state.mySessionId;
+        //const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
 
         return (
             <div className="container" id="container">
+                <ContainerWrap>
+                    <HeaderWrap>
+                        <LiveRoomSnackbar />
+                    </HeaderWrap>
+                </ContainerWrap>
+{/* 
+
                 <ToolbarComponent
                     sessionId={mySessionId}
                     user={localUser}
@@ -610,7 +639,7 @@ class VideoRoomComponent extends Component {
                     switchCamera={this.switchCamera}
                     leaveSession={this.leaveSession}
                     toggleChat={this.toggleChat}
-                />
+                />  */}
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
 
@@ -637,6 +666,92 @@ class VideoRoomComponent extends Component {
                     )}
 
                 </div>
+
+
+               <FooterWrap>
+        <div className="buttonsContent" >
+            <IconButton>
+                <BedIcon />
+            </IconButton>
+            <IconButton>
+                <AccessibilityNewIcon/>
+            </IconButton>
+            <IconButton
+              color="inherit"
+              className="navButton"
+              id="navMicButton"
+              onClick={this.micStatusChanged}
+            >
+              {localUser !== undefined && localUser.isAudioActive() ? (
+                <Mic />
+              ) : (
+                <MicOff color="secondary" />
+              )}
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              className="navButton"
+              id="navCamButton"
+              onClick={this.camStatusChanged}
+            >
+              {localUser !== undefined && localUser.isVideoActive() ? (
+                <Videocam />
+              ) : (
+                <VideocamOff color="secondary" />
+              )}
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              className="navButton"
+              onClick={this.screenShare}
+            >
+              {localUser !== undefined && localUser.isScreenShareActive() ? (
+                <PictureInPicture />
+              ) : (
+                <ScreenShare />
+              )}
+            </IconButton>
+
+            {localUser !== undefined && localUser.isScreenShareActive() && (
+              <IconButton onClick={this.stopScreenShare} id="navScreenButton">
+                <StopScreenShare color="secondary" />
+              </IconButton>
+            )}
+
+            <IconButton
+              color="inherit"
+              className="navButton"
+              onClick={this.toggleFullscreen}
+            >
+              {localUser !== undefined && this.state.fullscreen ? (
+                <FullscreenExit />
+              ) : (
+                <Fullscreen />
+              )}
+            </IconButton>
+            <IconButton
+              color="secondary"
+              className="navButton"
+              onClick={this.leaveSession}
+              id="navLeaveButton"
+            >
+              <PowerSettingsNew />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={this.toggleChat}
+              id="navChatButton"
+            >
+              {this.state.messageReceived && <div id="point" className="" />}
+              <Tooltip title="Chat">
+                <QuestionAnswer />
+              </Tooltip>
+            </IconButton>
+            </div>
+
+            </FooterWrap>
             </div>
         );
     }
@@ -697,4 +812,59 @@ class VideoRoomComponent extends Component {
         return response.data; // The token
     }
 }
+
+const ContainerWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: bottom;
+  width: 100vw;
+  height: 80vh;
+`
+const HeaderWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 10vh;
+`
+// const ContentWrap = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 90%;
+//   height: 80vh;
+// `
+//const ContentLiveView = styled.div`
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  width: 80%;
+//  height: 100%;
+//  border: 1px solid black;
+//`
+
+//const ContentLiveChat = styled.div`
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  width: 20%;
+//  height: 100%;
+//  border: 1px solid black;
+//`
+const FooterWrap = styled.div`
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background-color: green;
+  color: white;
+  gap: 3vw;
+
+`
+
 export default VideoRoomComponent;
