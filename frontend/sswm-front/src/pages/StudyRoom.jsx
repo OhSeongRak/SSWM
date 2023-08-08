@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../utils/api";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -17,22 +17,43 @@ import CheckboxChip from "../components/StudyRoom/HashTags";
 
 const StudyRoom = (props) => {
   const [isTokenValid, setIsTokenValid] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("인원순");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [isPublic, setIsPublic] = useState(1);
+
+  const handleSearchKeywordChange = (keyword) => {
+    setSearchKeyword(keyword);
+  };
+
+  const handleMenuItemClick = (option) => {
+    setSelectedOption(option);
+  };
+
+  const handleSelectedTagsChange = (newSelectedTags) => {
+    setSelectedTags(newSelectedTags);
+  };
+
+  const handleShowPrivateRoomsChange = (event) => {
+    const isChecked = event.target.checked;
+    if (isChecked) setIsPublic(0);
+    else setIsPublic(1);
+  };
 
   const checkTokenValidity = () => {
-    const token = JSON.parse(localStorage.getItem("jwtToken"));
+    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+    const refreshToken = JSON.parse(localStorage.getItem("refreshToken"));
 
-    console.log(token);
     // 로그인 안했을 때
-    if (token === null) {
+    if (accessToken === null) {
       setIsTokenValid(false);
       return;
     }
-    console.log(token.accessToken);
 
     axios
-      .post("http://localhost:8080/api/auth/access-token", token.accessToken, {
+      .post("/api/auth/access-token", accessToken, {
         headers: {
-          Authorization: token.accessToken,
+          Authorization: accessToken,
         },
       })
       .then((response) => {
@@ -43,24 +64,22 @@ const StudyRoom = (props) => {
         // 로그인 했지만 access 토큰 만료 재발급 필요
         console.error("Access 토큰 만료: ", error);
         axios
-          .post(
-            "http://localhost:8080/api/auth/refresh-access-token",
-            token.refreshToken,
-            {
-              headers: {
-                Authorization: token.refreshToken,
-              },
-            }
-          )
+          .post("/api/auth/refresh-access-token", refreshToken, {
+            headers: {
+              Authorization: refreshToken,
+            },
+          })
           .then((response) => {
             console.log("refresh토큰을 이용해 토큰 재발급: ", response.data);
-            localStorage.setItem("jwtToken", JSON.stringify(response.data));
+            localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+            localStorage.setItem("refreshToken", JSON.stringify(response.data.refreshToken));
             setIsTokenValid(true);
           })
           .catch((error) => {
-            console.error("refresh토큰을 이용해 토큰 만료:", error);
+            console.error("refresh 토큰 만료 :", error);
             setIsTokenValid(false);
-            localStorage.setItem("jwtToken", null);
+            localStorage.setItem("accessToken", null);
+            localStorage.setItem("refreshToken", null);
           });
       });
   };
@@ -80,13 +99,13 @@ const StudyRoom = (props) => {
     <div>
       <Gnb />
       <ContainerWrap>
-        <SearchBar />
+        <SearchBar onSearchKeywordChange={handleSearchKeywordChange} />
         <CheckChip>
-          <CheckboxChip />
+          <CheckboxChip onTagClick={handleSelectedTagsChange} />
         </CheckChip>
         <StudyRoomBtn>
           <SortBtn>
-            <FadeMenu></FadeMenu>
+            <FadeMenu selectedOption={selectedOption} onMenuItemClick={handleMenuItemClick} />
           </SortBtn>
           <FormGroup style={{ display: "inline-block" }}>
             <FormControlLabel
@@ -95,7 +114,7 @@ const StudyRoom = (props) => {
                   fontFamily: "NanumSquareNeo",
                 },
               }}
-              control={<Checkbox />}
+              control={<Checkbox onChange={handleShowPrivateRoomsChange} />}
               label="비공개 스터디룸 표시"
             />
             <FormControlLabel
@@ -110,10 +129,15 @@ const StudyRoom = (props) => {
           </FormGroup>
         </StudyRoomBtn>
 
-        <StudyRoomList />
+        <StudyRoomList
+          option={selectedOption}
+          searchKeyword={searchKeyword}
+          selectedTags={selectedTags}
+          isPublic={isPublic}
+        />
         <AddBtn>
           <Link to="/CreateStudyRoom">
-            <Fab color="primary" aria-label="add">
+            <Fab color="primary" aria-label="add" sx={{ zIndex: "tooltip" }}>
               <AddIcon />
             </Fab>
           </Link>

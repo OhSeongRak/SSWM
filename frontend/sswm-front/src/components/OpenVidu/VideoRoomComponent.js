@@ -550,6 +550,10 @@ class VideoRoomComponent extends Component {
           });
 
           var currentSound = undefined;
+          if(currentSound) {
+              currentSound.pause();
+              currentSound.currentTime = 0;
+          }
       
           // TODO: mp3 파일 경로는 맞게 수정해주세요!
           currentSound = new Audio(sound);
@@ -578,6 +582,10 @@ class VideoRoomComponent extends Component {
     displayAlarmMessage(message) {
 
         var currentSound = undefined;
+        if(currentSound) {
+            currentSound.pause();
+            currentSound.currentTime = 0;
+        }
     
         // TODO: mp3 파일 경로는 맞게 수정해주세요!
         currentSound = new Audio(sound);

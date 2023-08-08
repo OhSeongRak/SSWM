@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 import { Link } from "react-router-dom";
@@ -16,15 +16,18 @@ import CustomModal from "../components/StudyRoom/deleteModal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Snackbar } from "@mui/material";
-
+import { useParams } from "react-router-dom";
+import axios from 'axios';
 
 const StudyRoomMember = () => {
+  const { studyroomId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-
+  const [studyroom, setStudyroom] = useState([]);
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+  
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
+  
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
@@ -35,6 +38,22 @@ const StudyRoomMember = () => {
     setIsModalOpen(false);
     openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
+
+  // useEffect(() => {
+  //   axios
+  //     .get("/api/studyrooms/list", {
+  //       headers: {
+  //         Authorization: accessToken,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
+  //     })
+  //     .catch((error) => {
+  //       // 오류 처리
+  //       console.log(error);
+  //     });
+  // }, []);
 
   return (
     <div>

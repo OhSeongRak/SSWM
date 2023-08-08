@@ -14,6 +14,7 @@ import CreateStudyRoom from './pages/CreateStudyRoom';
 import StudyRoomAdmin from './pages/StudyRoomAdmin';
 import StudyRoomMember from './pages/StudyRoomMember';
 import LiveRoom from './pages/LiveRoom';
+import Stretching from './pages/Stretching';
 //import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
 
 function App() {
@@ -29,8 +30,9 @@ function App() {
           <Route path="/EditInfo" element={<EditInfo />}></Route>
           <Route path="/CreateStudyRoom" element={<CreateStudyRoom />}></Route>
           <Route path="/StudyRoomAdmin" element={<StudyRoomAdmin />}></Route>
-          <Route path="/StudyRoomMember" element={<StudyRoomMember />}></Route>
+          <Route path="/StudyRoomMember/:studyroomId" element={<StudyRoomMember />}></Route>
           <Route path="/LiveRoom" element={<LiveRoom />}></Route>
+          <Route path="/Stretching" element={<Stretching />}></Route>
           {/* <Route path="/VideoRoomComponent" element={<VideoRoomComponent />} /> */}
         </Routes>
       </BrowserRouter>
