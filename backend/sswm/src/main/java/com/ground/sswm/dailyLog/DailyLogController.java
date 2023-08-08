@@ -22,7 +22,7 @@ public class DailyLogController {
     private final DailyLogService dailyLogService;
     private final AuthService authService;
 
-    @PostMapping("/{studyroomId")
+    @PostMapping("/{studyroomId}")
     public ResponseEntity<?> add(@RequestHeader("Authorization") String token,
         @PathVariable Long studyroomId) {
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
