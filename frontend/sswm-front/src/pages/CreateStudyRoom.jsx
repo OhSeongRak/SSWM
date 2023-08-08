@@ -357,7 +357,7 @@ const CreateStudyRoom = () => {
                       onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
                     />
                     <Typography sx={{ marginLeft: "10px" }}>
-                      {studyroomDto.enterCode.length ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
+                      {(studyroomDto.enterCode !== null) ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
                     </Typography>
                   </StudyRoomContent>
                 </StudyRoomWrap>

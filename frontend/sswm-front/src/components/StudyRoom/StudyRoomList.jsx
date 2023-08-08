@@ -28,9 +28,10 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
     "orderBy" : "DESC", // ASC
     "searchKeyword" : searchKeyword, // 방제목, 방아이디
     "tagNames" : selectedTags,
-    "isPublic" : 1,
+    "isPublic" : isPublic,
   };
   console.log(token);
+  console.log("isPublic::", isPublic)
   useEffect(() => {
     axios
       .post("/api/studyrooms/list", data, {

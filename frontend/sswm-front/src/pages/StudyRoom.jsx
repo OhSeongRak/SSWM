@@ -21,7 +21,7 @@ const StudyRoom = (props) => {
   const [selectedOption, setSelectedOption] = useState("인원순");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
-  const [isPublic, setIsPublic] = useState(0);
+  const [isPublic, setIsPublic] = useState(1);
 
   const handleSearchKeywordChange = (keyword) => {
     setSearchKeyword(keyword);
@@ -38,9 +38,9 @@ const StudyRoom = (props) => {
   const handleShowPrivateRoomsChange = (event) => {
     const isChecked = event.target.checked;
     if (isChecked)
-      setIsPublic(1)
-    else
       setIsPublic(0)
+    else
+      setIsPublic(1)
     // isChecked 값이 true면 비공개 스터디룸을 보여줄 때 처리할 작업
     // isChecked 값이 false면 비공개 스터디룸을 숨길 때 처리할 작업
   };
