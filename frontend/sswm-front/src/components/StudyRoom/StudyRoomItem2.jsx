@@ -31,7 +31,7 @@ const Card = ({studyroom}) => {
           src={imageUrl}
           style={{ width: 382, height: 255 }}
         />
-        <CardHoverMenus />
+        <CardHoverMenus studyroom = {studyroom}/>
         <div className="card-footer">
           <IconButton sx={{ gap: 1 }} disabled>
           {studyroom.tagNames.map((tagName) => (
