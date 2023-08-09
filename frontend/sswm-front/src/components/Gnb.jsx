@@ -24,13 +24,13 @@ const Gnb = (props) => {
       <GnbBtn>
         {isLoggedIn ? (
           <>
-            <Link to="/MyPage" style={{ textDecoration: "none" }}>
+            <Link to="/MyPage" style={{ textDecoration: "none", color:"black" }}>
               <GnbBtn>마이페이지</GnbBtn>
             </Link>
             <GnbBtn onClick={handleLogout} style={{ cursor: "pointer" }}>로그아웃</GnbBtn>
           </>
         ) : (
-          <Link to="/Login" style={{ textDecoration: "none" }}>
+          <Link to="/Login" style={{ textDecoration: "none", color:"black" }}>
             <GnbBtn>로그인</GnbBtn>
           </Link>
         )}
