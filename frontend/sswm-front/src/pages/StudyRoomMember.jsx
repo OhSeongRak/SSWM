@@ -85,7 +85,7 @@ const StudyRoomMember = () => {
         <ContentWrap>
           <ContentLeftWrap>
             <StudyMemberWrap>
-              <StudyRoomMemberIcon />
+              <StudyRoomMemberIcon studyroomId ="1"/>
             </StudyMemberWrap>
             <StudyScoreWrap>
               <StudyRoomMemberScore />

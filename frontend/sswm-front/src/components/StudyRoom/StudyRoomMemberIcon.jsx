@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { styled as MuiStyled } from '@mui/material/styles';
@@ -6,7 +6,8 @@ import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 
 import def from '../../assets/fubao.jpg';
-
+import {useEffect} from 'react';
+import axios from 'axios';
 const StyledBadge = MuiStyled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     backgroundColor: '#44b700',
@@ -36,7 +37,25 @@ const StyledBadge = MuiStyled(Badge)(({ theme }) => ({
   },
 }));
 
-const StudyRoomMemberIcon = () => {
+const StudyRoomMemberIcon = ({studyroomId}) => {
+  const token = JSON.parse(localStorage.getItem("accessToken"));
+  const [studyPeople, setStudyPeople] = useState();
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await axios.get("/api/studyrooms/"+studyroomId+"/search-user", {
+          headers: {
+            Authorization: token,
+          },
+        }); 
+        setStudyPeople(response.data);
+      } catch (error) {
+        console.error("유저 데이터를 가져오는 데 실패했습니다:", error);
+      }
+    };
+
+    fetchMembers(); // 함수 실행
+  }, [studyroomId]);
   return (
     <ContainerWrap>
       <MemberTitleWrap>
@@ -44,30 +63,29 @@ const StudyRoomMemberIcon = () => {
       </MemberTitleWrap>
 
       <MemberWrap>
-        <MemberContent>
+      {studyPeople && 
+      studyPeople.map((person,idx)=>
+        person.inLive ? 
+        <MemberContent key={idx}>
           <StyledBadge
             overlap="circular"
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-            <Avatar alt="Study-Member" src={def} sx={{ width: 60, height: 60 }} />
-          </StyledBadge>
-          Name
+          <Avatar alt="Study-Member" src={person.userDto.image} sx={{ width: 60, height: 60 }} />
+        </StyledBadge>
+          {person.userDto.nickname}
         </MemberContent>
-        <MemberContent>
-          <StyledBadge
-            overlap="circular"
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            variant="dot"
-          >
-            <Avatar alt="Study-Member" src={def} sx={{ width: 60, height: 60 }} />
-          </StyledBadge>
-          Name
+        :
+        <MemberContent key={idx}>
+          <Avatar alt="Study-Member" src={person.userDto.image} sx={{ width: 60, height: 60 }} />
+          {person.userDto.nickname}
         </MemberContent>
-        <MemberContent>
-          <Avatar alt="Study-Member" src={def} sx={{ width: 60, height: 60 }} />
-          Name
-        </MemberContent>
+      )}
+        
+
+        
+      
       </MemberWrap>
       
     </ContainerWrap>
