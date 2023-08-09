@@ -10,6 +10,7 @@ import Calendar from "../components/Mypage/Calendar";
 // import Piechart from "../components/Mypage/Chart";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import GFooter from "../components/GFooter";
 
 const MyPage = () => {
   const [users, setUsers] = useState([]);
@@ -62,6 +63,7 @@ const MyPage = () => {
           </CalendarWrap>
         </ContentWrap>
       </ContainerWrap>
+      <GFooter/>
     </div>
   );
 };

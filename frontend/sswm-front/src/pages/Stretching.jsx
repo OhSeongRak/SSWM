@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Gnb from "../components/Gnb";
 import Button from "@mui/material/Button";
+import GFooter from "../components/GFooter";
 
 const Streching = () => {
   return (
@@ -34,6 +35,7 @@ const Streching = () => {
           </Link>
         </FooterWrap>
       </ContainerWrap>
+      <GFooter/>
     </div>
   );
 };
