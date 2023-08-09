@@ -44,6 +44,7 @@ import { Button } from "@mui/material";
 let model, webcam;
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL = 'https://i9a206.p.ssafy.io:5443/';
+const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
 
 class VideoRoomComponent extends Component {
@@ -65,9 +66,10 @@ class VideoRoomComponent extends Component {
             currentVideoDevice: undefined,
             open: false,
             anchorEl: null,
-            minute : 0
-        };
+            minute : 0,
+            restOn: false // 휴식 상태 여부
 
+        };
         this.joinSession = this.joinSession.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
         this.onbeforeunload = this.onbeforeunload.bind(this);
@@ -535,6 +537,7 @@ class VideoRoomComponent extends Component {
         }
     }
 
+    //휴식 버튼 클릭
     handleRestClick = (event) => {
         this.setState((prevState) => ({
           anchorEl: event.target,
@@ -542,6 +545,7 @@ class VideoRoomComponent extends Component {
         }));
       };
     
+    //휴식 시간 감소
     handleMinusClick = () => {
         if (this.state.minute > 0){
             this.setState((prevState) => ({
@@ -550,6 +554,7 @@ class VideoRoomComponent extends Component {
         }
     }
 
+    //휴식 시간 증가
     handlePlusClick = () => {
         if (this.state.minute < 10){
         this.setState((prevState) => ({
@@ -558,27 +563,79 @@ class VideoRoomComponent extends Component {
         }
     }
 
+    //휴식 시작 버튼 클릭
     handleApplyClick = () => {
-        const { minute } = this.state;
+        //0초면 팝업 닫기
+        if(this.state.minute<0){
+            this.setState({
+                open: false
+            });
+        }
+        const { restOn, minute } = this.state;
         const timerValue = minute * 60; // 분을 초로 변환
     
         this.setState({
           timerValue,
           timerRunning: true,
-          open: true // 팝업 닫기
+          open: true // 팝업 열기
         });
     
         this.startTimer();
-      };
+
+        const restStatus = restOn ? 'OFF' : 'ON';
+        const studyStatus = restOn ? 'ON' : 'OFF';
+
+        // 휴식 event 전송
+        const restRequestBody = {
+            type: 'REST',
+            status: restStatus,
+            studyroomId: 1,
+        };
+        axios
+        .post("/api/event", JSON.stringify(restRequestBody),{
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/json",
+              },
+        })
+        .then((response) => {
+            console.log("휴식 이벤트 성공");
+        })
+        .catch(error => {
+            console.error('휴식 설정 요청 에러:', error);
+        });
+
+        // 스터디 off event 전송
+        const studyRequestBody = {
+            type: 'LIVE',
+            status: studyStatus,
+            studyroomId: 1,
+        };
+        axios
+        .post("/api/event", JSON.stringify(studyRequestBody),{
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/json",
+              },
+        })
+        .then((response) => {
+            console.log("스터디 오프 이벤트 성공");
+        })
+        .catch(error => {
+            console.error('스터디 오프 설정 요청 에러:', error);
+        });
+    };
     
-      startTimer = () => {
+    //타이머 설정
+    startTimer = () => {
         this.timerInterval = setInterval(() => {
           this.setState((prevState) => {
             const newTimerValue = prevState.timerValue - 1;
     
-            if (newTimerValue === 0) {
+            if (newTimerValue <= 0) {
               clearInterval(this.timerInterval);
               this.setState({
+                timerRunning: false,
                 open: false
               });
             }
