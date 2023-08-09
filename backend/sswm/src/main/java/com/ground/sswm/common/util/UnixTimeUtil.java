@@ -28,7 +28,7 @@ public class UnixTimeUtil {
         Instant now = Instant.ofEpochSecond(time);
         ZonedDateTime zonedDateTime = now.atZone(zoneId);
 
-        // 현재 날짜를 기준으로 00:00:00 UTC로 설정
+        // 현재 날짜를 기준으로 00:00:00 Asia/Seoul로 설정
         ZonedDateTime startOfCurrentDate = zonedDateTime.toLocalDate().atStartOfDay(zoneId);
         ZonedDateTime oneDayBefore = startOfCurrentDate.minusDays(dayBefore);
         Instant dayBeforeInstant = oneDayBefore.toInstant();
