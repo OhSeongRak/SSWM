@@ -19,10 +19,21 @@ import { Snackbar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 
+function formatTime(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = remainingMinutes.toString().padStart(2, '0');
+  return `${formattedHours}:${formattedMinutes}`;
+}
+
 const StudyRoomMember = () => {
   const { studyroomId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [studyroom, setStudyroom] = useState([]);
+  const [studyAvgTime, setStudyAvgTime] = useState("");
+  const [maxRestTime, setMaxRestTime] = useState("");
+
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   
   const openModal = () => setIsModalOpen(true);
@@ -38,22 +49,81 @@ const StudyRoomMember = () => {
     setIsModalOpen(false);
     openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
+  
+  useEffect(() => {
+    // 스터디룸 관련 정보 조회
+    axios
+      .get(`/api/studyrooms/${studyroomId}`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
+        console.log("studyroom", response.data);
+        setStudyAvgTime(formatTime(response.data.studyAvgTime));
+        setMaxRestTime(formatTime(response.data.maxRestTime));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-  // useEffect(() => {
-  //   axios
-  //     .get("/api/studyrooms/list", {
-  //       headers: {
-  //         Authorization: accessToken,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
-  //     })
-  //     .catch((error) => {
-  //       // 오류 처리
-  //       console.log(error);
-  //     });
-  // }, []);
+    // 스터디룸 가입
+    axios
+    .post(`/api/studyrooms/${studyroomId}/join`, {}, {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    // 접속중인 유저들 정보
+    axios
+    .get(`/api/studyrooms/${studyroomId}/search-user`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log("userInfo", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    // 출석률 top3
+    axios
+    .get(`/api/studyrooms/${studyroomId}/daily-attend`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log("attend top3", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  
+    // 공부량 top3
+    axios
+    .get(`/api/studyrooms/${studyroomId}/daily-study`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log("studyTime top3", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }, [studyroomId]);
 
   return (
     <div>
@@ -61,7 +131,7 @@ const StudyRoomMember = () => {
       <ContainerWrap>
         <HeaderWrap>
           <HeaderTitle>
-            공부할사람~
+            {studyroom.name}
             <HeaderBtnWrap>
               <Link to="/StudyRoomAdmin" style={{ textDecoration: "none" }}>
                 <IconButton aria-label="setting" size="large">
@@ -73,7 +143,7 @@ const StudyRoomMember = () => {
           <HeaderBtn>
             <div>
               <Button variant="contained" color="success" onClick={openModal}>
-                스터디룸 탈퇴하기
+                스터디룸 탈퇴하기 
               </Button>
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
                 <Box>
@@ -116,10 +186,10 @@ const StudyRoomMember = () => {
 
           <ContentRightWrap>
             <StudyRoomTimeWrap>
-              <StudyRoomMemberTime />
+              <StudyRoomMemberTime studyAvgTime = {studyAvgTime} maxAvgTime = {maxRestTime}/>
             </StudyRoomTimeWrap>
             <StudyRoomBoardWrap>
-              <StudyRoomMemberBoard />
+              <StudyRoomMemberBoard notice = {studyroom.notice}/>
             </StudyRoomBoardWrap>
           </ContentRightWrap>
         </ContentWrap>

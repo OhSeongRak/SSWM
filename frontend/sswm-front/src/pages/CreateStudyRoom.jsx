@@ -226,14 +226,14 @@ const CreateStudyRoom = () => {
       })
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        navigate("/StudyRoom");
       })
       .catch((error) => {
         // 오류 처리
         alert("스터디방 개설이 되지 않았습니다.");
         console.log(Error);
       });
-      navigate("/");
+      navigate("/StudyRoom");
       window.location.reload();
   };
 
