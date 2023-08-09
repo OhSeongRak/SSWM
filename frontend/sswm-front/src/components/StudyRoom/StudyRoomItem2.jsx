@@ -25,22 +25,24 @@ const Card = ({studyroom}) => {
   return (
     <div className="col-sm-6 col-md-6 col-lg-4 mt-4">
       <div className="card">
-        <div className="card-block">
-          <Typography className="card-title">{formattedDate}</Typography>
-          <Typography sx={{ color: "black" }}>{studyAvgTime}</Typography>
-          <IconButton disabled>
+        <div className="card-block"style={{"display":"flex",flexDirection: "column", padding:"0.5em"}}>
+          <div style={{display:"flex",justifyContent: "flex-end"}}>
             <LocalFireDepartmentIcon sx={{ color: "black" }} />
-            <Typography sx={{ color: "black" }}>{studyroom.name}</Typography>
-          </IconButton>
+            <Typography  sx={{ color: "black","display":"flex" }}>{studyAvgTime}</Typography>
+          </div>
+          <div style={{display:"flex",justifyContent: "center"}}>
+            <Typography variant="h5"sx={{ color: "black" }}>{studyroom.name}</Typography>
+          </div>
         </div>
         <img
           alt="random pic"
           className="card-img-top"
           src={imageUrl}
-          style={{ width: 382, height: 255 }}
         />
-        <CardHoverMenus studyroom = {studyroom}/>
+        {/*<CardHoverMenus studyroom = {studyroom}/>*/}
         <div className="card-footer">
+        <Typography className="card-title">{formattedDate}</Typography>
+
           <IconButton sx={{ gap: 1 }} disabled>
           {studyroom.tagNames.map((tagName) => (
             <Chip
@@ -51,6 +53,7 @@ const Card = ({studyroom}) => {
             />
           ))}
           </IconButton>
+
           <IconButton disabled sx={{ justifyContent: "end" }}>
             <PeopleAltIcon sx={{ justifyContent: "end", color: "black" }} />
             <Typography sx={{ justifyContent: "end", color: "black" }}>&nbsp; {studyroom.userNum} / {studyroom.maxUserNum}</Typography>
