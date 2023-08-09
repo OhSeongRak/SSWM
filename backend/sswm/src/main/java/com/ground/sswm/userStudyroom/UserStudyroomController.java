@@ -7,7 +7,7 @@ import com.ground.sswm.chat.model.dto.ChatDto;
 import com.ground.sswm.chat.service.ChatServiceImpl;
 import com.ground.sswm.user.model.dto.UserDto;
 import com.ground.sswm.userStudyroom.model.dto.OnAirResDto;
-import com.ground.sswm.userStudyroom.model.dto.UserAttendResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserAttendTop3ResDto;
 import com.ground.sswm.userStudyroom.model.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
@@ -133,19 +133,19 @@ public class UserStudyroomController {
     @GetMapping("/{studyroomId}/daily-study")
     //스터디룸에서 공부량 top3 조회
     public ResponseEntity<List<UserStudyTimeResDto>> searchDailyStudy(
-        /*@RequestHeader("Authorization") String token,*/ @PathVariable Long studyroomId) {
+        @RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
 
         List<UserStudyTimeResDto> users = userStudyroomService.searchDailyStudy(studyroomId);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{studyroomId}/daily-attend")
-    //스터디룸에서 출석률 top3 whghl
-    public ResponseEntity<List<UserAttendResDto>> searchDailyAttend(
-        /*@RequestHeader("Authorization") String token,*/ @PathVariable Long studyroomId) {
+    //스터디룸에서 출석률 top3 조회
+    public ResponseEntity<UserAttendTop3ResDto> searchDailyAttend(
+        @RequestHeader("Authorization") String token, @PathVariable Long studyroomId) {
 
-        List<UserAttendResDto> users = userStudyroomService.searchDailyAttend(studyroomId, 123,
-            126);
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        UserAttendTop3ResDto userAttendTop3ResDto = userStudyroomService.searchDailyAttend(studyroomId);
+
+        return new ResponseEntity<>(userAttendTop3ResDto, HttpStatus.OK);
     }
 }
