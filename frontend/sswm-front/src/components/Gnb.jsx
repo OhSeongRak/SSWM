@@ -45,8 +45,8 @@ const Header = styled.header`
 `
 
 const LogoImg = styled.img`
-  width: 100px;
-  height: 50px;
+  width: 10%;
+  height: 60%;
 `
 
 const GnbBtn = styled.div`
