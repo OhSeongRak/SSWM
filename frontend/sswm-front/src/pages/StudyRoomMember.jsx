@@ -19,7 +19,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Snackbar } from "@mui/material";
 import { useParams } from "react-router-dom";
-import axios from 'axios';
 import GFooter from "../components/GFooter";
 
 function formatTime(minutes) {
