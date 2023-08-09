@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "../utils/api";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -16,11 +15,12 @@ import FadeMenu from "../components/SortMenu";
 import CheckboxChip from "../components/StudyRoom/HashTags";
 
 const StudyRoom = (props) => {
-  const [isTokenValid, setIsTokenValid] = useState(false);
   const [selectedOption, setSelectedOption] = useState("인원순");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [isPublic, setIsPublic] = useState(1);
+
+  
 
   const handleSearchKeywordChange = (keyword) => {
     setSearchKeyword(keyword);
@@ -39,61 +39,6 @@ const StudyRoom = (props) => {
     if (isChecked) setIsPublic(0);
     else setIsPublic(1);
   };
-
-  const checkTokenValidity = () => {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-    const refreshToken = JSON.parse(localStorage.getItem("refreshToken"));
-
-    // 로그인 안했을 때
-    if (accessToken === null) {
-      setIsTokenValid(false);
-      return;
-    }
-
-    axios
-      .post("/api/auth/access-token", accessToken, {
-        headers: {
-          Authorization: accessToken,
-        },
-      })
-      .then((response) => {
-        console.log("Access 토큰 유효: ", response.data);
-        setIsTokenValid(true);
-      })
-      .catch((error) => {
-        // 로그인 했지만 access 토큰 만료 재발급 필요
-        console.error("Access 토큰 만료: ", error);
-        axios
-          .post("/api/auth/refresh-access-token", refreshToken, {
-            headers: {
-              Authorization: refreshToken,
-            },
-          })
-          .then((response) => {
-            console.log("refresh토큰을 이용해 토큰 재발급: ", response.data);
-            localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
-            localStorage.setItem("refreshToken", JSON.stringify(response.data.refreshToken));
-            setIsTokenValid(true);
-          })
-          .catch((error) => {
-            console.error("refresh 토큰 만료 :", error);
-            setIsTokenValid(false);
-            localStorage.setItem("accessToken", null);
-            localStorage.setItem("refreshToken", null);
-          });
-      });
-  };
-
-  useEffect(() => {
-    // 컴포넌트가 마운트된 후, 처음 한 번 유효성 확인
-    checkTokenValidity();
-
-    // 일정 간격(예: 1분)으로 토큰 유효성 확인
-    const intervalId = setInterval(checkTokenValidity, 60000);
-
-    // 언마운트 시 인터벌 클리어
-    return () => clearInterval(intervalId);
-  }, []);
 
   return (
     <div>

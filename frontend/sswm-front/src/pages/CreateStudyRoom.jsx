@@ -233,7 +233,7 @@ const CreateStudyRoom = () => {
         alert("스터디방 개설이 되지 않았습니다.");
         console.log(Error);
       });
-      navigate("/");
+      navigate("/StudyRoom");
       window.location.reload();
   };
 

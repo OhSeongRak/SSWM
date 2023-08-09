@@ -1,31 +1,21 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { KAKAO_AUTH_URL } from "../shared/kakaoApi";
 
 import Gnb from "../components/Gnb";
-
-import KakaoLogo from "../assets/Kakao_Logo.svg";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
 // 로그인
 import GoogleLogin from "../shared/GoogleLogin";
-import Axios from "axios";
+import KakaoSignIn from "../shared/KakaoSign";
+
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import KakaoLogin from "../shared/KakaoLogin";
-import KakaoCallback from "../shared/KakaoCallback";
-const config = {
-  headers: {
-    Authorization: "Bearer " + localStorage.getItem("jwtToken"),
-  },
-};
+
+
 
 const Login = () => {
-  const kakaoAuth = () => {
-    window.location.href = KAKAO_AUTH_URL; // page redirect
-  };
+  
   return (
     <div>
       <Gnb />
@@ -37,18 +27,10 @@ const Login = () => {
               <GoogleOAuthProvider clientId="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com">
                 <GoogleLogin />
               </GoogleOAuthProvider>
-              <LogoImg onClick={kakaoAuth} src={KakaoLogo} />
-              <KakaoLogin
-                JS_KEY="7d0b480cb467b756260e2f69512b54f6"
+              <KakaoSignIn
                 REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
                 // REDIRECT_URI="https://i9a206.p.ssafy.io"
-                REDIRECT_URI="http://localhost:3000"
-              />
-              <KakaoCallback
-                REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
-                // REDIRECT_URI="https://i9a206.p.ssafy.io"
-                REDIRECT_URI="http://localhost:3000"
-    
+                REDIRECT_URI="http://localhost:3000/kakao/login"
               />
             </SocialWrap>
             <ButtonWrap>
@@ -83,11 +65,6 @@ const SocialWrap = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-evenly;
-`;
-
-const LogoImg = styled.img`
-  width: 240px;
-  height: 100px;
 `;
 
 const Text = styled.p`
