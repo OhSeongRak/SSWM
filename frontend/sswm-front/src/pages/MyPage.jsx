@@ -8,27 +8,20 @@ import MyProfile from "../components/Mypage/MyProfile";
 import MyStudyRoom from "../components/Mypage/MyStudyRoom";
 import Calendar from "../components/Mypage/Calendar";
 // import Piechart from "../components/Mypage/Chart";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const MyPage = () => {
   const [users, setUsers] = useState([]);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
-  
-  
-  // const isTokenValid = useToken();
-  
-  // if (!isTokenValid) {
-  //   alert("로그인이 필요합니다.");
-  //   return navigate("/Login");
-  // }
-  
-  useEffect(() => {
+  const navigate = useNavigate();
 
-    // if (!isTokenValid) {
-    //   alert("로그인이 필요합니다.");
-    //   return navigate("/Login");
-    // }
+  useEffect(() => {
+    if(accessToken === null){
+      alert('로그인 후 입장가능합니다.');
+      navigate("/Login")
+    }
     axios
       .get("/api/users", {
         headers: {
@@ -37,7 +30,6 @@ const MyPage = () => {
       })
       .then((response) => {
         setUsers(response.data)
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
