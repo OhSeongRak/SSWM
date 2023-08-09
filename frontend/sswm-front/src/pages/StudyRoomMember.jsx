@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
+
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 import { Link } from "react-router-dom";
 
-import StudyRoomMemberIcon from "../components/StudyRoom/StudyRoomMemberIcon";
+import StudyRoomMembers from "../components/StudyRoom/StudyRoomMembers";
 import StudyRoomMemberScore from "../components/StudyRoom/StudyRoomMemberScore";
 import StudyRoomMemberChat from "../components/StudyRoom/StudyRoomMemberChat";
 import StudyRoomMemberTime from "../components/StudyRoom/StudyRoomMemberTime";
@@ -83,47 +85,9 @@ const StudyRoomMember = () => {
       console.log(error);
     });
 
-    // 접속중인 유저들 정보
-    axios
-    .get(`/api/studyrooms/${studyroomId}/search-user`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log("userInfo", response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    // 접속중인 유저들 정보 -> 컴포넌트 안에서 호출
 
-    // 출석률 top3
-    axios
-    .get(`/api/studyrooms/${studyroomId}/daily-attend`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log("attend top3", response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  
-    // 공부량 top3
-    axios
-    .get(`/api/studyrooms/${studyroomId}/daily-study`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log("studyTime top3", response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
   }, [studyroomId]);
 
   return (
@@ -175,16 +139,16 @@ const StudyRoomMember = () => {
         <ContentWrap>
           <ContentLeftWrap>
             <StudyMemberWrap>
-              <StudyRoomMemberIcon studyroomId ="1"/>
+              <StudyRoomMembers studyroomId ={studyroomId}/>
             </StudyMemberWrap>
             <StudyScoreWrap>
-              <StudyRoomMemberScore />
+              {/*일일 공부왕, 7월 출석왕*/}
+              <StudyRoomMemberScore studyroomId ={studyroomId}/>
             </StudyScoreWrap>
             <StudyChatWrap>
               <StudyRoomMemberChat />
             </StudyChatWrap>
           </ContentLeftWrap>
-
           <ContentRightWrap>
             <StudyRoomTimeWrap>
               <StudyRoomMemberTime studyAvgTime = {studyAvgTime} maxAvgTime = {maxRestTime}/>
