@@ -9,6 +9,7 @@ import Gnb from "../components/Gnb";
 //import LiveRoomView from "../components/LiveRoom/LiveRoomView";
 //import LiveRoomChat from "../components/LiveRoom/LiveRoomChat";
 import VideoRoomComponent from '../components/OpenVidu/VideoRoomComponent';
+import GFooter from "../components/GFooter";
 
 const LiveRoom = () => {
   return (
@@ -26,6 +27,7 @@ const LiveRoom = () => {
         </ContentWrap>
 
       </ContainerWrap>
+      <GFooter/>
     </div>
   );
 };

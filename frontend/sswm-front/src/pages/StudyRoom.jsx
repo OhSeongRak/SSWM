@@ -13,6 +13,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FadeMenu from "../components/SortMenu";
 import CheckboxChip from "../components/StudyRoom/HashTags";
+import GFooter from "../components/GFooter";
 
 const StudyRoom = (props) => {
   const [selectedOption, setSelectedOption] = useState("인원순");
@@ -88,6 +89,7 @@ const StudyRoom = (props) => {
           </Link>
         </AddBtn>
       </ContainerWrap>
+      <GFooter/>
     </div>
   );
 };

@@ -24,6 +24,7 @@ import Notice from "../components/StudyRoom/Notice";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
+import GFooter from "../components/GFooter";
 
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -447,6 +448,7 @@ const StudyRoomAdmin = () => {
           </FooterBtnWrap>
         </FooterWrap>
       </ContainerWrap>
+      <GFooter/>
     </div>
   );
 };

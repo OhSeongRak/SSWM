@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 import { Snackbar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
+import GFooter from "../components/GFooter";
 
 function formatTime(minutes) {
   const hours = Math.floor(minutes / 60);
@@ -194,6 +195,7 @@ const StudyRoomMember = () => {
           </ContentRightWrap>
         </ContentWrap>
       </ContainerWrap>
+      <GFooter/>
     </div>
   );
 };
