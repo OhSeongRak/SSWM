@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Gnb from "../components/Gnb";
@@ -8,21 +8,34 @@ import MyProfile from "../components/Mypage/MyProfile";
 import MyStudyRoom from "../components/Mypage/MyStudyRoom";
 import Calendar from "../components/Mypage/Calendar";
 // import Piechart from "../components/Mypage/Chart";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Redirect, useParams } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const MyPage = () => {
-  //   const dispatch = useDispatch();
-  //   const profileList = useSelector((state) => state.profile)
-  //   const sessionStoragetokenCheck = sessionStorage.getItem('Authorization')
-  //   const param = useParams();
+  const [users, setUsers] = useState([]);
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
-  //  if(!sessionStoragetokenCheck){
-  //   return(
-  //     alert('로그인 후 입장가능합니다.'),
-  //     <Redirect to={'/login'}/>
-  //   )
-  //  }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(accessToken === null){
+      alert('로그인 후 입장가능합니다.');
+      navigate("/Login")
+    }
+    axios
+      .get("/api/users", {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        setUsers(response.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+       // eslint-disable-next-line
+    }, []);
 
   return (
     <div>
@@ -37,7 +50,7 @@ const MyPage = () => {
 
         <ContentWrap>
           <ProfileWrap name="nav1">
-            <MyProfile />
+            <MyProfile users={users} />
           </ProfileWrap>
 
           <MyStudyWrap name="nav3">
