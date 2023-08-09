@@ -226,7 +226,7 @@ const CreateStudyRoom = () => {
       })
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        navigate("/StudyRoom");
       })
       .catch((error) => {
         // 오류 처리

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const StudyRoomMemberBoard = () => {
+const StudyRoomMemberBoard = ({notice}) => {
   return (
     <ContainerWrap>
       <BoardWrap>
@@ -10,7 +10,7 @@ const StudyRoomMemberBoard = () => {
           공지사항
         </BoardTitle>
         <BoardContent>
-          내용
+          {notice}
         </BoardContent>
       </BoardWrap>
     </ContainerWrap>

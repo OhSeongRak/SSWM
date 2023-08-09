@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const StudyRoomMemberTime = () => {
+const StudyRoomMemberTime = ({studyAvgTime, maxAvgTime}) => {
+  console.log(studyAvgTime);
   return (
     <ContainerWrap>
       <TimeWrap>
@@ -10,7 +11,7 @@ const StudyRoomMemberTime = () => {
           스터디룸 평균 공부 시간
         </TimeTitle>
         <TimeContent>
-          01 : 00
+          {studyAvgTime}
         </TimeContent>
       </TimeWrap>
       <TimeWrap>
@@ -18,7 +19,7 @@ const StudyRoomMemberTime = () => {
           일일 할당 휴식시간
         </TimeTitle>
         <TimeContent>
-          01 : 00
+          {maxAvgTime}
         </TimeContent>
       </TimeWrap>
     </ContainerWrap>

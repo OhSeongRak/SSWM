@@ -6,20 +6,28 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 // import def from "../../assets/dolphin.jpg";
 import { Chip, IconButton, Typography } from "@mui/material";
 
+function formatTime(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = remainingMinutes.toString().padStart(2, '0');
+  return `${formattedHours}:${formattedMinutes}`;
+}
+
 //----====---------------------------------------------------
 const Card = ({studyroom}) => {
   const timestamp = studyroom.createdTime; // Unix timestamp
   const dateObject = new Date(timestamp * 1000); // Unix timestamp를 밀리초 단위로 변환해야 함
   const formattedDate = dateObject.toLocaleDateString(); // 날짜만 포맷으로 변환
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + studyroom.image;
-
+  const studyAvgTime = formatTime(studyroom.studyAvgTime);
   
   return (
     <div className="col-sm-6 col-md-6 col-lg-4 mt-4">
       <div className="card">
         <div className="card-block">
           <Typography className="card-title">{formattedDate}</Typography>
-          <Typography sx={{ color: "black" }}>{studyroom.studyAvgTime}시간</Typography>
+          <Typography sx={{ color: "black" }}>{studyAvgTime}</Typography>
           <IconButton disabled>
             <LocalFireDepartmentIcon sx={{ color: "black" }} />
             <Typography sx={{ color: "black" }}>{studyroom.name}</Typography>
