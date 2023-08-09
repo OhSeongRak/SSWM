@@ -31,6 +31,16 @@ import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
 import QuestionAnswer from '@material-ui/icons/QuestionAnswer';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import IconButton from '@material-ui/core/IconButton';
+
+import Popper from '@mui/material/Popper';
+import Paper from "@mui/material/Paper";
+import Fade from '@mui/material/Fade';
+import Box from '@mui/material/Box';
+import { styled as muistyled } from "@mui/material/styles";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { Button } from "@mui/material";
+
 let model, webcam;
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL = 'https://i9a206.p.ssafy.io:5443/';
@@ -53,6 +63,9 @@ class VideoRoomComponent extends Component {
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
+            open: false,
+            anchorEl: null,
+            minute : 0
         };
 
         this.joinSession = this.joinSession.bind(this);
@@ -521,6 +534,61 @@ class VideoRoomComponent extends Component {
             this.hasBeenUpdated = false;
         }
     }
+
+    handleRestClick = (event) => {
+        this.setState((prevState) => ({
+          anchorEl: event.target,
+          open: !prevState.open
+        }));
+      };
+    
+    handleMinusClick = () => {
+        if (this.state.minute > 0){
+            this.setState((prevState) => ({
+                minute: prevState.minute -1
+            }));
+        }
+    }
+
+    handlePlusClick = () => {
+        if (this.state.minute < 10){
+        this.setState((prevState) => ({
+            minute: prevState.minute + 1
+          }));
+        }
+    }
+
+    handleApplyClick = () => {
+        const { minute } = this.state;
+        const timerValue = minute * 60; // 분을 초로 변환
+    
+        this.setState({
+          timerValue,
+          timerRunning: true,
+          open: true // 팝업 닫기
+        });
+    
+        this.startTimer();
+      };
+    
+      startTimer = () => {
+        this.timerInterval = setInterval(() => {
+          this.setState((prevState) => {
+            const newTimerValue = prevState.timerValue - 1;
+    
+            if (newTimerValue === 0) {
+              clearInterval(this.timerInterval);
+              this.setState({
+                open: false
+              });
+            }
+    
+            return {
+              timerValue: newTimerValue
+            };
+          });
+        }, 1000); // 1초마다 감소
+      };
     async init() {
         const URL = "https://teachablemachine.withgoogle.com/models/xtvI2r9Ck/";
         const modelURL = URL+"model.json";
@@ -617,7 +685,12 @@ class VideoRoomComponent extends Component {
         //const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-
+        const { open, anchorEl } = this.state;
+        const canBeOpen = open && Boolean(anchorEl);
+        const id = canBeOpen ? 'transition-popper' : undefined;
+        const Item = muistyled(Paper)(({ theme }) => ({
+            textAlign: "center",
+          }));
         return (
             <div className="container" id="container">
                 <ContainerWrap>
@@ -625,21 +698,7 @@ class VideoRoomComponent extends Component {
                         <LiveRoomSnackbar />
                     </HeaderWrap>
                 </ContainerWrap>
-{/* 
 
-                <ToolbarComponent
-                    sessionId={mySessionId}
-                    user={localUser}
-                    showNotification={this.state.messageReceived}
-                    camStatusChanged={this.camStatusChanged}
-                    micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
-                    toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
-                    leaveSession={this.leaveSession}
-                    toggleChat={this.toggleChat}
-                />  */}
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
 
@@ -670,12 +729,56 @@ class VideoRoomComponent extends Component {
 
                <FooterWrap>
         <div className="buttonsContent" >
-            <IconButton>
+            {/* 휴식 버튼 시작 */}
+            <IconButton
+                aria-describedby={id}
+                id="rest-button"
+                onClick={this.handleRestClick}
+            >
                 <BedIcon />
             </IconButton>
+            <Popper id={id} open={open} anchorEl={anchorEl} transition>{({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                <Box sx={{ border: 2, p: 1, bgcolor: 'background.paper', borderRadius: '16px', borderColor: 'orange' }}>
+                                      {/* 타이머 설정 */}
+                                      {this.state.timerRunning ? (
+                    <div>
+                      <h2>타이머 실행 중</h2>
+                      <p>남은 시간: {this.state.timerValue}초</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <h2>타이머 설정</h2>
+                      <TimerWrap>
+                        <IconButton aria-label="minus" onClick={this.handleMinusClick}>
+                          <RemoveCircleOutlineIcon />
+                        </IconButton>
+                        <Item>{this.state.minute}</Item>
+                        <span>분</span>
+                        <IconButton aria-label="plus" onClick={this.handlePlusClick}>
+                          <AddCircleOutlineIcon />
+                        </IconButton>
+                      </TimerWrap>
+                      <TimerBtnWrap>
+                        <Button variant="contained" color="success" onClick={this.handleApplyClick}>
+                          적용
+                        </Button>
+                      </TimerBtnWrap>
+                    </div>
+                  )}
+                  {/* 타이머 설정 끝 */}
+                </Box>
+                </Fade>
+            )}
+            </Popper>
+            {/* 휴식 버튼 끝 */}
+
+            {/* 스트레칭 버튼 시작 */}
             <IconButton>
                 <AccessibilityNewIcon/>
             </IconButton>
+            {/* 스트레칭 버튼 끝 */}
+
             <IconButton
               color="inherit"
               className="navButton"
@@ -865,6 +968,17 @@ const FooterWrap = styled.div`
   color: white;
   gap: 3vw;
 
+`
+const TimerWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+`
+const TimerBtnWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export default VideoRoomComponent;
