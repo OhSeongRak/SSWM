@@ -17,7 +17,7 @@ const SignUp = () => {
     <div>
       <Gnb />
       <ContainerWrap>
-        <Box component="span" sx={{ p: 2, border: "1px solid grey" }}>
+        <Box component="span" sx={{  p: 2, border: "3px solid orange",borderRadius:"35px" }}>
           <SignUpWrap>
             <Text> 회원가입 </Text>
             <SocialWrap>
@@ -32,7 +32,7 @@ const SignUp = () => {
             </SocialWrap>
             <ButtonWrap>
               <Link to="/Login">
-                <Button variant="outlined">로그인</Button>
+              <div style={{color:"orange"}} >로그인하러 가기</div>
               </Link>
             </ButtonWrap>
           </SignUpWrap>
