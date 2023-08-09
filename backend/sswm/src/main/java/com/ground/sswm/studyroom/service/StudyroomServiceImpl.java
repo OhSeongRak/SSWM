@@ -1,26 +1,28 @@
 package com.ground.sswm.studyroom.service;
 
-import com.ground.sswm.studyRoomTag.domain.StudyRoomTagRepository;
-import com.ground.sswm.studyRoomTag.domain.StudyroomTag;
-import com.ground.sswm.studyroom.domain.Studyroom;
-import com.ground.sswm.studyroom.domain.StudyroomRepository;
-import com.ground.sswm.studyroom.dto.SearchStudyroomReqDto;
-import com.ground.sswm.studyroom.dto.SearchStudyroomResDto;
-import com.ground.sswm.studyroom.dto.StudyroomDto;
-import com.ground.sswm.tag.domain.TagRepository;
-import com.ground.sswm.tag.dto.TagDto;
-import com.ground.sswm.user.domain.User;
-import com.ground.sswm.user.domain.UserRepository;
-import com.ground.sswm.userStudyroom.domain.StudyMemberRole;
-import com.ground.sswm.userStudyroom.domain.UserStudyroom;
-import com.ground.sswm.userStudyroom.domain.UserStudyroomRepository;
+import com.ground.sswm.studyroom.model.Studyroom;
+import com.ground.sswm.studyroom.model.StudyroomTag;
+import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
+import com.ground.sswm.studyroom.model.dto.SearchStudyroomResDto;
+import com.ground.sswm.studyroom.model.dto.StudyroomDto;
+import com.ground.sswm.studyroom.repository.StudyRoomTagRepository;
+import com.ground.sswm.studyroom.repository.StudyroomRepository;
+import com.ground.sswm.tag.model.dto.TagDto;
+import com.ground.sswm.tag.repository.TagRepository;
+import com.ground.sswm.user.model.User;
+import com.ground.sswm.user.repository.UserRepository;
+import com.ground.sswm.userStudyroom.model.StudyMemberRole;
+import com.ground.sswm.userStudyroom.model.UserStudyroom;
+import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -34,8 +36,14 @@ public class StudyroomServiceImpl implements StudyroomService {
 
     @Override
     public List<SearchStudyroomResDto> list(SearchStudyroomReqDto searchStudyroomReqDto) {
-        List<Studyroom> studyrooms = studyroomRepository.list(searchStudyroomReqDto.getTagNames(),
-            searchStudyroomReqDto.getSearchKeyword());
+        List<Studyroom> studyrooms;
+
+        if (searchStudyroomReqDto.getTagNames().isEmpty()) {
+            studyrooms = studyroomRepository.listNoTag(searchStudyroomReqDto.getSearchKeyword());
+        } else {
+            studyrooms = studyroomRepository.list(searchStudyroomReqDto.getTagNames(),
+                searchStudyroomReqDto.getSearchKeyword());
+        }
 
         List<SearchStudyroomResDto> searchStudyroomResDtos = new ArrayList<>();
         for (Studyroom studyroom : studyrooms) {

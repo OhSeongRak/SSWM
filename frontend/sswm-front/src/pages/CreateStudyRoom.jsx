@@ -136,7 +136,7 @@ const CreateStudyRoom = () => {
     if (event.target.checked) {
       setStudyroomDto({
         ...studyroomDto,
-        enterCode: null, // 암호를 NULL값으로 초기화
+        enterCode: "", // 암호를 NULL값으로 초기화
         isPublic: event.target.checked,
       });
     } else {
@@ -226,14 +226,14 @@ const CreateStudyRoom = () => {
       })
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        navigate("/StudyRoom");
       })
       .catch((error) => {
         // 오류 처리
         alert("스터디방 개설이 되지 않았습니다.");
         console.log(Error);
       });
-      navigate("/");
+      navigate("/StudyRoom");
       window.location.reload();
   };
 
@@ -342,7 +342,6 @@ const CreateStudyRoom = () => {
                       disabled={studyroomDto.isPublic}
                       hiddenLabel
                       id="filled-hidden-label-normal"
-                      defaultValue=""
                       variant="filled"
                       value={studyroomDto.enterCode}
                       size="small"
@@ -357,7 +356,7 @@ const CreateStudyRoom = () => {
                       onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
                     />
                     <Typography sx={{ marginLeft: "10px" }}>
-                      {studyroomDto.enterCode.length ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
+                      {(studyroomDto.enterCode !== "") ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
                     </Typography>
                   </StudyRoomContent>
                 </StudyRoomWrap>

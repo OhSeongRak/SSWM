@@ -1,7 +1,7 @@
 package com.ground.sswm.usertree;
 
 import com.ground.sswm.auth.service.AuthService;
-import com.ground.sswm.usertree.dto.UserTreeDto;
+import com.ground.sswm.usertree.model.dto.UserTreeDto;
 import com.ground.sswm.usertree.service.UserTreeService;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class UserTreeController {
     private final AuthService authService;
 
     @PostMapping
-    public ResponseEntity<String> randTree(@RequestHeader("Authorization") String token){
+    public ResponseEntity<String> randTree(@RequestHeader("Authorization") String token) {
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
         Long userId = Long.valueOf(headerToken.get("id").toString());
 
@@ -34,12 +34,23 @@ public class UserTreeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserTreeDto>> searchTree(@RequestHeader("Authorization") String token, Long treeId){
+    public ResponseEntity<List<UserTreeDto>> searchMaxTree(
+        @RequestHeader("Authorization") String token) {
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
         Long userId = Long.valueOf(headerToken.get("id").toString());
 
-        List<UserTreeDto> userTreeDtos = userTreeService.searchTree(userId, treeId);
+        List<UserTreeDto> userTreeDtos = userTreeService.searchMaxTree(userId);
 
         return new ResponseEntity<List<UserTreeDto>>(userTreeDtos, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<UserTreeDto> nowTree(@RequestHeader("Authorization") String token){
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = Long.valueOf(headerToken.get("id").toString());
+
+        UserTreeDto userTreeDto = userTreeService.nowTree(userId);
+
+        return new ResponseEntity<UserTreeDto>(userTreeDto, HttpStatus.OK);
     }
 }

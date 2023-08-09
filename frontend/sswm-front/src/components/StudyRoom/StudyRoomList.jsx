@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 import RecipeReviewCard from "./StudyRoomItem2";
 import "./Style.css";
 import axios from "axios";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const RoomListLayout = styled.div`
   flex: 1;
@@ -28,9 +28,10 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
     "orderBy" : "DESC", // ASC
     "searchKeyword" : searchKeyword, // 방제목, 방아이디
     "tagNames" : selectedTags,
-    "isPublic" : 1,
+    "isPublic" : isPublic,
   };
   console.log(token);
+  console.log("isPublic::", isPublic)
   useEffect(() => {
     axios
       .post("/api/studyrooms/list", data, {
@@ -45,13 +46,12 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
         // 오류 처리
         console.log(error);
       });
-      
   }, [option, searchKeyword, selectedTags, isPublic]);
-    
+
   return (
     <RoomListLayout ref={ref}>
       <RoomList>
-      {studyrooms.map((studyroom) => (
+        {studyrooms.map((studyroom) => (
           <RecipeReviewCard key={studyroom.id} studyroom={studyroom} />
         ))}
       </RoomList>

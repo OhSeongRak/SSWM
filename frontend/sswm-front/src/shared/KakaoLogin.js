@@ -1,10 +1,29 @@
-const KakaoLogin = ({JS_KEY, REST_API_KEY, REDIRECT_URI}) => {
-  const CLIENT_ID = REST_API_KEY;
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`
+
+import styled from "styled-components";
+import KakaoLogo from "../assets/Kakao_Logo.svg";
+
+const KakaoLogin = ({REST_API_KEY, REDIRECT_URI}) => {
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
+
+  const login = () =>{
+    window.location.href=(`${kakaoURL}`);
+    console.log("Login")
+  };
+  
 
   return(
-      <button onClick={() => window.location.href = kakaoURL}>카카오로그인</button>
+    <LogoImg
+    src={KakaoLogo}
+    alt="Kakao 로그인"
+    style={{ cursor: "pointer" }}
+    onClick={() => login()}
+  />
   )
 }
 
 export default KakaoLogin;
+
+const LogoImg = styled.img`
+  width: 240px;
+  height: 100px;
+`;

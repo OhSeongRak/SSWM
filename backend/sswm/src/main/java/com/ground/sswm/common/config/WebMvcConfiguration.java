@@ -5,6 +5,7 @@ import com.ground.sswm.common.interceptor.JwtInterceptor;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     //TODO: http method check
-    private final List<String> PATTERNS = Arrays.asList("/users/**", "/articles/**/edit",
-        "/like-places/**");
+    private final List<String> PATTERNS = Arrays.asList("/users/**", "/chat/**",
+        "/studyrooms/**");
 
     private JwtInterceptor jwtInterceptor;
 
@@ -24,20 +25,17 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-         registry.addInterceptor(jwtInterceptor).addPathPatterns(PATTERNS);
+        registry.addInterceptor(jwtInterceptor).addPathPatterns(PATTERNS);
     }
 
     @Override
+    @CrossOrigin
     public void addCorsMappings(CorsRegistry registry) {
-        // TODO: setting pattern CORS
         registry.addMapping("/**")
+            .allowedOriginPatterns("*")
             .allowedOrigins("http://localhost:3000")
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true);
-        ;
-
     }
-
-
 }

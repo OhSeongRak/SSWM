@@ -2,11 +2,11 @@
     position: absolute;
     z-index: 0;
     width: 100%;
-    height: 100%;
+    height: 93%;
   }
   
   #chatToolbar {
-    height: 30px;
+    height: 35px;
     background-color: #3d3d3d;
     box-sizing: border-box;
     font-weight: bold;
