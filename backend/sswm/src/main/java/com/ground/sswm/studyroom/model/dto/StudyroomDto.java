@@ -25,11 +25,17 @@ public class StudyroomDto {
     private long createdAt;
     private List<TagDto> tags;
 
+    public boolean getIsPublic() {
+        return this.isPublic;
+    }
+
+    public boolean getIsDeleted() {
+        return this.isDeleted;
+    }
 
     @Builder
     public StudyroomDto(String name, String notice, boolean isPublic, String enterCode,
-        int maxUserNum, int maxRestTime, int studyAvgTime, String image, boolean isDeleted,
-        long createdAt) {
+        int maxUserNum, int maxRestTime, int studyAvgTime, String image, boolean isDeleted, long createdAt) {
         this.name = name;
         this.notice = notice;
         this.isPublic = isPublic;

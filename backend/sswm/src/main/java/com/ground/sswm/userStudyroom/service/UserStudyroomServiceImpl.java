@@ -1,5 +1,8 @@
 package com.ground.sswm.userStudyroom.service;
 
+import static com.ground.sswm.common.util.UnixTimeUtil.getStartEndOfPeriod;
+
+import com.ground.sswm.common.util.UnixTimeUtil;
 import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
 import com.ground.sswm.event.repository.StudyEventRepository;
@@ -16,9 +19,15 @@ import com.ground.sswm.userStudyroom.exception.UserStudyroomUnauthorizedExceptio
 import com.ground.sswm.userStudyroom.model.StudyMemberRole;
 import com.ground.sswm.userStudyroom.model.UserStudyroom;
 import com.ground.sswm.userStudyroom.model.dto.OnAirResDto;
-import com.ground.sswm.userStudyroom.model.dto.UserAttendResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserAttendDto;
+import com.ground.sswm.userStudyroom.model.dto.UserAttendTop3ResDto;
 import com.ground.sswm.userStudyroom.model.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -218,9 +227,16 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         //빈 UserStudyTimeResDto 생성
         List<UserStudyTimeResDto> userStudyTimeResDtos = new ArrayList<>();
 
+        //현재 시간 가져와서 4시인지 아닌지 판단 및 날짜로 dailylog 가져오기
+        LocalTime currentTime = LocalTime.now();
+        int hour = currentTime.getHour();
+        long now = UnixTimeUtil.getCurrentUnixTime();
+        int dayBefore = (hour < 4) ? 1 : 0;
+        long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
+
         //스터디룸 아이디 및 날짜로 검색해서 공부량 top3 가져오기
         List<DailyLog> dailyLogs = dailyLogRepository.findTop3ByStudyroomIdAndDateOrderByStudyTimeDesc(
-            studyroomId, 123);
+            studyroomId, days[0]);
 
         //3명의 데일리 로그로 UserStudyTimeResDto리스트 만들기
         for (DailyLog dailyLog : dailyLogs
@@ -246,17 +262,48 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
     @Override
     //스터디룸에서 출석률 top3 조회
-    public List<UserAttendResDto> searchDailyAttend(Long studyroomId, int startDate, int endDate) {
+    public UserAttendTop3ResDto searchDailyAttend(Long studyroomId) {
         //user를 다 가져온 뒤 dailylog에서 각각을 카운트 한 뒤, 정렬한 다음 3명만 조회
         //빈 UserStudyTimeResDto 생성
-        List<UserAttendResDto> userAttendResDtos = new ArrayList<>();
+        List<UserAttendDto> userAttendDtos = new ArrayList<>();
 
         //우선순위큐 생성
-        PriorityQueue<UserAttendResDto> userAttendResDtoQueue = new PriorityQueue<>();
+        PriorityQueue<UserAttendDto> userAttendDtoQueue = new PriorityQueue<>();
 
         //studyroomId에 해당하는 userStudyrooms가져오기
         List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(
             studyroomId);
+
+        //해당 달의 첫번째 날과 마지막 날을 가져옴
+        LocalDateTime now = LocalDateTime.now();
+
+        int year = now.getYear();
+        int month = now.getMonthValue();
+        int hour = now.getHour();
+        if (hour < 4){
+            if (month == 1){
+                year -= 1;
+                month = 12;
+            }
+            else{
+                month -= 1;
+            }
+        }
+
+        //다음 달의 첫번째 일에서 하루를 빼서 이번달의 마지막 날을 가져옴
+        LocalDate firstOfNextMonth = LocalDate.of(year, month + 1, 1);
+        LocalDate lastOfMonth = firstOfNextMonth.minusDays(1);
+
+        //마지막날이 이번달의 몇번째 일인지 가져옴
+        int intLastOfMonth = lastOfMonth.getDayOfMonth();
+
+        //서울 시간을 기준으로 해당 달의 첫번째 날과 마지막 날의 00시 00분 을 가져옴
+        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+        ZonedDateTime firstDayOfMonth = ZonedDateTime.of(year, month, 1, 0, 0, 0, 0, koreaZone);
+        ZonedDateTime lastDayOfMonth = ZonedDateTime.of(year, month, intLastOfMonth, 0, 0, 0, 0, koreaZone);
+        long startDate = firstDayOfMonth.toEpochSecond();
+        long endDate = lastDayOfMonth.toEpochSecond();
+
 
         //deleted 하지 않은 userId만 가져오기
         for (UserStudyroom userStudyroom : userStudyrooms) {
@@ -265,7 +312,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             }
 
             //새 userAttendResDto 생성
-            UserAttendResDto nowUserAttenedResDto = new UserAttendResDto();
+            UserAttendDto nowUserAttenedResDto = new UserAttendDto();
 
             //user entity가져와서 set
             User user = userStudyroom.getUser();
@@ -277,14 +324,19 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             nowUserAttenedResDto.setAttendDays(attendDays);
 
             //우선순위 큐에 push
-            userAttendResDtoQueue.add(nowUserAttenedResDto);
+            userAttendDtoQueue.add(nowUserAttenedResDto);
         }
 
         //출석일이 가장 많은 3명 뽑기
-        for (int i = 0; i < Math.min(3, userAttendResDtoQueue.size()); i++) {
-            userAttendResDtos.add(userAttendResDtoQueue.poll());
+        for (int i = 0; i < Math.min(3, userAttendDtoQueue.size()); i++) {
+            userAttendDtos.add(userAttendDtoQueue.poll());
         }
 
-        return userAttendResDtos;
+        UserAttendTop3ResDto userAttendTop3ResDto = new UserAttendTop3ResDto();
+        userAttendTop3ResDto.setUsers(userAttendDtos);
+        userAttendTop3ResDto.setMonth(month);
+        userAttendTop3ResDto.setDaysOfMonth(intLastOfMonth);
+
+        return userAttendTop3ResDto;
     }
 }

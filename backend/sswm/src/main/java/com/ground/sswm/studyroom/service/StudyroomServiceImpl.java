@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,7 +100,7 @@ public class StudyroomServiceImpl implements StudyroomService {
     @Override
     @Transactional
     public Long add(Long userId, StudyroomDto studyroomDto) {
-//    studyroomDto.setStudyAvgTime(0);
+        studyroomDto.setCreatedAt(System.currentTimeMillis() / 1000);
         // INSERT Studyroom
         Studyroom studyroom = Studyroom.from(studyroomDto);
         studyroomRepository.save(studyroom);
@@ -141,7 +142,7 @@ public class StudyroomServiceImpl implements StudyroomService {
     }
 
     @Override
-    public StudyroomDto select(Long studyroomId) {
+    public StudyroomDto selectByStudyroomId(Long studyroomId) {
 
         Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
 
@@ -154,6 +155,21 @@ public class StudyroomServiceImpl implements StudyroomService {
     }
 
     @Override
+    public List<SearchStudyroomResDto> selectByUserId(Long userId) {
+        List<Studyroom> studyrooms = studyroomRepository.findByUserId(userId);
+
+        if (studyrooms.isEmpty())
+            return null;
+
+        List<SearchStudyroomResDto> searchStudyroomResDtoList=new ArrayList<>();
+        for (Studyroom studyroom : studyrooms) {
+            searchStudyroomResDtoList.add(SearchStudyroomResDto.from(studyroom));
+        }
+
+        return searchStudyroomResDtoList;
+    }
+
+    @Override
     @Transactional
     public void delete(Long studyroomId) {
         Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
@@ -163,6 +179,12 @@ public class StudyroomServiceImpl implements StudyroomService {
     @Override
     public boolean exists(String name) {
         return studyroomRepository.findByName(name).isPresent();
+    }
+
+    @Override
+    public boolean checkEnterCode(Long studyroomId, String enterCode) {
+        Studyroom studyroom = studyroomRepository.findByIdAndEnterCode(studyroomId, enterCode);
+        return (studyroom == null) ? false : true;
     }
 
 }
