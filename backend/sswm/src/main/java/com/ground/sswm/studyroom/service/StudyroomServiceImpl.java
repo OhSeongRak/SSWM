@@ -100,7 +100,7 @@ public class StudyroomServiceImpl implements StudyroomService {
     @Override
     @Transactional
     public Long add(Long userId, StudyroomDto studyroomDto) {
-//    studyroomDto.setStudyAvgTime(0);
+        studyroomDto.setCreatedAt(System.currentTimeMillis() / 1000);
         // INSERT Studyroom
         Studyroom studyroom = Studyroom.from(studyroomDto);
         studyroomRepository.save(studyroom);
