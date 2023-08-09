@@ -18,8 +18,10 @@ import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DailyLogServiceImpl implements DailyLogService {
@@ -50,8 +52,13 @@ public class DailyLogServiceImpl implements DailyLogService {
         LocalTime currentTime = LocalTime.now();
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
+        log.debug("now : "+ now);
         int dayBefore = (hour < 4) ? 1 : 0;
         long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
+        for (long day : days) {
+            log.debug("days : " + day );
+        }
+        log.debug("date :"+ days[0]);
 
         if(dailyLogRepository.findByUserIdAndStudyroomIdAndDateBetween(userId, studyroomId, days[0], days[1]).isEmpty()){
             DailyLog newDailyLog = new DailyLog();
