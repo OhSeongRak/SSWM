@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Gnb from "../components/Gnb";
 import { Link } from "react-router-dom";
 
-import StudyRoomMemberIcon from "../components/StudyRoom/StudyRoomMemberIcon";
+import StudyRoomMembers from "../components/StudyRoom/StudyRoomMembers";
 import StudyRoomMemberScore from "../components/StudyRoom/StudyRoomMemberScore";
 import StudyRoomMemberChat from "../components/StudyRoom/StudyRoomMemberChat";
 import StudyRoomMemberTime from "../components/StudyRoom/StudyRoomMemberTime";
@@ -82,19 +82,7 @@ const StudyRoomMember = () => {
       console.log(error);
     });
 
-    // 접속중인 유저들 정보
-    axios
-    .get(`/api/studyrooms/${studyroomId}/search-user`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log("userInfo", response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    // 접속중인 유저들 정보 -> 컴포넌트 안에서 호출
 
     // 출석률 top3
     axios
@@ -174,7 +162,7 @@ const StudyRoomMember = () => {
         <ContentWrap>
           <ContentLeftWrap>
             <StudyMemberWrap>
-              <StudyRoomMemberIcon studyroomId ="1"/>
+              <StudyRoomMembers studyroomId ={studyroomId}/>
             </StudyMemberWrap>
             <StudyScoreWrap>
               <StudyRoomMemberScore />
