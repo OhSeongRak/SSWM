@@ -77,7 +77,7 @@ public class DailyLogServiceImpl implements DailyLogService {
 
     public List<DailyLogDto> totalStudyTime(Long userId, long start, long end) {
         System.out.println("여긴와???");
-        Optional<List<DailyLog>> dailyLogs = dailyLogRepository.findAllByUserIdAndDateBetween(
+        List<DailyLog> dailyLogs = dailyLogRepository.findAllByUserIdAndDateBetween(
             userId, start, end);
 
         if (dailyLogs.isEmpty()) {
@@ -85,14 +85,13 @@ public class DailyLogServiceImpl implements DailyLogService {
         }
 
         System.out.println("여기도 오지?");
-        log.debug("dailyLogs.get() : "+ dailyLogs.get());
-        log.debug("dailyLogs.get() : "+ dailyLogs);
-        for (DailyLog dailyLog : dailyLogs.get()) {
+        log.debug("dailyLogs : "+ dailyLogs);
+        for (DailyLog dailyLog : dailyLogs) {
             log.debug("dailyLog : "+ dailyLog);
         }
 
         ArrayList<DailyLogDto> dailyLogDtos = new ArrayList<>();
-        for (DailyLog dailyLog : dailyLogs.get()) {
+        for (DailyLog dailyLog : dailyLogs) {
             DailyLogDto dailyLogDto = DailyLogDto.from(dailyLog);
             dailyLogDtos.add(dailyLogDto);
         }
