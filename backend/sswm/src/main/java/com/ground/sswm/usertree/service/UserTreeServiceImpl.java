@@ -65,7 +65,7 @@ public class UserTreeServiceImpl implements UserTreeService {
             UserTreeDto userTreeDto = new UserTreeDto();
 
             //해당 나무가 아직 키우고 있는 상태라면
-            if (userTreeDto.getExp() < 3400){
+            if (userTree.getExp() < 3400){
                 //현재 나무라고 알려줌
                 userTreeResDto.setCurrent(true);
 

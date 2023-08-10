@@ -81,7 +81,6 @@ public class MySQLSelfService {
     }
     //dayillog -> usertree (04시)
     public void dailylogToUsesTree(){
-        //오늘의 데일리 로그를 전부 가져옴
 
         //유저를 전부 가져옴
         List<User> users = userRepository.findAll();
@@ -94,6 +93,8 @@ public class MySQLSelfService {
             if(userTrees.isEmpty()) continue;
 
             long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
+
+            //어제(새벽4시 이므로)의 데일리 로그를 전부 가져옴
             List<DailyLog> dailyLogs = dailyLogRepository.findAllDateBetween(days[0], days[1]);
 
             ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId, dailyLogs);
