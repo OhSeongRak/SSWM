@@ -7,14 +7,14 @@ import { useState, useEffect } from "react";
 
 const RoomListLayout = styled.div`
   flex: 1;
-  background-color: green;
+  padding : 0 5.4em 0 3.4em;
 `;
 
 const RoomList = styled.ul`
   background-color: #ffffff;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 5px;
+  gap: 1.8em;
 `;
 
 const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {

@@ -2,6 +2,7 @@ import React from "react";
 import CardHoverMenus from "./ItemMenu";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import styled from "styled-components";
 
 // import def from "../../assets/dolphin.jpg";
 import { Chip, IconButton, Typography } from "@mui/material";
@@ -23,9 +24,9 @@ const Card = ({studyroom}) => {
   const studyAvgTime = formatTime(studyroom.studyAvgTime);
   
   return (
-    <div className="col-sm-6 col-md-6 col-lg-4 mt-4">
+    <div className="col-sm-6 col-md-6 col-lg-4 mt-4" > 
       <div className="card">
-        <div className="card-block"style={{"display":"flex",flexDirection: "column", padding:"0.5em"}}>
+        <CardBlock>
           <div style={{display:"flex",justifyContent: "flex-end"}}>
             <div style={{display:"flex"}}>
             <LocalFireDepartmentIcon sx={{ color: "gray" }} />
@@ -35,17 +36,16 @@ const Card = ({studyroom}) => {
           <div style={{display:"flex",justifyContent: "center"}}>
             <Typography variant="h5"sx={{ color: "black" }}>{studyroom.name}</Typography>
           </div>
-
-        </div>
+        </CardBlock>
         <img
           alt="random pic"
           className="card-img-top"
           src={imageUrl}
         />
-        {/**/}
-        <CardHoverMenus studyroom = {studyroom}/>
+        
+        {/*<CardHoverMenus studyroom = {studyroom}/>*/}
         <div className="card-footer">
-        <div disabled   style={{display:"flex",justifyContent: "space-between"}}>
+        <div disabled  style={{display:"flex",justifyContent: "space-between"}}>
             <Typography className="card-title">{formattedDate} ~ </Typography>
             <div style={{display:"flex"}}>
               <PeopleAltIcon sx={{ justifyContent: "end", color: "black" }} />
@@ -71,11 +71,15 @@ const Card = ({studyroom}) => {
             />
           </IconButton>
 
-      
         </div>
       </div>
     </div>
   );
 };
+const CardBlock = styled.div`
+  display : flex;
+  flex-direction :  column;
+  padding : 0.5em;
+`;
 
 export default Card;
