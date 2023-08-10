@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 import StudyRoomMembers from "../components/StudyRoom/StudyRoomMembers";
 import StudyRoomMemberScore from "../components/StudyRoom/StudyRoomMemberScore";
+import StudyRoomMemberChat from "../components/StudyRoom/StudyRoomMemberChat";
 import StudyRoomMemberTime from "../components/StudyRoom/StudyRoomMemberTime";
 import StudyRoomMemberBoard from "../components/StudyRoom/StudyRoomMemberBoard";
 
@@ -65,6 +66,7 @@ const StudyRoomMember = () => {
       })
       .then((response) => {
         setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
+        console.log("studyroom", response.data);
         setStudyAvgTime(formatTime(response.data.studyAvgTime));
         setMaxRestTime(formatTime(response.data.maxRestTime));
       })
@@ -89,49 +91,22 @@ const StudyRoomMember = () => {
       .catch((error) => {
         console.log(error);
       });
-
-    // 출석률 top3
-    axios
-    .get(`/api/studyrooms/${studyroomId}/daily-attend`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log("attend top3", response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  
-    // 공부량 top3
-    axios
-    .get(`/api/studyrooms/${studyroomId}/daily-study`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log("studyTime top3", response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
-    // dailylog생성
-    axios
+   // dailylog생성
+   axios
     .post(`/api/user-logs/${studyroomId}`, {}, {
-      headers: {
-        Authorization: accessToken,
+       headers: {
+         Authorization: accessToken,
       },
     })
     .then((response) => {
-      console.log("create daily log!!!!!!!!!!!!");
+       console.log("create daily log!!!!!!!!!!!!");
     })
     .catch((error) => {
-      console.log("dailylog 에러",error);
+       console.log("dailylog 에러",error);
     });
 
+
+    // 접속중인 유저들 정보 -> 컴포넌트 안에서 호출
   }, [studyroomId, accessToken]);
 
   return (
@@ -212,36 +187,6 @@ const StudyRoomMember = () => {
                 onClose={closeSnackBar}
                 message="정상적으로 탈퇴되었습니다."
               />
-            </div>
-            <Link to={`/LiveRoom/${studyroomId}`} style={{ textDecoration: "none" }}>
-              <Button variant="contained" color="primary">
-                라이브 입장
-              </Button>
-            </Link>
-          </HeaderBtn>
-        </HeaderWrap>
-
-        <ContentWrap>
-          <ContentLeftWrap>
-            <StudyMemberWrap>
-              <StudyRoomMembers studyroomId={studyroomId} />
-            </StudyMemberWrap>
-            <StudyScoreWrap>
-              {/*일일 공부왕, 7월 출석왕*/}
-              <StudyRoomMemberScore studyroomId={studyroomId} />
-            </StudyScoreWrap>
-            <StudyChatWrap>
-              <StudyRoomMemberChat />
-            </StudyChatWrap>
-          </ContentLeftWrap>
-          <ContentRightWrap>
-            <StudyRoomTimeWrap>
-              <StudyRoomMemberTime studyAvgTime={studyAvgTime} maxAvgTime={maxRestTime} />
-            </StudyRoomTimeWrap>
-            <StudyRoomBoardWrap>
-              <StudyRoomMemberBoard notice={studyroom.notice} />
-            </StudyRoomBoardWrap>
-          </ContentRightWrap>
         </ContentWrap>
       </ContainerWrap>
       <GFooter />
