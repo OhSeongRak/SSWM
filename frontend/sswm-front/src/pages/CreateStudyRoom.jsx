@@ -32,8 +32,8 @@ const Item = muistyled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-let formData;
 // const로 정의하면 재정의가 불가능해서 let으로 저장
+let formData;
 const CreateStudyRoom = () => {
   useEffect(() => {
     formData = new FormData();
@@ -226,15 +226,14 @@ const CreateStudyRoom = () => {
       })
       .then((response) => {
         console.log(response.data);
-        navigate("/StudyRoom");
+        window.location.replace("/StudyRoom");
       })
       .catch((error) => {
         // 오류 처리
         alert("스터디방 개설이 되지 않았습니다.");
         console.log(Error);
       });
-      navigate("/StudyRoom");
-      window.location.reload();
+      window.location.replace("/StudyRoom");
   };
 
   // const [checked, setChecked] = useState(true);
