@@ -43,7 +43,7 @@ const Card = ({studyroom}) => {
           src={imageUrl}
         />
         
-        {/*<CardHoverMenus studyroom = {studyroom}/>*/}
+        <CardHoverMenus studyroom = {studyroom}/>
         <div className="card-footer">
         <div disabled  style={{display:"flex",justifyContent: "space-between"}}>
             <Typography className="card-title">{formattedDate} ~ </Typography>
