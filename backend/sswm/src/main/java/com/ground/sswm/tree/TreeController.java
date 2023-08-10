@@ -24,22 +24,12 @@ public class TreeController {
     private final TreeService treeService;
     private final AuthService authService;
 
-    @GetMapping
-    public ResponseEntity<List<TreeDto>> findTrees(@RequestHeader("Authorization") String token) {
-        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Long userId = Long.valueOf(headerToken.get("id").toString());
-
-        List<TreeDto> trees = treeService.findTrees(userId);
-        return new ResponseEntity<>(trees, HttpStatus.OK);
-    }
-
     @PostMapping("/{id}")
-    public ResponseEntity<?> saveTree(@RequestHeader UserDto userDto, @RequestBody TreeDto treeDto,
+    public ResponseEntity<?> saveTree(@RequestBody TreeDto treeDto,
         @RequestHeader("Authorization") String token) {
-        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Long userId = Long.valueOf(headerToken.get("id").toString());
 
-        treeService.saveTree(userDto, userId, treeDto);
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        treeService.saveTree(treeDto);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 }
