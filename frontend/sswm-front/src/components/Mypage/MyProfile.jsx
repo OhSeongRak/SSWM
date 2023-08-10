@@ -10,46 +10,71 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 
 import axios from "axios";
+import tree2 from "../../assets/tree2.jpg"
 
 const MyProfile = ({ users }) => {
+  const treesName = {
+    1: "벚꽃나무",
+    2: "등나무",
+    3: "은행나무",
+    4: "크리스마스나무"
+  }
   const [trees, setTrees] = useState([]);
+  const [createtrees, setCreateTrees] = useState([]);
+  const [isTreeCreated, setIsTreeCreated] = useState(false);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-
   useEffect(() => {
     axios
-      .get("/api/user/trees", {
+      .get("/api/trees", {
         headers: {
           Authorization: accessToken,
         },
       })
       .then((response) => {
-        console.log(response.data)
+        console.log("내나무:::",response.data)
         setTrees(response.data)
       })
       .catch((error) => {
         console.log(error);
       });
+    // axios
+    //   .get("/api/trees", {
+    //     headers: {
+    //       Authorization: accessToken,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log("나무이름:::", response.data)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
       // eslint-disable-next-line
     }, []);
+    
   
-  const CreateTree = () => {
-    axios
-    .post("/api/user/trees", null ,{
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  };
+    const CreateTree = () => {
+      axios
+        .post("/api/user/trees", null ,{
+          headers: {
+            Authorization: accessToken,
+          },
+        })
+        .then((response) => {
+          console.log("생성된 새로운 나무", response.data.tree.id)
+          setCreateTrees(response.data.tree.id)
+          setIsTreeCreated(true);
+          // Use the newly created tree data directly from the response
+          const newTree = response.data;
+          setTrees(prevTrees => [...prevTrees, newTree]); // Add the new tree to the existing list
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
   const currentExp = 75;
   const maxExp = 100;
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
-
   return (
     <ContainerWrap>
       <TitleWrap>
@@ -74,19 +99,34 @@ const MyProfile = ({ users }) => {
         </UserWrap>
 
         <TreeWrap>
-          <TreeInfo></TreeInfo>
+          <TreeInfo>
+            {isTreeCreated ? ( 
+              <TreeInfoWrap>
+                <TreeImg src={tree2}>
+                </TreeImg>
+                <TreeName>
+                  <div>{treesName[createtrees]}</div>
+                  <div>LV.0</div>
+                </TreeName>
+              </TreeInfoWrap>
+            ) : (
+              <IconButton aria-label="add" size="large" onClick={CreateTree}>
+                <AddIcon fontSize="inherit" />
+              </IconButton>
+            )}
+          </TreeInfo>
 
 
           <TreeBalanceWrap>
             <TreeBalanceText>전체 밸런스</TreeBalanceText>
             <TreeBalanceContent>
               <ExpBar value={currentExp} maxValue={maxExp} />
-              75%
+              <div>75%</div>
             </TreeBalanceContent>
             <TreeBalanceText>일일 밸런스</TreeBalanceText>
             <TreeBalanceContent>
               <ExpBar value={currentExp} maxValue={maxExp} />
-              75%
+              <div>75%</div>
             </TreeBalanceContent>
           </TreeBalanceWrap>
         </TreeWrap>
@@ -99,22 +139,16 @@ const MyProfile = ({ users }) => {
         <TreeListWrap>
         {trees.map((tree) => {
             return (
-              <TreeInfo2>
-                <TreeImg>
+              <TreeInfo2 key={tree.id}>
+                <TreeImg src={tree2}>
                 </TreeImg>
                 <TreeName>
-                  <div>{tree.tree_id}</div>
-                  <div>LV.{tree.exp} (0/250xp)</div>
+                  <div>{tree.name}</div>
+                  <div>LV.20</div>
                 </TreeName>
               </TreeInfo2>
             );
           })}
-          <IconButton aria-label="add" size="large"
-            // onClick={() => dispatch({type: 'CREATE_SEED'})}
-            onClick={CreateTree}
-          >
-            <AddIcon fontSize="inherit" />
-          </IconButton>
         </TreeListWrap>
       </ContentWrap>
     </ContainerWrap>
@@ -192,6 +226,14 @@ const TreeInfo = styled.div`
   align-items: center;
   width: 30%;
 `;
+const TreeInfoWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`
 const TreeInfo2 = styled.div`
   display: flex;
   flex-direction: column;
@@ -201,13 +243,14 @@ const TreeInfo2 = styled.div`
   height: 200px;
   border: 2px solid orange;
   border-radius: 15px;
+  overflow: hidden;
 `;
 
 const TreeImg = styled.img`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70%;
+  height: 60%;
 `;
 const TreeName = styled.div`
   display: flex;
@@ -215,6 +258,7 @@ const TreeName = styled.div`
   justify-content: center;
   align-items: center;
   height: 30%;
+  font-family: "NanumSquareNeo";
 `;
 const TreeBalanceWrap = styled.div`
   display: flex;
@@ -224,18 +268,20 @@ const TreeBalanceWrap = styled.div`
   width: 70%;
 `;
 const TreeBalanceText = styled.span`
+  width: 90%;
   font-family: "NanumSquareNeo";
 `;
 const TreeBalanceContent = styled.div`
   display: flex;
-  width: 70%;
-  height: 50%;
+  width: 90%;
+  height: 30%;
   justify-content: center;
   align-items: center;
+  gap: 1vw;
 `;
 const TreeListWrap = styled.div`
   height: 200px;
-  width: 60%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;

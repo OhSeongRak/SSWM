@@ -11,6 +11,7 @@ import def from "../assets/dolphin.jpg";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
+import GFooter from "../components/GFooter";
 
 let formData = new FormData();
 const SignUpName = () => {

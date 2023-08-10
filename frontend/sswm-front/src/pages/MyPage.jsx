@@ -8,20 +8,15 @@ import MyProfile from "../components/Mypage/MyProfile";
 import MyStudyRoom from "../components/Mypage/MyStudyRoom";
 import Calendar from "../components/Mypage/Calendar";
 // import Piechart from "../components/Mypage/Chart";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import GFooter from "../components/GFooter";
 
 const MyPage = () => {
   const [users, setUsers] = useState([]);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if(accessToken === null){
-      alert('로그인 후 입장가능합니다.');
-      navigate("/Login")
-    }
     axios
       .get("/api/users", {
         headers: {
@@ -63,6 +58,7 @@ const MyPage = () => {
           </CalendarWrap>
         </ContentWrap>
       </ContainerWrap>
+      <GFooter/>
     </div>
   );
 };

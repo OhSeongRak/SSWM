@@ -37,7 +37,7 @@ const StyledBadge = MuiStyled(Badge)(({ theme }) => ({
   },
 }));
 
-const StudyRoomMemberIcon = ({studyroomId}) => {
+const StudyRoomMembers = ({studyroomId}) => {
   const token = JSON.parse(localStorage.getItem("accessToken"));
   const [studyPeople, setStudyPeople] = useState();
   useEffect(() => {
@@ -119,4 +119,4 @@ const MemberContent = styled.div`
   justify-content: center;
 `
 
-export default StudyRoomMemberIcon;
+export default StudyRoomMembers;

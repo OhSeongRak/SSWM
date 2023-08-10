@@ -11,6 +11,7 @@ import Gnb from "../components/Gnb";
 import VideoRoomComponent from '../components/OpenVidu/VideoRoomComponent';
 import { useParams } from "react-router-dom";
 import axios from 'axios';
+import GFooter from "../components/GFooter";
 
 const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -48,6 +49,7 @@ const LiveRoom = () => {
           )}
         </ContentWrap>
       </ContainerWrap>
+      <GFooter/>
     </div>
   );
 };
