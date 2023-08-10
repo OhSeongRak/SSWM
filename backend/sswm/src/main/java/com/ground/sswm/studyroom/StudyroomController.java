@@ -37,7 +37,7 @@ public class StudyroomController {
 
     private final FileManageUtil fileManageUtil;
 
-    // 전체 조회 (아직 구현하지 않았습니다!!!!!!)
+    // 전체 조회
     @PostMapping("/list")
     public ResponseEntity<List<SearchStudyroomResDto>> list(
         @RequestBody SearchStudyroomReqDto searchStudyroomReqDto) {
@@ -102,11 +102,27 @@ public class StudyroomController {
     // id로 스터디룸 조회
     @GetMapping("/{studyroomId}")
     @ResponseBody
-    public ResponseEntity<StudyroomDto> select(@PathVariable("studyroomId") Long studyroomId) {
-        StudyroomDto studyroom = studyroomService.select(studyroomId);
+    public ResponseEntity<StudyroomDto> selectByStudyroomId(@PathVariable("studyroomId") Long studyroomId) {
+        StudyroomDto studyroom = studyroomService.selectByStudyroomId(studyroomId);
         return new ResponseEntity<StudyroomDto>(studyroom, HttpStatus.OK);
     }
 
+    // 유저 ID로 스터디룸 조회
+    @GetMapping
+    public ResponseEntity<List<SearchStudyroomResDto>> selectByUserId(
+        @RequestHeader("Authorization") String token) {
+        Map<String, Object> claims = authService.getClaimsFromToken(token);
+        Long userId = Long.valueOf(claims.get("id").toString());
+        List<SearchStudyroomResDto> studyrooms = studyroomService.selectByUserId(userId);
+
+        return new ResponseEntity<List<SearchStudyroomResDto>>(studyrooms, HttpStatus.OK);
+    }
+
+    @GetMapping("/enterCode")
+    public ResponseEntity<Boolean> checkEnterCode(@RequestParam Long studyroomId, @RequestParam String enterCode) {
+        boolean isCorrect = studyroomService.checkEnterCode(studyroomId, enterCode);
+        return new ResponseEntity<Boolean>(isCorrect, HttpStatus.OK);
+    }
     // 룸 제목 중복 확인
     @GetMapping("/exists")
     public ResponseEntity<Boolean> exists(@RequestParam String name) {

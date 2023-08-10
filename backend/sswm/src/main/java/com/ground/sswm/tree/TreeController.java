@@ -1,12 +1,15 @@
 package com.ground.sswm.tree;
 
+import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.tree.model.dto.TreeDto;
 import com.ground.sswm.tree.service.TreeService;
 import com.ground.sswm.user.model.dto.UserDto;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -19,11 +22,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class TreeController {
 
     private final TreeService treeService;
+    private final AuthService authService;
+
+    @GetMapping
+    public ResponseEntity<List<TreeDto>> findTrees(@RequestHeader("Authorization") String token) {
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = Long.valueOf(headerToken.get("id").toString());
+
+        List<TreeDto> trees = treeService.findTrees(userId);
+        return new ResponseEntity<>(trees, HttpStatus.OK);
+    }
 
     @PostMapping("/{id}")
     public ResponseEntity<?> saveTree(@RequestHeader UserDto userDto, @RequestBody TreeDto treeDto,
-        @PathVariable Long id) {
-        treeService.saveTree(userDto, id, treeDto);
+        @RequestHeader("Authorization") String token) {
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = Long.valueOf(headerToken.get("id").toString());
+
+        treeService.saveTree(userDto, userId, treeDto);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 }

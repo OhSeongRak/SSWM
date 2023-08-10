@@ -29,7 +29,7 @@ public class GoogleAuthService implements SocialAuthService {
 
 
     @Override
-    public OAuthTokenDto getToken(String code) { // 인가코드로 토큰 받기
+    public OAuthTokenDto getToken(String code, String auth) { // 인가코드로 토큰 받기
         Map<String, Object> params = generateParams(code);
 
         JSONParser parser;

@@ -8,7 +8,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class SearchStudyroomReqDto {
 
@@ -17,5 +16,10 @@ public class SearchStudyroomReqDto {
     private String searchKeyword;
     private List<String> tagNames;
     private boolean showFull;
-    private boolean showPrivate;
+    private boolean isPublic;
+
+    public boolean getIsPublic() {
+        return this.isPublic;
+    }
 }
+

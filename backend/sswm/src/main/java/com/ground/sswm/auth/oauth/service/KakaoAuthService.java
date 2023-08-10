@@ -29,14 +29,21 @@ public class KakaoAuthService implements SocialAuthService {
     private String KAKAO_USER_INFO_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
     private String CLIENT_ID = "a8cdfb7c6e1ce33857c1ff4df66c348c";
     private String CLIENT_SECRET = "ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV";
-    private String REDIRECT_URI = "http://localhost:3000";
+    private String REDIRECT_URI_SIGN = "http://localhost:3000/kakao/sign";
+    private String REDIRECT_URI_LOGIN = "http://localhost:3000/kakao/login";
+
     @Autowired
     private RestTemplate restTemplate;
 
 
     @Override
-    public OAuthTokenDto getToken(String code) {
-        Map<String, Object> params = generateParams(code);
+    public OAuthTokenDto getToken(String code, String auth) {
+        Map<String, Object> params= new HashMap<>();
+        if (auth == "LOGIN") {
+            params = generateLoginParams(code);
+        } else {
+            params = generateSignParams(code);
+        }
         log.debug("[GETTOKEN] " + params);
 
         HttpHeaders headers = new HttpHeaders();
@@ -130,12 +137,22 @@ public class KakaoAuthService implements SocialAuthService {
         }
     }
 
-    private Map<String, Object> generateParams(String code) {
+    private Map<String, Object> generateLoginParams(String code) {
         Map<String, Object> params = new HashMap<>();
         params.put("grant_type", "authorization_code");
         params.put("client_id", CLIENT_ID);
         params.put("client_secret", CLIENT_SECRET);
-        params.put("redirect_uri", REDIRECT_URI);
+        params.put("redirect_uri", REDIRECT_URI_LOGIN);
+        params.put("code", code);
+        return params;
+    }
+
+    private Map<String, Object> generateSignParams(String code) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("grant_type", "authorization_code");
+        params.put("client_id", CLIENT_ID);
+        params.put("client_secret", CLIENT_SECRET);
+        params.put("redirect_uri", REDIRECT_URI_SIGN);
         params.put("code", code);
         return params;
     }

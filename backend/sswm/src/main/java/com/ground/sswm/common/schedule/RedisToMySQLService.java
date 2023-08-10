@@ -88,7 +88,7 @@ public class RedisToMySQLService {
                 .ifPresent(dailyLog -> {
 
                     //redis의 이벤트에 따라 분기
-                    if (dto.getType() == StudyEventType.LIVE) { //이벤트가 공부이면
+                    if (dto.getType() == StudyEventType.STUDY) { //이벤트가 공부이면
                         dailyLog.setStudyTime(duration + dailyLog.getStudyTime());
                     } else if (dto.getType() == StudyEventType.REST) { //이벤트가 휴식이면
                         dailyLog.setRestTime(duration + dailyLog.getRestTime());
@@ -119,7 +119,7 @@ public class RedisToMySQLService {
             EventKeyDto dto = keySpliter(key);
 
             DailyLog dailyLog = new DailyLog();
-            if (dto.getType() == StudyEventType.LIVE) {
+            if (dto.getType() == StudyEventType.STUDY) {
                 dailyLog.setStudyTime(0);
             } else if (dto.getType() == StudyEventType.REST) {
                 dailyLog.setRestTime(0);
