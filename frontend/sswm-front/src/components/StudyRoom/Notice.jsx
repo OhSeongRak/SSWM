@@ -3,27 +3,29 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 const Notice = () => {
-  const CHARACTER_LIMIT = 300;
+  const CONTENT_LIMIT = 300;
 
   const [studyroomDto, setStudyroomDto] = useState({
     notice: "오늘은 금요일입니다~",
   });
 
   const handleEnterCodeChange = (event) => {
-    setStudyroomDto({
-      ...studyroomDto,
-      notice: event.target.value, // 사용자가 입력한 값으로 업데이트
-    });
+    if (studyroomDto.notice != null) {
+      setStudyroomDto({
+        ...studyroomDto,
+        notice: event.target.value, // 사용자가 입력한 값으로 업데이트
+      });
+    }
   };
 
   return (
     <ContainerWrap>
-      <ContentWrap maxLength={CHARACTER_LIMIT} onChange={handleEnterCodeChange}>
+      <ContentWrap maxLength={CONTENT_LIMIT} onChange={handleEnterCodeChange}>
         {studyroomDto.notice}
       </ContentWrap>
       <BtnWrap>
         <Typography sx={{ marginRight: "10px" }}>
-          {studyroomDto.notice.length ? studyroomDto.notice.length : 0}/{CHARACTER_LIMIT}
+          {studyroomDto.notice.length}/{CONTENT_LIMIT}
         </Typography>
       </BtnWrap>
     </ContainerWrap>

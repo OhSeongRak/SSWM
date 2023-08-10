@@ -1,10 +1,49 @@
-import React from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import ScheduleCalendar from "./ScheduleCalendar";
-// import MyResponsivePie from "./Chart";
+import ScheduleCalendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import Piechart from "./Chart";
 
 const Calendar = (props) => {
+  const [selectedDateRange, setSelectedDateRange] = useState([
+    new Date(),
+    new Date(),
+  ]);
+
+  const [dailyLog, setdailyLog] = useState([]);
+
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+  const handleDateChange = (date) => {
+    const unixTimestampDates = date.map((d) => d.getTime());
+    setSelectedDateRange(unixTimestampDates);
+  };
+
+  const studyTime = dailyLog.reduce((total, log) => total + log.studyTime, 0);
+
+  useEffect(() => {
+    console.log(selectedDateRange);
+    axios
+      .get("/api/user-logs", {
+        params: {
+          start: selectedDateRange[0],
+          end: selectedDateRange[1],
+        },
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        setdailyLog(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // eslint-disable-next-line
+  }, [selectedDateRange]);
+
   return (
     <ContainerWrap>
       <TitleWrap>
@@ -12,11 +51,28 @@ const Calendar = (props) => {
       </TitleWrap>
       <ContentWrap>
         <CalendarWrap>
-          <ScheduleCalendar />
+          <ScheduleCalendar
+            onChange={handleDateChange}
+            value={selectedDateRange.map((timestamp) => new Date(timestamp))}
+            selectRange={true}
+            
+          />
+          <div>
+            <p>
+              {new Date(selectedDateRange[0]).toLocaleDateString()} ~{" "}
+              {new Date(selectedDateRange[1]).toLocaleDateString()}
+            </p>
+          </div>
+          <div>
+            <h2>
+              기간 내 총 공부시간 {Math.floor(studyTime / 60)}시간 :{" "}
+              {studyTime % 60}분
+            </h2>
+          </div>
         </CalendarWrap>
         <GraphWrap>
           그래프
-          <Piechart></Piechart>
+          <Piechart dailyLog={dailyLog}></Piechart>
         </GraphWrap>
       </ContentWrap>
     </ContainerWrap>
