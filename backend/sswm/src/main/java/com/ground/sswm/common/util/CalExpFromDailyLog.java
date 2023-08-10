@@ -8,7 +8,9 @@ import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.model.dto.DailyLogDto;
 import java.time.ZoneId;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CalExpFromDailyLog {
 
     public static ExpDto getTimeAndScoreFromDailyLog(Long userId, List<DailyLog> dailyLogs){
@@ -34,16 +36,14 @@ public class CalExpFromDailyLog {
         return expDto;
     }
     public static int calExp(long studyTime, long restTime, int stretchScore){
-        long studyMin = studyTime / 60L;
-        long restMin = restTime / 60L;
-
-        long exp = 100L;
-        exp *= Math.min(studyMin, 500L)/500L;
-        exp *= 0.7 + 0.3 * (
-            Math.min(restMin + stretchScore / 30L, studyMin / 5L) /
-                (studyMin / 5L)
+        float studyMin = studyTime / 60f;
+        float restMin = restTime / 60f;
+        float exp = 100L;
+        exp *= Math.min(studyMin, 500f)/500f;
+        exp *= 0.7f + 0.3f * (
+            Math.min(restMin + stretchScore / 30f, studyMin / 5f) /
+                (studyMin / 5f)
         );
-
         return (int)exp;
     }
 }
