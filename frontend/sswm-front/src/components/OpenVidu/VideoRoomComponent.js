@@ -161,6 +161,8 @@ class VideoRoomComponent extends Component {
                 await this.connectToSession();
             },
         );
+        
+        this.sendRestTimeAxios();
     }
 
     async connectToSession() {
@@ -278,6 +280,24 @@ class VideoRoomComponent extends Component {
             console.error('요청 에러:', error);
         });
     };
+
+    sendRestTimeAxios() {
+        // 휴식 시간 가져오기
+        axios
+        .get(`/api/user-logs/${this.state.mySessionId}`, {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            }
+        })
+        .then((response) => {
+        this.setState({ restTime: response.data.restTime });
+        console.log("비디오룸컴포넌트에서 쉬는시간 호출:::::::::", response.data)
+        })
+        .catch(error => {
+            console.error('요청 에러:', error);
+        });            
+    }
 
     leaveSession() {
         this.sendEventAxios({
@@ -681,38 +701,10 @@ class VideoRoomComponent extends Component {
                 studyroomId: this.state.mySessionId,
               })
 
-              // 현재 날짜를 가져옵니다.
-            const currentDate = new Date();
-            // 현재 날짜의 년, 월, 일 정보를 가져옵니다.
-            const currentYear = currentDate.getFullYear();
-            const currentMonth = currentDate.getMonth();
-            const currentDay = currentDate.getDate();
-            // 현재 날짜의 00시 00분으로 설정합니다.
-            const startOfDay = new Date(currentYear, currentMonth, currentDay, 0, 0, 0);
-            // Unix 타임스탬프로 변환합니다.
-            const currentTimestampInMillis = Math.floor(startOfDay.getTime());
-              console.log("currentTimestampInMillis:", currentTimestampInMillis)
-              // 휴식 시간 가져오기
-              axios
-              .get("/api/user-logs", {
-                  headers: {
-                  Authorization: accessToken,
-                  "Content-Type": "application/json",
-                  },
-                  params: {
-                      start: currentTimestampInMillis,
-                      end: currentTimestampInMillis,
-                  }
-              })
-              .then((response) => {
-                this.setState({ restTime: response.data[0].restTime });
-                console.log("this.state.restTime:::::::::", this.state.restTime)
-              })
-              .catch(error => {
-                  console.error('요청 에러:', error);
-              });
+              this.sendRestTimeAxios();
             }
-    
+            
+
             return {
               timerValue: newTimerValue
             };
