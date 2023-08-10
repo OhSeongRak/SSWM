@@ -128,7 +128,13 @@ const StudyRoomMember = () => {
               {/* 공부,휴식 시간 */}
               <SideBanner>
                 <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" 
+                    sx={{
+                      m : 1,
+                      backgroundColor: "#114B0B",
+                      ":hover": { backgroundColor: "#FA990E" },
+                    }}
+                  >
                     라이브 입장
                   </Button>
                 </Link>
@@ -198,7 +204,6 @@ const HeaderTitle = styled.div`
   align-items: center;
   justify-content: center;
   width: 80%;
-  border: 1px solid black;
   border-radius: 15px;
   font-size: 30px;
   font-family: "NanumSquareNeo";
@@ -207,13 +212,7 @@ const HeaderTitle = styled.div`
 const HeaderBtnWrap = styled.span`
   display: flex;
 `;
-const HeaderBtn = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30%;
-  gap: 1vw;
-`;
+
 const ContentWrap = styled.div`
   display: flex;
   width: 80%;
@@ -221,9 +220,7 @@ const ContentWrap = styled.div`
   margin-top: 2vw;
   flex-direction: column;
 `;
-const ContentLeftWrap = styled.div`
-  width: 80%;
-`;
+
 const StudyMemberWrap = styled.div`
   display: flex;
   align-items: center;
@@ -240,10 +237,7 @@ const StudyScoreWrap = styled.div`
   height: 40vh;
 `;
 
-const ContentRightWrap = styled.div`
-  width: 20%;
-  height: 100%;
-`;
+
 const StudyRoomTimeWrap = styled.div`
   display: flex;
   align-items: center;
@@ -266,5 +260,10 @@ const SideBanner = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  border: 0.2rem solid #FA990E;
+  border-radius : 15px;
+  padding: 0.5rem;
+  margin: 0 0.2rem 0 0;
+  background: white;
 `
 export default StudyRoomMember;

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { styled as MuiStyled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
-
+import { Grid } from '@mui/material';
 import {useEffect} from 'react';
 import axios from 'axios';
 const StyledBadge = MuiStyled(Badge)(({ theme }) => ({
@@ -63,6 +63,7 @@ const StudyRoomMembers = ({studyroomId}) => {
         </Background>
       </MemberTitleWrap>
       <MemberWrap>
+
       {studyPeople && 
       studyPeople.map((person,idx)=>
         person.inLive ? 
@@ -89,11 +90,8 @@ const StudyRoomMembers = ({studyroomId}) => {
         </MemberContent>
       )}
         
-
-        
       
       </MemberWrap>
-      
     </ContainerWrap>
   );
 };
@@ -126,7 +124,6 @@ const MemberWrap = styled.div`
   width: 100%;
   height: 90%;
   gap: 1vw;
-  border: 1px solid black;
   border-radius: 15px;
 `
 const MemberContent = styled.div`

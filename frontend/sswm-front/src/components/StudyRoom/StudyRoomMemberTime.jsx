@@ -47,6 +47,9 @@ const TimeWrap = styled.div`
 `
 const TimeTitle = styled.div`
   font-size: 12px;
+  display: inline-block;
+  white-space: nowrap;
+}
 `
 const TimeContent = styled.div`
   font-size: 25px;
