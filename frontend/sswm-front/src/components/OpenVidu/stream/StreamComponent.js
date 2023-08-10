@@ -78,7 +78,7 @@ export default class StreamComponent extends Component {
 
     render() {
         // 스터디룸 총 휴식 시간 - 내가 사용한 휴식시간 => 남은 휴식시간
-        const formattedMaxRestTime = this.formatTime(this.props.studyroom.maxRestTime - this.props.restTime);
+
 
         return (
             <div className="OT_widget-container">
@@ -109,8 +109,9 @@ export default class StreamComponent extends Component {
                     ) : (
                         <div>
                             <span id="nickname">{this.props.user.getNickname()}</span>
-                            {this.props.user.isLocal() && <span id=""></span>}
-                            <div style={{ marginTop: "10px" }}>남은 쉬는 시간 : {formattedMaxRestTime}</div>
+                            {this.props.user.isLocal() && <span id=""></span> && (
+                            <div style={{ marginTop: "10px" }}>남은 쉬는 시간 : {this.formatTime(this.props.studyroom.maxRestTime - this.props.restTime)}</div>
+                            )}
                         </div>
                     )}
                 </div>
