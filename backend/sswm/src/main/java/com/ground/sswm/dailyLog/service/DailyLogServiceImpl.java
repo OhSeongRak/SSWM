@@ -17,8 +17,8 @@ import com.ground.sswm.userStudyroom.model.UserStudyroom;
 import com.ground.sswm.user.repository.UserRepository;
 import com.ground.sswm.userStudyroom.exception.UserStudyroomNotFoundException;
 import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +52,6 @@ public class DailyLogServiceImpl implements DailyLogService {
         if (userStudyroom.isDeleted()){
             throw new UserStudyroomNotFoundException("해당 스터디룸에 가입되어 있지 않습니다.");
         }
-
 
         LocalTime currentTime = LocalTime.now();
         int hour = currentTime.getHour();
@@ -97,5 +96,21 @@ public class DailyLogServiceImpl implements DailyLogService {
         }
 
         return dailyLogDtos;
+    }
+
+    @Override
+    public DailyLogDto getDailylog(Long userId, Long studyroomId) {
+        LocalTime currentTime = LocalTime.now();
+        int hour = currentTime.getHour();
+        long now = UnixTimeUtil.getCurrentUnixTime();
+        log.debug("now : "+ now);
+        int dayBefore = (hour < 4) ? 1 : 0;
+        long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
+        for (long day : days) {
+            log.debug("days : " + day );
+        }
+        log.debug("date :"+ days[0]);
+
+        return DailyLogDto.from(dailyLogRepository.findAllByUserIdAndStudyroomIdAndDate(userId, studyroomId, days[0]));
     }
 }
