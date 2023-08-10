@@ -46,13 +46,13 @@ const Header = styled.header`
 
 const LogoImg = styled.img`
   width: 10%;
-  height: 60%;
+  height: 80%;
 `
 
 const GnbBtn = styled.div`
   display: inline-flex;
   font-family: "NanumSquareNeo";
-  font-size: 20px;
+  font-size: 18px;
   margin-left: 15px;  
 `
 

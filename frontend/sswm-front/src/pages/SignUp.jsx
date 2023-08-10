@@ -5,13 +5,12 @@ import { Link } from "react-router-dom";
 import Gnb from "../components/Gnb";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 
 // 회원가입
 import GoogleSignIn from "../shared/GoogleSignIn";
 import KakaoSignIn from "../shared/KakaoSign";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-
+ 
 const SignUp = () => {
   return (
     <div>
@@ -31,7 +30,7 @@ const SignUp = () => {
               />
             </SocialWrap>
             <ButtonWrap>
-              <Link to="/Login">
+              <Link to="/Login" style={{ textDecoration: "none"}}>
               <div style={{color:"orange"}} >로그인하러 가기</div>
               </Link>
             </ButtonWrap>

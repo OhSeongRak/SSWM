@@ -27,8 +27,8 @@ const EditInfo = () => {
         },
       })
       .then((response) => {
-        setUsers(response.data)
-        console.log(response.data);
+        setUsers(response.data);
+        console.log(response.data); 
       })
       .catch((error) => {
         console.log(error);
@@ -39,9 +39,10 @@ const EditInfo = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const [isExist, setIsExist] = useState(true);
+  const [isExist, setIsExist] = useState(false);
 
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
+  console.log("이미지경로", imageUrl)
   const [imageSrc, setImage] = useState(imageUrl);
 
   const imageUp = useRef();
@@ -166,6 +167,7 @@ const EditInfo = () => {
   
   const closeModalEvent = () => {
     setIsModalOpen(false);
+    DeleteUser()
     openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
   console.log('수정페이지', accessToken)
