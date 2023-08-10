@@ -38,14 +38,12 @@ public class CalExpFromDailyLog {
     public static int calExp(long studyTime, long restTime, int stretchScore){
         float studyMin = studyTime / 60f;
         float restMin = restTime / 60f;
-
         float exp = 100L;
         exp *= Math.min(studyMin, 500f)/500f;
         exp *= 0.7f + 0.3f * (
             Math.min(restMin + stretchScore / 30f, studyMin / 5f) /
                 (studyMin / 5f)
         );
-        log.debug("Exp : ", (int)exp);
         return (int)exp;
     }
 }
