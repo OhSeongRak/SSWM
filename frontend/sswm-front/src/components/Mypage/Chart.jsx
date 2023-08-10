@@ -1,7 +1,17 @@
 import * as React from "react";
 import { ResponsivePie } from "@nivo/pie";
 
-const Piechart = () => {
+const Piechart = (props) => {
+  const { dailyLog } = props;
+
+  const studyTime= dailyLog.reduce((total, log) => total+log.studyTime,0);
+  const restTime= dailyLog.reduce((total, log) => total+log.restTime,0);
+  const stretchScore= dailyLog.reduce((total, log) => total+log.stretchScore,0);
+  console.log(studyTime);
+  console.log(restTime);
+  console.log(stretchScore);
+  console.log(dailyLog.length);
+  
   const handle = {
     padClick: (data) => {
       console.log(data);
@@ -20,9 +30,9 @@ const Piechart = () => {
          * chart에 사용될 데이터
          */
         data={[
-          { id: "cola", value: 324 },
-          { id: "cidar", value: 88 },
-          { id: "fanta", value: 221 },
+          { id: "공부 시간", value: studyTime },
+          { id: "휴식 시간", value: restTime },
+          { id: "스트레칭 시간", value: stretchScore/dailyLog.length },
         ]}
         /**
          * chart margin
