@@ -72,7 +72,7 @@ const StudyRoomMembers = ({studyroomId}) => {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-          <Avatar alt="Study-Member" src={person.userDto.image} sx={{ width: 60, height: 60 }} />
+          <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${person.userDto.image}`} sx={{ width: 60, height: 60 }} />
         </StyledBadge>
           <Nickname>
             {person.userDto.nickname}
@@ -80,7 +80,7 @@ const StudyRoomMembers = ({studyroomId}) => {
         </MemberContent>
         :
         <MemberContent key={idx}>
-          <Avatar alt="Study-Member" src={person.userDto.image} sx={{ width: 60, height: 60 }} />
+          <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${person.userDto.image}`} sx={{ width: 60, height: 60 }} />
           <div style={{display:"flex", textAlign: "center"}}>
           <Nickname>
             {person.userDto.nickname}

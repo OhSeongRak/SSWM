@@ -56,7 +56,7 @@ const StudyRoomMemberScore = ({studyroomId}) => {
                 <ContentRankValue key={idx}>
                   <MemberContent key={idx}>
                   <div>{v.studyTime}</div>
-                  <Avatar alt="Study-Member" src={v.userDto.image} />
+                  <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${v.userDto.image}`} />
                   <div style={{display:"flex", textAlign: "center"}}>
                     <Nickname>
                       {v.userDto.nickname}
@@ -83,7 +83,7 @@ const StudyRoomMemberScore = ({studyroomId}) => {
               <ContentRankValue key={idx}>
                 <MemberContent key={idx}>
                   <div>{user.attendDays}/{top3Attend.daysOfMonth}</div>
-                  <Avatar alt="Study-Member" src={user.userDto.image} />
+                  <Avatar alt="Study-Member"src={`${process.env.REACT_APP_IMAGE_URL}/${user.userDto.image}`} />
                   <div style={{display:"flex", textAlign: "center"}}>
                     <Nickname>
                       {user.userDto.nickname}
