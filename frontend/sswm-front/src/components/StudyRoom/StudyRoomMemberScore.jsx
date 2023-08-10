@@ -52,7 +52,6 @@ const StudyRoomMemberScore = ({studyroomId}) => {
             일일 공부왕
           </ContentTitle>
           <ContentRank>
-            <ContentRankImg src={rank}/>
             <ContentRankValueWrap>
               {top3Study && top3Study.map((v,idx)=>
                 <ContentRankValue key={idx}>
@@ -72,7 +71,6 @@ const StudyRoomMemberScore = ({studyroomId}) => {
             {top3Attend.month}월 출석왕
           </ContentTitle>
           <ContentRank>
-            <ContentRankImg src={rank} />
             <ContentRankValueWrap>
             { top3Attend.users &&
               top3Attend.users.map((user,idx)=>

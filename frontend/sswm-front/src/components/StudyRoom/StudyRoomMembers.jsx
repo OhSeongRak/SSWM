@@ -61,7 +61,6 @@ const StudyRoomMembers = ({studyroomId}) => {
       <MemberTitleWrap>
         스터디원
       </MemberTitleWrap>
-
       <MemberWrap>
       {studyPeople && 
       studyPeople.map((person,idx)=>
@@ -101,7 +100,6 @@ const ContainerWrap = styled.div`
 `
 const MemberTitleWrap = styled.div`
   width: 100%;
-  height: 10%;
   font-size: 20px;
   font-family: "NanumSquareNeo";
   margin-bottom: 1vw;

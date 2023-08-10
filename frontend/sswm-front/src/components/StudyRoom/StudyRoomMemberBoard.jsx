@@ -31,23 +31,22 @@ const BoardWrap = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   height: 90%;
-  border: 1px solid black;  
 `
 const BoardTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 10%;
-  border-bottom: 1px solid black;
+width: 100%;
+font-size: 20px;
+padding : 20px 0px 0px 0px;
+font-family: "NanumSquareNeo";
+margin-bottom: 1vw;
 `
 const BoardContent = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
   height: 90%;
+  border: 1px solid black;  
 `
 
 export default StudyRoomMemberBoard;

@@ -110,9 +110,42 @@ const StudyRoomMember = () => {
               </Link>
             </HeaderBtnWrap>
           </HeaderTitle>
-          <HeaderBtn>
-            <div>
-              <Button variant="contained" color="success" onClick={openModal}>
+        </HeaderWrap>
+        <ContentWrap>
+            {/* 스터디원 */}
+            <StudyMemberWrap>
+              <StudyRoomMembers studyroomId={studyroomId} />
+            </StudyMemberWrap>
+            
+            <div style={{display:"flex",justifyContent:"space-between"}}>
+              {/* 공지사항 */}
+              <StudyRoomBoardWrap>
+                <StudyRoomMemberBoard notice={studyroom.notice} />
+              </StudyRoomBoardWrap>
+
+              {/* 공부,휴식 시간 */}
+              <div style={{display:"flex",flexDirection:"column",alignItems: "center"}}>
+                <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
+                  <Button variant="contained" color="primary">
+                    라이브 입장
+                  </Button>
+                </Link>
+                <StudyRoomTimeWrap>
+                  <StudyRoomMemberTime studyAvgTime={studyAvgTime} maxAvgTime={maxRestTime} />
+                </StudyRoomTimeWrap>
+              </div>
+            </div>
+       
+        </ContentWrap>
+        <ContentWrap>
+          <StudyScoreWrap>
+              {/*일일 공부왕, 7월 출석왕*/}
+              <StudyRoomMemberScore studyroomId={studyroomId} />
+          </StudyScoreWrap>
+        </ContentWrap>
+        <ContentWrap>
+               {/* 스터디룸 탈퇴하기 */}
+               <Button variant="contained" color="success" onClick={openModal}>
                 스터디룸 탈퇴하기
               </Button>
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
@@ -132,36 +165,6 @@ const StudyRoomMember = () => {
                 onClose={closeSnackBar}
                 message="정상적으로 탈퇴되었습니다."
               />
-            </div>
-            <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
-              <Button variant="contained" color="primary">
-                라이브 입장
-              </Button>
-            </Link>
-          </HeaderBtn>
-        </HeaderWrap>
-
-        <ContentWrap>
-          <ContentLeftWrap>
-            <StudyMemberWrap>
-              <StudyRoomMembers studyroomId={studyroomId} />
-            </StudyMemberWrap>
-            <StudyScoreWrap>
-              {/*일일 공부왕, 7월 출석왕*/}
-              <StudyRoomMemberScore studyroomId={studyroomId} />
-            </StudyScoreWrap>
-            <StudyChatWrap>
-              <StudyRoomMemberChat />
-            </StudyChatWrap>
-          </ContentLeftWrap>
-          <ContentRightWrap>
-            <StudyRoomTimeWrap>
-              <StudyRoomMemberTime studyAvgTime={studyAvgTime} maxAvgTime={maxRestTime} />
-            </StudyRoomTimeWrap>
-            <StudyRoomBoardWrap>
-              <StudyRoomMemberBoard notice={studyroom.notice} />
-            </StudyRoomBoardWrap>
-          </ContentRightWrap>
         </ContentWrap>
       </ContainerWrap>
       <GFooter />
@@ -175,20 +178,16 @@ const ContainerWrap = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100vh;
 `;
 const HeaderWrap = styled.div`
   display: flex;
-  width: 80%;
   height: 10%;
 `;
 const HeaderTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 70%;
   height: 100%;
-  border: 1px solid black;
   border-radius: 15px;
   font-size: 30px;
   font-family: "NanumSquareNeo";
@@ -209,9 +208,10 @@ const ContentWrap = styled.div`
   width: 80%;
   height: 90%;
   margin-top: 2vw;
+  flex-direction: column;
 `;
 const ContentLeftWrap = styled.div`
-  width: 70%;
+  width: 80%;
   height: 100%;
 `;
 const StudyMemberWrap = styled.div`
@@ -229,15 +229,9 @@ const StudyScoreWrap = styled.div`
   width: 100%;
   height: 40%;
 `;
-const StudyChatWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 40%;
-`;
+
 const ContentRightWrap = styled.div`
-  width: 30%;
+  width: 20%;
   height: 100%;
 `;
 const StudyRoomTimeWrap = styled.div`
@@ -245,13 +239,12 @@ const StudyRoomTimeWrap = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 35%;
+  
 `;
 const StudyRoomBoardWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 65%;
 `;
 export default StudyRoomMember;

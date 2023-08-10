@@ -7,20 +7,20 @@ const StudyRoomMemberTime = ({studyAvgTime, maxAvgTime}) => {
   return (
     <ContainerWrap>
       <TimeWrap>
-        <TimeTitle>
-          스터디룸 평균 공부 시간
-        </TimeTitle>
         <TimeContent>
           {studyAvgTime}
         </TimeContent>
+        <TimeTitle>
+          스터디룸 평균 공부 시간
+        </TimeTitle>
       </TimeWrap>
       <TimeWrap>
-        <TimeTitle>
-          일일 할당 휴식시간
-        </TimeTitle>
         <TimeContent>
           {maxAvgTime}
         </TimeContent>
+        <TimeTitle>
+          일일 할당 휴식시간
+        </TimeTitle>
       </TimeWrap>
     </ContainerWrap>
   );
@@ -46,7 +46,7 @@ const TimeWrap = styled.div`
   font-family: "NanumSquareNeo";  
 `
 const TimeTitle = styled.div`
-  font-size: 17px;
+  font-size: 12px;
 `
 const TimeContent = styled.div`
   font-size: 25px;
