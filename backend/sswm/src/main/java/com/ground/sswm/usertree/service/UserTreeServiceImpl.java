@@ -77,7 +77,7 @@ public class UserTreeServiceImpl implements UserTreeService {
                 //현재 나무라고 알려줌
                 userTreeResDto.setCurrent(true);
 
-                long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
+                long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 0);
                 List<DailyLog> dailyLogs = dailyLogRepository.findAllByUserIdAndDateBetween(userId, days[0], days[1]);
                 //dailylog에서 시간 및 점수 합산해서 가져옴
                 ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId, dailyLogs);
