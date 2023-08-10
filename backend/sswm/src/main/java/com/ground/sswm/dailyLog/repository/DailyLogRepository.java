@@ -39,4 +39,5 @@ public interface DailyLogRepository extends
     int countByUserIdAndStudyroomIdAndDateBetween(Long userId, Long studyroomId, long startDate,
         long endDate);
 
+    DailyLog findAllByUserIdAndStudyroomIdAndDate(Long userId, Long studyroomId, Long date);
 }
