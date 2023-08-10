@@ -140,11 +140,11 @@ class VideoRoomComponent extends Component {
 
     joinSession() {
         this.OV = new OpenVidu();
-        this.sendEventAxios({
-            type: 'REST',
-            status: 'OFF',
-            studyroomId: this.state.mySessionId,
-        })
+        // this.sendEventAxios({
+        //     type: 'REST',
+        //     status: 'OFF',
+        //     studyroomId: this.state.mySessionId,
+        // })
 
         this.sendEventAxios({
             type: 'STUDY',
@@ -705,12 +705,8 @@ class VideoRoomComponent extends Component {
                   }
               })
               .then((response) => {
-                const studyroomList = response.data;
-                studyroomList.forEach(studyroom => {
-                    console.log("studyroom", studyroom);
-                    if (studyroom.id === this.state.mySessionId)
-                        this.setState({ restTime: studyroom.restTime });
-                })
+                this.setState({ restTime: response.data[0].restTime });
+                console.log("this.state.restTime:::::::::", this.state.restTime)
               })
               .catch(error => {
                   console.error('요청 에러:', error);
@@ -721,7 +717,7 @@ class VideoRoomComponent extends Component {
               timerValue: newTimerValue
             };
           });
-        }, 1000); // 1초마다 감소
+        }, 100); // 1초마다 감소
       };
     async init() {
         const URL = "https://teachablemachine.withgoogle.com/models/xtvI2r9Ck/";
@@ -844,7 +840,7 @@ class VideoRoomComponent extends Component {
                                 handleNickname={this.nicknameChanged}
                                 localUser={localUser}
                                 studyroom={this.props.studyroom}
-                                restTime = {this.state.restTime}
+                                restTime={this.state.restTime}
                             />
                         </div>
                     )}
