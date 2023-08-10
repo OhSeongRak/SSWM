@@ -48,6 +48,7 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
       });
   }, [option, searchKeyword, selectedTags, isPublic]);
 
+  console.log(studyrooms);
   return (
     <RoomListLayout ref={ref}>
       <RoomList>

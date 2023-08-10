@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import axios from "axios";
 
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
@@ -24,8 +24,8 @@ import GFooter from "../components/GFooter";
 function formatTime(minutes) {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
-  const formattedHours = hours.toString().padStart(2, '0');
-  const formattedMinutes = remainingMinutes.toString().padStart(2, '0');
+  const formattedHours = hours.toString().padStart(2, "0");
+  const formattedMinutes = remainingMinutes.toString().padStart(2, "0");
   return `${formattedHours}:${formattedMinutes}`;
 }
 
@@ -37,21 +37,25 @@ const StudyRoomMember = () => {
   const [maxRestTime, setMaxRestTime] = useState("");
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-  
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  
+
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
   const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
-  
+
   const closeModalEvent = () => {
     setIsModalOpen(false);
     openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
-  
+
+  const handleenterAdmin = () => {
+    window.location.href = `/StudyroomAdmin/${studyroomId}`;
+  };
+
   useEffect(() => {
     // 스터디룸 관련 정보 조회
     axios
@@ -72,22 +76,24 @@ const StudyRoomMember = () => {
 
     // 스터디룸 가입
     axios
-    .post(`/api/studyrooms/${studyroomId}/join`, {}, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .post(
+        `/api/studyrooms/${studyroomId}/join`,
+        {},
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     // 접속중인 유저들 정보 -> 컴포넌트 안에서 호출
-
-
-  }, [studyroomId]);
+  }, [studyroomId, accessToken]);
 
   return (
     <div>
@@ -98,7 +104,7 @@ const StudyRoomMember = () => {
             {studyroom.name}
             <HeaderBtnWrap>
               <Link to="/StudyRoomAdmin" style={{ textDecoration: "none" }}>
-                <IconButton aria-label="setting" size="large">
+                <IconButton onClick={handleenterAdmin} aria-label="setting" size="large">
                   <SettingsIcon fontSize="inherit" />
                 </IconButton>
               </Link>
@@ -107,7 +113,7 @@ const StudyRoomMember = () => {
           <HeaderBtn>
             <div>
               <Button variant="contained" color="success" onClick={openModal}>
-                스터디룸 탈퇴하기 
+                스터디룸 탈퇴하기
               </Button>
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
                 <Box>
@@ -129,7 +135,7 @@ const StudyRoomMember = () => {
             </div>
             <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
               <Button variant="contained" color="primary">
-                라이브 입장 
+                라이브 입장
               </Button>
             </Link>
           </HeaderBtn>
@@ -138,11 +144,11 @@ const StudyRoomMember = () => {
         <ContentWrap>
           <ContentLeftWrap>
             <StudyMemberWrap>
-              <StudyRoomMembers studyroomId ={studyroomId}/>
+              <StudyRoomMembers studyroomId={studyroomId} />
             </StudyMemberWrap>
             <StudyScoreWrap>
               {/*일일 공부왕, 7월 출석왕*/}
-              <StudyRoomMemberScore studyroomId ={studyroomId}/>
+              <StudyRoomMemberScore studyroomId={studyroomId} />
             </StudyScoreWrap>
             <StudyChatWrap>
               <StudyRoomMemberChat />
@@ -150,15 +156,15 @@ const StudyRoomMember = () => {
           </ContentLeftWrap>
           <ContentRightWrap>
             <StudyRoomTimeWrap>
-              <StudyRoomMemberTime studyAvgTime = {studyAvgTime} maxAvgTime = {maxRestTime}/>
+              <StudyRoomMemberTime studyAvgTime={studyAvgTime} maxAvgTime={maxRestTime} />
             </StudyRoomTimeWrap>
             <StudyRoomBoardWrap>
-              <StudyRoomMemberBoard notice = {studyroom.notice}/>
+              <StudyRoomMemberBoard notice={studyroom.notice} />
             </StudyRoomBoardWrap>
           </ContentRightWrap>
         </ContentWrap>
       </ContainerWrap>
-      <GFooter/>
+      <GFooter />
     </div>
   );
 };

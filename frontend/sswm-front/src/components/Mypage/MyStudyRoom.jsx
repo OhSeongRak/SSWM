@@ -1,46 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-import StudyRoomItem from '../StudyRoom/StudyRoomItem';
+import axios from "axios";
+import { useInView } from "react-intersection-observer";
+import RecipeReviewCard from "../StudyRoom/StudyRoomItem2";
 
 const MyStudyRoom = (props) => {
-  return(
+  const [studyrooms, setStudyrooms] = useState([]);
+  const [ref] = useInView();
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+  console.log(accessToken);
+  useEffect(() => {
+    axios
+      .get("/api/studyrooms", {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setStudyrooms(response.data); // API 호출 완료 후에 studyrooms 업데이트
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.log(error);
+      });
+  }, []);
+
+  return (
     <ContainerWrap>
       <TitleWrap>
         <Title>내 스터디룸</Title>
       </TitleWrap>
-      <ContentWrap>
-        <StudyRoomWrap>
-          <StudyRoomItem/ >
-          <StudyRoomItem/ >
-          <StudyRoomItem/ >
-        </StudyRoomWrap>
-      </ContentWrap>
+      <RoomListLayout ref={ref}>
+      <RoomList>
+        {studyrooms.map((studyroom) => (
+          <RecipeReviewCard key={studyroom.id} studyroom={studyroom} />
+        ))}
+      </RoomList>
+    </RoomListLayout>
     </ContainerWrap>
   );
 };
 
 const ContainerWrap = styled.div`
   width: 100%;
-`
+`;
 const TitleWrap = styled.div`
   font-size: 25px;
   margin-top: 1vw;
   margin-bottom: 1vw;
-`
+`;
 const Title = styled.span`
   border: 2px solid #fecc47;
   border-radius: 15px;
   padding: 3px 3px;
   background: #fecc47;
   font-family: "NanumSquareNeo";
-`
-const ContentWrap = styled.div`
-  
-`
-const StudyRoomWrap = styled.div`
-  display: flex;
-  witdh: 100%;
-  height: 350px;
-` 
+`;
+const RoomListLayout = styled.div`
+  flex: 1;
+  background-color: green;
+`;
+
+const RoomList = styled.ul`
+  background-color: #ffffff;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 5px;
+`;
 export default MyStudyRoom;
