@@ -124,7 +124,7 @@ const StudyRoomMember = () => {
               </StudyRoomBoardWrap>
 
               {/* 공부,휴식 시간 */}
-              <div style={{display:"flex",flexDirection:"column",alignItems: "center"}}>
+              <SideBanner>
                 <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
                   <Button variant="contained" color="primary">
                     라이브 입장
@@ -133,7 +133,7 @@ const StudyRoomMember = () => {
                 <StudyRoomTimeWrap>
                   <StudyRoomMemberTime studyAvgTime={studyAvgTime} maxAvgTime={maxRestTime} />
                 </StudyRoomTimeWrap>
-              </div>
+              </SideBanner>
             </div>
        
         </ContentWrap>
@@ -178,19 +178,26 @@ const ContainerWrap = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+  height: 120vh;
 `;
 const HeaderWrap = styled.div`
   display: flex;
-  height: 10%;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 10vh;
+  margin-top: 5vw;
 `;
 const HeaderTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  width: 80%;
+  border: 1px solid black;
   border-radius: 15px;
   font-size: 30px;
   font-family: "NanumSquareNeo";
+  
 `;
 const HeaderBtnWrap = styled.span`
   display: flex;
@@ -200,26 +207,24 @@ const HeaderBtn = styled.div`
   align-items: center;
   justify-content: center;
   width: 30%;
-  height: 100%;
   gap: 1vw;
 `;
 const ContentWrap = styled.div`
   display: flex;
   width: 80%;
-  height: 90%;
+  height: 60vh;
   margin-top: 2vw;
   flex-direction: column;
 `;
 const ContentLeftWrap = styled.div`
   width: 80%;
-  height: 100%;
 `;
 const StudyMemberWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 20%;
+  height: 20vh;
   gap: 1vw;
 `;
 const StudyScoreWrap = styled.div`
@@ -227,7 +232,7 @@ const StudyScoreWrap = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 40%;
+  height: 40vh;
 `;
 
 const ContentRightWrap = styled.div`
@@ -246,5 +251,15 @@ const StudyRoomBoardWrap = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+  height: 40vh;
 `;
+const SideBanner = styled.div`
+  position: fixed;
+  right: 0;
+  top: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`
 export default StudyRoomMember;

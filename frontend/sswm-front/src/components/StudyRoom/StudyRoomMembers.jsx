@@ -5,7 +5,6 @@ import { styled as MuiStyled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 
-import def from '../../assets/fubao.jpg';
 import {useEffect} from 'react';
 import axios from 'axios';
 const StyledBadge = MuiStyled(Badge)(({ theme }) => ({
@@ -96,7 +95,6 @@ const ContainerWrap = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  gap: 1vw;
 `
 const MemberTitleWrap = styled.div`
   width: 100%;
@@ -109,6 +107,8 @@ const MemberWrap = styled.div`
   width: 100%;
   height: 90%;
   gap: 1vw;
+  border: 1px solid black;
+  border-radius: 15px;
 `
 const MemberContent = styled.div`
   display: flex;
