@@ -66,7 +66,6 @@ const StudyRoomMember = () => {
       })
       .then((response) => {
         setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
-        console.log("studyroom", response.data);
         setStudyAvgTime(formatTime(response.data.studyAvgTime));
         setMaxRestTime(formatTime(response.data.maxRestTime));
       })
@@ -92,7 +91,48 @@ const StudyRoomMember = () => {
         console.log(error);
       });
 
-    // 접속중인 유저들 정보 -> 컴포넌트 안에서 호출
+    // 출석률 top3
+    axios
+    .get(`/api/studyrooms/${studyroomId}/daily-attend`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log("attend top3", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  
+    // 공부량 top3
+    axios
+    .get(`/api/studyrooms/${studyroomId}/daily-study`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log("studyTime top3", response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+    // dailylog생성
+    axios
+    .post(`/api/user-logs/${studyroomId}`, {}, {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log("create daily log!!!!!!!!!!!!");
+    })
+    .catch((error) => {
+      console.log("dailylog 에러",error);
+    });
+
   }, [studyroomId, accessToken]);
 
   return (
@@ -133,7 +173,7 @@ const StudyRoomMember = () => {
                 message="정상적으로 탈퇴되었습니다."
               />
             </div>
-            <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
+            <Link to={`/LiveRoom/${studyroomId}`} style={{ textDecoration: "none" }}>
               <Button variant="contained" color="primary">
                 라이브 입장
               </Button>

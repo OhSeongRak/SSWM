@@ -12,18 +12,29 @@ import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import axios from 'axios';
+// import { useParams } from "react-router-dom";
+
+const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
 export default class StreamComponent extends Component {
     constructor(props) {
         super(props);
-        this.state = { nickname: this.props.user.getNickname(), showForm: false, mutedSound: false, isFormValid: true };
+        this.state = {
+            nickname: this.props.user.getNickname(),
+            showForm: false,
+            mutedSound: false,
+            isFormValid: true,
+            studyroom: this.props.studyroom
+        };
         this.handleChange = this.handleChange.bind(this);
         this.handlePressKey = this.handlePressKey.bind(this);
         this.toggleNicknameForm = this.toggleNicknameForm.bind(this);
         this.toggleSound = this.toggleSound.bind(this);
         this.handleNotificationButtonClick = this.handleNotificationButtonClick.bind(this);
-    }
 
+    }
+    
     handleChange(event) {
         this.setState({ nickname: event.target.value });
         event.preventDefault();
@@ -58,7 +69,17 @@ export default class StreamComponent extends Component {
           }
     };
 
+    formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remainderSeconds = seconds % 60;
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainderSeconds.toString().padStart(2, '0')}`;
+    }
+
     render() {
+        // 스터디룸 총 휴식 시간 - 내가 사용한 휴식시간 => 남은 휴식시간
+        const formattedMaxRestTime = this.formatTime(this.props.studyroom.maxRestTime - this.props.restTime);
+
         return (
             <div className="OT_widget-container">
                 <div className="pointer nickname">
@@ -89,6 +110,7 @@ export default class StreamComponent extends Component {
                         <div>
                             <span id="nickname">{this.props.user.getNickname()}</span>
                             {this.props.user.isLocal() && <span id=""></span>}
+                            <div style={{ marginTop: "10px" }}>남은 쉬는 시간 : {formattedMaxRestTime}</div>
                         </div>
                     )}
                 </div>

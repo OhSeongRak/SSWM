@@ -113,9 +113,8 @@ function App() {
           {/* 아래 Admin은 방장일 때만 접속가능하게 하나 만들어줘야할듯? */}
           <Route path="/StudyRoomAdmin/:studyroomId" element={isTokenValid ? <StudyRoomAdmin /> : <Login />}></Route>
           <Route path="/StudyRoomMember/:studyroomId" element={isTokenValid ? <StudyRoomMember /> : <Login />}></Route>
-          <Route path="/LiveRoom" element={isTokenValid ? <LiveRoom /> : <Login />}></Route>
+          <Route path="/LiveRoom/:studyroomId" element={isTokenValid ? <LiveRoom /> : <Login />}></Route>
           <Route path="/Stretching" element={isTokenValid ? <Stretching /> : <Login />}></Route>
-          {/* <Route path="/VideoRoomComponent" element={<VideoRoomComponent />} /> */}
         </Routes>
       </BrowserRouter>
     </ContentWrap>
