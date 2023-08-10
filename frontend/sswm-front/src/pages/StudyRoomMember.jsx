@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 import StudyRoomMembers from "../components/StudyRoom/StudyRoomMembers";
 import StudyRoomMemberScore from "../components/StudyRoom/StudyRoomMemberScore";
-import StudyRoomMemberChat from "../components/StudyRoom/StudyRoomMemberChat";
 import StudyRoomMemberTime from "../components/StudyRoom/StudyRoomMemberTime";
 import StudyRoomMemberBoard from "../components/StudyRoom/StudyRoomMemberBoard";
 
@@ -141,7 +140,9 @@ const StudyRoomMember = () => {
       <ContainerWrap>
         <HeaderWrap>
           <HeaderTitle>
-            {studyroom.name}
+            <Background>
+              {studyroom.name}
+            </Background>
             <HeaderBtnWrap>
               <Link to="/StudyRoomAdmin" style={{ textDecoration: "none" }}>
                 <IconButton onClick={handleenterAdmin} aria-label="setting" size="large">
@@ -150,9 +151,48 @@ const StudyRoomMember = () => {
               </Link>
             </HeaderBtnWrap>
           </HeaderTitle>
-          <HeaderBtn>
-            <div>
-              <Button variant="contained" color="success" onClick={openModal}>
+        </HeaderWrap>
+        <ContentWrap>
+            {/* 스터디원 */}
+            <StudyMemberWrap>
+              <StudyRoomMembers studyroomId={studyroomId} />
+            </StudyMemberWrap>
+            
+            <div style={{display:"flex",justifyContent:"space-between"}}>
+              {/* 공지사항 */}
+              <StudyRoomBoardWrap>
+                <StudyRoomMemberBoard notice={studyroom.notice} />
+              </StudyRoomBoardWrap>
+
+              {/* 공부,휴식 시간 */}
+              <SideBanner>
+                <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
+                  <Button variant="contained" 
+                    sx={{
+                      m : 1,
+                      backgroundColor: "#114B0B",
+                      ":hover": { backgroundColor: "#FA990E" },
+                    }}
+                  >
+                    라이브 입장
+                  </Button>
+                </Link>
+                <StudyRoomTimeWrap>
+                  <StudyRoomMemberTime studyAvgTime={studyAvgTime} maxAvgTime={maxRestTime} />
+                </StudyRoomTimeWrap>
+              </SideBanner>
+            </div>
+       
+        </ContentWrap>
+        <ContentWrap>
+          <StudyScoreWrap>
+              {/*일일 공부왕, 7월 출석왕*/}
+              <StudyRoomMemberScore studyroomId={studyroomId} />
+          </StudyScoreWrap>
+        </ContentWrap>
+        <ContentWrap>
+               {/* 스터디룸 탈퇴하기 */}
+               <Button variant="contained" color="success" onClick={openModal}>
                 스터디룸 탈퇴하기
               </Button>
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
@@ -208,58 +248,54 @@ const StudyRoomMember = () => {
     </div>
   );
 };
-
+const Background = styled.span`
+  padding: 7px;
+  border-radius : 10px;
+`;
 const ContainerWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100vh;
+  height: 120vh;
 `;
 const HeaderWrap = styled.div`
   display: flex;
-  width: 80%;
-  height: 10%;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 10vh;
+  margin-top: 5vw;
 `;
 const HeaderTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 70%;
-  height: 100%;
-  border: 1px solid black;
+  width: 80%;
   border-radius: 15px;
   font-size: 30px;
   font-family: "NanumSquareNeo";
+  
 `;
 const HeaderBtnWrap = styled.span`
   display: flex;
 `;
-const HeaderBtn = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30%;
-  height: 100%;
-  gap: 1vw;
-`;
+
 const ContentWrap = styled.div`
   display: flex;
   width: 80%;
-  height: 90%;
+  height: 60vh;
   margin-top: 2vw;
+  flex-direction: column;
 `;
-const ContentLeftWrap = styled.div`
-  width: 70%;
-  height: 100%;
-`;
+
 const StudyMemberWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 20%;
+  height: 20vh;
   gap: 1vw;
 `;
 const StudyScoreWrap = styled.div`
@@ -267,31 +303,36 @@ const StudyScoreWrap = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 40%;
+  height: 40vh;
 `;
-const StudyChatWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 40%;
-`;
-const ContentRightWrap = styled.div`
-  width: 30%;
-  height: 100%;
-`;
+
+
 const StudyRoomTimeWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 35%;
+  
 `;
 const StudyRoomBoardWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 65%;
+  height: 40vh;
 `;
+const SideBanner = styled.div`
+  position: fixed;
+  right: 0;
+  top: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 0.2rem solid #FA990E;
+  border-radius : 15px;
+  padding: 0.5rem;
+  margin: 0 0.2rem 0 0;
+  background: white;
+`
 export default StudyRoomMember;

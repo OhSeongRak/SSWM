@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import styled from 'styled-components';
-
-import rank from '../../assets/rank.JPG';
+import { Avatar } from "@mui/material";
 
 const StudyRoomMemberScore = ({studyroomId}) => {
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
@@ -52,12 +51,18 @@ const StudyRoomMemberScore = ({studyroomId}) => {
             일일 공부왕
           </ContentTitle>
           <ContentRank>
-            <ContentRankImg src={rank}/>
             <ContentRankValueWrap>
               {top3Study && top3Study.map((v,idx)=>
                 <ContentRankValue key={idx}>
-                  [{v.userDto.nickname}]
-                  {v.studyTime}
+                  <MemberContent key={idx}>
+                  <div>{v.studyTime}</div>
+                  <Avatar alt="Study-Member" src={v.userDto.image} />
+                  <div style={{display:"flex", textAlign: "center"}}>
+                    <Nickname>
+                      {v.userDto.nickname}
+                    </Nickname>
+                  </div>
+                </MemberContent>
                 </ContentRankValue>
               )
             
@@ -72,14 +77,22 @@ const StudyRoomMemberScore = ({studyroomId}) => {
             {top3Attend.month}월 출석왕
           </ContentTitle>
           <ContentRank>
-            <ContentRankImg src={rank} />
             <ContentRankValueWrap>
             { top3Attend.users &&
               top3Attend.users.map((user,idx)=>
               <ContentRankValue key={idx}>
-                [{user.userDto.nickname}]
-                {user.attendDays}/{top3Attend.daysOfMonth}
+                <MemberContent key={idx}>
+                  <div>{user.attendDays}/{top3Attend.daysOfMonth}</div>
+                  <Avatar alt="Study-Member" src={user.userDto.image} />
+                  <div style={{display:"flex", textAlign: "center"}}>
+                    <Nickname>
+                      {user.userDto.nickname}
+                    </Nickname>
+                  </div>
+                </MemberContent>
               </ContentRankValue>
+
+              
               )
             }
             
@@ -113,7 +126,6 @@ const ContentWrap = styled.div`
   justify-content: center;
   width: 45%;
   height: 100%;
-  border: 3px solid #b2dfdb;
   border-radius: 15px;
   overflow: hidden;
 `
@@ -124,7 +136,7 @@ const ContentTitle = styled.div`
   width: 100%;
   height: 10%;
   background-color: #b2dfdb;
-  font-size: 15px;
+  font-size: 20px;
   font-family: "NanumSquareNeo";
   border-bottom: 1px solid #b2dfdb;
 `
@@ -136,10 +148,7 @@ const ContentRank = styled.div`
   width: 100%;
   height: 90%;
 `
-const ContentRankImg = styled.img`
-  width: 80%;
-  height: 80%;
-`
+
 const ContentRankValueWrap = styled.div`
   display: flex;
   align-items: center;
@@ -154,5 +163,20 @@ const ContentRankValue = styled.div`
   width: 33%;
   height: 100%;
   font-family: "NanumSquareNeo";
+  flex-direction: column;
+  align-items: center;
+`
+const MemberContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+`
+const Nickname = styled.div`
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  width: 80px;
 `
 export default StudyRoomMemberScore;
