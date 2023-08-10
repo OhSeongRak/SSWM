@@ -74,6 +74,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         };
     }
 
+    @Override
     public List<DailyLogDto> selcectDailyLogsByUserId(Long userId, long start, long end) {
         System.out.println("여긴와???");
         List<DailyLog> dailyLogs = dailyLogRepository.findAllByUserIdAndDateBetween(
