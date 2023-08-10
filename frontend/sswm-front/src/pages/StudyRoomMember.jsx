@@ -101,7 +101,9 @@ const StudyRoomMember = () => {
       <ContainerWrap>
         <HeaderWrap>
           <HeaderTitle>
-            {studyroom.name}
+            <Background>
+              {studyroom.name}
+            </Background>
             <HeaderBtnWrap>
               <Link to="/StudyRoomAdmin" style={{ textDecoration: "none" }}>
                 <IconButton onClick={handleenterAdmin} aria-label="setting" size="large">
@@ -171,7 +173,10 @@ const StudyRoomMember = () => {
     </div>
   );
 };
-
+const Background = styled.span`
+  padding: 7px;
+  border-radius : 10px;
+`;
 const ContainerWrap = styled.div`
   display: flex;
   flex-direction: column;

@@ -57,8 +57,10 @@ const StudyRoomMembers = ({studyroomId}) => {
   }, [studyroomId]);
   return (
     <ContainerWrap>
-      <MemberTitleWrap>
-        스터디원
+      <MemberTitleWrap >
+        <Background>
+          스터디원
+        </Background>
       </MemberTitleWrap>
       <MemberWrap>
       {studyPeople && 
@@ -72,12 +74,18 @@ const StudyRoomMembers = ({studyroomId}) => {
           >
           <Avatar alt="Study-Member" src={person.userDto.image} sx={{ width: 60, height: 60 }} />
         </StyledBadge>
-          {person.userDto.nickname}
+          <Nickname>
+            {person.userDto.nickname}
+          </Nickname>
         </MemberContent>
         :
         <MemberContent key={idx}>
           <Avatar alt="Study-Member" src={person.userDto.image} sx={{ width: 60, height: 60 }} />
-          {person.userDto.nickname}
+          <div style={{display:"flex", textAlign: "center"}}>
+          <Nickname>
+            {person.userDto.nickname}
+          </Nickname>
+          </div>
         </MemberContent>
       )}
         
@@ -89,7 +97,18 @@ const StudyRoomMembers = ({studyroomId}) => {
     </ContainerWrap>
   );
 };
+const Nickname = styled.div`
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  width: 70px;
 
+`
+const Background = styled.span`
+  background-color: #F2CC47;  
+  padding: 7px;
+  border-radius : 10px;
+`;
 const ContainerWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -115,6 +134,7 @@ const MemberContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 70px;
 `
 
 export default StudyRoomMembers;
