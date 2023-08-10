@@ -39,7 +39,7 @@ const MyPage = () => {
       <ContainerWrap>
         <SidebarWrap>
           <SidebarItem href="#nav1">내 프로필</SidebarItem>
-          <SidebarItem href="#nav2">내가 키운나무 도감</SidebarItem>
+          <SidebarItem href="#nav1">내가 키운나무 도감</SidebarItem>
           <SidebarItem href="#nav3">내 스터디룸</SidebarItem>
           <SidebarItem href="#nav4">캘린더</SidebarItem>
         </SidebarWrap>

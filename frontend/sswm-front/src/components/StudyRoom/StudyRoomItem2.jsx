@@ -22,7 +22,7 @@ const Card = ({studyroom}) => {
   const formattedDate = dateObject.toLocaleDateString(); // 날짜만 포맷으로 변환
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + studyroom.image;
   const studyAvgTime = formatTime(studyroom.studyAvgTime);
-  
+
   return (
     <div className="col-sm-6 col-md-6 col-lg-4 mt-4" > 
       <div className="card">
@@ -54,7 +54,7 @@ const Card = ({studyroom}) => {
          </div>
 
           <IconButton sx={{ gap: 1 }} disabled style={{"padding":"0px"}}>
-          {studyroom.tagNames.map((tagName) => (
+          {studyroom.tagNames && studyroom.tagNames.map((tagName) => (
             <Chip
               key={tagName} // 각 Chip 컴포넌트에 고유한 key prop을 설정해야 합니다.
               variant="outlined"

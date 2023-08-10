@@ -25,7 +25,7 @@ const MyProfile = ({ users }) => {
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   useEffect(() => {
     axios
-      .get("/api/trees", {
+      .get("/api/user/trees",{
         headers: {
           Authorization: accessToken,
         },
@@ -61,7 +61,7 @@ const MyProfile = ({ users }) => {
           },
         })
         .then((response) => {
-          console.log("생성된 새로운 나무", response.data.tree.id)
+          console.log(response.data)
           setCreateTrees(response.data.tree.id)
           setIsTreeCreated(true);
           // Use the newly created tree data directly from the response
@@ -136,18 +136,22 @@ const MyProfile = ({ users }) => {
         <Title>나무도감</Title>
       </TitleWrap>
       <ContentWrap>
-        <TreeListWrap>
-        {trees.map((tree) => {
-            return (
-              <TreeInfo2 key={tree.id}>
-                <TreeImg src={tree2}>
-                </TreeImg>
-                <TreeName>
-                  <div>{tree.name}</div>
-                  <div>LV.20</div>
-                </TreeName>
-              </TreeInfo2>
-            );
+      <TreeListWrap>
+          {trees.map((tree) => {
+            // Check if tree.current is false, and render accordingly
+            if (!tree.current) {
+              return (
+                <TreeInfo2 key={tree.id}>
+                  <TreeImg src={tree2}></TreeImg>
+                  <TreeName>
+                    <div>{tree.name}</div>
+                    <div>LV.20</div>
+                  </TreeName>
+                </TreeInfo2>
+              );
+            } else {
+              return null; // Don't render anything if tree.current is true
+            }
           })}
         </TreeListWrap>
       </ContentWrap>
