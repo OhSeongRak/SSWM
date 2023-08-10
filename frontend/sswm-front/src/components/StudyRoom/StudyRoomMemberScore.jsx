@@ -111,7 +111,6 @@ const ContentWrap = styled.div`
   justify-content: center;
   width: 45%;
   height: 100%;
-  border: 3px solid #b2dfdb;
   border-radius: 15px;
   overflow: hidden;
 `
@@ -122,7 +121,7 @@ const ContentTitle = styled.div`
   width: 100%;
   height: 10%;
   background-color: #b2dfdb;
-  font-size: 15px;
+  font-size: 20px;
   font-family: "NanumSquareNeo";
   border-bottom: 1px solid #b2dfdb;
 `
