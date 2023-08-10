@@ -42,7 +42,7 @@ public class StudyEventServiceImpl implements StudyEventService {
             dailyLogRepository.findByUserIdAndStudyroomIdAndDateBetween(
                     userId, studyEventDto.getStudyroomId(), days[0], days[1])
                 .ifPresent(dailyLog -> {
-                    if (studyEventDto.getType() == StudyEventType.LIVE) {
+                    if (studyEventDto.getType() == StudyEventType.STUDY) {
                         dailyLog.setStudyTime(duration + dailyLog.getStudyTime());
                     } else if (studyEventDto.getType() == StudyEventType.REST) {
                         dailyLog.setRestTime(duration + dailyLog.getRestTime());
@@ -59,10 +59,10 @@ public class StudyEventServiceImpl implements StudyEventService {
             studyEventRepository.delete(
                 keyBuilder(userId, studyEventDto.getStudyroomId(), studyEventDto.getType()));
         } else if (studyEventDto.getStatus() == StudyEventStatus.ON) { // O
-            if (studyEventDto.getType() == StudyEventType.LIVE) {
+            if (studyEventDto.getType() == StudyEventType.STUDY) {
                 // 기존 LIVE가 없어야함
                 Long time = studyEventRepository.findById(
-                    keyBuilder(userId, studyEventDto.getStudyroomId(), StudyEventType.LIVE));
+                    keyBuilder(userId, studyEventDto.getStudyroomId(), StudyEventType.STUDY));
                 if (time != null) {
                     return;
                 }
@@ -70,7 +70,7 @@ public class StudyEventServiceImpl implements StudyEventService {
             if (studyEventDto.getType() == StudyEventType.STRETCH) {
                 // LIVE 가 있어야하고, STRETCH가 없어야 하고, REST가 없어야 함
                 Long prevLiveTime = studyEventRepository.findById(
-                    keyBuilder(userId, studyEventDto.getStudyroomId(), StudyEventType.LIVE));
+                    keyBuilder(userId, studyEventDto.getStudyroomId(), StudyEventType.STUDY));
                 Long prevStretchTime = studyEventRepository.findById(
                     keyBuilder(userId, studyEventDto.getStudyroomId(), StudyEventType.STRETCH));
                 Long prevRestTime = studyEventRepository.findById(
@@ -82,7 +82,7 @@ public class StudyEventServiceImpl implements StudyEventService {
             if (studyEventDto.getType() == StudyEventType.REST) {
                 // LIVE가 있어야 하고, REST가 없어야 하고, STRETCH가 없어야 함
                 Long prevLiveTime = studyEventRepository.findById(
-                    keyBuilder(userId, studyEventDto.getStudyroomId(), StudyEventType.LIVE));
+                    keyBuilder(userId, studyEventDto.getStudyroomId(), StudyEventType.STUDY));
                 Long prevStretchTime = studyEventRepository.findById(
                     keyBuilder(userId, studyEventDto.getStudyroomId(), StudyEventType.STRETCH));
                 Long prevRestTime = studyEventRepository.findById(

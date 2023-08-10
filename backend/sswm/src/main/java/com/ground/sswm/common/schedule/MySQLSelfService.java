@@ -6,6 +6,8 @@ import static com.ground.sswm.common.util.UnixTimeUtil.toSeoulTime;
 
 import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
+import com.ground.sswm.studyroom.model.Studyroom;
+import com.ground.sswm.studyroom.repository.StudyroomRepository;
 import com.ground.sswm.userStudyroom.model.UserStudyroom;
 import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
 import java.time.ZoneId;
@@ -21,7 +23,7 @@ public class MySQLSelfService {
 
     private final DailyLogRepository dailyLogRepository;
     private final UserStudyroomRepository userStudyroomRepository;
-
+    private final StudyroomRepository studyroomRepository;
     public void dailyLogToUserStudyroom() {
         // [0] 작업을 진행할 초기 시간 ~ 끝 시간 선택
         long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
@@ -50,6 +52,23 @@ public class MySQLSelfService {
     }
 
     //TODO: userStudyroom -> Studyroom
+    public void UserStudyroomToStudyroom() {
+        long count = studyroomRepository.count();
+        for(long i=1; i<=count; i++){
+            Studyroom studyroom = studyroomRepository.findById(i).get();
 
+            List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(i);
+            int sum = 0, cnt = 0;
+            for (UserStudyroom userStudyroom:userStudyrooms
+            ) {
+               if(userStudyroom.isDeleted()) continue;
+                sum += userStudyroom.getTotalStudy();
+                cnt += 1;
+            }
+            studyroom.setStudyAvgTime(sum / cnt);
+            studyroomRepository.save(studyroom);
+
+        }
+    }
     //TODO: dayillog -> usertree
 }

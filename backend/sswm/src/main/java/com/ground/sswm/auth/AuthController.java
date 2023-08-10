@@ -64,12 +64,12 @@ public class AuthController {
         OAuthUserInfoDto userInitialInfo;
         if (socialType.equals(OAuthProvider.GOOGLE.getProvider())) {
             socialAuthService = googleAuthService;
-            oAuthTokenDto = socialAuthService.getToken(authorizationCode);
+            oAuthTokenDto = socialAuthService.getToken(authorizationCode,"LOGIN");
             userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
             oauthUser = new GoogleUserInfo(userInitialInfo);
         } else if (socialType.equals(OAuthProvider.KAKAO.getProvider())) {
             socialAuthService = kakaoAuthService;
-            oAuthTokenDto = socialAuthService.getToken(authorizationCode);
+            oAuthTokenDto = socialAuthService.getToken(authorizationCode,"LOGIN");
             userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
             oauthUser = new KakaoUserInfo(userInitialInfo);
         }
@@ -112,12 +112,12 @@ public class AuthController {
         OAuthUserInfoDto userInitialInfo;
         if (socialType.equals(OAuthProvider.GOOGLE.getProvider())) {
             socialAuthService = googleAuthService;
-            oAuthTokenDto = socialAuthService.getToken(authorizationCode);
+            oAuthTokenDto = socialAuthService.getToken(authorizationCode,"SIGN");
             userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
             oauthUser = new GoogleUserInfo(userInitialInfo);
         } else if (socialType.equals(OAuthProvider.KAKAO.getProvider())) {
             socialAuthService = kakaoAuthService;
-            oAuthTokenDto = socialAuthService.getToken(authorizationCode);
+            oAuthTokenDto = socialAuthService.getToken(authorizationCode,"SIGN");
             userInitialInfo = socialAuthService.getUserInfo(oAuthTokenDto);
             oauthUser = new KakaoUserInfo(userInitialInfo);
         }

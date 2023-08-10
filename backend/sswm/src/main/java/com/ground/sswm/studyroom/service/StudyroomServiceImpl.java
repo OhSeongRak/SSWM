@@ -158,13 +158,14 @@ public class StudyroomServiceImpl implements StudyroomService {
     public List<SearchStudyroomResDto> selectByUserId(Long userId) {
         List<Studyroom> studyrooms = studyroomRepository.findByUserId(userId);
 
-        if (studyrooms.isEmpty())
-            return null;
-
-        List<SearchStudyroomResDto> searchStudyroomResDtoList=new ArrayList<>();
+        List<SearchStudyroomResDto> searchStudyroomResDtoList = new ArrayList<>();
         for (Studyroom studyroom : studyrooms) {
-            searchStudyroomResDtoList.add(SearchStudyroomResDto.from(studyroom));
+            SearchStudyroomResDto searchStudyroomResDto = SearchStudyroomResDto.from(studyroom);
+            searchStudyroomResDto.setTagNames(tagRepository.findTags(studyroom.getId()));
+
+            searchStudyroomResDtoList.add(searchStudyroomResDto);
         }
+
 
         return searchStudyroomResDtoList;
     }
