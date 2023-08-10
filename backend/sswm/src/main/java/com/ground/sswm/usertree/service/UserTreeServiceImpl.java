@@ -58,17 +58,23 @@ public class UserTreeServiceImpl implements UserTreeService {
         List<UserTree> userTrees = userTreeRepository.findAllByUserId(userId);
         List<UserTreeResDto> userTreeResDtos = new ArrayList<>();
 
+        //해당 유저의 모든 나무에 대해서
         for (UserTree userTree : userTrees) {
             Long treeId = userTree.getTree().getId();
             UserTreeResDto userTreeResDto = new UserTreeResDto();
             UserTreeDto userTreeDto = new UserTreeDto();
+
+            //해당 나무가 아직 키우고 있는 상태라면
             if (userTreeDto.getExp() < 3400){
+                //현재 나무라고 알려줌
                 userTreeResDto.setCurrent(true);
 
                 long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
                 List<DailyLog> dailyLogs = dailyLogRepository.findAllByUserIdAndDateBetween(userId, days[0], days[1]);
+                //dailylog에서 시간 및 점수 합산해서 가져옴
                 ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId, dailyLogs);
 
+                //시간 및 점수로 경험치 계산해서 가져옴
                 userTreeDto.setExp(userTree.getExp() +
                         CalExpFromDailyLog.calExp(
                             expDto.getStudyTime(),
@@ -78,6 +84,7 @@ public class UserTreeServiceImpl implements UserTreeService {
                 );
 
             }
+            //이미 다 키운 나무라면
             else{
                 userTreeResDto.setCurrent(false);
                 userTreeDto.setExp(userTree.getExp());
@@ -86,10 +93,10 @@ public class UserTreeServiceImpl implements UserTreeService {
             userTreeDto.setUserId(userId);
             userTreeDto.setTreeId(treeId);
 
-
-
+            //response 데이터에 set
             userTreeResDto.setUserTreeDto(userTreeDto);
 
+            //잘못된 아이디로 나무를 조회하면(거의 가능성 없는 오류)
             Tree tree = treeRepository.findById(treeId).orElseThrow(
                 () -> new TreeNotFoundException("해당 나무가 없습니다.")
             );
