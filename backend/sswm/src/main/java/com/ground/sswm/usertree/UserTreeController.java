@@ -26,13 +26,13 @@ public class UserTreeController {
     private final AuthService authService;
 
     @PostMapping
-    public ResponseEntity<String> randTree(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<UserTreeResDto> randTree(@RequestHeader("Authorization") String token) {
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
         Long userId = Long.valueOf(headerToken.get("id").toString());
 
-        String result = userTreeService.randTree(userId);
+        UserTreeResDto userTreeResDto = userTreeService.randTree(userId);
 
-        return new ResponseEntity<String>(result, HttpStatus.OK);
+        return new ResponseEntity<>(userTreeResDto, HttpStatus.OK);
     }
 
     @GetMapping
