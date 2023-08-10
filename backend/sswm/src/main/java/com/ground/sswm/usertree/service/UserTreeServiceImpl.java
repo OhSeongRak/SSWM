@@ -38,9 +38,9 @@ public class UserTreeServiceImpl implements UserTreeService {
         List<Long> trees = userTreeRepository.findByUserIdNotIn(userId);
 
         Collections.shuffle(trees);
-
-        Tree tree = new Tree();
-        tree.setId(trees.get(0));
+        Tree tree = treeRepository.findById(trees.get(0)).orElseThrow(
+            () -> new TreeNotFoundException("남은 나무가 없습니다.")
+        );;
 
         UserTree userTree = new UserTree();
         userTree.setUser(user);
