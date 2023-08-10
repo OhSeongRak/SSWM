@@ -14,6 +14,6 @@ public interface UserTreeRepository extends JpaRepository<UserTree, Long> {
         + "(select ut.tree.id from UserTree ut where ut.user.id = :userId)")
     List<Long> findByUserIdNotIn(@Param("userId") Long userId);
 
-    List<UserTree> findAllByUserIdAndTreeId(Long userId, Long treeId);
+    List<UserTree> findAllByUserId(Long userId);
 
 }

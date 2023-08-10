@@ -4,12 +4,18 @@ import static com.ground.sswm.common.util.UnixTimeUtil.getCurrentUnixTime;
 import static com.ground.sswm.common.util.UnixTimeUtil.getStartEndOfPeriod;
 import static com.ground.sswm.common.util.UnixTimeUtil.toSeoulTime;
 
+import com.ground.sswm.common.util.CalExpFromDailyLog;
 import com.ground.sswm.dailyLog.model.DailyLog;
+import com.ground.sswm.dailyLog.model.dto.DailyLogDto;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.repository.StudyroomRepository;
+import com.ground.sswm.user.model.User;
+import com.ground.sswm.user.repository.UserRepository;
 import com.ground.sswm.userStudyroom.model.UserStudyroom;
 import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
+import com.ground.sswm.usertree.model.UserTree;
+import com.ground.sswm.usertree.repository.UserTreeRepository;
 import java.time.ZoneId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +30,8 @@ public class MySQLSelfService {
     private final DailyLogRepository dailyLogRepository;
     private final UserStudyroomRepository userStudyroomRepository;
     private final StudyroomRepository studyroomRepository;
+    private final UserRepository userRepository;
+    private final UserTreeRepository userTreeRepository;
     public void dailyLogToUserStudyroom() {
         // [0] 작업을 진행할 초기 시간 ~ 끝 시간 선택
         long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
@@ -51,7 +59,7 @@ public class MySQLSelfService {
         );
     }
 
-    //TODO: userStudyroom -> Studyroom
+    //userStudyroom -> Studyroom
     public void UserStudyroomToStudyroom() {
         long count = studyroomRepository.count();
         for(long i=1; i<=count; i++){
@@ -70,5 +78,60 @@ public class MySQLSelfService {
 
         }
     }
-    //TODO: dayillog -> usertree
+    //dayillog -> usertree (04시)
+    public void dailylogToUsesTree(){
+        long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
+        //오늘의 데일리 로그를 전부 가져옴
+        List<DailyLog> dailyLogs = dailyLogRepository.findAllDateBetween(days[0], days[1]);
+
+        //유저를 전부 가져옴
+        List<User> users = userRepository.findAll();
+
+        //유저에 대해
+        for (User user: users) {
+            Long userId = user.getId();
+            //유저 트리를 모두 가져옴
+            List<UserTree> userTrees = userTreeRepository.findAllByUserId(userId);
+            if(userTrees.isEmpty()) continue;
+
+            long studyTime = 0;
+            long restTime = 0;
+            int stretchScore = 0;
+
+            //데일리 로그에 대해
+            for (DailyLog dailyLog: dailyLogs){
+                DailyLogDto dailyLogDto = DailyLogDto.from(dailyLog);
+
+                //해당 유저의 데일리 로그이면 시간 및 점수 더해줌
+                if (dailyLog.getUser().getId() == userId){
+                    studyTime += dailyLogDto.getStudyTime();
+                    restTime += dailyLogDto.getRestTime();
+                    stretchScore += dailyLogDto.getStretchScore();
+                }
+            }
+
+            //어떤 나무에 적용할지 고르기 위한 for
+            for (UserTree userTree: userTrees
+            ) {
+                //키우고 있는 나무라면
+                if (userTree.getExp() < 3400){
+                    //rudgjacl 계산
+                    userTree.setExp(userTree.getExp() + CalExpFromDailyLog.calExp(studyTime, restTime, stretchScore));
+
+                    //오늘 다 키웠다면 최대 경험치로 설정
+                    if (userTree.getExp() > 3400){
+                        userTree.setExp(3400);
+                    }
+
+                    userTreeRepository.save(userTree);
+                    break;
+                }
+            }
+
+        }
+
+    }
+
+    //나무 경험치
+
 }
