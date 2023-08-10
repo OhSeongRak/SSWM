@@ -1,8 +1,9 @@
 package com.ground.sswm.dailyLog;
 
 import com.ground.sswm.auth.service.AuthService;
+import com.ground.sswm.dailyLog.model.dto.DailyLogDto;
 import com.ground.sswm.dailyLog.service.DailyLogService;
-import com.ground.sswm.studyroom.model.dto.StudyroomDto;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -38,8 +37,17 @@ public class DailyLogController {
     }
 
     @GetMapping
-    public ResponseEntity<?> list(@RequestParam Long start,@RequestParam Long end) {
-        return null;
+    public ResponseEntity<?> list(@RequestHeader("Authorization") String token,
+        @RequestParam long start, @RequestParam long end) {
+        log.debug("start : " + start/1000L);
+        log.debug("end :" + end/1000L);
+        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
+        Long userId = Long.valueOf(headerToken.get("id").toString());
+        log.debug("userId : " +userId);
+        List<DailyLogDto> dailyLogDtos = dailyLogService.totalStudyTime(userId, start/1000L, end/1000L-86399L);
+
+        return new ResponseEntity<>(dailyLogDtos, HttpStatus.OK);
     }
+
 
 }
