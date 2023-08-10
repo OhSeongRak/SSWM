@@ -31,7 +31,7 @@ public class UserTreeServiceImpl implements UserTreeService {
     private final TreeRepository treeRepository;
     private final DailyLogRepository dailyLogRepository;
     @Override
-    public String randTree(Long userId) {
+    public UserTreeResDto randTree(Long userId) {
         User user = new User();
         user.setId(userId);
 
@@ -48,8 +48,16 @@ public class UserTreeServiceImpl implements UserTreeService {
         userTree.setExp(0);
 
         userTreeRepository.save(userTree);
-
-        return "생성완료";
+        UserTreeDto userTreeDto = new UserTreeDto();
+        userTreeDto.setUserId(userId);
+        userTreeDto.setTreeId(tree.getId());
+        userTreeDto.setExp(0);
+        UserTreeResDto userTreeResDto = new UserTreeResDto();
+        userTreeResDto.setUserTreeDto(userTreeDto);
+        userTreeResDto.setName(tree.getName());
+        userTreeResDto.setCurrent(true);
+        userTreeResDto.setImage(tree.getImage());
+        return userTreeResDto;
     }
 
     //유저 아이디에 해당하는 나무를 찾아서 response해줌

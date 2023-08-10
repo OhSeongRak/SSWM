@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserTreeService {
 
-    String randTree(Long userId);
+    UserTreeResDto randTree(Long userId);
 
     List<UserTreeResDto> searchTree(Long userId);
 
