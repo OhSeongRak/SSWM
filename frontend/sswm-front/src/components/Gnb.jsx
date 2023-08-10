@@ -1,16 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
-import Logo from '../assets/Logo.png'
-
+import Logo from "../assets/Logo.png";
 
 const Gnb = (props) => {
   const isLoggedIn = !!localStorage.getItem("accessToken");
 
   const navigate = useNavigate();
   const handleLogout = () => {
-  
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     window.location.replace("/Login");
@@ -24,13 +22,18 @@ const Gnb = (props) => {
       <GnbBtn>
         {isLoggedIn ? (
           <>
-            <Link to="/MyPage" style={{ textDecoration: "none" , color : "black"}}>
+            <Link
+              to="/MyPage"
+              style={{ textDecoration: "none", color: "black" }}
+            >
               <GnbBtn>마이페이지</GnbBtn>
             </Link>
-            <GnbBtn onClick={handleLogout} style={{ cursor: "pointer" }}>로그아웃</GnbBtn>
+            <GnbBtn onClick={handleLogout} style={{ cursor: "pointer" }}>
+              로그아웃
+            </GnbBtn>
           </>
         ) : (
-          <Link to="/Login" style={{ textDecoration: "none" , color : "black"}}>
+          <Link to="/Login" style={{ textDecoration: "none", color: "black" }}>
             <GnbBtn>로그인</GnbBtn>
           </Link>
         )}
@@ -41,19 +44,21 @@ const Gnb = (props) => {
 
 const Header = styled.header`
   display: flex;
-  justify-content : space-between;
-`
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+`;
 
 const LogoImg = styled.img`
   width: 100px;
-  height: 50px;
-`
+`;
 
 const GnbBtn = styled.div`
   display: inline-flex;
   font-family: "NanumSquareNeo";
   font-size: 20px;
-  margin-left: 15px;  
-`
+  margin-left: 15px;
+  white-space: nowrap;
+`;
 
 export default Gnb;

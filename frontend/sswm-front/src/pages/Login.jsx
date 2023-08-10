@@ -20,7 +20,7 @@ const Login = () => {
     <div>
       <Gnb />
       <ContainerWrap>
-        <Box component="span" sx={{ p: 2, border: "1px solid grey" }}>
+        <Box component="span" sx={{ p: 2, border: "3px solid orange",borderRadius:"35px" }}>
           <LoginWrap>
             <Text> 간편로그인 </Text>
             <SocialWrap>
@@ -34,11 +34,9 @@ const Login = () => {
               />
             </SocialWrap>
             <ButtonWrap>
+              아직 회원이 아니신가요?
               <Link to="/SignUp">
-                <Button variant="outlined">회원가입</Button>
-              </Link>
-              <Link to="/SignUpName">
-                <Button variant="outlined">로그인</Button>
+                <div style={{color:"orange"}} >회원가입 하러 가기</div>
               </Link>
             </ButtonWrap>
           </LoginWrap>
