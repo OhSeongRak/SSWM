@@ -25,36 +25,53 @@ const Card = ({studyroom}) => {
   return (
     <div className="col-sm-6 col-md-6 col-lg-4 mt-4">
       <div className="card">
-        <div className="card-block">
-          <Typography className="card-title">{formattedDate}</Typography>
-          <Typography sx={{ color: "black" }}>{studyAvgTime}</Typography>
-          <IconButton disabled>
-            <LocalFireDepartmentIcon sx={{ color: "black" }} />
-            <Typography sx={{ color: "black" }}>{studyroom.name}</Typography>
-          </IconButton>
+        <div className="card-block"style={{"display":"flex",flexDirection: "column", padding:"0.5em"}}>
+          <div style={{display:"flex",justifyContent: "flex-end"}}>
+            <div style={{display:"flex"}}>
+            <LocalFireDepartmentIcon sx={{ color: "gray" }} />
+            <Typography  sx={{ color: "gray" ,"display":"flex" }}>{studyAvgTime}</Typography>
+            </div>
+          </div>
+          <div style={{display:"flex",justifyContent: "center"}}>
+            <Typography variant="h5"sx={{ color: "black" }}>{studyroom.name}</Typography>
+          </div>
+
         </div>
         <img
           alt="random pic"
           className="card-img-top"
           src={imageUrl}
-          style={{ width: 382, height: 255 }}
         />
+        {/**/}
         <CardHoverMenus studyroom = {studyroom}/>
         <div className="card-footer">
-          <IconButton sx={{ gap: 1 }} disabled>
+        <div disabled   style={{display:"flex",justifyContent: "space-between"}}>
+            <Typography className="card-title">{formattedDate} ~ </Typography>
+            <div style={{display:"flex"}}>
+              <PeopleAltIcon sx={{ justifyContent: "end", color: "black" }} />
+              <Typography sx={{ justifyContent: "end", color: "black" }}>&nbsp; {studyroom.userNum} / {studyroom.maxUserNum}</Typography>
+            </div>
+         </div>
+
+          <IconButton sx={{ gap: 1 }} disabled style={{"padding":"0px"}}>
           {studyroom.tagNames.map((tagName) => (
             <Chip
               key={tagName} // 각 Chip 컴포넌트에 고유한 key prop을 설정해야 합니다.
               variant="outlined"
               color="primary"
+              size="small"
               label={tagName}
             />
           ))}
+          <Chip
+              variant="outlined"
+              color="primary"
+              size="small"
+              style={{  visibility: "hidden"}}
+            />
           </IconButton>
-          <IconButton disabled sx={{ justifyContent: "end" }}>
-            <PeopleAltIcon sx={{ justifyContent: "end", color: "black" }} />
-            <Typography sx={{ justifyContent: "end", color: "black" }}>&nbsp; {studyroom.userNum} / {studyroom.maxUserNum}</Typography>
-          </IconButton>
+
+      
         </div>
       </div>
     </div>

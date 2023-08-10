@@ -42,11 +42,12 @@ const Gnb = (props) => {
 const Header = styled.header`
   display: flex;
   justify-content : space-between;
+  align-items: center;
+  height:50px;
 `
 
 const LogoImg = styled.img`
-  width: 10%;
-  height: 60%;
+  width: 100px;
 `
 
 const GnbBtn = styled.div`
@@ -54,6 +55,7 @@ const GnbBtn = styled.div`
   font-family: "NanumSquareNeo";
   font-size: 20px;
   margin-left: 15px;  
+  white-space: nowrap;
 `
 
 export default Gnb;

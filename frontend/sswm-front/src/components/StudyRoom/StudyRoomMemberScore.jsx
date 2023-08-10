@@ -46,6 +46,7 @@ const StudyRoomMemberScore = ({studyroomId}) => {
   return (
     <ContainerWrap>
       <ScoreWrap>
+        {top3Study&&
         <ContentWrap>
           <ContentTitle>
             일일 공부왕
@@ -53,38 +54,38 @@ const StudyRoomMemberScore = ({studyroomId}) => {
           <ContentRank>
             <ContentRankImg src={rank}/>
             <ContentRankValueWrap>
-              <ContentRankValue>
-                5:00:00
-              </ContentRankValue>
-              <ContentRankValue>
-                15:00:00
-              </ContentRankValue>
-              <ContentRankValue>
-                1:00:00
-              </ContentRankValue>
+              {top3Study && top3Study.map((v,idx)=>
+                <ContentRankValue key={idx}>
+                  [{v.userDto.nickname}]
+                  {v.studyTime}
+                </ContentRankValue>
+              )
+            
+              }
             </ContentRankValueWrap>
           </ContentRank>
         </ContentWrap>
-
+        }
+        {top3Attend &&
         <ContentWrap>
-          <ContentTitle>
-            7월 출석왕
+         <ContentTitle>
+            {top3Attend.month}월 출석왕
           </ContentTitle>
           <ContentRank>
             <ContentRankImg src={rank} />
             <ContentRankValueWrap>
-              <ContentRankValue>
-                25/31
+            { top3Attend.users &&
+              top3Attend.users.map((user,idx)=>
+              <ContentRankValue key={idx}>
+                [{user.userDto.nickname}]
+                {user.attendDays}/{top3Attend.daysOfMonth}
               </ContentRankValue>
-              <ContentRankValue>
-                30/31
-              </ContentRankValue>
-              <ContentRankValue>
-                15/31
-              </ContentRankValue>
+              )
+            }
+            
             </ContentRankValueWrap>
           </ContentRank>
-        </ContentWrap>
+        </ContentWrap>}
       </ScoreWrap>
     </ContainerWrap>
   );
