@@ -1,5 +1,12 @@
 package com.ground.sswm.usertree.service;
 
+import static com.ground.sswm.common.util.UnixTimeUtil.getCurrentUnixTime;
+import static com.ground.sswm.common.util.UnixTimeUtil.getStartEndOfPeriod;
+
+import com.ground.sswm.common.util.CalExpFromDailyLog;
+import com.ground.sswm.common.util.dto.ExpDto;
+import com.ground.sswm.dailyLog.model.DailyLog;
+import com.ground.sswm.dailyLog.repository.DailyLogRepository;
 import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.tree.exception.TreeNotFoundException;
 import com.ground.sswm.tree.model.Tree;
@@ -9,6 +16,7 @@ import com.ground.sswm.usertree.model.UserTree;
 import com.ground.sswm.usertree.model.dto.UserTreeDto;
 import com.ground.sswm.usertree.model.dto.UserTreeResDto;
 import com.ground.sswm.usertree.repository.UserTreeRepository;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +29,7 @@ public class UserTreeServiceImpl implements UserTreeService {
 
     private final UserTreeRepository userTreeRepository;
     private final TreeRepository treeRepository;
-
+    private final DailyLogRepository dailyLogRepository;
     @Override
     public String randTree(Long userId) {
         User user = new User();
@@ -52,12 +60,34 @@ public class UserTreeServiceImpl implements UserTreeService {
 
         for (UserTree userTree : userTrees) {
             Long treeId = userTree.getTree().getId();
+            UserTreeResDto userTreeResDto = new UserTreeResDto();
             UserTreeDto userTreeDto = new UserTreeDto();
+            if (userTreeDto.getExp() < 3400){
+                userTreeResDto.setCurrent(true);
+
+                long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
+                List<DailyLog> dailyLogs = dailyLogRepository.findAllByUserIdAndDateBetween(userId, days[0], days[1]);
+                ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId, dailyLogs);
+
+                userTreeDto.setExp(userTree.getExp() +
+                        CalExpFromDailyLog.calExp(
+                            expDto.getStudyTime(),
+                            expDto.getRestTime(),
+                            expDto.getStretchScore()
+                        )
+                );
+
+            }
+            else{
+                userTreeResDto.setCurrent(false);
+                userTreeDto.setExp(userTree.getExp());
+            }
+
             userTreeDto.setUserId(userId);
             userTreeDto.setTreeId(treeId);
-            userTreeDto.setExp(userTree.getExp());
 
-            UserTreeResDto userTreeResDto = new UserTreeResDto();
+
+
             userTreeResDto.setUserTreeDto(userTreeDto);
 
             Tree tree = treeRepository.findById(treeId).orElseThrow(

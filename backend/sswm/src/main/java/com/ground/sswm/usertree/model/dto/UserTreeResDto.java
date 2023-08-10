@@ -11,4 +11,5 @@ public class UserTreeResDto {
     private UserTreeDto userTreeDto;
     private String image;
     private String name;
+    private boolean current;
 }

@@ -5,6 +5,7 @@ import static com.ground.sswm.common.util.UnixTimeUtil.getStartEndOfPeriod;
 import static com.ground.sswm.common.util.UnixTimeUtil.toSeoulTime;
 
 import com.ground.sswm.common.util.CalExpFromDailyLog;
+import com.ground.sswm.common.util.dto.ExpDto;
 import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.model.dto.DailyLogDto;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
@@ -80,43 +81,36 @@ public class MySQLSelfService {
     }
     //dayillog -> usertree (04시)
     public void dailylogToUsesTree(){
-        long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
         //오늘의 데일리 로그를 전부 가져옴
-        List<DailyLog> dailyLogs = dailyLogRepository.findAllDateBetween(days[0], days[1]);
 
         //유저를 전부 가져옴
         List<User> users = userRepository.findAll();
 
-        //유저에 대해
+        //유저에 대해 나무 계산
         for (User user: users) {
             Long userId = user.getId();
             //유저 트리를 모두 가져옴
             List<UserTree> userTrees = userTreeRepository.findAllByUserId(userId);
             if(userTrees.isEmpty()) continue;
 
-            long studyTime = 0;
-            long restTime = 0;
-            int stretchScore = 0;
+            long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
+            List<DailyLog> dailyLogs = dailyLogRepository.findAllDateBetween(days[0], days[1]);
 
-            //데일리 로그에 대해
-            for (DailyLog dailyLog: dailyLogs){
-                DailyLogDto dailyLogDto = DailyLogDto.from(dailyLog);
-
-                //해당 유저의 데일리 로그이면 시간 및 점수 더해줌
-                if (dailyLog.getUser().getId() == userId){
-                    studyTime += dailyLogDto.getStudyTime();
-                    restTime += dailyLogDto.getRestTime();
-                    stretchScore += dailyLogDto.getStretchScore();
-                }
-            }
+            ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId, dailyLogs);
 
             //어떤 나무에 적용할지 고르기 위한 for
             for (UserTree userTree: userTrees
             ) {
                 //키우고 있는 나무라면
                 if (userTree.getExp() < 3400){
-                    //rudgjacl 계산
-                    userTree.setExp(userTree.getExp() + CalExpFromDailyLog.calExp(studyTime, restTime, stretchScore));
+                    //경험치 계산
+                    userTree.setExp(userTree.getExp() +
+                        CalExpFromDailyLog.calExp(
+                            expDto.getStudyTime(),
+                            expDto.getRestTime(),
+                            expDto.getStretchScore()
+                        )
+                    );
 
                     //오늘 다 키웠다면 최대 경험치로 설정
                     if (userTree.getExp() > 3400){
