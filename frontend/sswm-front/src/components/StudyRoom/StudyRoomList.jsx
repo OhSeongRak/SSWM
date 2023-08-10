@@ -30,8 +30,7 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
     "tagNames" : selectedTags,
     "isPublic" : isPublic,
   };
-  console.log(token);
-  console.log("isPublic::", isPublic)
+  // console.log(token);
   useEffect(() => {
     axios
       .post("/api/studyrooms/list", data, {

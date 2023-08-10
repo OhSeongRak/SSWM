@@ -30,6 +30,7 @@ const MyPage = () => {
       })
       .then((response) => {
         setUsers(response.data)
+        console.log("user:::", response.data);
       })
       .catch((error) => {
         console.log(error);
