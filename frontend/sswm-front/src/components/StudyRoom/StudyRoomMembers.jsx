@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { styled as MuiStyled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
-import { Grid } from '@mui/material';
 import {useEffect} from 'react';
 import axios from 'axios';
 const StyledBadge = MuiStyled(Badge)(({ theme }) => ({
@@ -54,7 +53,7 @@ const StudyRoomMembers = ({studyroomId}) => {
     };
 
     fetchMembers(); // 함수 실행
-  }, [studyroomId]);
+  }, [studyroomId,token]);
   return (
     <ContainerWrap>
       <MemberTitleWrap >

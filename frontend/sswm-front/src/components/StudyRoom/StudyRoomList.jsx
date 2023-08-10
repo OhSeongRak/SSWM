@@ -18,7 +18,6 @@ const RoomList = styled.ul`
 `;
 
 const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
-  // const { option } = props;
   const [studyrooms, setStudyrooms] = useState([]);
   const [ref] = useInView();
   const token = JSON.parse(localStorage.getItem("accessToken"));
@@ -45,7 +44,7 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
         // 오류 처리
         console.log(error);
       });
-  }, [option, searchKeyword, selectedTags, isPublic]);
+  }, [option, searchKeyword, selectedTags, isPublic,token]);
 
   console.log(studyrooms);
   return (

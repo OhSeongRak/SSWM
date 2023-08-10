@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 import StudyRoomMembers from "../components/StudyRoom/StudyRoomMembers";
 import StudyRoomMemberScore from "../components/StudyRoom/StudyRoomMemberScore";
-import StudyRoomMemberChat from "../components/StudyRoom/StudyRoomMemberChat";
 import StudyRoomMemberTime from "../components/StudyRoom/StudyRoomMemberTime";
 import StudyRoomMemberBoard from "../components/StudyRoom/StudyRoomMemberBoard";
 

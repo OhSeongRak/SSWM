@@ -41,7 +41,7 @@ const StudyRoomMemberScore = ({studyroomId}) => {
    fetchTop3Study();
    // 출석률 top3
    fetchTop3Attend();
-  },[studyroomId]);
+  },[studyroomId,accessToken]);
   return (
     <ContainerWrap>
       <ScoreWrap>
