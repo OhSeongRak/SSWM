@@ -85,6 +85,9 @@ public class MySQLSelfService {
         //유저를 전부 가져옴
         List<User> users = userRepository.findAll();
 
+        //어제(새벽4시 이므로)의 데일리 로그를 전부 가져옴
+        long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
+        List<DailyLog> dailyLogs = dailyLogRepository.findAllDateBetween(days[0], days[1]);
         //유저에 대해 나무 계산
         for (User user: users) {
             Long userId = user.getId();
@@ -92,10 +95,8 @@ public class MySQLSelfService {
             List<UserTree> userTrees = userTreeRepository.findAllByUserId(userId);
             if(userTrees.isEmpty()) continue;
 
-            long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
 
-            //어제(새벽4시 이므로)의 데일리 로그를 전부 가져옴
-            List<DailyLog> dailyLogs = dailyLogRepository.findAllDateBetween(days[0], days[1]);
+
 
             ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId, dailyLogs);
 

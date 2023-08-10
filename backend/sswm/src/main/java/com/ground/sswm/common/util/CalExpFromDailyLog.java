@@ -34,16 +34,16 @@ public class CalExpFromDailyLog {
         return expDto;
     }
     public static int calExp(long studyTime, long restTime, int stretchScore){
-        int studyMin = (int) studyTime / 60;
-        int restMin = (int) restTime / 60;
+        long studyMin = studyTime / 60L;
+        long restMin = restTime / 60L;
 
-        int exp = 100;
-        exp *= Math.min(studyMin, 500)/500;
+        long exp = 100L;
+        exp *= Math.min(studyMin, 500L)/500L;
         exp *= 0.7 + 0.3 * (
-            Math.min(restMin + stretchScore / 30, studyMin / 5) /
-                (studyMin / 5)
+            Math.min(restMin + stretchScore / 30L, studyMin / 5L) /
+                (studyMin / 5L)
         );
 
-        return exp;
+        return (int)exp;
     }
 }
