@@ -44,7 +44,7 @@ public class DailyLogController {
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
         Long userId = Long.valueOf(headerToken.get("id").toString());
         log.debug("userId : " +userId);
-        List<DailyLogDto> dailyLogDtos = dailyLogService.totalStudyTime(userId, start/1000L, end/1000L-86399L);
+        List<DailyLogDto> dailyLogDtos = dailyLogService.selcectDailyLogsByUserId(userId, start/1000L, end/1000L-86399L);
 
         return new ResponseEntity<>(dailyLogDtos, HttpStatus.OK);
     }

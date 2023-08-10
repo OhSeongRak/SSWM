@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface DailyLogService {
     void create(Long studyroomId, Long userId);
-    List<DailyLogDto> totalStudyTime(Long userId, long start, long end);
+    List<DailyLogDto> selcectDailyLogsByUserId(Long userId, long start, long end);
 }
