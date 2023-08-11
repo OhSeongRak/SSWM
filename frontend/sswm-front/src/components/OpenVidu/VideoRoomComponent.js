@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import ChatComponent from './chat/ChatComponent';
 import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
@@ -46,19 +46,17 @@ var localUser = new UserModel();
 const APPLICATION_SERVER_URL = 'https://i9a206.p.ssafy.io:5443/';
 const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
-
 class VideoRoomComponent extends Component {
     constructor(props) {
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        let sessionName = 'TEST_SESSION';
-        let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
+        // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
         this.state = {
-            mySessionId: sessionName,
-            myUserName: userName,
+            mySessionId: props.studyroomId,
+            myUserName: undefined,
             session: undefined,
             localUser: undefined,
             subscribers: [],
@@ -67,7 +65,8 @@ class VideoRoomComponent extends Component {
             open: false,
             anchorEl: null,
             minute : 0,
-            restOn: false // 휴식 상태 여부
+            restOn: false, // 휴식 상태 여부
+            restTime: 0,
 
         };
         this.joinSession = this.joinSession.bind(this);
@@ -105,6 +104,20 @@ class VideoRoomComponent extends Component {
             bigFirst: true, // Whether to place the big one in the top left (true) or bottom right
             animate: true, // Whether you want to animate the transitions
         };
+        
+        axios
+        .get("/api/users", {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            this.state.myUserName = response.data.nickname;
+        })
+        .catch(error => {
+            console.error('요청 에러:', error);
+        });
 
         this.layout.initLayoutContainer(document.getElementById('layout'), openViduLayoutOptions);
         window.addEventListener('beforeunload', this.onbeforeunload);
@@ -127,6 +140,11 @@ class VideoRoomComponent extends Component {
 
     joinSession() {
         this.OV = new OpenVidu();
+        this.sendEventAxios({
+            type: 'STUDY',
+            status: 'ON',
+            studyroomId: this.state.mySessionId,
+        })
 
         this.setState(
             {
@@ -137,6 +155,8 @@ class VideoRoomComponent extends Component {
                 await this.connectToSession();
             },
         );
+        
+        this.sendRestTimeAxios();
     }
 
     async connectToSession() {
@@ -226,7 +246,7 @@ class VideoRoomComponent extends Component {
                 subscribers: subscribers,
             },
             () => {
-                if (this.state.localUser) {
+                if (this.state.localUser) { 
                     this.sendSignalUserChanged({
                         isAudioActive: this.state.localUser.isAudioActive(),
                         isVideoActive: this.state.localUser.isVideoActive(),
@@ -239,7 +259,54 @@ class VideoRoomComponent extends Component {
         );
     }
 
+    // axios 요청 함수
+    sendEventAxios = (data) => {        
+        axios
+        .post("/api/event", data, {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+        })
+        .catch(error => {
+            console.error('요청 에러:', error);
+        });
+    };
+
+    sendRestTimeAxios() {
+        // 휴식 시간 가져오기
+        axios
+        .get(`/api/user-logs/${this.state.mySessionId}`, {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            }
+        })
+        .then((response) => {
+        this.setState({ restTime: response.data.restTime });
+        console.log("비디오룸컴포넌트에서 쉬는시간 호출:::::::::", response.data)
+        })
+        .catch(error => {
+            console.error('요청 에러:', error);
+        });            
+    }
+
     leaveSession() {
+        this.sendEventAxios({
+            type: 'REST',
+            status: 'OFF',
+            studyroomId: this.state.mySessionId,
+        })
+        this.restOn = false
+
+        this.sendEventAxios({
+            type: 'STUDY',
+            status: 'OFF',
+            studyroomId: this.state.mySessionId,
+        })
+
         const mySession = this.state.session;
 
         if (mySession) {
@@ -556,7 +623,9 @@ class VideoRoomComponent extends Component {
 
     //휴식 시간 증가
     handlePlusClick = () => {
-        if (this.state.minute < 10){
+        console.log("this.state.restTime/60:::", Math.floor(this.state.restTime/60));
+        // this.props.studyroom.maxRestTime/60 - this.state.restTime/60
+        if (this.state.minute < Math.floor((this.props.studyroom.maxRestTime - this.state.restTime) / 60)) {
         this.setState((prevState) => ({
             minute: prevState.minute + 1
           }));
@@ -566,64 +635,40 @@ class VideoRoomComponent extends Component {
     //휴식 시작 버튼 클릭
     handleApplyClick = () => {
         //0초면 팝업 닫기
-        if(this.state.minute<0){
+        if(this.state.minute <= 0){
             this.setState({
-                open: false
+                open: false,
+                timerRunning: false,
             });
         }
-        const { restOn, minute } = this.state;
-        const timerValue = minute * 60; // 분을 초로 변환
-    
-        this.setState({
-          timerValue,
-          timerRunning: true,
-          open: true // 팝업 열기
-        });
-    
-        this.startTimer();
+        else {
+            const { restOn, minute } = this.state;
+            const timerValue = minute * 60; // 분을 초로 변환
+        
+            this.setState({
+            timerValue,
+            timerRunning: true,
+            open: true // 팝업 열기
+            });
+        
+            this.startTimer();
 
-        const restStatus = restOn ? 'OFF' : 'ON';
-        const studyStatus = restOn ? 'ON' : 'OFF';
+            // const restStatus = restOn ? 'OFF' : 'ON';
+            // const studyStatus = restOn ? 'ON' : 'OFF';
 
-        // 휴식 event 전송
-        const restRequestBody = {
-            type: 'REST',
-            status: restStatus,
-            studyroomId: 1,
-        };
-        axios
-        .post("/api/event", JSON.stringify(restRequestBody),{
-            headers: {
-                Authorization: accessToken,
-                "Content-Type": "application/json",
-              },
-        })
-        .then((response) => {
-            console.log("휴식 이벤트 성공");
-        })
-        .catch(error => {
-            console.error('휴식 설정 요청 에러:', error);
-        });
+            this.sendEventAxios({
+                type: 'REST',
+                status: 'ON',
+                studyroomId: this.state.mySessionId,
+            })
+            this.restOn = true
 
-        // 스터디 off event 전송
-        const studyRequestBody = {
-            type: 'LIVE',
-            status: studyStatus,
-            studyroomId: 1,
-        };
-        axios
-        .post("/api/event", JSON.stringify(studyRequestBody),{
-            headers: {
-                Authorization: accessToken,
-                "Content-Type": "application/json",
-              },
-        })
-        .then((response) => {
-            console.log("스터디 오프 이벤트 성공");
-        })
-        .catch(error => {
-            console.error('스터디 오프 설정 요청 에러:', error);
-        });
+            this.sendEventAxios({
+                type: 'STUDY',
+                status: 'OFF',
+                studyroomId: this.state.mySessionId,
+            })
+        }
     };
     
     //타이머 설정
@@ -633,18 +678,36 @@ class VideoRoomComponent extends Component {
             const newTimerValue = prevState.timerValue - 1;
     
             if (newTimerValue <= 0) {
+              this.state.minute = 0;
               clearInterval(this.timerInterval);
               this.setState({
                 timerRunning: false,
                 open: false
               });
+              
+              this.sendEventAxios({
+                type: 'REST',
+                status: 'OFF',
+                studyroomId: this.state.mySessionId,
+              })
+              this.restOn = false
+
+              this.sendEventAxios({
+                type: 'STUDY',
+                status: 'ON',
+                studyroomId: this.state.mySessionId,
+              })
+
+              setTimeout(() => {
+                this.sendRestTimeAxios();
+              }, 1000);
             }
-    
+            
             return {
               timerValue: newTimerValue
             };
           });
-        }, 1000); // 1초마다 감소
+        }, 100); // 1초마다 감소
       };
     async init() {
         const URL = "https://teachablemachine.withgoogle.com/models/xtvI2r9Ck/";
@@ -762,7 +825,13 @@ class VideoRoomComponent extends Component {
                 <div id="layout" className="bounds">
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         <div className="OT_root OT_publisher custom-class" id="localUser">
-                            <StreamComponent user={localUser} handleNickname={this.nicknameChanged} localUser={localUser}/>
+                            <StreamComponent
+                                user={localUser}
+                                handleNickname={this.nicknameChanged}
+                                localUser={localUser}
+                                studyroom={this.props.studyroom}
+                                restTime={this.state.restTime}
+                            />
                         </div>
                     )}
                     {this.state.subscribers.map((sub, i) => (

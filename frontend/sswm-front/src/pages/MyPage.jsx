@@ -6,9 +6,8 @@ import Gnb from "../components/Gnb";
 import MyProfile from "../components/Mypage/MyProfile";
 // import Tree from "../components/Mypage/Tree";
 import MyStudyRoom from "../components/Mypage/MyStudyRoom";
-import Calendar from "../components/Mypage/Calendar";
+import ScheduleCalendar from "../components/Mypage/ScheduleCalendar";
 // import Piechart from "../components/Mypage/Chart";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import GFooter from "../components/GFooter";
 
@@ -16,13 +15,8 @@ const MyPage = () => {
   const [users, setUsers] = useState([]);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if(accessToken === null){
-      alert('로그인 후 입장가능합니다.');
-      navigate("/Login")
-    }
     axios
       .get("/api/users", {
         headers: {
@@ -31,6 +25,7 @@ const MyPage = () => {
       })
       .then((response) => {
         setUsers(response.data)
+        console.log("user:::", response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -44,7 +39,7 @@ const MyPage = () => {
       <ContainerWrap>
         <SidebarWrap>
           <SidebarItem href="#nav1">내 프로필</SidebarItem>
-          <SidebarItem href="#nav2">내가 키운나무 도감</SidebarItem>
+          <SidebarItem href="#nav1">내가 키운나무 도감</SidebarItem>
           <SidebarItem href="#nav3">내 스터디룸</SidebarItem>
           <SidebarItem href="#nav4">캘린더</SidebarItem>
         </SidebarWrap>
@@ -59,7 +54,7 @@ const MyPage = () => {
           </MyStudyWrap>
 
           <CalendarWrap name="nav4">
-            <Calendar />
+            <ScheduleCalendar />
           </CalendarWrap>
         </ContentWrap>
       </ContainerWrap>

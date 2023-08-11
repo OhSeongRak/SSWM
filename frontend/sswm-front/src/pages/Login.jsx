@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Gnb from "../components/Gnb";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 
 // 로그인
 import GoogleLogin from "../shared/GoogleLogin";
@@ -35,7 +34,7 @@ const Login = () => {
             </SocialWrap>
             <ButtonWrap>
               아직 회원이 아니신가요?
-              <Link to="/SignUp">
+              <Link to="/SignUp" style={{ textDecoration: "none"}}>
                 <div style={{color:"orange"}} >회원가입 하러 가기</div>
               </Link>
             </ButtonWrap>
@@ -76,6 +75,7 @@ const ButtonWrap = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-evenly;
+  font-family: "NanumSquareNeo";
 `;
 
 export default Login;

@@ -2,15 +2,14 @@ import * as React from "react";
 import { ResponsivePie } from "@nivo/pie";
 
 const Piechart = (props) => {
-  const { dailyLog } = props;
+  const { calendarDto } = props;
 
-  const studyTime= dailyLog.reduce((total, log) => total+log.studyTime,0);
-  const restTime= dailyLog.reduce((total, log) => total+log.restTime,0);
-  const stretchScore= dailyLog.reduce((total, log) => total+log.stretchScore,0);
-  console.log(studyTime);
-  console.log(restTime);
-  console.log(stretchScore);
-  console.log(dailyLog.length);
+  const studyExp= calendarDto.studyExp;
+  const restTimeExp= calendarDto.restTimeExp;
+  const stretchExp= calendarDto.stretchExp;
+  console.log(studyExp);
+  console.log(restTimeExp);
+  console.log(stretchExp);
   
   const handle = {
     padClick: (data) => {
@@ -30,9 +29,9 @@ const Piechart = (props) => {
          * chart에 사용될 데이터
          */
         data={[
-          { id: "공부 시간", value: studyTime },
-          { id: "휴식 시간", value: restTime },
-          { id: "스트레칭 시간", value: stretchScore/dailyLog.length },
+          { id: "공부 시간", value: studyExp },
+          { id: "휴식 시간", value: restTimeExp },
+          { id: "스트레칭 시간", value: stretchExp },
         ]}
         /**
          * chart margin
@@ -53,7 +52,7 @@ const Piechart = (props) => {
         /**
          * chart 색상
          */
-        colors={["olive", "brown", "orange"]} // 커스터하여 사용할 때
+        colors={["green", "orange", "yellow"]} // 커스터하여 사용할 때
         // colors={{ scheme: 'nivo' }} // nivo에서 제공해주는 색상 조합 사용할 때
         /**
          * pad border 두께 설정

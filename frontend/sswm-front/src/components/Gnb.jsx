@@ -50,8 +50,9 @@ const Header = styled.header`
 `;
 
 const LogoImg = styled.img`
-  width: 100px;
-`;
+  width: 10%;
+  height: 80%;
+`
 
 const GnbBtn = styled.div`
   display: inline-flex;

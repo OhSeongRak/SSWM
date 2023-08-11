@@ -1,17 +1,18 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import ScheduleCalendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import Calendar from "react-calendar";
 import Piechart from "./Chart";
+import moment from "moment";
+import "./Calendar.css";
 
-const Calendar = (props) => {
+const ScheduleCalendar = (props) => {
   const [selectedDateRange, setSelectedDateRange] = useState([
     new Date(),
     new Date(),
   ]);
 
-  const [dailyLog, setdailyLog] = useState([]);
+  const [calendarDto, setcalendarDto] = useState([]);
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -19,8 +20,6 @@ const Calendar = (props) => {
     const unixTimestampDates = date.map((d) => d.getTime());
     setSelectedDateRange(unixTimestampDates);
   };
-
-  const studyTime = dailyLog.reduce((total, log) => total + log.studyTime, 0);
 
   useEffect(() => {
     console.log(selectedDateRange);
@@ -35,7 +34,7 @@ const Calendar = (props) => {
         },
       })
       .then((response) => {
-        setdailyLog(response.data);
+        setcalendarDto(response.data);
         console.log(response.data);
       })
       .catch((error) => {
@@ -51,11 +50,12 @@ const Calendar = (props) => {
       </TitleWrap>
       <ContentWrap>
         <CalendarWrap>
-          <ScheduleCalendar
+          <Calendar
             onChange={handleDateChange}
             value={selectedDateRange.map((timestamp) => new Date(timestamp))}
             selectRange={true}
-            
+            formatDay={(locale, date) => moment(date).format("D")}
+            locale="en-US"
           />
           <div>
             <p>
@@ -65,19 +65,20 @@ const Calendar = (props) => {
           </div>
           <div>
             <h2>
-              기간 내 총 공부시간 {Math.floor(studyTime / 60)}시간 :{" "}
-              {studyTime % 60}분
+              기간 내 총 공부시간 {Math.floor(calendarDto.studyTime / 60)}시간 :{" "}
+              {calendarDto.studyTime % 60}분
             </h2>
           </div>
         </CalendarWrap>
         <GraphWrap>
           그래프
-          <Piechart dailyLog={dailyLog}></Piechart>
+          <Piechart calendarDto={calendarDto}></Piechart>
         </GraphWrap>
       </ContentWrap>
     </ContainerWrap>
   );
 };
+
 
 const ContainerWrap = styled.div`
   width: 100%;
@@ -107,4 +108,13 @@ const GraphWrap = styled.div`
   border: 2px solid orange;
   border-radius: 15px;
 `;
-export default Calendar;
+
+const Dot = styled.div`
+  height: 8px;
+  width: 8px;
+  background-color: #f87171;
+  border-radius: 50%;
+  display: flex;
+  margin-left: 1px;
+`;
+export default ScheduleCalendar;

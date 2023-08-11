@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import { styled as MuiStyled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
-
-import def from '../../assets/fubao.jpg';
 import {useEffect} from 'react';
 import axios from 'axios';
 const StyledBadge = MuiStyled(Badge)(({ theme }) => ({
@@ -55,14 +53,16 @@ const StudyRoomMembers = ({studyroomId}) => {
     };
 
     fetchMembers(); // 함수 실행
-  }, [studyroomId]);
+  }, [studyroomId,token]);
   return (
     <ContainerWrap>
-      <MemberTitleWrap>
-        스터디원
+      <MemberTitleWrap >
+        <Background>
+          스터디원
+        </Background>
       </MemberTitleWrap>
-
       <MemberWrap>
+
       {studyPeople && 
       studyPeople.map((person,idx)=>
         person.inLive ? 
@@ -72,36 +72,48 @@ const StudyRoomMembers = ({studyroomId}) => {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
           >
-          <Avatar alt="Study-Member" src={person.userDto.image} sx={{ width: 60, height: 60 }} />
+          <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${person.userDto.image}`} sx={{ width: 60, height: 60 }} />
         </StyledBadge>
-          {person.userDto.nickname}
+          <Nickname>
+            {person.userDto.nickname}
+          </Nickname>
         </MemberContent>
         :
         <MemberContent key={idx}>
-          <Avatar alt="Study-Member" src={person.userDto.image} sx={{ width: 60, height: 60 }} />
-          {person.userDto.nickname}
+          <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${person.userDto.image}`} sx={{ width: 60, height: 60 }} />
+          <div style={{display:"flex", textAlign: "center"}}>
+          <Nickname>
+            {person.userDto.nickname}
+          </Nickname>
+          </div>
         </MemberContent>
       )}
         
-
-        
       
       </MemberWrap>
-      
     </ContainerWrap>
   );
 };
+const Nickname = styled.div`
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  width: 70px;
 
+`
+const Background = styled.span`
+  background-color: #F2CC47;  
+  padding: 7px;
+  border-radius : 10px;
+`;
 const ContainerWrap = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  gap: 1vw;
 `
 const MemberTitleWrap = styled.div`
   width: 100%;
-  height: 10%;
   font-size: 20px;
   font-family: "NanumSquareNeo";
   margin-bottom: 1vw;
@@ -111,12 +123,14 @@ const MemberWrap = styled.div`
   width: 100%;
   height: 90%;
   gap: 1vw;
+  border-radius: 15px;
 `
 const MemberContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 70px;
 `
 
 export default StudyRoomMembers;
