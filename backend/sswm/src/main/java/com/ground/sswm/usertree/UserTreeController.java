@@ -43,14 +43,4 @@ public class UserTreeController {
 
         return new ResponseEntity<List<UserTreeDto>>(userTreeDtos, HttpStatus.OK);
     }
-
-    @GetMapping
-    public ResponseEntity<UserTreeDto> nowTree(@RequestHeader("Authorization") String token){
-        Map<String, Object> headerToken = authService.getClaimsFromToken(token);
-        Long userId = Long.valueOf(headerToken.get("id").toString());
-
-        UserTreeDto userTreeDto = userTreeService.nowTree(userId);
-
-        return new ResponseEntity<UserTreeDto>(userTreeDto, HttpStatus.OK);
-    }
 }
