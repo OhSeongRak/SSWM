@@ -1,6 +1,7 @@
 package com.ground.sswm.dailyLog;
 
 import com.ground.sswm.auth.service.AuthService;
+import com.ground.sswm.dailyLog.model.dto.CalenderDto;
 import com.ground.sswm.dailyLog.model.dto.DailyLogDto;
 import com.ground.sswm.dailyLog.service.DailyLogService;
 import java.util.List;
@@ -45,9 +46,9 @@ public class DailyLogController {
         Map<String, Object> headerToken = authService.getClaimsFromToken(token);
         Long userId = Long.valueOf(headerToken.get("id").toString());
         log.debug("userId : " +userId);
-        List<DailyLogDto> dailyLogDtos = dailyLogService.selcectDailyLogsByUserId(userId, start/1000L, end/1000L-86399L);
+        CalenderDto calenderDto = dailyLogService.selcectDailyLogsByUserId(userId, start/1000L, end/1000L-86399L);
 
-        return new ResponseEntity<>(dailyLogDtos, HttpStatus.OK);
+        return new ResponseEntity<>(calenderDto, HttpStatus.OK);
     }
 
     @GetMapping("/{studyroomId}")
