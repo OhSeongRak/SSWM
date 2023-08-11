@@ -6,7 +6,7 @@ import Gnb from "../components/Gnb";
 import MyProfile from "../components/Mypage/MyProfile";
 // import Tree from "../components/Mypage/Tree";
 import MyStudyRoom from "../components/Mypage/MyStudyRoom";
-import Calendar from "../components/Mypage/Calendar";
+import ScheduleCalendar from "../components/Mypage/ScheduleCalendar";
 // import Piechart from "../components/Mypage/Chart";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -59,7 +59,7 @@ const MyPage = () => {
           </MyStudyWrap>
 
           <CalendarWrap name="nav4">
-            <Calendar />
+            <ScheduleCalendar />
           </CalendarWrap>
         </ContentWrap>
       </ContainerWrap>
