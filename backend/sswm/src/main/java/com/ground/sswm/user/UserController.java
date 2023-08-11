@@ -44,15 +44,17 @@ public class UserController {
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
-    @Deprecated
-    @GetMapping
-    public ResponseEntity<List<UserDto>> getAll() {  //FOR Test
-        List<UserDto> userDtoList = userService.getAllUser();
-        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
-    }
+//    @Deprecated
+//    @GetMapping
+//    public ResponseEntity<List<UserDto>> getAll() {  //FOR Test
+//        List<UserDto> userDtoList = userService.getAllUser();
+//        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
+//    }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<UserResDto> get(@PathVariable Long userId) {
+    @GetMapping
+    public ResponseEntity<UserResDto> get(@RequestHeader("Authorization") String token) {
+        Map<String, Object> claims = authService.getClaimsFromToken(token);
+        Long userId = Long.valueOf(claims.get("id").toString());
         UserResDto userResDto = userService.getUserResDto(userId);
         return new ResponseEntity<>(userResDto, HttpStatus.OK);
     }

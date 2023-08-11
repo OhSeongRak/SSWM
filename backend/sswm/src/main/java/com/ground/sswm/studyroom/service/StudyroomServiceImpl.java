@@ -1,5 +1,6 @@
 package com.ground.sswm.studyroom.service;
 
+import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.model.StudyroomTag;
 import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
@@ -33,32 +34,37 @@ public class StudyroomServiceImpl implements StudyroomService {
     private final UserRepository userRepository;
     private final StudyRoomTagRepository studyRoomTagRepository;
     private final TagRepository tagRepository;
+    private final FileManageUtil fileManageUtil;
 
     @Override
     public List<SearchStudyroomResDto> list(SearchStudyroomReqDto searchStudyroomReqDto) {
-        List<Studyroom> studyrooms;
 
-        if (searchStudyroomReqDto.getTagNames().isEmpty()) {
-            studyrooms = studyroomRepository.listNoTag(searchStudyroomReqDto.getSearchKeyword());
-        } else {
-            studyrooms = studyroomRepository.list(searchStudyroomReqDto.getTagNames(),
-                searchStudyroomReqDto.getSearchKeyword());
+        List<Studyroom> studyrooms;
+        boolean isPublic = searchStudyroomReqDto.getIsPublic();
+        List<String> tagNames = searchStudyroomReqDto.getTagNames();
+        String searchKeyword = searchStudyroomReqDto.getSearchKeyword();
+
+        if (isPublic) { // 공개만 표시
+            if (tagNames.isEmpty()) // 태그 선택 x
+            {
+                studyrooms = studyroomRepository.listPublic(searchKeyword);
+            } else // 태그 선택 o
+            {
+                studyrooms = studyroomRepository.listTagPublic(tagNames, searchKeyword);
+            }
+        } else { // 비공개도 표시
+            if (tagNames.isEmpty()) // 태그 선택 x
+            {
+                studyrooms = studyroomRepository.list(searchKeyword);
+            } else // 태그 선택 o
+            {
+                studyrooms = studyroomRepository.listTag(tagNames, searchKeyword);
+            }
         }
 
         List<SearchStudyroomResDto> searchStudyroomResDtos = new ArrayList<>();
         for (Studyroom studyroom : studyrooms) {
-            SearchStudyroomResDto searchStudyroomResDto = new SearchStudyroomResDto();
-
-            searchStudyroomResDto.setId(studyroom.getId());
-            searchStudyroomResDto.setPublic(studyroom.isPublic());
-            searchStudyroomResDto.setCode(studyroom.getEnterCode());
-            searchStudyroomResDto.setImage(studyroom.getImage());
-            searchStudyroomResDto.setName(studyroom.getName());
-            searchStudyroomResDto.setUserNum(studyroom.getUserNum());
-            searchStudyroomResDto.setMaxUserNum(studyroom.getMaxUserNum());
-            searchStudyroomResDto.setCreatedTime(studyroom.getCreatedAt());
-            searchStudyroomResDto.setStudyAvgTime(studyroom.getStudyAvgTime());
-//            searchStudyroomResDto.setUserNum(userStudyroomRepository.countUserNum(studyroom.getId()));
+            SearchStudyroomResDto searchStudyroomResDto = SearchStudyroomResDto.from(studyroom);
             searchStudyroomResDto.setTagNames(tagRepository.findTags(studyroom.getId()));
 
             searchStudyroomResDtos.add(searchStudyroomResDto);
@@ -103,7 +109,7 @@ public class StudyroomServiceImpl implements StudyroomService {
     @Override
     @Transactional
     public Long add(Long userId, StudyroomDto studyroomDto) {
-//    studyroomDto.setStudyAvgTime(0);
+        studyroomDto.setCreatedAt(System.currentTimeMillis() / 1000);
         // INSERT Studyroom
         Studyroom studyroom = Studyroom.from(studyroomDto);
         studyroomRepository.save(studyroom);
@@ -139,13 +145,36 @@ public class StudyroomServiceImpl implements StudyroomService {
 
     @Override
     @Transactional
-    public void update(Long studyroomId, StudyroomDto studyroomDto) {
+    public void update(Long studyroomId, StudyroomDto studyroomDto, String imagePath) {
         Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
+
+        // 이미지 바꾸는 경우
+        if (imagePath != null && !imagePath.isBlank()) {
+//            log.debug("[modifyUser] (1)");
+//            if (studyroomDto.getImage() != null && !studyroomDto.getImage().isBlank()) {
+//                // 기존 이미지 삭제
+//                log.debug("[modifyUser] (2)");
+//                fileManageUtil.deleteFile(studyroomDto.getImage());
+//            }
+            log.debug("[modifyUser] (3)");
+            studyroomDto.setImage(imagePath);
+        }
+
+        // INSERT StudyRoomTag
+        List<TagDto> tagDtoList = studyroomDto.getTags();
+        for (TagDto tagDto : tagDtoList) {
+            StudyroomTag studyroomTag = new StudyroomTag();
+            studyroomTag.setStudyroom(studyroom);
+            studyroomTag.setTag(tagRepository.findByName(tagDto.getName()));
+            studyRoomTagRepository.save(studyroomTag);
+        }
+
         studyroom.setUpdates(studyroomDto);
     }
 
+
     @Override
-    public StudyroomDto select(Long studyroomId) {
+    public StudyroomDto selectByStudyroomId(Long studyroomId) {
 
         Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
 
@@ -159,17 +188,39 @@ public class StudyroomServiceImpl implements StudyroomService {
     }
 
     @Override
-    @Transactional
-    public void delete(Long studyroomId) {
-        Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
-        studyroom.setDeleted(true);
+    public List<SearchStudyroomResDto> selectByUserId(Long userId) {
+        List<Studyroom> studyrooms = studyroomRepository.findByUserId(userId);
+
+        List<SearchStudyroomResDto> searchStudyroomResDtoList = new ArrayList<>();
+        for (Studyroom studyroom : studyrooms) {
+            SearchStudyroomResDto searchStudyroomResDto = SearchStudyroomResDto.from(studyroom);
+            searchStudyroomResDto.setTagNames(tagRepository.findTags(studyroom.getId()));
+
+            searchStudyroomResDtoList.add(searchStudyroomResDto);
+        }
+
+        return searchStudyroomResDtoList;
     }
+
+    @Override
+    @Transactional
+    public void delete(Long studyroomId, boolean isDelete) {
+        Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
+        studyroom.setDeleted(isDelete);
+    }
+
+
 
     @Override
     public boolean exists(String name) {
         return studyroomRepository.findByName(name).isPresent();
     }
 
+    @Override
+    public boolean checkEnterCode(Long studyroomId, String enterCode) {
+        Studyroom studyroom = studyroomRepository.findByIdAndEnterCode(studyroomId, enterCode);
+        return (studyroom == null) ? false : true;
+    }
 
 }
 

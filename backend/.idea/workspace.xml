@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="652d4501-784d-43be-ad45-0091eb335bad" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/sswm/src/main/java/com/ground/sswm/studyroom/StudyroomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sswm/src/main/java/com/ground/sswm/studyroom/StudyroomController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sswm/src/main/java/com/ground/sswm/studyroom/service/StudyroomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sswm/src/main/java/com/ground/sswm/studyroom/service/StudyroomService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sswm/src/main/java/com/ground/sswm/studyroom/service/StudyroomServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sswm/src/main/java/com/ground/sswm/studyroom/service/StudyroomServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sswm/src/main/java/com/ground/sswm/usertree/UserTreeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sswm/src/main/java/com/ground/sswm/usertree/UserTreeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sswm/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sswm/src/main/resources/application-local.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/sswm-front/src/components/StudyRoom/FreeRoomHover.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/sswm-front/src/components/StudyRoom/MemberTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/sswm-front/src/components/StudyRoom/MemberTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/sswm-front/src/components/StudyRoom/Notice.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/sswm-front/src/pages/StudyRoomAdmin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/sswm-front/src/pages/StudyRoomAdmin.jsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="2TobKfIAzIpVoTUnHqQ46u3uafW" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "settings.editor.selected.configurable": "project.propVCSSupport.CommitDialog"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="652d4501-784d-43be-ad45-0091eb335bad" name="Changes" comment="" />
+      <created>1691712318742</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1691712318742</updated>
+    </task>
+    <servers />
+  </component>
+</project>
