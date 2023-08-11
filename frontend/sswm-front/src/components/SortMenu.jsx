@@ -35,7 +35,7 @@ export default function FadeMenu(props) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        sx={{fontFamily:"NanumSquareNeo", fontSize:16, color:"black"}}
+        sx={{fontFamily:"NanumSquareNeo", fontSize:16, color:"black", paddingRight:0}}
       >
         {selectedOption}
       </Button>
