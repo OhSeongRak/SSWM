@@ -1,13 +1,13 @@
 .react-calendar {
-  width: 600px;
+  width: 100%;
   max-width: 100%;
-  background-color: #fff;
-  color: #222;
+  background-color: #2ecc71;
+  color: #fff;
   border-radius: 8px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  font-family: Arial, Helvetica, sans-serif;
   line-height: 140px;
   padding-bottom: 20px;
+  font-family: "NanumSquareNeo";
 }
 
 .react-calendar--doubleView {
@@ -49,7 +49,7 @@
 }
 
 .react-calendar__navigation button {
-  color: #6f48eb;
+  color: #fff;
   min-width: 44px;
   background: none;
   font-size: 30px;
@@ -57,19 +57,20 @@
 }
 
 .react-calendar__navigation button:disabled {
-  background-color: #f0f0f0;
+  background-color: #27ae60;
 }
 
 .react-calendar__navigation button:enabled:hover,
 .react-calendar__navigation button:enabled:focus {
-  background-color: #f8f8fa;
+  background-color: #27ae60;
 }
 
 .react-calendar__month-view__weekdays {
-  text-align: center;
+  background-color: #27ae60;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.4em;
+  height: 40px;
 }
 
 .react-calendar__month-view__weekdays__weekday {
@@ -77,7 +78,6 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  height: 60px;
 }
 
 .react-calendar__month-view__weekNumbers .react-calendar__tile {
@@ -89,6 +89,7 @@
 }
 
 .react-calendar__month-view__days__day {
+  background-color: #f8f8fa;
   font-size: 1.4em; /* 원하는 폰트 크기로 조정 */
   height: 60px;
 }
@@ -99,10 +100,6 @@
 }
 
 
-/* 달력에서 이전 달이나 다음달이 보여질 때의 색 */
-.react-calendar__month-view__days__day--neighboringMonth {
-  color: #757575;
-}
 
 .react-calendar__year-view .react-calendar__tile,
 .react-calendar__decade-view .react-calendar__tile,
@@ -126,36 +123,35 @@
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
   background: #f8f8fa;
-  color: #6f48eb;
+  color: #fa990e;
   border-radius: 6px;
 }
 
 /* 오늘 날짜 색 */
 .react-calendar__tile--now {
-  background: #6f48eb33;
+  background: #27ae60;
   border-radius: 6px;
   font-weight: bold;
-  color: #6f48eb;
+  color: #fff;
 }
 
 /* 오늘 날짜에 마우스를 대면 나오는색 */
 .react-calendar__tile--now:enabled:hover,
 .react-calendar__tile--now:enabled:focus {
-  background: #6f48eb33;
   border-radius: 6px;
   font-weight: bold;
-  color: #6f48eb;
+  color: #fff;
 }
 
 /* 달력에서 지금 선택 중인 월 배경색 */
 .react-calendar__tile--hasActive {
-  background: #e9e9e9;
+  background: #27ae60;
 }
 
 /* 달력에서 월에 마우스 올려놓았을 때 색  */
 .react-calendar__tile--hasActive:enabled:hover,
 .react-calendar__tile--hasActive:enabled:focus {
-  background: #e9e9e9;
+  background: #27ae60;
 }
 
 .react-calendar__tile--active {
@@ -168,7 +164,7 @@
 /* 날짜 간격 선택할 때 날짜 색 */
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background: #6f48eb;
+  background: #27ae60;
   color: white;
 }
 
@@ -180,8 +176,8 @@
 /* 날짜 간격 선택 완료 후 간격의 색깔 */
 .react-calendar__tile--range {
   background: #d8d8fb;
-  color: #6f48eb;
-  border-radius: 0;
+  color: #27ae60;
+  border-radius: 0; 
 }
 
 /* 날짜 선택 완료 후 첫번째 날짜 색  */
@@ -190,7 +186,7 @@
   border-bottom-right-radius: 0;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
-  background: #6f48eb;
+  background: #27ae60;
   color: white;
 }
 
@@ -200,6 +196,6 @@
   border-bottom-left-radius: 0;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
-  background: #6f48eb;
+  background: #27ae60;
   color: white;
 }
