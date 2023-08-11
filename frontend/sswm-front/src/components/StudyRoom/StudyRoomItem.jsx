@@ -1,69 +1,85 @@
 import React from "react";
+import CardHoverMenus from "./ItemMenu";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import CardMedia from "@mui/material/CardMedia";
+// import def from "../../assets/dolphin.jpg";
+import { Chip, IconButton, Typography } from "@mui/material";
 
-import def from "../../assets/dolphin.jpg";
+function formatTime(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = remainingMinutes.toString().padStart(2, '0');
+  return `${formattedHours}:${formattedMinutes}`;
+}
 
-const StudyRoomItem = (props) => {
+//----====---------------------------------------------------
+const Card = ({studyroom}) => {
+  const timestamp = studyroom.createdTime; // Unix timestamp
+  const dateObject = new Date(timestamp * 1000); // Unix timestamp를 밀리초 단위로 변환해야 함
+  const formattedDate = dateObject.toLocaleDateString(); // 날짜만 포맷으로 변환
+  const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + studyroom.image;
+  const studyAvgTime = formatTime(studyroom.studyAvgTime);
+
   return (
-    <StudyRoomItemLayout>
-      <Card sx={{ minWidth: 275, border: 1 }}>
-        <CardMedia component="img" height="140" image={def} alt="def" />
-        <CardContent>
-          <Typography
-            sx={{ fontSize: 14, fontFamily: "NanumSquareNeo" }}
-            color="text.secondary"
-            gutterBottom
-          >
-            2023.07.21~
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14, fontFamily: "NanumSquareNeo" }}
-            color="text.secondary"
-            gutterBottom
-          >
-            평균공부시간
-          </Typography>
+    <div className="col-sm-6 col-md-6 col-lg-4 mt-4" > 
+      <div className="card">
+        <CardBlock>
+          <div style={{display:"flex",justifyContent: "flex-end"}}>
+            <div style={{display:"flex"}}>
+            <LocalFireDepartmentIcon sx={{ color: "gray" }} />
+            <Typography  sx={{ color: "gray" ,"display":"flex" }}>{studyAvgTime}</Typography>
+            </div>
+          </div>
+          <div style={{display:"flex",justifyContent: "center"}}>
+            <Typography variant="h5"sx={{ color: "black" }}>{studyroom.name}</Typography>
+          </div>
+        </CardBlock>
+        <img
+          alt="random pic"
+          className="card-img-top"
+          src={imageUrl}
+        />
+        
+        <CardHoverMenus studyroom = {studyroom}/>
+        <div className="card-footer">
+        <div disabled  style={{display:"flex",justifyContent: "space-between"}}>
+            <Typography className="card-title">{formattedDate} ~ </Typography>
+            <div style={{display:"flex"}}>
+              <PeopleAltIcon sx={{ justifyContent: "end", color: "black" }} />
+              <Typography sx={{ justifyContent: "end", color: "black" }}>&nbsp; {studyroom.userNum} / {studyroom.maxUserNum}</Typography>
+            </div>
+         </div>
 
-          <Typography sx={{ fontFamily: "NanumSquareNeo" }} variant="h5" component="div">
-            Card Section 나누기
-          </Typography>
+          <IconButton sx={{ gap: 1 }} disabled style={{"padding":"0px"}}>
+          {studyroom.tagNames && studyroom.tagNames.map((tagName) => (
+            <Chip
+              key={tagName} // 각 Chip 컴포넌트에 고유한 key prop을 설정해야 합니다.
+              variant="outlined"
+              color="primary"
+              size="small"
+              label={tagName}
+            />
+          ))}
+          <Chip
+              variant="outlined"
+              color="primary"
+              size="small"
+              style={{  visibility: "hidden"}}
+            />
+          </IconButton>
 
-          <Typography sx={{ mb: 1.5, fontFamily: "NanumSquareNeo" }} color="text.secondary">
-            # 태그 넣을 자리
-          </Typography>
-          <Typography sx={{ mb: 1.5, fontFamily: "NanumSquareNeo" }} color="text.secondary">
-            현재인원/총인원
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Link to="/StudyRoomMember" style={{ textDecoration: "none" }}>
-            <Button sx={{ fontFamily: "NanumSquareNeo" }} size="small">
-              입장하기
-            </Button>
-          </Link>
-        </CardActions>
-      </Card>
-    </StudyRoomItemLayout>
+        </div>
+      </div>
+    </div>
   );
 };
-
-const StudyRoomItemLayout = styled.div`
-  padding: 15px 13px;
-  display: block;
-  width: 300px;
-  gap: 10px;
-  flex-direction: row;
-  background-color: #ffffff;
-  border-radius: 10px;
-  cursor: pointer;
+const CardBlock = styled.div`
+  display : flex;
+  flex-direction :  column;
+  padding : 0.5em;
 `;
 
-export default StudyRoomItem;
+export default Card;
