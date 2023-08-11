@@ -16,6 +16,9 @@ public class OnAirResDto {
     private StudyMemberRole role;
     private boolean isBan;
 
+    public boolean getIsBan() {
+        return this.isBan;
+    }
     @Builder
     public OnAirResDto(UserDto userDto, boolean isInLive, StudyMemberRole role, boolean isBan) {
         this.userDto = userDto;
