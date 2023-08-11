@@ -73,7 +73,7 @@ public class StudyroomController {
         }
 
         log.debug("[filePath]>>>> " + filePath);
-
+        log.debug("[userNum]>>>> " + studyroomDto.getUserNum());
         studyroomDto.setImage(filePath);
 
         Long studyroomId = studyroomService.add(userId, studyroomDto);
