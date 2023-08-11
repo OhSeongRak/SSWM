@@ -52,8 +52,6 @@ const StudyRoomAdmin = () => {
 
   const [isExist, setIsExist] = useState(true);
 
-  const [isDelete, setIsDelete] = useState(false);
-
   const [checkedStudyroomName, setCheckedStudyroomName] = useState("");
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
@@ -295,17 +293,16 @@ const StudyRoomAdmin = () => {
 
     setIsModalOpen(false);
 
-    const headers = {
-      Authorization: accessToken,
-      "Content-Type": "application/json", // Set the content type to application/json
-    };
-
-    const requestBody = {
-      isDelete: true,
-    };
-
     axios
-      .put(`/api/studyrooms/${studyroomId}/delete`, requestBody, { headers }, {})
+      .put(`/api/studyrooms/${studyroomId}/delete`, null, {
+        params: {
+          isDelete: true,
+        },
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         console.log(response.data);
         openSnackBar();
@@ -314,7 +311,7 @@ const StudyRoomAdmin = () => {
       .catch((error) => {
         // 오류 처리
         console.log(Error);
-        console.log(isDelete);
+        console.log(error.data);
         alert("스터디방이 삭제되지 않았습니다.");
       });
     navigate(`/StudyRoomAdmin/${studyroomId}`);
@@ -477,7 +474,7 @@ const StudyRoomAdmin = () => {
             <ContentBottomRight>
               <ContentBottomTitle>스터디원 관리</ContentBottomTitle>
               <ContentBottomBoard>
-                <MemberTable />
+                <MemberTable studyroomId={studyroomId} />
               </ContentBottomBoard>
             </ContentBottomRight>
           </ContentBottom>
@@ -499,9 +496,7 @@ const StudyRoomAdmin = () => {
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
-                  <Button value={studyroomDto.isDelete} onClick={(event) => closeModalEvent(event)}>
-                    확인
-                  </Button>
+                  <Button onClick={(event) => closeModalEvent(event)}>확인</Button>
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
