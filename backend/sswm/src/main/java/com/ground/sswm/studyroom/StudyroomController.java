@@ -53,7 +53,6 @@ public class StudyroomController {
         @RequestPart(value = "file", required = false) MultipartFile multipartFile,
         @RequestPart(value = "fileType", required = false) String fileType) {
 
-        System.out.println("여기까진오나?");
         log.debug("[POST] /user : file " + multipartFile);
         log.debug("[POST] /user : fileType " + fileType);
         log.debug("[POST] /user : token " + token);
@@ -67,14 +66,14 @@ public class StudyroomController {
         log.debug("userId :" + userId);
 
         // 이미지 저장
-        String filePath = "image/jpeg/2023/08/06/ae34df9e-d6b9-46f9-9433-55f723620c8e.jpg";
+        String filePath = "image/studyDefault/dolphin.jpg";
         if (fileType != null && !fileType.isBlank() && multipartFile != null
             && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
         }
 
         log.debug("[filePath]>>>> " + filePath);
-
+        log.debug("[userNum]>>>> " + studyroomDto.getUserNum());
         studyroomDto.setImage(filePath);
 
         Long studyroomId = studyroomService.add(userId, studyroomDto);

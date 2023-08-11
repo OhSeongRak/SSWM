@@ -7,10 +7,7 @@ import moment from "moment";
 import "./Calendar.css";
 
 const ScheduleCalendar = (props) => {
-  const [selectedDateRange, setSelectedDateRange] = useState([
-    new Date(),
-    new Date(),
-  ]);
+  const [selectedDateRange, setSelectedDateRange] = useState([new Date(), new Date()]);
 
   const [calendarDto, setcalendarDto] = useState([]);
 
@@ -55,7 +52,6 @@ const ScheduleCalendar = (props) => {
             value={selectedDateRange.map((timestamp) => new Date(timestamp))}
             selectRange={true}
             formatDay={(locale, date) => moment(date).format("D")}
-            locale="en-US"
           />
           <div>
             <p>
@@ -81,7 +77,6 @@ const ScheduleCalendar = (props) => {
     </ContainerWrap>
   );
 };
-
 
 const ContainerWrap = styled.div`
   width: 100%;

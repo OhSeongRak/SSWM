@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         User newUser = User.builder()
             .name(oauthUser.getName())
             .nickname(oauthUser.getNickname() != "" ? oauthUser.getNickname() : oauthUser.getName())
-            .image(oauthUser.getProfileImg())
+            .image("image/userDefault/fubao.jpg")
             .email(oauthUser.getEmail())
             .provider(oauthUser.getProvider())
             .providerId(oauthUser.getProviderId())
@@ -106,13 +106,6 @@ public class UserServiceImpl implements UserService {
         }
         // 이미지 바꾸는 경우
         if (imagePath != null && !imagePath.isBlank()) {
-            log.debug("[modifyUser] (1)");
-            if (user.getImage() != null && !user.getImage().isBlank()) {
-                // 기존 이미지 삭제
-                log.debug("[modifyUser] (2)");
-                fileManageUtil.deleteFile(user.getImage());
-            }
-            log.debug("[modifyUser] (3)");
             user.setImage(imagePath);
         }
         user.setModifiedAt(UnixTimeUtil.getCurrentUnixTime());
