@@ -6,4 +6,4 @@ server:
 
 spring:
   profiles:
-    default: local
+    default: prod
