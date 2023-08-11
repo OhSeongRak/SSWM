@@ -17,6 +17,8 @@ const EditInfo = () => {
   const [users, setUsers] = useState([]);
   const [nickName, setNickName] = useState("");
   const [checkedNickName, setCheckedNickName] = useState("");
+  const [imageSrc, setImage] = useState();
+
   const navigate = useNavigate();
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   useEffect(() => {
@@ -28,6 +30,8 @@ const EditInfo = () => {
       })
       .then((response) => {
         setUsers(response.data);
+        setImage(`${process.env.REACT_APP_IMAGE_URL}/` + response.data.image);
+        setNickName(response.data.nickname);
         console.log(response.data); 
       })
       .catch((error) => {
@@ -35,16 +39,12 @@ const EditInfo = () => {
       });
        // eslint-disable-next-line
     }, []);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [isExist, setIsExist] = useState(false);
-
-  const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
-  console.log("이미지경로", imageUrl)
-  const [imageSrc, setImage] = useState(imageUrl);
-
   const imageUp = useRef();
   const onClickImage = () => {
     imageUp.current.click();
@@ -204,8 +204,9 @@ const EditInfo = () => {
                   id="filled-hidden-label-normal"
                   variant="filled"
                   onChange={handleNameChange}
+                  value = {nickName}
                 />
-                <Button variant="outlined" color="error" onClick={checkNickName}>
+                <Button variant="outlined" color="error" onClick={checkNickName} >
                   중복확인
                 </Button>
               </EditRightContent>
