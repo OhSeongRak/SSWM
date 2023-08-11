@@ -20,12 +20,16 @@ import { Snackbar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import GFooter from "../components/GFooter";
 
-function formatTime(minutes) {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+function formatTime(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
   const formattedHours = hours.toString().padStart(2, "0");
-  const formattedMinutes = remainingMinutes.toString().padStart(2, "0");
-  return `${formattedHours}:${formattedMinutes}`;
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = seconds.toString().padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
 const StudyRoomMember = () => {
@@ -56,56 +60,34 @@ const StudyRoomMember = () => {
   };
 
   useEffect(() => {
-    // 스터디룸 관련 정보 조회
-    axios
-      .get(`/api/studyrooms/${studyroomId}`, {
-        headers: {
-          Authorization: accessToken,
-        },
-      })
-      .then((response) => {
-        setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
-        console.log("studyroom", response.data);
-        setStudyAvgTime(formatTime(response.data.studyAvgTime));
-        setMaxRestTime(formatTime(response.data.maxRestTime));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    // 스터디룸 가입
-    axios
-      .post(
-        `/api/studyrooms/${studyroomId}/join`,
-        {},
-        {
+    const fetchData = async () => {
+      try {
+        // dailylog 생성
+        await axios.post(`/api/user-logs/${studyroomId}`, {}, {
           headers: {
             Authorization: accessToken,
           },
+        });
+        console.log("create daily log!!!!!!!!!!!!");
+
+        // 스터디룸 조회
+        const studyroomResponse = await axios.get(`/api/studyrooms/${studyroomId}`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        console.log("studyroomResponse:", studyroomResponse);
+        setStudyroom(studyroomResponse.data);
+        setStudyAvgTime(formatTime(studyroomResponse.data.studyAvgTime));
+        setMaxRestTime(formatTime(studyroomResponse.data.maxRestTime));
+
+        } catch (error) {
+          console.log(error);
+          console.log("dailylog 에러", error);
         }
-      )
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-   // dailylog생성
-   axios
-    .post(`/api/user-logs/${studyroomId}`, {}, {
-       headers: {
-         Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-       console.log("create daily log!!!!!!!!!!!!");
-    })
-    .catch((error) => {
-       console.log("dailylog 에러",error);
-    });
 
-
-    // 접속중인 유저들 정보 -> 컴포넌트 안에서 호출
+    };    
+    fetchData();
   }, [studyroomId, accessToken]);
 
   return (

@@ -50,7 +50,7 @@ const CreateStudyRoom = () => {
     isPublic: true,
     enterCode: "",
     maxUserNum: 1,
-    maxRestTime: 90,
+    maxRestTime: 90 * 60,
     tags: [],
   });
 
@@ -168,7 +168,7 @@ const CreateStudyRoom = () => {
     if (value >= 90 && value <= 240) {
       setStudyroomDto({
         ...studyroomDto,
-        maxRestTime: value, // 휴식 시간 값으로 업데이트
+        maxRestTime: value * 60, // 휴식 시간 값으로 업데이트
       });
     }
   };
@@ -395,16 +395,16 @@ const CreateStudyRoom = () => {
                   <IconButton
                     aria-label="minus"
                     onClick={() =>
-                      handleMaxRestTimeChange(studyroomDto.maxRestTime - 10)
+                      handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 - 10)
                     }
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
-                  <Item>{studyroomDto.maxRestTime}</Item>
+                  <Item>{studyroomDto.maxRestTime / 60}</Item>
                   <IconButton
                     aria-label="plus"
                     onClick={() =>
-                      handleMaxRestTimeChange(studyroomDto.maxRestTime + 10)
+                      handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 + 10)
                     }
                   >
                     <AddCircleOutlineIcon />

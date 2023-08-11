@@ -140,12 +140,6 @@ class VideoRoomComponent extends Component {
 
     joinSession() {
         this.OV = new OpenVidu();
-        // this.sendEventAxios({
-        //     type: 'REST',
-        //     status: 'OFF',
-        //     studyroomId: this.state.mySessionId,
-        // })
-
         this.sendEventAxios({
             type: 'STUDY',
             status: 'ON',
@@ -252,7 +246,7 @@ class VideoRoomComponent extends Component {
                 subscribers: subscribers,
             },
             () => {
-                if (this.state.localUser) {
+                if (this.state.localUser) { 
                     this.sendSignalUserChanged({
                         isAudioActive: this.state.localUser.isAudioActive(),
                         isVideoActive: this.state.localUser.isVideoActive(),
@@ -701,7 +695,9 @@ class VideoRoomComponent extends Component {
                 studyroomId: this.state.mySessionId,
               })
 
-              this.sendRestTimeAxios();
+              setTimeout(() => {
+                this.sendRestTimeAxios();
+              }, 1000);
             }
             
 
