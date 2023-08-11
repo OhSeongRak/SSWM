@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -83,19 +82,34 @@ public class StudyroomController {
         return new ResponseEntity<Long>(studyroomId, HttpStatus.OK);
     }
 
+
+
     // 스터디룸 수정
     @PutMapping("/{studyroomId}")
-    @ResponseBody
     public ResponseEntity<Void> update(@PathVariable("studyroomId") Long studyroomId,
-        @RequestBody StudyroomDto studyroomDto) {
-        studyroomService.update(studyroomId, studyroomDto);
+        @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+        @RequestPart(value = "fileType", required = false) String fileType,
+        @RequestPart("studyroom") StudyroomDto studyroomDto) {
+        log.debug("PUT : update studyroom");
+        // 이미지 저장
+        String filePath = "image/jpeg/2023/08/06/ae34df9e-d6b9-46f9-9433-55f723620c8e.jpg";
+        if (fileType != null && !fileType.isBlank() && multipartFile != null
+            && !multipartFile.isEmpty()) {
+            filePath = fileManageUtil.uploadFile(fileType, multipartFile);
+        }
+
+        studyroomDto.setImage(filePath);
+
+        studyroomService.update(studyroomId, studyroomDto, filePath);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{studyroomId}")
-    @ResponseBody
-    public ResponseEntity<Void> delete(@PathVariable("studyroomId") Long studyroomId) {
-        studyroomService.delete(studyroomId);
+    //스터디룸 삭제
+    @PutMapping("/{studyroomId}/delete")
+    public ResponseEntity<Void> delete(@PathVariable("studyroomId") Long studyroomId,
+        @RequestPart("isDelete") boolean isDelete) {
+
+        studyroomService.delete(studyroomId, isDelete);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -103,6 +117,7 @@ public class StudyroomController {
     @GetMapping("/{studyroomId}")
     @ResponseBody
     public ResponseEntity<StudyroomDto> selectByStudyroomId(@PathVariable("studyroomId") Long studyroomId) {
+        log.debug("studyroomId : "+studyroomId);
         StudyroomDto studyroom = studyroomService.selectByStudyroomId(studyroomId);
         return new ResponseEntity<StudyroomDto>(studyroom, HttpStatus.OK);
     }

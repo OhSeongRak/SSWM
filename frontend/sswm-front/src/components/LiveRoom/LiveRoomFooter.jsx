@@ -32,7 +32,7 @@ const LiveRoomFooter = () => {
   return (
     <ContainerWrap>
       <FooterTitle>
-        <Link to="/Streching">
+        <Link to="/Stretching">
           <Button sx={{ color: 'white' }}>
             스트레칭
           </Button>
@@ -85,7 +85,7 @@ const ContainerWrap = styled.div`
   height: 50px;
   background-color: green;
   color: white;
-  gap: 5vw;
+  gap: 3vw;
 `
 const FooterTitle = styled.div`
 `

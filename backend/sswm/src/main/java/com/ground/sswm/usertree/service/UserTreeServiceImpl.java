@@ -20,6 +20,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,17 @@ public class UserTreeServiceImpl implements UserTreeService {
         userTreeResDto.setCurrent(true);
         userTreeResDto.setImage(tree.getImage());
         return userTreeResDto;
+    }
+    @Override
+    public UserTreeDto nowTree(Long userId) {
+        Optional<UserTree> userTree = userTreeRepository.findByUserId(userId);
+
+        UserTreeDto userTreeDto = new UserTreeDto();
+        userTreeDto.setUserId(userId);
+        userTreeDto.setTreeId(userTree.get().getTree().getId());
+        userTreeDto.setExp(userTree.get().getExp());
+
+        return userTreeDto;
     }
 
     //유저 아이디에 해당하는 나무를 찾아서 response해줌

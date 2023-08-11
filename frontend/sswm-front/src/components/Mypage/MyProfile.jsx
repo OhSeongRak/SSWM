@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -9,30 +9,47 @@ import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 
-import def from "../../assets/fubao.jpg";
-import tree from "../../assets/tree.JPG";
-import seed from "../../assets/seed.jpg"
-// import tree2 from '../../assets/tree2.jpg';
-// import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
-const MyProfile = (props) => {
-  // const dispatch = useDispatch();
-  // const profile = useSelector((state) => state.profile);
-  // const defaultSeed = useSelector((state) => state.profile.default_seed);
+const MyProfile = ({ users }) => {
+  const [trees, setTrees] = useState([]);
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
+  useEffect(() => {
+    axios
+      .get("/api/user/trees", {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        console.log(response.data)
+        setTrees(response.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      // eslint-disable-next-line
+    }, []);
+  
+  const CreateTree = () => {
+    axios
+    .post("/api/user/trees", null ,{
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
   const currentExp = 75;
   const maxExp = 100;
-  const array = []
-  const [names, setNames] = useState(array);
-  const handleClick = () => {
-    const newItemName = '씨앗';
-    const nameExists = names.some((element) => element.name === newItemName);
+  const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
 
-    if (!nameExists) {
-      const newItem = { img: seed, name: newItemName, level: 1, exp: 0 };
-      setNames((current) => [...current, newItem]);
-    }
-  };
   return (
     <ContainerWrap>
       <TitleWrap>
@@ -41,10 +58,10 @@ const MyProfile = (props) => {
       <ContentWrap>
         <UserWrap>
           <InfoWrap>
-            <InfoImg>
-              <Avatar alt="profile Img" src={def} sx={{ width: 100, height: 100 }} />
+            <InfoImg> 
+              <Avatar alt="profile Img" src={imageUrl} sx={{ width: 100, height: 100 }} />
             </InfoImg>
-            <InfoName>A206</InfoName>
+            <InfoName>{users.nickname}</InfoName>
           </InfoWrap>
 
           <BtnWrap>
@@ -57,20 +74,7 @@ const MyProfile = (props) => {
         </UserWrap>
 
         <TreeWrap>
-              {/* <div>{defaultSeed.name}</div>
-              <div>{defaultSeed.level}</div> */}
-              {names.map((element, index) => {
-                return (
-                  <TreeInfo key={index}>
-                    <TreeImg src={element.img}>
-                    </TreeImg>
-                    <TreeName>
-                      <div>{element.name}</div>
-                      <div>LV.{element.level} ({element.exp}/250xp)</div>
-                    </TreeName>
-                  </TreeInfo>
-                );
-              })}
+          <TreeInfo></TreeInfo>
 
 
           <TreeBalanceWrap>
@@ -93,17 +97,21 @@ const MyProfile = (props) => {
       </TitleWrap>
       <ContentWrap>
         <TreeListWrap>
-          <TreeInfo2>
-            <TreeImg src={tree}>
-            </TreeImg>
-            <TreeName>
-              <div>나무</div>
-              <div>LV.20</div>
-            </TreeName>
-          </TreeInfo2>
+        {trees.map((tree) => {
+            return (
+              <TreeInfo2>
+                <TreeImg>
+                </TreeImg>
+                <TreeName>
+                  <div>{tree.tree_id}</div>
+                  <div>LV.{tree.exp} (0/250xp)</div>
+                </TreeName>
+              </TreeInfo2>
+            );
+          })}
           <IconButton aria-label="add" size="large"
             // onClick={() => dispatch({type: 'CREATE_SEED'})}
-            onClick={handleClick}
+            onClick={CreateTree}
           >
             <AddIcon fontSize="inherit" />
           </IconButton>

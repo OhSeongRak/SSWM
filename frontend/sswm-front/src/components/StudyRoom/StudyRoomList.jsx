@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 import RecipeReviewCard from "./StudyRoomItem2";
 import "./Style.css";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const RoomListLayout = styled.div`
   flex: 1;
@@ -15,27 +17,44 @@ const RoomList = styled.ul`
   gap: 5px;
 `;
 
-const StudyRoomList = (props) => {
+const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
+  // const { option } = props;
+  const [studyrooms, setStudyrooms] = useState([]);
   const [ref] = useInView();
+  const token = JSON.parse(localStorage.getItem("accessToken"));
+
+  const data = {
+    "sortBy" : option === "인원순" ? "USER_NUM" : option === "최근순" ? "CREATED" : "STUDY_TIME", // 공부시간(STUDY_TIME), 인원(USER_NUM), 생성시간(CREATED), 
+    "orderBy" : "DESC", // ASC
+    "searchKeyword" : searchKeyword, // 방제목, 방아이디
+    "tagNames" : selectedTags,
+    "isPublic" : isPublic,
+  };
+  console.log(token);
+  console.log("isPublic::", isPublic)
+  useEffect(() => {
+    axios
+      .post("/api/studyrooms/list", data, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((response) => {
+        setStudyrooms(response.data); // API 호출 완료 후에 studyrooms 업데이트
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.log(error);
+      });
+  }, [option, searchKeyword, selectedTags, isPublic]);
+
+  console.log(studyrooms);
   return (
     <RoomListLayout ref={ref}>
       <RoomList>
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
-        <RecipeReviewCard />
+        {studyrooms.map((studyroom) => (
+          <RecipeReviewCard key={studyroom.id} studyroom={studyroom} />
+        ))}
       </RoomList>
     </RoomListLayout>
   );

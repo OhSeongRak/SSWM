@@ -4,13 +4,12 @@ import { Link } from "react-router-dom";
 
 import Gnb from "../components/Gnb";
 
-import KakaoLogo from "../assets/Kakao_Logo.svg";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
-// 로그인
+// 회원가입
 import GoogleSignIn from "../shared/GoogleSignIn";
+import KakaoSignIn from "../shared/KakaoSign";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const SignUp = () => {
@@ -18,20 +17,22 @@ const SignUp = () => {
     <div>
       <Gnb />
       <ContainerWrap>
-        <Box component="span" sx={{ p: 2, border: "1px solid grey" }}>
+        <Box component="span" sx={{  p: 2, border: "3px solid orange",borderRadius:"35px" }}>
           <SignUpWrap>
             <Text> 회원가입 </Text>
             <SocialWrap>
-              {/* <Link to="/SignUpName"> */}
-                <GoogleOAuthProvider clientId="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com">
-                  <GoogleSignIn />
-                </GoogleOAuthProvider>
-              {/* </Link> */}
-              <LogoImg src={KakaoLogo} />
+              <GoogleOAuthProvider clientId="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com">
+                <GoogleSignIn />
+              </GoogleOAuthProvider>
+              <KakaoSignIn
+                REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
+                // REDIRECT_URI="https://i9a206.p.ssafy.io"
+                REDIRECT_URI="http://localhost:3000/kakao/sign"
+              />
             </SocialWrap>
             <ButtonWrap>
               <Link to="/Login">
-                <Button variant="outlined">로그인</Button>
+              <div style={{color:"orange"}} >로그인하러 가기</div>
               </Link>
             </ButtonWrap>
           </SignUpWrap>
@@ -58,11 +59,6 @@ const SocialWrap = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-evenly;
-`;
-
-const LogoImg = styled.img`
-  width: 240px;
-  height: 100px;
 `;
 
 const Text = styled.p`

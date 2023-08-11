@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import styled from 'styled-components';
 
 import rank from '../../assets/rank.JPG';
 
-const StudyRoomMemberScore = () => {
+const StudyRoomMemberScore = ({studyroomId}) => {
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+  const [top3Study, setTop3Study] = useState();
+  const [top3Attend, setTop3Attend] = useState();
+  useEffect(() => {
+    const fetchTop3Attend = async () => {
+      try {
+        const response = await axios.get(`/api/studyrooms/${studyroomId}/daily-attend`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        console.log("TOP3 Attend : ",response.data);
+        setTop3Attend(response.data);
+    
+      } catch (error) {
+        console.error("유저 데이터를 가져오는 데 실패했습니다:", error);
+      }
+    };
+    const fetchTop3Study = async () => {// 출석률 top3
+      try {
+        const response = await axios.get(`/api/studyrooms/${studyroomId}/daily-study`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        console.log("TOP3 STUDY : ",response.data);
+        setTop3Study(response.data);
+
+      } catch (error) {
+        console.error("유저 데이터를 가져오는 데 실패했습니다:", error);
+      }
+    };   
+      
+    // 공부량 top3
+   fetchTop3Study();
+   // 출석률 top3
+   fetchTop3Attend();
+  },[studyroomId]);
   return (
     <ContainerWrap>
       <ScoreWrap>
+        {top3Study&&
         <ContentWrap>
           <ContentTitle>
             일일 공부왕
@@ -14,38 +54,38 @@ const StudyRoomMemberScore = () => {
           <ContentRank>
             <ContentRankImg src={rank}/>
             <ContentRankValueWrap>
-              <ContentRankValue>
-                5:00:00
-              </ContentRankValue>
-              <ContentRankValue>
-                15:00:00
-              </ContentRankValue>
-              <ContentRankValue>
-                1:00:00
-              </ContentRankValue>
+              {top3Study && top3Study.map((v,idx)=>
+                <ContentRankValue key={idx}>
+                  [{v.userDto.nickname}]
+                  {v.studyTime}
+                </ContentRankValue>
+              )
+            
+              }
             </ContentRankValueWrap>
           </ContentRank>
         </ContentWrap>
-
+        }
+        {top3Attend &&
         <ContentWrap>
-          <ContentTitle>
-            7월 출석왕
+         <ContentTitle>
+            {top3Attend.month}월 출석왕
           </ContentTitle>
           <ContentRank>
             <ContentRankImg src={rank} />
             <ContentRankValueWrap>
-              <ContentRankValue>
-                25/31
+            { top3Attend.users &&
+              top3Attend.users.map((user,idx)=>
+              <ContentRankValue key={idx}>
+                [{user.userDto.nickname}]
+                {user.attendDays}/{top3Attend.daysOfMonth}
               </ContentRankValue>
-              <ContentRankValue>
-                30/31
-              </ContentRankValue>
-              <ContentRankValue>
-                15/31
-              </ContentRankValue>
+              )
+            }
+            
             </ContentRankValueWrap>
           </ContentRank>
-        </ContentWrap>
+        </ContentWrap>}
       </ScoreWrap>
     </ContainerWrap>
   );
