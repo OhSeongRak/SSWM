@@ -11,6 +11,7 @@ import def from "../assets/dolphin.jpg";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
+import GFooter from "../components/GFooter";
 
 let formData = new FormData();
 const SignUpName = () => {
@@ -103,7 +104,7 @@ const SignUpName = () => {
     console.log("checkedNickName :" + checkedNickName);
     // 닉네임 중복확인
     if (isExist || nickName !== checkedNickName) {
-      alert("닉네임의 중복 확인이 필요합니다.");
+      alert("닉네임 중복 확인이 필요합니다.");
       return;
     }
 
@@ -120,7 +121,8 @@ const SignUpName = () => {
       })
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        // navigate("/StudyRoom");
+        window.location.replace("/StudyRoom");
       })
       .catch((error) => {
         // 오류 처리

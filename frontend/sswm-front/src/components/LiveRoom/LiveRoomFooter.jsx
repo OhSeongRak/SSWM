@@ -85,7 +85,7 @@ const ContainerWrap = styled.div`
   height: 50px;
   background-color: green;
   color: white;
-  gap: 5vw;
+  gap: 3vw;
 `
 const FooterTitle = styled.div`
 `

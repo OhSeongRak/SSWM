@@ -32,8 +32,8 @@ const Item = muistyled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-let formData;
 // const로 정의하면 재정의가 불가능해서 let으로 저장
+let formData;
 const CreateStudyRoom = () => {
   useEffect(() => {
     formData = new FormData();
@@ -44,8 +44,6 @@ const CreateStudyRoom = () => {
   const [checkedStudyroomName, setCheckedStudyroomName] = useState("");
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-
-  const navigate = useNavigate();
 
   const [studyroomDto, setStudyroomDto] = useState({
     name: "스터디룸 이름",
@@ -136,7 +134,7 @@ const CreateStudyRoom = () => {
     if (event.target.checked) {
       setStudyroomDto({
         ...studyroomDto,
-        enterCode: null, // 암호를 NULL값으로 초기화
+        enterCode: "", // 암호를 NULL값으로 초기화
         isPublic: event.target.checked,
       });
     } else {
@@ -226,15 +224,14 @@ const CreateStudyRoom = () => {
       })
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        window.location.replace("/StudyRoom");
       })
       .catch((error) => {
         // 오류 처리
         alert("스터디방 개설이 되지 않았습니다.");
         console.log(Error);
       });
-    navigate("/");
-    window.location.reload();
+      window.location.replace("/StudyRoom");
   };
 
   // const [checked, setChecked] = useState(true);
@@ -325,7 +322,10 @@ const CreateStudyRoom = () => {
                   </StudyRoomTitle>
                   <StudyRoomContent>
                     <RadioGroup row defaultValue="공개">
-                      <Switch checked={studyroomDto.isPublic} onChange={handleIsPublicChange} />
+                      <Switch
+                        checked={studyroomDto.isPublic}
+                        onChange={handleIsPublicChange}
+                      />
                     </RadioGroup>
                   </StudyRoomContent>
                 </StudyRoomWrap>
@@ -339,12 +339,13 @@ const CreateStudyRoom = () => {
                       disabled={studyroomDto.isPublic}
                       hiddenLabel
                       id="filled-hidden-label-normal"
-                      defaultValue=""
                       variant="filled"
                       value={studyroomDto.enterCode}
                       size="small"
                       helperText={
-                        codeValidation() ? "알파벳,숫자 포함하여 8자리로 설정해주세요" : ""
+                        codeValidation()
+                          ? "알파벳,숫자 포함하여 8자리로 설정해주세요"
+                          : ""
                       }
                       inputProps={{
                         maxLength: CHARACTER_LIMIT,
@@ -352,7 +353,7 @@ const CreateStudyRoom = () => {
                       onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
                     />
                     <Typography sx={{ marginLeft: "10px" }}>
-                      {(studyroomDto.enterCode !== null) ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
+                      {(studyroomDto.enterCode !== "") ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
                     </Typography>
                   </StudyRoomContent>
                 </StudyRoomWrap>
@@ -368,14 +369,18 @@ const CreateStudyRoom = () => {
                 <StudyRoomContent>
                   <IconButton
                     aria-label="minus"
-                    onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum - 1)}
+                    onClick={() =>
+                      handleMaxUserNumChange(studyroomDto.maxUserNum - 1)
+                    }
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
                   <Item>{studyroomDto.maxUserNum}</Item>
                   <IconButton
                     aria-label="plus"
-                    onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum + 1)}
+                    onClick={() =>
+                      handleMaxUserNumChange(studyroomDto.maxUserNum + 1)
+                    }
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
@@ -389,14 +394,18 @@ const CreateStudyRoom = () => {
                 <StudyRoomContent>
                   <IconButton
                     aria-label="minus"
-                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime - 10)}
+                    onClick={() =>
+                      handleMaxRestTimeChange(studyroomDto.maxRestTime - 10)
+                    }
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
                   <Item>{studyroomDto.maxRestTime}</Item>
                   <IconButton
                     aria-label="plus"
-                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime + 10)}
+                    onClick={() =>
+                      handleMaxRestTimeChange(studyroomDto.maxRestTime + 10)
+                    }
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>

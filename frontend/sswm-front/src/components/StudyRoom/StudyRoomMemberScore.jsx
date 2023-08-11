@@ -1,51 +1,104 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import styled from 'styled-components';
+import { Avatar } from "@mui/material";
 
-import rank from '../../assets/rank.JPG';
+const StudyRoomMemberScore = ({studyroomId}) => {
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+  const [top3Study, setTop3Study] = useState();
+  const [top3Attend, setTop3Attend] = useState();
+  useEffect(() => {
+    const fetchTop3Attend = async () => {
+      try {
+        const response = await axios.get(`/api/studyrooms/${studyroomId}/daily-attend`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        console.log("TOP3 Attend : ",response.data);
+        setTop3Attend(response.data);
+    
+      } catch (error) {
+        console.error("유저 데이터를 가져오는 데 실패했습니다:", error);
+      }
+    };
+    const fetchTop3Study = async () => {// 출석률 top3
+      try {
+        const response = await axios.get(`/api/studyrooms/${studyroomId}/daily-study`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        console.log("TOP3 STUDY : ",response.data);
+        setTop3Study(response.data);
 
-const StudyRoomMemberScore = () => {
+      } catch (error) {
+        console.error("유저 데이터를 가져오는 데 실패했습니다:", error);
+      }
+    };   
+      
+    // 공부량 top3
+   fetchTop3Study();
+   // 출석률 top3
+   fetchTop3Attend();
+  },[studyroomId,accessToken]);
   return (
     <ContainerWrap>
       <ScoreWrap>
+        {top3Study&&
         <ContentWrap>
           <ContentTitle>
             일일 공부왕
           </ContentTitle>
           <ContentRank>
-            <ContentRankImg src={rank}/>
             <ContentRankValueWrap>
-              <ContentRankValue>
-                5:00:00
-              </ContentRankValue>
-              <ContentRankValue>
-                15:00:00
-              </ContentRankValue>
-              <ContentRankValue>
-                1:00:00
-              </ContentRankValue>
+              {top3Study && top3Study.map((v,idx)=>
+                <ContentRankValue key={idx}>
+                  <MemberContent key={idx}>
+                  <div>{v.studyTime}</div>
+                  <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${v.userDto.image}`} />
+                  <div style={{display:"flex", textAlign: "center"}}>
+                    <Nickname>
+                      {v.userDto.nickname}
+                    </Nickname>
+                  </div>
+                </MemberContent>
+                </ContentRankValue>
+              )
+            
+              }
             </ContentRankValueWrap>
           </ContentRank>
         </ContentWrap>
-
+        }
+        {top3Attend &&
         <ContentWrap>
-          <ContentTitle>
-            7월 출석왕
+         <ContentTitle>
+            {top3Attend.month}월 출석왕
           </ContentTitle>
           <ContentRank>
-            <ContentRankImg src={rank} />
             <ContentRankValueWrap>
-              <ContentRankValue>
-                25/31
+            { top3Attend.users &&
+              top3Attend.users.map((user,idx)=>
+              <ContentRankValue key={idx}>
+                <MemberContent key={idx}>
+                  <div>{user.attendDays}/{top3Attend.daysOfMonth}</div>
+                  <Avatar alt="Study-Member"src={`${process.env.REACT_APP_IMAGE_URL}/${user.userDto.image}`} />
+                  <div style={{display:"flex", textAlign: "center"}}>
+                    <Nickname>
+                      {user.userDto.nickname}
+                    </Nickname>
+                  </div>
+                </MemberContent>
               </ContentRankValue>
-              <ContentRankValue>
-                30/31
-              </ContentRankValue>
-              <ContentRankValue>
-                15/31
-              </ContentRankValue>
+
+              
+              )
+            }
+            
             </ContentRankValueWrap>
           </ContentRank>
-        </ContentWrap>
+        </ContentWrap>}
       </ScoreWrap>
     </ContainerWrap>
   );
@@ -73,7 +126,6 @@ const ContentWrap = styled.div`
   justify-content: center;
   width: 45%;
   height: 100%;
-  border: 3px solid #b2dfdb;
   border-radius: 15px;
   overflow: hidden;
 `
@@ -84,7 +136,7 @@ const ContentTitle = styled.div`
   width: 100%;
   height: 10%;
   background-color: #b2dfdb;
-  font-size: 15px;
+  font-size: 20px;
   font-family: "NanumSquareNeo";
   border-bottom: 1px solid #b2dfdb;
 `
@@ -96,10 +148,7 @@ const ContentRank = styled.div`
   width: 100%;
   height: 90%;
 `
-const ContentRankImg = styled.img`
-  width: 80%;
-  height: 80%;
-`
+
 const ContentRankValueWrap = styled.div`
   display: flex;
   align-items: center;
@@ -114,5 +163,20 @@ const ContentRankValue = styled.div`
   width: 33%;
   height: 100%;
   font-family: "NanumSquareNeo";
+  flex-direction: column;
+  align-items: center;
+`
+const MemberContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+`
+const Nickname = styled.div`
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  width: 80px;
 `
 export default StudyRoomMemberScore;

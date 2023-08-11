@@ -7,18 +7,17 @@ import { useState, useEffect } from "react";
 
 const RoomListLayout = styled.div`
   flex: 1;
-  background-color: green;
+  padding : 0 5.4em 0 3.4em;
 `;
 
 const RoomList = styled.ul`
   background-color: #ffffff;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 5px;
+  gap: 1.8em;
 `;
 
 const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
-  // const { option } = props;
   const [studyrooms, setStudyrooms] = useState([]);
   const [ref] = useInView();
   const token = JSON.parse(localStorage.getItem("accessToken"));
@@ -30,8 +29,7 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
     "tagNames" : selectedTags,
     "isPublic" : isPublic,
   };
-  console.log(token);
-  console.log("isPublic::", isPublic)
+  // console.log(token);
   useEffect(() => {
     axios
       .post("/api/studyrooms/list", data, {
@@ -46,8 +44,9 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
         // 오류 처리
         console.log(error);
       });
-  }, [option, searchKeyword, selectedTags, isPublic]);
+  }, [option, searchKeyword, selectedTags, isPublic,token]);
 
+  console.log(studyrooms);
   return (
     <RoomListLayout ref={ref}>
       <RoomList>

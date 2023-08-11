@@ -41,7 +41,8 @@ const GoogleLogin = () => {
           );
           console.log(JSON.parse(localStorage.getItem("accessToken")));
           console.log(JSON.parse(localStorage.getItem("refreshToken")));
-          navigate("/");
+          // navigate("/StudyRoom");
+          window.location.replace("/StudyRoom");
         })
         .catch((error) => {
           alert("회원정보가 존재 하지 않습니다.");
