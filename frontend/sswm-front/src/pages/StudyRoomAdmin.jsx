@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 
@@ -13,16 +13,18 @@ import Paper from "@mui/material/Paper";
 import ForestIcon from "@mui/icons-material/Forest";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { styled as muistyled } from "@mui/material/styles";
-import { Snackbar } from "@mui/material";
-
+import { Avatar, RadioGroup, Snackbar } from "@mui/material";
 
 import def from "../assets/dolphin.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
 import { Box, Switch, Typography } from "@mui/material";
 
-
 import MemberTable from "../components/StudyRoom/MemberTable";
 import Notice from "../components/StudyRoom/Notice";
+import { useNavigate, useParams } from "react-router";
+import axios from "axios";
+import MultipleSelectChip from "../components/StudyRoom/Tags";
+import GFooter from "../components/GFooter";
 
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -32,24 +34,13 @@ const Item = muistyled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+let formData;
+
 const StudyRoomAdmin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  const [checked, setChecked] = useState(true);
-  const [disabled, setAble] = useState(true);
-
-  const handleChange = () => {
-    if (checked) {
-      setAble(false);
-      setChecked(false);
-    } else {
-      setAble(true);
-      setChecked(true);
-    }
-  };
 
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
@@ -57,9 +48,251 @@ const StudyRoomAdmin = () => {
   const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
 
+  const { studyroomId } = useParams();
+  const [studyroom, setStudyroom] = useState([]);
+
+  const [isExist, setIsExist] = useState(true);
+
+  const [checkedStudyroomName, setCheckedStudyroomName] = useState("");
+
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+  const navigate = useNavigate();
+
+  // const dispatch = useDispatch();
+  // const studyroom = useSelector((state) => state.studyroom);
+
   const closeModalEvent = () => {
     setIsModalOpen(false);
+
+    axios
+      .delete(`/api/studyrooms/${studyroomId}`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        alert("스터디룸이 삭제되었습니다.");
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.log(error);
+        alert("스터디룸 삭제중 오류가 발생했습니다.");
+      });
+
     openSnackBar(); // Open the CustomSnackBar after closing the modal
+  };
+
+  useEffect(() => {
+    formData = new FormData();
+
+    axios
+      .get(`/api/studyrooms/${studyroomId}`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
+        console.log("studyroom", response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [studyroomId, accessToken]);
+
+  const [imageSrc, setImage] = useState(def);
+
+  const imageUp = useRef();
+
+  const onClickImage = () => {
+    imageUp.current.click();
+  };
+
+  // 이미지 파일 변경
+  const handleFileChange = (fileUp) => {
+    const file = fileUp.target.files[0];
+
+    if (file) {
+      // 일단 formData를 초기화함으로써 파일이 여러개 추가되지않는다.
+      formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileType", file.type);
+
+      setImage(URL.createObjectURL(file));
+
+      // formData를 보고싶으면 keys와 values 값을 봐야한다.
+      for (const key of formData.keys()) {
+        console.log(key);
+      }
+      for (const value of formData.values()) {
+        console.log(value);
+      }
+    }
+  };
+
+  // name 입력란이 변경될 때마다 studyroom의 name 속성 업데이트
+  const handleNameChange = (event) => {
+    setStudyroom({
+      ...studyroom,
+      name: event.target.value, // 사용자가 입력한 값으로 업데이트
+    });
+  };
+
+  // 스터디룸 이름 중복 확인 함수
+  const checkStudyroomName = (event) => {
+    // 여기에 스터디룸 이름 중복 확인 요청을 보내는 코드 작성
+    console.log("스터디룸 이름 : " + studyroom.name);
+
+    setCheckedStudyroomName(studyroom.name);
+
+    axios
+      .get("/api/studyrooms/exists", {
+        headers: {
+          Authorization: accessToken,
+        },
+        params: {
+          name: studyroom.name,
+        },
+      })
+      .then((response) => {
+        setIsExist(response.data);
+        console.log(response.data);
+        // isExist 값에 따라 중복 확인 로직을 수행
+        if (response.data) {
+          alert("중복된 스터디룸 이름입니다.");
+        } else {
+          alert("사용 가능한 스터디룸 이름입니다.");
+        }
+        console.log("중복 확인" + response.data);
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.log(error);
+        alert("스터디룸 이름 확인 중 오류가 발생했습니다.");
+      });
+  };
+
+  // 공개 설정
+  const handleIsPublicChange = (event) => {
+    if (event.target.checked) {
+      setStudyroom({
+        ...studyroom,
+        enterCode: null, // 암호를 NULL값으로 초기화
+        isPublic: event.target.checked,
+      });
+    } else {
+      setStudyroom({
+        ...studyroom,
+        isPublic: event.target.checked,
+      });
+    }
+  };
+
+  // enterCode 입력란이 변경될 때마다 studyroom의 enterCode 속성 업데이트
+  const handleEnterCodeChange = (event) => {
+    const newEnterCode = event.target.value;
+
+    if (newEnterCode != null) {
+      setStudyroom((studyroom) => ({
+        ...studyroom,
+        enterCode: newEnterCode,
+      }));
+    }
+  };
+
+  // maxUserNum 값 변경
+  const handleMaxUserNumChange = (value) => {
+    if (value >= 1 && value <= 9) {
+      setStudyroom({
+        ...studyroom,
+        maxUserNum: value, // 인원 수 값으로 업데이트
+      });
+    }
+  };
+
+  // maxRestTime 값 변경
+  const handleMaxRestTimeChange = (value) => {
+    if (value >= 90 && value <= 240) {
+      setStudyroom({
+        ...studyroom,
+        maxRestTime: value, // 휴식 시간 값으로 업데이트
+      });
+    }
+  };
+
+  // tag값 변경
+  const handleTagsChange = (selectedTags) => {
+    setStudyroom((studyroom) => ({
+      ...studyroom,
+      tags: selectedTags,
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    // 스터디룸 제목 중복확인
+    if (isExist || studyroom.name !== checkedStudyroomName) {
+      alert("스터디룸 제목의 중복 확인이 필요합니다.");
+      return;
+    }
+
+    // 코드 유효성 검사
+    const codeValidationError = codeValidation();
+
+    if (codeValidationError) {
+      alert(codeValidationError); // 오류 메시지를 사용자에게 알려줌
+      return;
+    }
+
+    console.log(accessToken);
+
+    console.log("태그 : " + studyroom.tags);
+    formData.append(
+      "studyroom",
+      new Blob([JSON.stringify(studyroom)], { type: "application/json" })
+    );
+
+    for (const key of formData.keys()) {
+      console.log(key);
+    }
+    for (const value of formData.values()) {
+      console.log(value);
+    }
+
+    // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
+    // 예시로 Axios 사용
+    axios
+      .put(`/api/studyrooms/${studyroomId}`, formData, {
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        navigate(`/StudyRoomMember/${studyroomId}`);
+      })
+      .catch((error) => {
+        // 오류 처리
+        alert("스터디방 개설이 되지 않았습니다.");
+        console.log(Error);
+      });
+    navigate(`/StudyRoomAdmin/${studyroomId}`);
+    window.location.reload();
+  };
+
+  const CHARACTER_LIMIT = 8;
+
+  const codeValidation = () => {
+    let check = /[~!@#$%^&*()_+|<>?:{}.,/;='"ㄱ-ㅎ | ㅏ-ㅣ |가-힣]/;
+    const comment = "알파벳,숫자 포함하여 8자리로 설정해주세요";
+
+    if (check.size !== 8 && check.test(studyroom.enterCode)) {
+      return comment;
+    }
+    return null;
   };
 
   return (
@@ -69,20 +302,43 @@ const StudyRoomAdmin = () => {
         <HeaderWrap>
           <HeaderBtnWrap>
             <HeaderBtn>
-              <HeaderBtnText placeholder="스터디 이름" />
-              <CustomButton>중복확인</CustomButton>
-            </HeaderBtn>
-            <HeaderBtn>
-              <HeaderBtnText
-                disabled={disabled}
+              <TextField
                 hiddenLabel
                 id="filled-hidden-label-normal"
                 defaultValue=""
                 variant="filled"
                 size="small"
-                helperText="알파벳,숫자 포함한 8자리"
+                placeholder={studyroom.name} // 상태값으로 설정
+                onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
               />
-              <CustomButton>저장</CustomButton>
+              <Button
+                sx={{ width: "50px", marginLeft: "10px" }}
+                variant="contained"
+                color="success"
+                onClick={checkStudyroomName}
+              >
+                중복확인
+              </Button>
+            </HeaderBtn>
+            <StudyRoomTitle>입장코드</StudyRoomTitle>
+            <HeaderBtn>
+              <TextField
+                disabled={studyroom.isPublic}
+                hiddenLabel
+                id="filled-hidden-label-normal"
+                defaultValue=""
+                variant="filled"
+                value={studyroom.enterCode}
+                size="small"
+                helperText={codeValidation() ? "알파벳,숫자 포함하여 8자리로 설정해주세요" : ""}
+                inputProps={{
+                  maxLength: CHARACTER_LIMIT,
+                }}
+                onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
+              />
+              <Typography sx={{ marginLeft: "10px" }}>
+                {studyroom.enterCode}/{CHARACTER_LIMIT}
+              </Typography>
             </HeaderBtn>
           </HeaderBtnWrap>
         </HeaderWrap>
@@ -90,7 +346,20 @@ const StudyRoomAdmin = () => {
         <ContentWrap>
           <ContentTop>
             <ContentTopLeftWrap>
-              <StudyRoomImg src={def} />
+              <input
+                type="file"
+                ref={imageUp}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+              {imageSrc && (
+                <Avatar
+                  onClick={onClickImage}
+                  alt="Default Img"
+                  src={imageSrc}
+                  sx={{ width: 200, height: 200 }}
+                ></Avatar>
+              )}
             </ContentTopLeftWrap>
             <ContentTopRightWrap>
               <StudyRoomWrap>
@@ -99,11 +368,9 @@ const StudyRoomAdmin = () => {
                   공개 여부
                 </StudyRoomTitle>
                 <StudyRoomContent>
-                  <Switch
-                    checked={checked}
-                    onChange={handleChange}
-                    inputProps={{ "aria-label": "controlled" }}
-                  />
+                  <RadioGroup row defaultValue="공개">
+                    <Switch checked={studyroom.isPublic} onChange={handleIsPublicChange} />
+                  </RadioGroup>
                 </StudyRoomContent>
               </StudyRoomWrap>
               <StudyRoomWrap>
@@ -112,11 +379,17 @@ const StudyRoomAdmin = () => {
                   최대 인원
                 </StudyRoomTitle2>
                 <StudyRoomContent>
-                  <IconButton aria-label="minus">
+                  <IconButton
+                    aria-label="minus"
+                    onClick={() => handleMaxUserNumChange(studyroom.maxUserNum - 1)}
+                  >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
-                  <Item>00</Item>
-                  <IconButton aria-label="plus">
+                  <Item>{studyroom.maxUserNum}</Item>
+                  <IconButton
+                    aria-label="plus"
+                    onClick={() => handleMaxUserNumChange(studyroom.maxUserNum + 1)}
+                  >
                     <AddCircleOutlineIcon />
                   </IconButton>
                 </StudyRoomContent>
@@ -127,11 +400,17 @@ const StudyRoomAdmin = () => {
                   일일 최대 휴식 시간
                 </StudyRoomTitle2>
                 <StudyRoomContent>
-                  <IconButton aria-label="minus">
+                  <IconButton
+                    aria-label="minus"
+                    onClick={() => handleMaxRestTimeChange(studyroom.maxRestTime - 10)}
+                  >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
-                  <Item>00</Item>
-                  <IconButton aria-label="plus">
+                  <Item>{studyroom.maxRestTime}</Item>
+                  <IconButton
+                    aria-label="plus"
+                    onClick={() => handleMaxRestTimeChange(studyroom.maxRestTime + 10)}
+                  >
                     <AddCircleOutlineIcon />
                   </IconButton>
                 </StudyRoomContent>
@@ -142,12 +421,9 @@ const StudyRoomAdmin = () => {
                   태그
                 </StudyRoomTitle2>
                 <StudyRoomContent>
-                  <TextField
-                    hiddenLabel
-                    id="filled-hidden-label-normal"
-                    defaultValue=""
-                    variant="filled"
-                    size="small"
+                  <MultipleSelectChip
+                    selectedTags={studyroom.tags}
+                    setSelectedTags={handleTagsChange}
                   />
                 </StudyRoomContent>
               </StudyRoomWrap>
@@ -163,7 +439,7 @@ const StudyRoomAdmin = () => {
             <ContentBottomRight>
               <ContentBottomTitle>스터디원 관리</ContentBottomTitle>
               <ContentBottomBoard>
-                 <MemberTable />
+                <MemberTable />
               </ContentBottomBoard>
             </ContentBottomRight>
           </ContentBottom>
@@ -171,7 +447,7 @@ const StudyRoomAdmin = () => {
 
         <FooterWrap>
           <FooterBtnWrap>
-            <Button variant="contained" color="success">
+            <Button variant="contained" color="success" onClick={handleSubmit}>
               수정
             </Button>
             <div>
@@ -199,6 +475,7 @@ const StudyRoomAdmin = () => {
           </FooterBtnWrap>
         </FooterWrap>
       </ContainerWrap>
+      <GFooter />
     </div>
   );
 };
@@ -227,28 +504,6 @@ const HeaderBtn = styled.div`
   justify-content: center;
   gap: 1vw;
 `;
-const HeaderBtnText = styled.input`
-  max-width: 190px;
-  padding: 10px;
-  font-size: 15px;
-  color: black;
-  border-top-left-radius: 0.5em;
-  border-bottom-left-radius: 0.5em;
-  border: 2px solid #fff;
-  margin-right: -10px;
-  border: 1px solid black;
-`;
-const CustomButton = styled.button`
-  border: none;
-  background-color: #5b8d27;
-  text-decoration: none;
-  padding: 10px;
-  font-size: 15px;
-  color: #fff;
-  border-top-right-radius: 0.5em;
-  border-bottom-right-radius: 0.5em;
-  cursor: pointer;
-`;
 
 const ContentWrap = styled.div`
   width: 80%;
@@ -266,10 +521,6 @@ const ContentTopLeftWrap = styled.div`
   justify-content: center;
   width: 35%;
   height: 100%;
-`;
-const StudyRoomImg = styled.img`
-  width: 90%;
-  height: 90%;
 `;
 const ContentTopRightWrap = styled.div`
   display: flex;
@@ -349,7 +600,6 @@ const ContentBottomBoard = styled.div`
   width: 100%;
   height: 85%;
 `;
-
 
 const FooterWrap = styled.div`
   display: flex;

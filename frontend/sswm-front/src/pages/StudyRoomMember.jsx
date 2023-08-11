@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 import { Link } from "react-router-dom";
 
-import StudyRoomMemberIcon from "../components/StudyRoom/StudyRoomMemberIcon";
+import StudyRoomMembers from "../components/StudyRoom/StudyRoomMembers";
 import StudyRoomMemberScore from "../components/StudyRoom/StudyRoomMemberScore";
 import StudyRoomMemberChat from "../components/StudyRoom/StudyRoomMemberChat";
 import StudyRoomMemberTime from "../components/StudyRoom/StudyRoomMemberTime";
@@ -16,11 +18,25 @@ import CustomModal from "../components/StudyRoom/deleteModal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Snackbar } from "@mui/material";
+import { useParams } from "react-router-dom";
+import GFooter from "../components/GFooter";
 
+function formatTime(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  const formattedHours = hours.toString().padStart(2, "0");
+  const formattedMinutes = remainingMinutes.toString().padStart(2, "0");
+  return `${formattedHours}:${formattedMinutes}`;
+}
 
 const StudyRoomMember = () => {
+  const { studyroomId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [studyroom, setStudyroom] = useState([]);
+  const [studyAvgTime, setStudyAvgTime] = useState("");
+  const [maxRestTime, setMaxRestTime] = useState("");
 
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -30,11 +46,54 @@ const StudyRoomMember = () => {
 
   const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
-  
+
   const closeModalEvent = () => {
     setIsModalOpen(false);
     openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
+
+  const handleenterAdmin = () => {
+    window.location.href = `/StudyroomAdmin/${studyroomId}`;
+  };
+
+  useEffect(() => {
+    // 스터디룸 관련 정보 조회
+    axios
+      .get(`/api/studyrooms/${studyroomId}`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
+        console.log("studyroom", response.data);
+        setStudyAvgTime(formatTime(response.data.studyAvgTime));
+        setMaxRestTime(formatTime(response.data.maxRestTime));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // 스터디룸 가입
+    axios
+      .post(
+        `/api/studyrooms/${studyroomId}/join`,
+        {},
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // 접속중인 유저들 정보 -> 컴포넌트 안에서 호출
+  }, [studyroomId, accessToken]);
 
   return (
     <div>
@@ -42,10 +101,10 @@ const StudyRoomMember = () => {
       <ContainerWrap>
         <HeaderWrap>
           <HeaderTitle>
-            공부할사람~
+            {studyroom.name}
             <HeaderBtnWrap>
               <Link to="/StudyRoomAdmin" style={{ textDecoration: "none" }}>
-                <IconButton aria-label="setting" size="large">
+                <IconButton onClick={handleenterAdmin} aria-label="setting" size="large">
                   <SettingsIcon fontSize="inherit" />
                 </IconButton>
               </Link>
@@ -76,7 +135,7 @@ const StudyRoomMember = () => {
             </div>
             <Link to="/LiveRoom" style={{ textDecoration: "none" }}>
               <Button variant="contained" color="primary">
-                라이브 입장 
+                라이브 입장
               </Button>
             </Link>
           </HeaderBtn>
@@ -85,26 +144,27 @@ const StudyRoomMember = () => {
         <ContentWrap>
           <ContentLeftWrap>
             <StudyMemberWrap>
-              <StudyRoomMemberIcon />
+              <StudyRoomMembers studyroomId={studyroomId} />
             </StudyMemberWrap>
             <StudyScoreWrap>
-              <StudyRoomMemberScore />
+              {/*일일 공부왕, 7월 출석왕*/}
+              <StudyRoomMemberScore studyroomId={studyroomId} />
             </StudyScoreWrap>
             <StudyChatWrap>
               <StudyRoomMemberChat />
             </StudyChatWrap>
           </ContentLeftWrap>
-
           <ContentRightWrap>
             <StudyRoomTimeWrap>
-              <StudyRoomMemberTime />
+              <StudyRoomMemberTime studyAvgTime={studyAvgTime} maxAvgTime={maxRestTime} />
             </StudyRoomTimeWrap>
             <StudyRoomBoardWrap>
-              <StudyRoomMemberBoard />
+              <StudyRoomMemberBoard notice={studyroom.notice} />
             </StudyRoomBoardWrap>
           </ContentRightWrap>
         </ContentWrap>
       </ContainerWrap>
+      <GFooter />
     </div>
   );
 };

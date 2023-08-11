@@ -4,8 +4,8 @@ import OvVideoComponent from './OvVideo';
 
 import MicOff from '@material-ui/icons/MicOff';
 import VideocamOff from '@material-ui/icons/VideocamOff';
-import VolumeUp from '@material-ui/icons/VolumeUp';
-import VolumeOff from '@material-ui/icons/VolumeOff';
+//import VolumeUp from '@material-ui/icons/VolumeUp';
+//import VolumeOff from '@material-ui/icons/VolumeOff';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -86,16 +86,16 @@ export default class StreamComponent extends Component {
                             )}
                         </FormControl>
                     ) : (
-                        <div onClick={this.toggleNicknameForm}>
+                        <div>
                             <span id="nickname">{this.props.user.getNickname()}</span>
-                            {this.props.user.isLocal() && <span id=""> (edit)</span>}
+                            {this.props.user.isLocal() && <span id=""></span>}
                         </div>
                     )}
                 </div>
 
                 {this.props.user !== undefined && this.props.user.getStreamManager() !== undefined ? (
                     <div className="streamComponent">
-                        <OvVideoComponent user={this.props.user} mutedSound={this.state.mutedSound} localUser={this.props.localUser} onNotificationButtonClick={this.handleNotificationButtonClick}/>
+                        <OvVideoComponent user={this.props.user} mutedSound={this.state.mutedSound} localUser={this.props.localUser} onNotificationButtonClick={this.handleNotificationButtonClick} micButtonClick={this.toggleSound}/>
                         <div id="statusIcons">
                             {!this.props.user.isVideoActive() ? (
                                 <div id="camIcon">
@@ -108,13 +108,6 @@ export default class StreamComponent extends Component {
                                     <MicOff id="statusMic" />
                                 </div>
                             ) : null}
-                        </div>
-                        <div>
-                            {!this.props.user.isLocal() && (
-                                <IconButton id="volumeButton" onClick={this.toggleSound}>
-                                    {this.state.mutedSound ? <VolumeOff color="secondary" /> : <VolumeUp />}
-                                </IconButton>
-                            )}
                         </div>
                     </div>
                 ) : null}

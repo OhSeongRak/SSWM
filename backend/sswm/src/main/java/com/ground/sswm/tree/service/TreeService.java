@@ -6,7 +6,5 @@ import java.util.List;
 
 public interface TreeService {
 
-    void saveTree(UserDto userDto, Long id, TreeDto treeDto);
-
-    List<TreeDto> findTrees(Long userId);
+    void saveTree(TreeDto treeDto);
 }
