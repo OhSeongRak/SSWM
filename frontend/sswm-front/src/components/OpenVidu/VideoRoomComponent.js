@@ -140,12 +140,6 @@ class VideoRoomComponent extends Component {
 
     joinSession() {
         this.OV = new OpenVidu();
-        // this.sendEventAxios({
-        //     type: 'REST',
-        //     status: 'OFF',
-        //     studyroomId: this.state.mySessionId,
-        // })
-
         this.sendEventAxios({
             type: 'STUDY',
             status: 'ON',
@@ -252,7 +246,7 @@ class VideoRoomComponent extends Component {
                 subscribers: subscribers,
             },
             () => {
-                if (this.state.localUser) {
+                if (this.state.localUser) { 
                     this.sendSignalUserChanged({
                         isAudioActive: this.state.localUser.isAudioActive(),
                         isVideoActive: this.state.localUser.isVideoActive(),
@@ -629,7 +623,9 @@ class VideoRoomComponent extends Component {
 
     //휴식 시간 증가
     handlePlusClick = () => {
-        if (this.state.minute < 10){
+        console.log("this.state.restTime/60:::", Math.floor(this.state.restTime/60));
+        // this.props.studyroom.maxRestTime/60 - this.state.restTime/60
+        if (this.state.minute < Math.floor((this.props.studyroom.maxRestTime - this.state.restTime) / 60)) {
         this.setState((prevState) => ({
             minute: prevState.minute + 1
           }));
@@ -682,6 +678,7 @@ class VideoRoomComponent extends Component {
             const newTimerValue = prevState.timerValue - 1;
     
             if (newTimerValue <= 0) {
+              this.state.minute = 0;
               clearInterval(this.timerInterval);
               this.setState({
                 timerRunning: false,
@@ -701,10 +698,11 @@ class VideoRoomComponent extends Component {
                 studyroomId: this.state.mySessionId,
               })
 
-              this.sendRestTimeAxios();
+              setTimeout(() => {
+                this.sendRestTimeAxios();
+              }, 1000);
             }
             
-
             return {
               timerValue: newTimerValue
             };

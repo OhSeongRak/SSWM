@@ -336,5 +336,6 @@ const ButtonCustom = styled.button`
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   margin-left: 1vw;
+  font-family: "NanumSquareNeo";
 `;
 export default EditInfo;

@@ -11,34 +11,51 @@ const CardHoverButton = (props) => {
     setEnterCode(event.target.value);
   };
   // console.log(studyroom)
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     if (studyroom.public === false) {
-    // axios GOGO
-      console.log("enterCode:::", enterCode)
-      // 패스워드를 서버로 보내는 Axios 요청
-      axios.get("/api/studyrooms/enterCode", {
-        headers: {
-          Authorization: accessToken,
-        },
-        params: {
-          enterCode: enterCode,
-          studyroomId: studyroom.id
-        },
-      })
-      .then((response) => {
+      console.log("enterCode:::", enterCode);
+      
+      try {
+        const response = await axios.get("/api/studyrooms/enterCode", {
+          headers: {
+            Authorization: accessToken,
+          },
+          params: {
+            enterCode: enterCode,
+            studyroomId: studyroom.id
+          },
+        });
+    
         if (response.data === true) {
-          window.location.href = `/StudyRoomMember/${studyroom.id}`;
+          // 비동기적으로 axios.post 실행
+          try {
+            await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
+              headers: {
+                Authorization: accessToken,
+              },
+            });
+            window.location.href = `/StudyRoomMember/${studyroom.id}`;
+          } catch (error) {
+            console.error("Error joining studyroom:", error);
+          }
         } else {
           alert("잘못된 코드입니다. 다시 입력해주세요.");
         }
-      })
-      .catch((error) => {
-        // 요청이 실패했을 때 수행할 작업
+      } catch (error) {
         console.error("Error sending enterCode:", error);
-      });
+      }
     }
     else {
-      window.location.href = `/StudyRoomMember/${studyroom.id}`;
+      try {
+        await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        window.location.href = `/StudyRoomMember/${studyroom.id}`;
+      } catch (error) {
+        console.error("Error joining studyroom:", error);
+      }
     }
     
   };
