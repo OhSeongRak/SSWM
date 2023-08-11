@@ -15,19 +15,8 @@ public class TreeServiceImpl implements TreeService {
 
     private final TreeRepository treeRepository;
 
-    public void saveTree(UserDto userDto, Long id, TreeDto treeDto) {
+    public void saveTree(TreeDto treeDto) {
         Tree tree = Tree.from(treeDto);
         treeRepository.save(tree);
-    }
-
-    @Override
-    public List<TreeDto> findTrees(Long userId) {
-        List<Tree> trees = treeRepository.findTrees(userId);
-        List<TreeDto> list = new ArrayList<>();
-        for (Tree tree : trees) {
-            TreeDto treeDto = TreeDto.from(tree);
-            list.add(treeDto);
-        }
-        return list;
     }
 }
