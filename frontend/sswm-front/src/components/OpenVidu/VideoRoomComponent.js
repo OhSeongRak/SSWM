@@ -623,7 +623,9 @@ class VideoRoomComponent extends Component {
 
     //휴식 시간 증가
     handlePlusClick = () => {
-        if (this.state.minute < 10){
+        console.log("this.state.restTime/60:::", Math.floor(this.state.restTime/60));
+        // this.props.studyroom.maxRestTime/60 - this.state.restTime/60
+        if (this.state.minute < Math.floor((this.props.studyroom.maxRestTime - this.state.restTime) / 60)) {
         this.setState((prevState) => ({
             minute: prevState.minute + 1
           }));
@@ -676,6 +678,7 @@ class VideoRoomComponent extends Component {
             const newTimerValue = prevState.timerValue - 1;
     
             if (newTimerValue <= 0) {
+              this.state.minute = 0;
               clearInterval(this.timerInterval);
               this.setState({
                 timerRunning: false,
@@ -700,7 +703,6 @@ class VideoRoomComponent extends Component {
               }, 1000);
             }
             
-
             return {
               timerValue: newTimerValue
             };
