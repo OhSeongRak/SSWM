@@ -12,9 +12,10 @@ function CustomModal({ isOpen, closeModal, children }) {
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: 800,
-          maxWidth: "100%",
+          maxWidth: "40%",
           maxHeight: "90%",
           overflowY: "auto",
+          justifyContent:"center"
         }}
       >
         {children}
