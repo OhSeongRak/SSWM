@@ -65,7 +65,9 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
         //처음 스터디룸에 참여하는 사용자라면
         if (OpUserStudyroom.isEmpty()) {
-
+            // 스터디룸이 꽉 찼다면
+            if (studyroom.getUserNum() == studyroom.getMaxUserNum())
+                return "정원 초과입니다.";
             //userStudyroom 생성
             UserStudyroom newUserStudyroom = new UserStudyroom();
 
@@ -127,7 +129,8 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         List<OnAirResDto> OnAirResDtos = new ArrayList<>(); //리턴할 리스트 생성
 
         //스터디룸 아이디로 userStudyroom 전부 가져옴
-        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
+//        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
+        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomIdAndIsDeletedAndIsBan(studyroomId, false, false);
 
         //해당 스터디룸에 해당하는 유저 및 현재 접속중인지 체크해서 목록 리턴해줌
         for (UserStudyroom userStudyroom : userStudyrooms) {
@@ -337,5 +340,11 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         userAttendTop3ResDto.setDaysOfMonth(intLastOfMonth);
 
         return userAttendTop3ResDto;
+    }
+
+    @Override
+    public boolean checkUserHost(Long userId, Long studyroomId) {
+        UserStudyroom userStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId, studyroomId).get();
+        return userStudyroom.getRole().equals(StudyMemberRole.HOST) ? true : false;
     }
 }

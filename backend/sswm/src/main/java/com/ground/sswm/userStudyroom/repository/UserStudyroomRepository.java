@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface UserStudyroomRepository extends JpaRepository<UserStudyroom, Long> {
 
     Optional<UserStudyroom> findByUserIdAndStudyroomId(Long targetId, Long studyroomId);
-
+    List<UserStudyroom> findAllByStudyroomIdAndIsDeletedAndIsBan(Long studyroomId, boolean isDeleted, boolean isBan);
 
     List<UserStudyroom> findAllByStudyroomId(Long studyroomId);
 
