@@ -12,12 +12,14 @@ public class DailyLogDto {
     private long studyTime;
     private long restTime;
     private long date;
+    private int stretchScore;
 
     @Builder
-    public DailyLogDto(long studyTime, long restTime, long date) {
+    public DailyLogDto(long studyTime, long restTime, long date, int stretchScore) {
         this.studyTime = studyTime;
         this.restTime = restTime;
         this.date = date;
+        this.stretchScore = stretchScore;
     }
 
     public static DailyLogDto from(DailyLog dailyLog) {
@@ -25,6 +27,7 @@ public class DailyLogDto {
             .studyTime(dailyLog.getStudyTime())
             .restTime(dailyLog.getRestTime())
             .date(dailyLog.getDate())
+            .stretchScore(dailyLog.getStretchScore())
             .build();
     }
 

@@ -1,12 +1,15 @@
 spring:
+  config:
+    activate:
+      on-profile: local
   datasource:
     url: jdbc:mysql://localhost:3316/sswm
     username: root
-    password: root
+    password: ssjjmt206
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
 
     properties:
       hibernate:
@@ -14,8 +17,8 @@ spring:
         show_sql: true
     servlet:
       multipart:  # 파일 올리는 설정
-        max-file-size: 5MB # 요청한 파일 한 개의 크기
-        max-request-size: 5MB # 요청한 파일 전체의 크기
+        max-file-size: 50MB # 요청한 파일 한 개의 크기
+        max-request-size: 50MB # 요청한 파일 전체의 크기
   redis:
     host: localhost
     port: 6379

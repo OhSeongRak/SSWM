@@ -20,7 +20,6 @@ import CustomModal from "../components/StudyRoom/deleteModal";
 import { Box, Switch, Typography } from "@mui/material";
 
 import MemberTable from "../components/StudyRoom/MemberTable";
-import Notice from "../components/StudyRoom/Notice";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
@@ -49,11 +48,12 @@ const StudyRoomAdmin = () => {
   const closeSnackBar = () => setIsSnackBarOpen(false);
 
   const { studyroomId } = useParams();
-  const [studyroom, setStudyroom] = useState([]);
+  const [studyroomDto, setStudyroomDto] = useState([]);
 
-  const [isExist, setIsExist] = useState(true);
+  const [isExist, setIsExist] = useState(false);
 
   const [checkedStudyroomName, setCheckedStudyroomName] = useState("");
+  const [originName, setOriginName] = useState("");
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -62,30 +62,8 @@ const StudyRoomAdmin = () => {
   // const dispatch = useDispatch();
   // const studyroom = useSelector((state) => state.studyroom);
 
-  const closeModalEvent = () => {
-    setIsModalOpen(false);
-
-    axios
-      .delete(`/api/studyrooms/${studyroomId}`, {
-        headers: {
-          Authorization: accessToken,
-        },
-      })
-      .then((response) => {
-        alert("스터디룸이 삭제되었습니다.");
-      })
-      .catch((error) => {
-        // 오류 처리
-        console.log(error);
-        alert("스터디룸 삭제중 오류가 발생했습니다.");
-      });
-
-    openSnackBar(); // Open the CustomSnackBar after closing the modal
-  };
-
   useEffect(() => {
     formData = new FormData();
-
     axios
       .get(`/api/studyrooms/${studyroomId}`, {
         headers: {
@@ -93,11 +71,13 @@ const StudyRoomAdmin = () => {
         },
       })
       .then((response) => {
-        setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
+        setStudyroomDto(response.data); // API 호출 완료 후에 studyrooms 업데이트
+        setCheckedStudyroomName(response.data.name);
+        setOriginName(response.data.name);
         console.log("studyroom", response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("errorerrorerrorerror");
       });
   }, [studyroomId, accessToken]);
 
@@ -131,10 +111,13 @@ const StudyRoomAdmin = () => {
     }
   };
 
+  const handleCancel = () => {
+    window.location.href = `/StudyRoomMember/${studyroomId}`;
+  }
   // name 입력란이 변경될 때마다 studyroom의 name 속성 업데이트
   const handleNameChange = (event) => {
-    setStudyroom({
-      ...studyroom,
+    setStudyroomDto({
+      ...studyroomDto,
       name: event.target.value, // 사용자가 입력한 값으로 업데이트
     });
   };
@@ -142,17 +125,18 @@ const StudyRoomAdmin = () => {
   // 스터디룸 이름 중복 확인 함수
   const checkStudyroomName = (event) => {
     // 여기에 스터디룸 이름 중복 확인 요청을 보내는 코드 작성
-    console.log("스터디룸 이름 : " + studyroom.name);
+    console.log("스터디룸 이름 : " + studyroomDto.name);
 
-    setCheckedStudyroomName(studyroom.name);
+    setCheckedStudyroomName(studyroomDto.name);
 
     axios
-      .get("/api/studyrooms/exists", {
+      .get(`/api/studyrooms/exists`, {
         headers: {
           Authorization: accessToken,
         },
         params: {
-          name: studyroom.name,
+          name: studyroomDto.name,
+          studyroomId:studyroomId
         },
       })
       .then((response) => {
@@ -176,14 +160,15 @@ const StudyRoomAdmin = () => {
   // 공개 설정
   const handleIsPublicChange = (event) => {
     if (event.target.checked) {
-      setStudyroom({
-        ...studyroom,
+      setStudyroomDto({
+        ...studyroomDto,
         enterCode: null, // 암호를 NULL값으로 초기화
         isPublic: event.target.checked,
       });
     } else {
-      setStudyroom({
-        ...studyroom,
+      setStudyroomDto({
+        ...studyroomDto,
+
         isPublic: event.target.checked,
       });
     }
@@ -194,8 +179,8 @@ const StudyRoomAdmin = () => {
     const newEnterCode = event.target.value;
 
     if (newEnterCode != null) {
-      setStudyroom((studyroom) => ({
-        ...studyroom,
+      setStudyroomDto((studyroomDto) => ({
+        ...studyroomDto,
         enterCode: newEnterCode,
       }));
     }
@@ -204,8 +189,8 @@ const StudyRoomAdmin = () => {
   // maxUserNum 값 변경
   const handleMaxUserNumChange = (value) => {
     if (value >= 1 && value <= 9) {
-      setStudyroom({
-        ...studyroom,
+      setStudyroomDto({
+        ...studyroomDto,
         maxUserNum: value, // 인원 수 값으로 업데이트
       });
     }
@@ -214,26 +199,50 @@ const StudyRoomAdmin = () => {
   // maxRestTime 값 변경
   const handleMaxRestTimeChange = (value) => {
     if (value >= 90 && value <= 240) {
-      setStudyroom({
-        ...studyroom,
-        maxRestTime: value, // 휴식 시간 값으로 업데이트
+      setStudyroomDto({
+        ...studyroomDto,
+        maxRestTime: value * 60, // 휴식 시간 값으로 업데이트
       });
     }
   };
 
   // tag값 변경
   const handleTagsChange = (selectedTags) => {
-    setStudyroom((studyroom) => ({
-      ...studyroom,
+    setStudyroomDto((studyroomDto) => ({
+      ...studyroomDto,
       tags: selectedTags,
     }));
   };
 
+  //enterCode
+  const CHARACTER_LIMIT = 8;
+
+  const codeValidation = () => {
+    let check = /[~!@#$%^&*()_+|<>?:{}.,/;='"ㄱ-ㅎ | ㅏ-ㅣ |가-힣]/;
+    const comment = "알파벳,숫자 포함하여 8자리로 설정해주세요";
+
+    if (check.size !== 8 && check.test(studyroomDto.enterCode)) {
+      return comment;
+    }
+    return null;
+  };
+
+  //notice
+  const CONTENT_LIMIT = 300;
+
+  const handleEnterNoticeChange = (event) => {
+    setStudyroomDto((studyroomDto) => ({
+      ...studyroomDto,
+      notice: event.target.value, // 사용자가 입력한 값으로 업데이트
+    }));
+  };
+
+  //수정처리
   const handleSubmit = (event) => {
     event.preventDefault();
 
     // 스터디룸 제목 중복확인
-    if (isExist || studyroom.name !== checkedStudyroomName) {
+    if (originName !== studyroomDto.name && (isExist || studyroomDto.name !== checkedStudyroomName)) {
       alert("스터디룸 제목의 중복 확인이 필요합니다.");
       return;
     }
@@ -248,10 +257,11 @@ const StudyRoomAdmin = () => {
 
     console.log(accessToken);
 
-    console.log("태그 : " + studyroom.tags);
+    console.log("태그 : " + studyroomDto.tags);
+
     formData.append(
       "studyroom",
-      new Blob([JSON.stringify(studyroom)], { type: "application/json" })
+      new Blob([JSON.stringify(studyroomDto)], { type: "application/json" })
     );
 
     for (const key of formData.keys()) {
@@ -272,27 +282,42 @@ const StudyRoomAdmin = () => {
       })
       .then((response) => {
         console.log(response.data);
+        alert("스터디방이 수정되었습니다.");
         navigate(`/StudyRoomMember/${studyroomId}`);
       })
       .catch((error) => {
         // 오류 처리
-        alert("스터디방 개설이 되지 않았습니다.");
         console.log(Error);
+        alert("스터디방이 수정되지 않았습니다.");
       });
     navigate(`/StudyRoomAdmin/${studyroomId}`);
-    window.location.reload();
   };
 
-  const CHARACTER_LIMIT = 8;
+  //삭제(수정)처리
+  const closeModalEvent = (event) => {
+    event.preventDefault();
 
-  const codeValidation = () => {
-    let check = /[~!@#$%^&*()_+|<>?:{}.,/;='"ㄱ-ㅎ | ㅏ-ㅣ |가-힣]/;
-    const comment = "알파벳,숫자 포함하여 8자리로 설정해주세요";
+    setIsModalOpen(false);
 
-    if (check.size !== 8 && check.test(studyroom.enterCode)) {
-      return comment;
-    }
-    return null;
+    axios
+      .put(`/api/studyrooms/${studyroomId}/delete`, {}, {
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        openSnackBar();
+        navigate(`/Studyroom`);
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.log(Error);
+        console.log(error.data);
+        alert("스터디방이 삭제되지 않았습니다.");
+      });
+    navigate(`/StudyRoomAdmin/${studyroomId}`);
   };
 
   return (
@@ -305,10 +330,10 @@ const StudyRoomAdmin = () => {
               <TextField
                 hiddenLabel
                 id="filled-hidden-label-normal"
-                defaultValue=""
+                defaultValue={checkedStudyroomName}
                 variant="filled"
                 size="small"
-                placeholder={studyroom.name} // 상태값으로 설정
+                placeholder={studyroomDto.name} // 상태값으로 설정
                 onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
               />
               <Button
@@ -323,12 +348,12 @@ const StudyRoomAdmin = () => {
             <StudyRoomTitle>입장코드</StudyRoomTitle>
             <HeaderBtn>
               <TextField
-                disabled={studyroom.isPublic}
+                disabled={studyroomDto.isPublic}
                 hiddenLabel
                 id="filled-hidden-label-normal"
                 defaultValue=""
                 variant="filled"
-                value={studyroom.enterCode}
+                value={studyroomDto.enterCode}
                 size="small"
                 helperText={codeValidation() ? "알파벳,숫자 포함하여 8자리로 설정해주세요" : ""}
                 inputProps={{
@@ -337,7 +362,7 @@ const StudyRoomAdmin = () => {
                 onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
               />
               <Typography sx={{ marginLeft: "10px" }}>
-                {studyroom.enterCode}/{CHARACTER_LIMIT}
+                {studyroomDto.enterCode ? studyroomDto.enterCode.length : 0}/{CHARACTER_LIMIT}
               </Typography>
             </HeaderBtn>
           </HeaderBtnWrap>
@@ -369,7 +394,7 @@ const StudyRoomAdmin = () => {
                 </StudyRoomTitle>
                 <StudyRoomContent>
                   <RadioGroup row defaultValue="공개">
-                    <Switch checked={studyroom.isPublic} onChange={handleIsPublicChange} />
+                    <Switch checked={studyroomDto.isPublic} onChange={handleIsPublicChange} />
                   </RadioGroup>
                 </StudyRoomContent>
               </StudyRoomWrap>
@@ -381,14 +406,14 @@ const StudyRoomAdmin = () => {
                 <StudyRoomContent>
                   <IconButton
                     aria-label="minus"
-                    onClick={() => handleMaxUserNumChange(studyroom.maxUserNum - 1)}
+                    onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum - 1)}
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
-                  <Item>{studyroom.maxUserNum}</Item>
+                  <Item>{studyroomDto.maxUserNum}</Item>
                   <IconButton
                     aria-label="plus"
-                    onClick={() => handleMaxUserNumChange(studyroom.maxUserNum + 1)}
+                    onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum + 1)}
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
@@ -402,14 +427,14 @@ const StudyRoomAdmin = () => {
                 <StudyRoomContent>
                   <IconButton
                     aria-label="minus"
-                    onClick={() => handleMaxRestTimeChange(studyroom.maxRestTime - 10)}
+                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 - 10)}
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
-                  <Item>{studyroom.maxRestTime}</Item>
+                  <Item>{studyroomDto.maxRestTime / 60}</Item>
                   <IconButton
                     aria-label="plus"
-                    onClick={() => handleMaxRestTimeChange(studyroom.maxRestTime + 10)}
+                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 + 10)}
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
@@ -422,7 +447,7 @@ const StudyRoomAdmin = () => {
                 </StudyRoomTitle2>
                 <StudyRoomContent>
                   <MultipleSelectChip
-                    selectedTags={studyroom.tags}
+                    selectedTags={studyroomDto.tags || []} // null이면 빈 배열로 설정
                     setSelectedTags={handleTagsChange}
                   />
                 </StudyRoomContent>
@@ -433,13 +458,26 @@ const StudyRoomAdmin = () => {
             <ContentBottomLeft>
               <ContentBottomTitle>공지사항 관리</ContentBottomTitle>
               <ContentBottomBoard>
-                <Notice />
+                <NoticeContainerWrap>
+                  <NoticeContentWrap
+                    maxLength={CONTENT_LIMIT}
+                    onChange={handleEnterNoticeChange}
+                    value={studyroomDto.notice == null ? "" : studyroomDto.notice}
+                  >
+                    {studyroomDto.notice}
+                  </NoticeContentWrap>
+                  <BtnWrap>
+                    <Typography sx={{ marginRight: "10px" }}>
+                      {studyroomDto.notice ? studyroomDto.notice.length : 0}/{CONTENT_LIMIT}
+                    </Typography>
+                  </BtnWrap>
+                </NoticeContainerWrap>
               </ContentBottomBoard>
             </ContentBottomLeft>
             <ContentBottomRight>
               <ContentBottomTitle>스터디원 관리</ContentBottomTitle>
               <ContentBottomBoard>
-                <MemberTable />
+                <MemberTable studyroomId={studyroomId} />
               </ContentBottomBoard>
             </ContentBottomRight>
           </ContentBottom>
@@ -449,6 +487,9 @@ const StudyRoomAdmin = () => {
           <FooterBtnWrap>
             <Button variant="contained" color="success" onClick={handleSubmit}>
               수정
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleCancel}>
+              취소
             </Button>
             <div>
               <Button variant="contained" color="error" onClick={openModal}>
@@ -461,7 +502,7 @@ const StudyRoomAdmin = () => {
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
-                  <Button onClick={() => closeModalEvent()}>확인</Button>
+                  <Button onClick={(event) => closeModalEvent(event)}>확인</Button>
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
@@ -615,5 +656,30 @@ const FooterBtnWrap = styled.div`
   width: 100%;
   height: 50%;
   gap: 1vw;
+`;
+const NoticeContainerWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #eee;
+`;
+const NoticeContentWrap = styled.textarea`
+  type: text;
+  width: 100%;
+  height: 80%;
+  font-size: 18px;
+  border: 0;
+  outline: none;
+  resize: none;
+  background-color: #eee;
+  font-family: "NanumSquareNeo";
+`;
+const BtnWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 15%;
+  margin: 0;
+  padding: 0;
 `;
 export default StudyRoomAdmin;

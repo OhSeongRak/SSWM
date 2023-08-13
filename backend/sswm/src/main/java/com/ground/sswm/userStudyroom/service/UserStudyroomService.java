@@ -2,7 +2,7 @@ package com.ground.sswm.userStudyroom.service;
 
 
 import com.ground.sswm.userStudyroom.model.dto.OnAirResDto;
-import com.ground.sswm.userStudyroom.model.dto.UserAttendResDto;
+import com.ground.sswm.userStudyroom.model.dto.UserAttendTop3ResDto;
 import com.ground.sswm.userStudyroom.model.dto.UserStudyTimeResDto;
 import java.util.List;
 
@@ -21,5 +21,5 @@ public interface UserStudyroomService {
 
     List<UserStudyTimeResDto> searchDailyStudy(Long studyroomId);
 
-    List<UserAttendResDto> searchDailyAttend(Long studyroomId, int startDate, int endDate);
+    UserAttendTop3ResDto searchDailyAttend(Long studyroomId);
 }

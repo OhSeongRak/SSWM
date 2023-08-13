@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useInView } from "react-intersection-observer";
-import RecipeReviewCard from "../StudyRoom/StudyRoomItem2";
+import RecipeReviewCard from "../StudyRoom/StudyRoomItem";
 
 const MyStudyRoom = (props) => {
   const [studyrooms, setStudyrooms] = useState([]);

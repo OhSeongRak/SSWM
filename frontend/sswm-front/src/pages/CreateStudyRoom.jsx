@@ -50,6 +50,7 @@ const CreateStudyRoom = () => {
     isPublic: true,
     enterCode: "",
     maxUserNum: 1,
+    userNum: 1,
     maxRestTime: 90 * 60,
     tags: [],
   });

@@ -15,7 +15,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     //TODO: http method check
     private final List<String> PATTERNS = Arrays.asList("/users/**", "/chat/**",
-        "/studyrooms/**");
+        "/studyrooms/**","/user-logs/**");
 
     private JwtInterceptor jwtInterceptor;
 

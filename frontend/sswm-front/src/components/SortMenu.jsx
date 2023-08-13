@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 export default function FadeMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedOption, setSelectedOption] = React.useState("인원순");
+  const [selectedOption, setSelectedOption] = React.useState("최근순");
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -35,7 +35,7 @@ export default function FadeMenu(props) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        sx={{fontFamily:"NanumSquareNeo", fontSize:16, color:"black"}}
+        sx={{fontFamily:"NanumSquareNeo", fontSize:16, color:"black", paddingRight:0}}
       >
         {selectedOption}
       </Button>
