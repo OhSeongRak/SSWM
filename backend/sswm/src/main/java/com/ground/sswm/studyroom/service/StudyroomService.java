@@ -18,7 +18,7 @@ public interface StudyroomService {
     StudyroomDto selectByStudyroomId(Long studyroomId);
 
     List<SearchStudyroomResDto> selectByUserId(Long userId);
-    void delete(Long studyroomId, boolean isDelete);
+    void delete(Long studyroomId);
 
     boolean exists(String name);
 

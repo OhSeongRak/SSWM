@@ -91,7 +91,7 @@ public class StudyroomController {
         @RequestPart("studyroom") StudyroomDto studyroomDto) {
         log.debug("PUT : update studyroom");
         // 이미지 저장
-        String filePath = "image/jpeg/2023/08/06/ae34df9e-d6b9-46f9-9433-55f723620c8e.jpg";
+        String filePath = "image/studyDefault/dolphin.jpg";
         if (fileType != null && !fileType.isBlank() && multipartFile != null
             && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
@@ -105,10 +105,9 @@ public class StudyroomController {
 
     //스터디룸 삭제
     @PutMapping("/{studyroomId}/delete")
-    public ResponseEntity<Void> delete(@PathVariable("studyroomId") Long studyroomId,
-        @RequestPart("isDelete") boolean isDelete) {
+    public ResponseEntity<Void> delete(@PathVariable("studyroomId") Long studyroomId) {
 
-        studyroomService.delete(studyroomId, isDelete);
+        studyroomService.delete(studyroomId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
