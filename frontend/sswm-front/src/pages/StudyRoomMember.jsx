@@ -76,6 +76,7 @@ const StudyRoomMember = () => {
             Authorization: accessToken,
           },
         });
+        console.log("studyroomResponse", studyroomResponse);
         setStudyroom(studyroomResponse.data);
         setStudyAvgTime(formatTime(studyroomResponse.data.studyAvgTime));
         setMaxRestTime(formatTime(studyroomResponse.data.maxRestTime));

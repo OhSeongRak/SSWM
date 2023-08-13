@@ -50,9 +50,10 @@ const StudyRoomAdmin = () => {
   const { studyroomId } = useParams();
   const [studyroomDto, setStudyroomDto] = useState([]);
 
-  const [isExist, setIsExist] = useState(true);
+  const [isExist, setIsExist] = useState(false);
 
   const [checkedStudyroomName, setCheckedStudyroomName] = useState("");
+  const [originName, setOriginName] = useState("");
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -63,7 +64,6 @@ const StudyRoomAdmin = () => {
 
   useEffect(() => {
     formData = new FormData();
-    console.log("userEffect");
     axios
       .get(`/api/studyrooms/${studyroomId}`, {
         headers: {
@@ -72,10 +72,12 @@ const StudyRoomAdmin = () => {
       })
       .then((response) => {
         setStudyroomDto(response.data); // API 호출 완료 후에 studyrooms 업데이트
+        setCheckedStudyroomName(response.data.name);
+        setOriginName(response.data.name);
         console.log("studyroom", response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("errorerrorerrorerror");
       });
   }, [studyroomId, accessToken]);
 
@@ -109,6 +111,9 @@ const StudyRoomAdmin = () => {
     }
   };
 
+  const handleCancel = () => {
+    window.location.href = `/StudyRoomMember/${studyroomId}`;
+  }
   // name 입력란이 변경될 때마다 studyroom의 name 속성 업데이트
   const handleNameChange = (event) => {
     setStudyroomDto({
@@ -196,7 +201,7 @@ const StudyRoomAdmin = () => {
     if (value >= 90 && value <= 240) {
       setStudyroomDto({
         ...studyroomDto,
-        maxRestTime: value, // 휴식 시간 값으로 업데이트
+        maxRestTime: value * 60, // 휴식 시간 값으로 업데이트
       });
     }
   };
@@ -237,7 +242,7 @@ const StudyRoomAdmin = () => {
     event.preventDefault();
 
     // 스터디룸 제목 중복확인
-    if (isExist || studyroomDto.name !== checkedStudyroomName) {
+    if (originName !== studyroomDto.name && (isExist || studyroomDto.name !== checkedStudyroomName)) {
       alert("스터디룸 제목의 중복 확인이 필요합니다.");
       return;
     }
@@ -325,7 +330,7 @@ const StudyRoomAdmin = () => {
               <TextField
                 hiddenLabel
                 id="filled-hidden-label-normal"
-                defaultValue=""
+                defaultValue={checkedStudyroomName}
                 variant="filled"
                 size="small"
                 placeholder={studyroomDto.name} // 상태값으로 설정
@@ -422,14 +427,14 @@ const StudyRoomAdmin = () => {
                 <StudyRoomContent>
                   <IconButton
                     aria-label="minus"
-                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime - 10)}
+                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 - 10)}
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
-                  <Item>{studyroomDto.maxRestTime}</Item>
+                  <Item>{studyroomDto.maxRestTime / 60}</Item>
                   <IconButton
                     aria-label="plus"
-                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime + 10)}
+                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 + 10)}
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
@@ -457,7 +462,7 @@ const StudyRoomAdmin = () => {
                   <NoticeContentWrap
                     maxLength={CONTENT_LIMIT}
                     onChange={handleEnterNoticeChange}
-                    value={studyroomDto.notice}
+                    value={studyroomDto.notice == null ? "" : studyroomDto.notice}
                   >
                     {studyroomDto.notice}
                   </NoticeContentWrap>
@@ -482,6 +487,9 @@ const StudyRoomAdmin = () => {
           <FooterBtnWrap>
             <Button variant="contained" color="success" onClick={handleSubmit}>
               수정
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleCancel}>
+              취소
             </Button>
             <div>
               <Button variant="contained" color="error" onClick={openModal}>
