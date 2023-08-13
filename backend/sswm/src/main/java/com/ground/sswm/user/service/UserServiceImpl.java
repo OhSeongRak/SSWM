@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public boolean exists(String nickname, Long id) {
-        return userRepository.existsByNicknameAndIdNot(nickname, id);
+        return userRepository.findByNickname(id,nickname)==null? false: true;
     }
 
 

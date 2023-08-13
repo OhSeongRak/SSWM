@@ -12,6 +12,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByProviderAndProviderId(String provider, String providerId);
     @Query("select u from User u where u.nickname = :nickname and u.id != :id")
     User findByNickname(Long id, String nickname);
-    boolean existsByNicknameAndIdNot(String nickname,Long id);
 
 }
