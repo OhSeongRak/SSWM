@@ -11,13 +11,15 @@ import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
 
 const MyProfile = ({ users }) => {
-  const [trees, setTrees] = useState([{
-    dayExp : 0,
-    userExp : 0,
-    image : "",
-    name : "",
-    current : false,
-  }]);
+  const [trees, setTrees] = useState([
+    {
+      dayExp: 0,
+      userExp: 0,
+      image: "",
+      name: "",
+      current: false,
+    },
+  ]);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
   useEffect(() => {
@@ -64,6 +66,7 @@ const MyProfile = ({ users }) => {
   };
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
   const existingTree = trees.find(tree => tree.current);
+ 
 
   function calculateLevel(currentExp){
     let level;
