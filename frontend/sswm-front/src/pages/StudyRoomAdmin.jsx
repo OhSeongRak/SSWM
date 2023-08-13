@@ -287,7 +287,7 @@ const StudyRoomAdmin = () => {
     navigate(`/StudyRoomAdmin/${studyroomId}`);
   };
 
-  //삭제처리
+  //삭제(수정)처리
   const closeModalEvent = (event) => {
     event.preventDefault();
 

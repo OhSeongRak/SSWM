@@ -7,8 +7,6 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router";
 
-let sendData;
-
 const MemberTable = ({ studyroomId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHostModalOpen, setIsHostModalOpen] = useState(false);
@@ -40,6 +38,7 @@ const MemberTable = ({ studyroomId }) => {
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   const [studyPeople, setStudyPeople] = useState();
+  const [selectedUserId, setSelectedUserId] = useState();
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -64,6 +63,8 @@ const MemberTable = ({ studyroomId }) => {
   const closeModalEvent = (userDto) => {
     setIsModalOpen(false);
     console.log("userDTO:::", userDto.id);
+
+    const setBan = { targetId: selectedUserId }; // 선택한 유저의 ID 사용
 
     axios
       .put(`/api/studyrooms/${studyroomId}/ban`, userDto, {

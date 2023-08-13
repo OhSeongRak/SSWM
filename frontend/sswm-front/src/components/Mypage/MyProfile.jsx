@@ -45,7 +45,7 @@ const MyProfile = ({ users }) => {
         .then((response) => {
           console.log("여기",response.data)
           const newTree = response.data;
-          setTrees(prevTrees => [...prevTrees, newTree]);
+          setTrees((prevTrees => [...prevTrees, newTree]));
         })
         .catch((error) => {
           console.log(error);
