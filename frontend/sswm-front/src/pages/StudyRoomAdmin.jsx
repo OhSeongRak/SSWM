@@ -125,12 +125,13 @@ const StudyRoomAdmin = () => {
     setCheckedStudyroomName(studyroomDto.name);
 
     axios
-      .get("/api/studyrooms/exists", {
+      .get(`/api/studyrooms/exists`, {
         headers: {
           Authorization: accessToken,
         },
         params: {
           name: studyroomDto.name,
+          studyroomId:studyroomId
         },
       })
       .then((response) => {
