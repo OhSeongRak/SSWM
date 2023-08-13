@@ -124,8 +124,8 @@ public class StudyroomController {
     @GetMapping
     public ResponseEntity<List<SearchStudyroomResDto>> selectByUserId(
         @RequestHeader("Authorization") String token) {
-        Map<String, Object> claims = authService.getClaimsFromToken(token);
-        Long userId = Long.valueOf(claims.get("id").toString());
+        Long userId = authService.getUserIdFromToken(token);
+
         List<SearchStudyroomResDto> studyrooms = studyroomService.selectByUserId(userId);
 
         return new ResponseEntity<List<SearchStudyroomResDto>>(studyrooms, HttpStatus.OK);
