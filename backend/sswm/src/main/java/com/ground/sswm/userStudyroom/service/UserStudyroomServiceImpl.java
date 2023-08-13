@@ -120,6 +120,8 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
                 "호스트는 스터디룸에서 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
         }
 
+        Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
+        studyroom.setUserNum(studyroom.getUserNum() - 1);
         userStudyroom.setDeleted(true);
     }
 
