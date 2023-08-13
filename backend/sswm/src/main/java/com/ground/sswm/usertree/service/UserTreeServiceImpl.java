@@ -7,7 +7,6 @@ import com.ground.sswm.common.util.CalExpFromDailyLog;
 import com.ground.sswm.common.util.dto.ExpDto;
 import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
-import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.tree.exception.TreeNotFoundException;
 import com.ground.sswm.tree.model.Tree;
 import com.ground.sswm.tree.repository.TreeRepository;
@@ -20,7 +19,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -60,17 +58,6 @@ public class UserTreeServiceImpl implements UserTreeService {
         userTreeResDto.setImage(tree.getImage());
         return userTreeResDto;
     }
-    @Override
-    public UserTreeDto nowTree(Long userId) {
-        Optional<UserTree> userTree = userTreeRepository.findByUserId(userId);
-
-        UserTreeDto userTreeDto = new UserTreeDto();
-        userTreeDto.setUserId(userId);
-        userTreeDto.setTreeId(userTree.get().getTree().getId());
-        userTreeDto.setExp(userTree.get().getExp());
-
-        return userTreeDto;
-    }
 
     //유저 아이디에 해당하는 나무를 찾아서 response해줌
     @Override
@@ -96,11 +83,11 @@ public class UserTreeServiceImpl implements UserTreeService {
 
                 //시간 및 점수로 경험치 계산해서 가져옴
                 userTreeDto.setExp(userTree.getExp() +
-                        CalExpFromDailyLog.calExp(
-                            expDto.getStudyTime(),
-                            expDto.getRestTime(),
-                            expDto.getStretchScore()
-                        )
+                    CalExpFromDailyLog.calExp(
+                        expDto.getStudyTime(),
+                        expDto.getRestTime(),
+                        expDto.getStretchScore()
+                    )
                 );
 
             }

@@ -198,7 +198,6 @@ public class StudyroomServiceImpl implements StudyroomService {
 
             searchStudyroomResDtoList.add(searchStudyroomResDto);
         }
-
         return searchStudyroomResDtoList;
     }
 
@@ -208,8 +207,6 @@ public class StudyroomServiceImpl implements StudyroomService {
         Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
         studyroom.setDeleted(isDelete);
     }
-
-
 
     @Override
     public boolean exists(String name) {
