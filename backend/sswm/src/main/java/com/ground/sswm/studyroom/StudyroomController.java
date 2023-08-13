@@ -138,9 +138,9 @@ public class StudyroomController {
     }
     // 룸 제목 중복 확인
     @GetMapping("/exists")
-    public ResponseEntity<Boolean> exists(@RequestParam String name) {
+    public ResponseEntity<Boolean> exists(@RequestParam(required = false) Long studyroomId, @RequestParam String name) {
         log.debug("스터디룸이름 : " + name);
-        boolean isExist = studyroomService.exists(name);
+        boolean isExist = studyroomService.exists(studyroomId,name);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }
 }

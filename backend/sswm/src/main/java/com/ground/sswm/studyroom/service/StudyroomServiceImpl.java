@@ -34,7 +34,6 @@ public class StudyroomServiceImpl implements StudyroomService {
     private final UserRepository userRepository;
     private final StudyRoomTagRepository studyRoomTagRepository;
     private final TagRepository tagRepository;
-    private final FileManageUtil fileManageUtil;
 
     @Override
     public List<SearchStudyroomResDto> list(SearchStudyroomReqDto searchStudyroomReqDto) {
@@ -215,8 +214,16 @@ public class StudyroomServiceImpl implements StudyroomService {
     }
 
     @Override
-    public boolean exists(String name) {
-        return studyroomRepository.findByName(name).isPresent();
+    public boolean exists(Long studyroomId, String name) {
+        Studyroom studyroom = studyroomRepository.findByName(name).orElse(null);
+        if(studyroom == null){
+            return false;
+        }
+        if(studyroomId!=null){
+            return studyroom.getId()!=studyroomId;
+
+        }
+        return true;
     }
 
     @Override

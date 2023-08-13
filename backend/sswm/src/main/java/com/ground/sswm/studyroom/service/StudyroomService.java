@@ -20,7 +20,7 @@ public interface StudyroomService {
     List<SearchStudyroomResDto> selectByUserId(Long userId);
     void delete(Long studyroomId);
 
-    boolean exists(String name);
+    boolean exists(Long studyroomId, String name);
 
     boolean checkEnterCode(Long studyroomId, String enterCode);
 }
