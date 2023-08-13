@@ -93,7 +93,7 @@ function App() {
         <Routes>
           <Route path="/kakao/sign" element={<KakaoSignCallback />} />
           <Route path="/kakao/login" element={<KakaoLoginCallback />} />
-          <Route path="/" element={<Login />}></Route>
+          <Route path="/" element={isTokenValid ? <StudyRoom /> : <Login />}></Route>
           <Route
             path="/StudyRoom"
             element={isTokenValid ? <StudyRoom /> : <Login />}

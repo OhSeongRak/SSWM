@@ -9,11 +9,17 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 
 import axios from "axios";
-import tree2 from "../../assets/tree2.jpg"
 
 const MyProfile = ({ users }) => {
-  const [trees, setTrees] = useState([]);
+  const [trees, setTrees] = useState([{
+    dayExp : 0,
+    userExp : 0,
+    image : "",
+    name : "",
+    current : false,
+  }]);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
   useEffect(() => {
     axios
       .get("/api/user/trees",{
@@ -33,6 +39,7 @@ const MyProfile = ({ users }) => {
     
   
   const CreateTree = () => {
+    console.log("trees : "+trees);
     const hasCurrentTree = trees.some(tree => tree.current);
     
     if (!hasCurrentTree) {
@@ -45,22 +52,23 @@ const MyProfile = ({ users }) => {
         .then((response) => {
           console.log("여기",response.data)
           const newTree = response.data;
-          setTrees((prevTrees => [...prevTrees, newTree]));
+          setTrees(prevTrees => [...prevTrees, newTree]);     
         })
         .catch((error) => {
           console.log(error);
+          alert("모든 나무를 다 키웠습니다.");
         });
     } else {
       console.log("A current tree already exists.");
     }
   };
-  const currentExp = 75;
-  const maxExp = 100;
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
   const existingTree = trees.find(tree => tree.current);
+
   function calculateLevel(currentExp){
     let level;
     let LextExp;
+    console.log(currentExp);
     if(currentExp < 100) {
       level = 1;
       LextExp = 100;
@@ -150,13 +158,12 @@ const MyProfile = ({ users }) => {
           {existingTree ? (
             <TreeInfo>
               <TreeInfoWrap>
-                <TreeImg src={tree2} />
+                <TreeImg src={existingTree.image} />
                 <TreeName>
                   <div>{existingTree.name}</div>
-                  {existingTree.userTreeDto ? ( // Check if userTreeDto is defined
+                  {existingTree ? ( // Check if userTreeDto is defined
                     <div>
-                      <div>LV. {calculateLevel(existingTree.userTreeDto.exp)[0]}</div>
-                      <div>Exp. {existingTree.userTreeDto.exp} / {calculateLevel(existingTree.userTreeDto.exp)[1]}</div>
+                      <div>LV. {calculateLevel(existingTree.userExp)[0]}</div>
                     </div>
                   ) : null}
                 </TreeName>
@@ -170,19 +177,33 @@ const MyProfile = ({ users }) => {
             </TreeInfo>
           )}
 
-
-          <TreeBalanceWrap>
-            <TreeBalanceText>전체 밸런스</TreeBalanceText>
+{existingTree ?
+          (<TreeBalanceWrap>
+            <TreeBalanceText>일일 EXP ({existingTree.dayExp}/100)</TreeBalanceText>
             <TreeBalanceContent>
-              <ExpBar value={currentExp} maxValue={maxExp} />
-              <div>75%</div>
+              <ExpBar value={existingTree.dayExp} maxValue={100} />
+              <div>{existingTree.dayExp}%</div>
             </TreeBalanceContent>
-            <TreeBalanceText>일일 밸런스</TreeBalanceText>
+            <TreeBalanceText>전체 EXP ({existingTree.userExp}/{calculateLevel(existingTree.userExp)[1]})</TreeBalanceText>
             <TreeBalanceContent>
-              <ExpBar value={currentExp} maxValue={maxExp} />
-              <div>75%</div>
+              <ExpBar value={existingTree.userExp} maxValue={calculateLevel(existingTree.userExp)[1]} />
+              <div>{Math.floor((existingTree.userExp)/(calculateLevel(existingTree.userExp)[1])*100)}%</div>
             </TreeBalanceContent>
           </TreeBalanceWrap>
+          ):(
+          <TreeBalanceWrap>
+            <TreeBalanceText>일일 EXP (0/100)</TreeBalanceText>
+            <TreeBalanceContent>
+              <ExpBar value={0} maxValue={100} />
+              <div>0%</div>
+            </TreeBalanceContent>
+            <TreeBalanceText>전체 EXP (0/100)</TreeBalanceText>
+            <TreeBalanceContent>
+              <ExpBar value={0} maxValue={100} />
+              <div>0%</div>
+            </TreeBalanceContent>
+          </TreeBalanceWrap>
+          )}
         </TreeWrap>
       </ContentWrap>
 
@@ -195,11 +216,11 @@ const MyProfile = ({ users }) => {
             if (!tree.current) {
               return (
                 <TreeInfo2 key={tree.name}>
-                  <TreeImg src={tree2}></TreeImg>
+                  <TreeImg src={tree.image}></TreeImg>
                   <TreeName>
                     <div>{tree.name}</div>
-                    {tree.userTreeDto ? (
-                      <div>LV. {calculateLevel(tree.userTreeDto.exp)}</div>
+                    {tree ? (
+                      <div>LV. {calculateLevel(tree.userExp)}</div>
                     ) : null}
                   </TreeName>
                 </TreeInfo2>

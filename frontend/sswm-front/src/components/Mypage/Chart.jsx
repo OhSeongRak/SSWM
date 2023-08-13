@@ -45,7 +45,7 @@ const Piechart = (props) => {
          * pad 간격
          */
         padAngle={1.8}
-        /**
+        /**x
          * pad radius 설정 (pad별 간격이 있을 시 보임)
          */
         cornerRadius={8}
