@@ -8,7 +8,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class UserTreeResDto {
-    private UserTreeDto userTreeDto;
+    private float dayExp;
+    private float userExp;
     private String image;
     private String name;
     private boolean current;

@@ -35,7 +35,7 @@ public class CalExpFromDailyLog {
         expDto.setRestTime(restTime);
         return expDto;
     }
-    public static int calExp(long studyTime, long restTime, int stretchScore) {
+    public static float calExp(long studyTime, long restTime, int stretchScore) {
         float studyMin = studyTime / 60f;
         float restMin = restTime / 60f;
         float exp = 100f;
@@ -44,6 +44,7 @@ public class CalExpFromDailyLog {
             Math.min(restMin + stretchScore / 30f, studyMin / 5f) /
                 (studyMin / 5f)
         );
-        return (int)exp;
+        log.debug("exp : " +exp);
+        return Float.isNaN(exp) ? 0 : exp ;
     }
 }
