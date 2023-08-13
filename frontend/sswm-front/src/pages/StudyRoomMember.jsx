@@ -19,6 +19,7 @@ import Typography from "@mui/material/Typography";
 import { Snackbar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import GFooter from "../components/GFooter";
+import { useNavigate } from 'react-router-dom';
 
 function formatTime(totalSeconds) {
   const hours = Math.floor(totalSeconds / 3600);
@@ -33,6 +34,8 @@ function formatTime(totalSeconds) {
 }
 
 const StudyRoomMember = () => {
+  const navigate = useNavigate();
+
   const { studyroomId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [studyroom, setStudyroom] = useState([]);
@@ -53,7 +56,16 @@ const StudyRoomMember = () => {
 
   const closeModalEvent = () => {
     setIsModalOpen(false);
-    openSnackBar(); // Open the CustomSnackBar after closing the modal
+    axios.put(`/api/studyrooms/${studyroomId}/leave`,{},{
+      headers:{
+          Authorization : accessToken
+      }
+    }).then((response) => {
+      console.log(response);
+      navigate("/StudyRoom")
+    }).catch((error)=>{
+      console.log(error);
+    });
   };
 
   const handleenterAdmin = () => {
@@ -156,13 +168,15 @@ const StudyRoomMember = () => {
         </ContentWrap>
         <ContentWrap>
                {/* 스터디룸 탈퇴하기 */}
+               {isHost && isHost? <></>:
                <Button variant="contained" color="success" onClick={openModal}>
                 스터디룸 탈퇴하기
               </Button>
+               }
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
                 <Box>
                   <Typography variant="h6" component="h2">
-                    삭제 시 더 이상 해당 스터디룸을 이용하지 못합니다.
+                    탈퇴 시 더 이상 해당 스터디룸을 이용하지 못합니다.
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
@@ -170,6 +184,7 @@ const StudyRoomMember = () => {
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
+              
               <Snackbar
                 open={isSnackBarOpen}
                 autoHideDuration={3000}
