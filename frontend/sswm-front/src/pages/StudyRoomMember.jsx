@@ -130,7 +130,7 @@ const StudyRoomMember = () => {
 
               {/* 공부,휴식 시간 */}
               <SideBanner>
-                <Link to={`/LiveRoom/${studyroomId}`} style={{ textDecoration: "none" }}>
+                <Link to={`/LiveRoom/${studyroomId}`} target="_blank" style={{ textDecoration: "none" }}>
                   <Button variant="contained" 
                     sx={{
                       m : 1,
