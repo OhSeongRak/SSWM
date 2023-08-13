@@ -92,9 +92,9 @@ public class DailyLogServiceImpl implements DailyLogService {
 
         int startIndex = 0;
 
-        int totalStudyTimeExp = 0;
-        int totalRestTimeExp = 0;
-        int totalStretchExp = 0;
+        float totalStudyTimeExp = 0;
+        float totalRestTimeExp = 0;
+        float totalStretchExp = 0;
 
         for (long i = start; i <= end; i += 86400L) {
             List<DailyLog> dayDailyLog = new ArrayList<>();
@@ -106,22 +106,25 @@ public class DailyLogServiceImpl implements DailyLogService {
                     break;
                 }
             }
+            if (dayDailyLog.isEmpty()) {
+                continue;
+            }
             ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId,
                 dayDailyLog);
 
-            int totalExp = CalExpFromDailyLog.calExp(
+            float totalExp = CalExpFromDailyLog.calExp(
                 expDto.getStudyTime(),
                 expDto.getRestTime(),
                 expDto.getStretchScore()
             );
 
-            int restTimeExp = CalExpFromDailyLog.calExp(
+            float restTimeExp = CalExpFromDailyLog.calExp(
                 expDto.getStudyTime(),
                 0L,
                 expDto.getStretchScore()
             );
 
-            int stretchExp = CalExpFromDailyLog.calExp(
+            float stretchExp = CalExpFromDailyLog.calExp(
                 expDto.getStudyTime(),
                 expDto.getRestTime(),
                 0
@@ -129,21 +132,21 @@ public class DailyLogServiceImpl implements DailyLogService {
 
             restTimeExp = totalExp - restTimeExp;
             stretchExp = totalExp - stretchExp;
-            int studyTimeExp = totalExp - restTimeExp - stretchExp;
+            float studyTimeExp = totalExp - restTimeExp - stretchExp;
 
             totalStudyTimeExp += studyTimeExp;
             totalRestTimeExp += restTimeExp;
             totalStretchExp += stretchExp;
         }
 
-        long studyTime = 0L;
+        float studyTime = 0f;
         for (DailyLog dailyLog : dailyLogs) {
             studyTime += dailyLog.getStudyTime();
         }
 
         CalenderDto calenderDto = new CalenderDto();
 
-        calenderDto.setStudyTime((int) studyTime);
+        calenderDto.setStudyTime((int) (studyTime/60f));
         calenderDto.setStudyExp(totalStudyTimeExp);
         calenderDto.setRestTimeExp(totalRestTimeExp);
         calenderDto.setStretchExp(totalStretchExp);
