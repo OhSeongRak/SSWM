@@ -18,11 +18,11 @@ import IconButton from "@mui/material/IconButton";
 import NorthIcon from '@mui/icons-material/North';
 import SouthIcon from '@mui/icons-material/South';
 const StudyRoom = (props) => {
-  const [selectedOption, setSelectedOption] = useState("인원순");
+  const [selectedOption, setSelectedOption] = useState("최근순");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [isPublic, setIsPublic] = useState(1);
-  const [sorting, setSorting] = useState(false);
+  const [sorting, setSorting] = useState(true);
   const handleAlarm = () => {
     setSorting(!sorting)
   }

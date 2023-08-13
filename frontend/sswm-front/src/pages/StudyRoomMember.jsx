@@ -38,6 +38,7 @@ const StudyRoomMember = () => {
   const [studyroom, setStudyroom] = useState([]);
   const [studyAvgTime, setStudyAvgTime] = useState("");
   const [maxRestTime, setMaxRestTime] = useState("");
+  const [isHost, setIsHost] = useState(false);
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -68,7 +69,6 @@ const StudyRoomMember = () => {
             Authorization: accessToken,
           },
         });
-        console.log("create daily log!!!!!!!!!!!!");
 
         // 스터디룸 조회
         const studyroomResponse = await axios.get(`/api/studyrooms/${studyroomId}`, {
@@ -76,10 +76,18 @@ const StudyRoomMember = () => {
             Authorization: accessToken,
           },
         });
-        console.log("studyroomResponse:", studyroomResponse);
         setStudyroom(studyroomResponse.data);
         setStudyAvgTime(formatTime(studyroomResponse.data.studyAvgTime));
         setMaxRestTime(formatTime(studyroomResponse.data.maxRestTime));
+
+        axios.get(`/api/studyrooms/${studyroomId}/isHost`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        })
+        .then((response) => {
+          setIsHost(response.data);
+        })
 
         } catch (error) {
           console.log(error);
@@ -99,13 +107,13 @@ const StudyRoomMember = () => {
             <Background>
               {studyroom.name}
             </Background>
-            <HeaderBtnWrap>
-              <Link to="/StudyRoomAdmin" style={{ textDecoration: "none" }}>
+            {isHost && (
+              <HeaderBtnWrap>
                 <IconButton onClick={handleenterAdmin} aria-label="setting" size="large">
                   <SettingsIcon fontSize="inherit" />
                 </IconButton>
-              </Link>
-            </HeaderBtnWrap>
+              </HeaderBtnWrap>
+            )}
           </HeaderTitle>
         </HeaderWrap>
         <ContentWrap>

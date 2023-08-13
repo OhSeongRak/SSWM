@@ -12,11 +12,20 @@ let sendData;
 const MemberTable = ({ studyroomId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHostModalOpen, setIsHostModalOpen] = useState(false);
+  const [modalStates, setModalStates] = useState({});
 
-  const openModal = () => setIsModalOpen(true);
+  const openModal = (person) => {
+    // console.log("person", person);
+    setModalStates(person.userDto);
+    setIsModalOpen(true);
+    // console.log("modalStates", modalStates);
+  }
   const closeModal = () => setIsModalOpen(false);
 
-  const openHostModal = () => setIsHostModalOpen(true);
+  const openHostModal = (person) => {
+    setModalStates(person.userDto);
+    setIsHostModalOpen(true);
+  }
   const closeHostModal = () => setIsHostModalOpen(false);
 
   // Snackbar
@@ -33,7 +42,6 @@ const MemberTable = ({ studyroomId }) => {
   const [studyPeople, setStudyPeople] = useState();
 
   useEffect(() => {
-    sendData = new FormData([]);
     const fetchMembers = async () => {
       try {
         const response = await axios.get("/api/studyrooms/" + studyroomId + "/search-user", {
@@ -41,6 +49,7 @@ const MemberTable = ({ studyroomId }) => {
             Authorization: accessToken,
           },
         });
+        console.log("스터디원 목록:::", response.data);
         setStudyPeople(response.data);
       } catch (error) {
         console.error("유저 데이터를 가져오는 데 실패했습니다:", error);
@@ -52,40 +61,41 @@ const MemberTable = ({ studyroomId }) => {
 
   const navigate = useNavigate();
 
-  const closeModalEvent = () => {
+  const closeModalEvent = (userDto) => {
     setIsModalOpen(false);
+    console.log("userDTO:::", userDto.id);
 
     axios
-      .put(`/api/studyrooms/${studyroomId}/ban`, {
+      .put(`/api/studyrooms/${studyroomId}/ban`, userDto, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
-        console.log(response.data);
+        console.log("차단 ERROR::",response.data);
         openSnackBar(); // Open the CustomSnackBar after closing the modal
-        Navigate(`/StudyRoomMember/${studyroomId}`);
+        window.location.reload();
+        // Navigate(`/StudyRoomMember/${studyroomId}`);
       })
       .catch((error) => {
         // 오류 처리
-        console.log(Error);
+        console.log(error);
         alert("해당유저를 스터디룸에서 차단하는것에 실패했습니다");
       });
   };
 
-  const closeHostModalEvent = () => {
+  const closeHostModalEvent = (userDto) => {
     setIsHostModalOpen(false);
-
+    console.log("userDto",userDto);
     axios
-      .put(`/api/studyrooms/${studyroomId}/pass`, {
+      .put(`/api/studyrooms/${studyroomId}/pass`, userDto, {
         headers: {
           Authorization: accessToken,
-          "Content-Type": "application/json",
         },
       })
       .then((response) => {
-        console.log(response.data);
+        console.log("권한 ERROR:::", response.data);
         openHostSnackBar(); // Open the CustomSnackBar after closing the modal
         navigate(`/StudyRoomMember/${studyroomId}`);
       })
@@ -104,15 +114,15 @@ const MemberTable = ({ studyroomId }) => {
             <TbodyWrap>
               <TrWrap key={idx}>
                 <TdWrap>{person.userDto.nickname}</TdWrap>
-                <TdWrap>{person.userDto.role}</TdWrap>
+                <TdWrap>{person.role}</TdWrap>
                 <TdWrap>
-                  <ButtonWrap onClick={openHostModal}>권한</ButtonWrap>
+                  <ButtonWrap onClick={() => openHostModal(person)}>권한</ButtonWrap>
                   <CustomModal isOpen={isHostModalOpen} closeModal={closeHostModal}>
                     <Box>
                       <Typography variant="h6" component="h2">
                         방장의 권한을 해당 유저에게 위임하겠습니까?
                       </Typography>
-                      <Button onClick={() => closeHostModalEvent()}>확인</Button>
+                      <Button onClick={() => closeHostModalEvent(modalStates)}>확인</Button>
                       <Button onClick={() => setIsHostModalOpen(false)}>취소</Button>
                     </Box>
                   </CustomModal>
@@ -122,7 +132,7 @@ const MemberTable = ({ studyroomId }) => {
                     onClose={closeHostSnackBar}
                     message="방장이 변경되었습니다"
                   />
-                  <ButtonWrap onClick={openModal}>차단</ButtonWrap>
+                  <ButtonWrap onClick={() => openModal(person)}>차단</ButtonWrap>
                   <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
                     <Box>
                       <Typography variant="h6" component="h2">
@@ -130,7 +140,7 @@ const MemberTable = ({ studyroomId }) => {
                         <br />
                         정말 차단하시겠습니까?
                       </Typography>
-                      <Button onClick={() => closeModalEvent()}>확인</Button>
+                      <Button onClick={() => closeModalEvent(modalStates)}>확인</Button>
                       <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                     </Box>
                   </CustomModal>

@@ -294,10 +294,7 @@ const StudyRoomAdmin = () => {
     setIsModalOpen(false);
 
     axios
-      .put(`/api/studyrooms/${studyroomId}/delete`, null, {
-        params: {
-          isDelete: true,
-        },
+      .put(`/api/studyrooms/${studyroomId}/delete`, {}, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
@@ -306,7 +303,7 @@ const StudyRoomAdmin = () => {
       .then((response) => {
         console.log(response.data);
         openSnackBar();
-        navigate(`/`);
+        navigate(`/Studyroom`);
       })
       .catch((error) => {
         // 오류 처리
