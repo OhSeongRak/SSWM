@@ -31,7 +31,6 @@ function App() {
     // 로그인 안했을 때
     if (accessToken === null) {
       setIsTokenValid(accessToken);
-      console.log("여기로안옴?");
       return;
     }
 

@@ -52,7 +52,6 @@ class VideoRoomComponent extends Component {
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
         this.state = {
@@ -69,6 +68,7 @@ class VideoRoomComponent extends Component {
             restOn: false, // 휴식 상태 여부
             restTime: 0,
             isOut: false,
+            autoRestTime: 0
         };
         this.joinSession = this.joinSession.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
@@ -137,6 +137,7 @@ class VideoRoomComponent extends Component {
     }
 
     onbeforeunload(event) {
+        event.preventDefault();
         this.leaveSession();
     }
 
@@ -148,8 +149,7 @@ class VideoRoomComponent extends Component {
             studyroomId: this.state.mySessionId,
         })
 
-        this.setState(
-            {
+        this.setState(  {
                 session: this.OV.initSession(),
             },
             async () => {
@@ -289,7 +289,6 @@ class VideoRoomComponent extends Component {
         })
         .then((response) => {
         this.setState({ restTime: response.data.restTime });
-        console.log("비디오룸컴포넌트에서 쉬는시간 호출:::::::::", response.data)
         })
         .catch(error => {
             console.error('요청 에러:', error);
@@ -309,27 +308,33 @@ class VideoRoomComponent extends Component {
             status: 'OFF',
             studyroomId: this.state.mySessionId,
         })
+
         setTimeout(() => {
-            const mySession = this.state.session;
+            window.close();
+        }, 500)
+        // 원래 오픈비두에 있던 코드
+        // setTimeout(() => {
+        //     const mySession = this.state.session;
 
-            if (mySession) {
-                mySession.disconnect();
-            }
+        //     if (mySession) {
+        //         mySession.disconnect();
+        //     }
 
-            // Empty all properties...
-            this.OV = null;
-            this.setState({
-                session: undefined,
-                subscribers: [],
-                mySessionId: 'Session2270callreact',
-                myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
-                localUser: undefined,
-            });
-            if (this.props.leaveSession) {
-                this.props.leaveSession();
-            }
-        }, 200);
+        //     // Empty all properties...
+        //     this.OV = null;
+        //     this.setState({
+        //         session: undefined,
+        //         subscribers: [],
+        //         mySessionId: 'Session2270callreact',
+        //         myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
+        //         localUser: undefined,
+        //     });
+        //     if (this.props.leaveSession) {
+        //         this.props.leaveSession();
+        //     }
+        // }, 200);
     }
+
     camStatusChanged(type, status) {
         if ((type==='REST' && status==='ON') || (type==='STUDY' && status==='OFF')){
             localUser.setVideoActive(false);
@@ -605,6 +610,7 @@ class VideoRoomComponent extends Component {
             messageReceived: this.state.chatDisplay === 'none',
         });
     }
+
     checkSize() {
         if (document.getElementById('layout').offsetWidth <= 700 && !this.hasBeenUpdated) {
             this.toggleChat('none');
@@ -678,9 +684,6 @@ class VideoRoomComponent extends Component {
         
             this.startTimer();
 
-            // const restStatus = restOn ? 'OFF' : 'ON';
-            // const studyStatus = restOn ? 'ON' : 'OFF';
-
             this.sendEventAxios({
                 type: 'REST',
                 status: 'ON',
@@ -696,6 +699,29 @@ class VideoRoomComponent extends Component {
         }
     };
     
+    autoRest = () => {
+        if(this.state.minute === -1) {
+            this.leaveSession();
+        }
+        else {
+            const { minute } = this.state;
+            console.log("minute!!: ", minute);
+
+            this.sendEventAxios({
+                type: 'REST',
+                status: 'ON',
+                studyroomId: this.state.mySessionId,
+            })
+            this.restOn = true
+
+            this.sendEventAxios({
+                type: 'STUDY',
+                status: 'OFF',
+                studyroomId: this.state.mySessionId,
+            })
+        }
+    };
+
     //타이머 설정
     startTimer = () => {
         this.timerInterval = setInterval(() => {
@@ -703,11 +729,10 @@ class VideoRoomComponent extends Component {
             const newTimerValue = prevState.timerValue - 1;
     
             if (newTimerValue <= 0) {
-                this.setState(
-                    {
-                        minute: 0,
-                    },
-                )
+                this.setState({
+                    minute: 0,
+                });
+
                 clearInterval(this.timerInterval);
                 this.setState({
                     timerRunning: false,
@@ -737,7 +762,8 @@ class VideoRoomComponent extends Component {
             };
           });
         }, 1000); // 1초마다 감소
-      };
+    };
+
     async init() {
         const URL = "https://teachablemachine.withgoogle.com/models/xtvI2r9Ck/";
         const modelURL = URL+"model.json";
@@ -758,37 +784,52 @@ class VideoRoomComponent extends Component {
 
     async loop(timestamp) {
         webcam.update(); // update the webcam frame
-        await this.predict();
-        window.requestAnimationFrame(this.loop);
+        this.predict();
+
+        setTimeout(() => {
+            window.requestAnimationFrame(this.loop);
+        }, 5000);
     }
     
     async predict() {
-        
         const prediction = await model.predict(webcam.canvas);
-        if(prediction[1].probability > 0.9){
+        if(prediction[1].probability > 0.9) {
             console.log("start rest");
-            if(this.state.isOut === false){
+            
+            this.setState((prevState) => ({
+                minute: prevState.minute + 5
+            }));
+
+            if (this.props.studyroom.maxRestTime < this.state.restTime + this.state.minute)
+                this.leaveSession();
+            
+            if(this.state.isOut === false) {
+                console.log("START: maxRestTime:", this.props.studyroom.maxRestTime);
+                console.log("STart: restTime:", this.state.restTime);
+
                 this.setState({
                     isOut : true,
-                    minute : (this.props.studyroom.maxRestTime - this.state.restTime) / 60,
-                    //minute : 10,
                 });
-                setTimeout(() => {
-                    this.handleApplyClick();
-                }, 100);
-                //this.handleApplyClick();
-                console.log("start here");
-            }
-        //     this.leaveSession();
-        //     //this.startRest();
-        } 
-        else{
 
-            if(this.state.isOut === true){
+                this.sendEventAxios({
+                    type: 'REST',
+                    status: 'ON',
+                    studyroomId: this.state.mySessionId,
+                })
+                this.restOn = true
+    
+                this.sendEventAxios({
+                    type: 'STUDY',
+                    status: 'OFF',
+                    studyroomId: this.state.mySessionId,
+                })
+            }
+        } 
+        else {
+            if(this.state.isOut === true) {
                 console.log("stop rest");
                 this.setState({
                     isOut : false,
-                    minute : 0,
                 });
                 setTimeout(() => {
                     this.sendEventAxios({
@@ -808,19 +849,12 @@ class VideoRoomComponent extends Component {
                         this.sendRestTimeAxios();
                     }, 100);
 
-                    setTimeout(() => {
-                        if(this.state.restTime === 0){
-                            this.leaveSession();
-                        }
-                    }, 300);
                 }, 100);
                 
                 console.log("stop here");
 
             }
         }
-
-
     }
 
     //알람 전송
@@ -856,10 +890,8 @@ class VideoRoomComponent extends Component {
 
           
     }
-
     //알람 수신
-
-    getAlarmMessage(){
+    getAlarmMessage() {
 
         this.state.session.on('signal:alarm', (event) => {
                 // 알람 메시지를 화면에 표시합니다.
@@ -869,6 +901,7 @@ class VideoRoomComponent extends Component {
         );
         
     }
+
     displayAlarmMessage(message) {
 
         var currentSound = undefined;
@@ -881,6 +914,7 @@ class VideoRoomComponent extends Component {
         currentSound = new Audio(sound);
         currentSound.play();
     }
+
     render() {
         //const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
@@ -898,8 +932,6 @@ class VideoRoomComponent extends Component {
                         <LiveRoomSnackbar />
                     </HeaderWrap>
                 </ContainerWrap>
-
-
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
 
                 <div id="layout" className="bounds">
@@ -933,7 +965,7 @@ class VideoRoomComponent extends Component {
                 </div>
 
 
-               <FooterWrap>
+        <FooterWrap>
         <div className="buttonsContent" >
             {/* 휴식 버튼 시작 */}
             <IconButton
@@ -985,7 +1017,6 @@ class VideoRoomComponent extends Component {
                     <AccessibilityNewIcon/>
                 </IconButton>
             </Link>
-
             {/* 스트레칭 버튼 끝 */}
 
             <IconButton
@@ -1000,19 +1031,6 @@ class VideoRoomComponent extends Component {
                 <MicOff color="secondary" />
               )}
             </IconButton>
-
-            {/* <IconButton
-              color="inherit"
-              className="navButton"
-              id="navCamButton"
-              onClick={this.camStatusChanged}
-            >
-              {localUser !== undefined && localUser.isVideoActive() ? (
-                <Videocam />
-              ) : (
-                <VideocamOff color="secondary" />
-              )}
-            </IconButton> */}
 
             <IconButton
               color="inherit"
@@ -1068,21 +1086,6 @@ class VideoRoomComponent extends Component {
         );
     }
 
-    /**
-     * --------------------------------------------
-     * GETTING A TOKEN FROM YOUR APPLICATION SERVER
-     * --------------------------------------------
-     * The methods below request the creation of a Session and a Token to
-     * your application server. This keeps your OpenVidu deployment secure.
-     *
-     * In this sample code, there is no user control at all. Anybody could
-     * access your application server endpoints! In a real production
-     * environment, your application server must identify the user to allow
-     * access to the endpoints.
-     *
-     * Visit https://docs.openvidu.io/en/stable/application-server to learn
-     * more about the integration of OpenVidu in your application server.
-     */
     async getToken() {
 	let result = await this.checkSessionId(this.state.mySessionId);
 	if(result) {
@@ -1140,30 +1143,6 @@ const HeaderWrap = styled.div`
   width: 90%;
   height: 10vh;
 `
-// const ContentWrap = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 90%;
-//   height: 80vh;
-// `
-//const ContentLiveView = styled.div`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//  width: 80%;
-//  height: 100%;
-//  border: 1px solid black;
-//`
-
-//const ContentLiveChat = styled.div`
-//  display: flex;
-//  justify-content: center;
-//  align-items: center;
-//  width: 20%;
-//  height: 100%;
-//  border: 1px solid black;
-//`
 const FooterWrap = styled.div`
 
   display: flex;
