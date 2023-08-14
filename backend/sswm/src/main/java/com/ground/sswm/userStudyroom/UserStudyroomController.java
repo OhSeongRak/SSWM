@@ -3,8 +3,6 @@ package com.ground.sswm.userStudyroom;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ground.sswm.auth.service.AuthService;
-import com.ground.sswm.chat.model.dto.ChatDto;
-import com.ground.sswm.chat.service.ChatServiceImpl;
 import com.ground.sswm.user.model.dto.UserDto;
 import com.ground.sswm.userStudyroom.model.dto.OnAirResDto;
 import com.ground.sswm.userStudyroom.model.dto.UserAttendTop3ResDto;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,7 +29,6 @@ public class UserStudyroomController {
 
     private final UserStudyroomService userStudyroomService;
     private final AuthService authService;
-    private final ChatServiceImpl chatServiceImpl;
 
     private final ObjectMapper objectMapper;
 
@@ -65,27 +61,6 @@ public class UserStudyroomController {
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
-    // 유저가 화상채팅에 참여할 때 채팅 리스트 반환
-    @GetMapping("/{studyroomId}/enter/chat")
-    public ResponseEntity<List<ChatDto>> enterStudyroom(
-        @PathVariable(required = false) Long studyroomId,
-        @RequestParam String userId) {
-
-        List<ChatDto> chatList = chatServiceImpl.findAllChatByStudyroomId(studyroomId);
-
-        String chatListJson;
-        try {
-            chatListJson = objectMapper.writeValueAsString(chatList);
-        } catch (Exception e) {
-            // 처리 오류 처리
-            chatListJson = "[]"; // 혹은 다른 오류 처리 방법을 사용
-        }
-
-        for (ChatDto chatDto : chatList) {
-            System.out.println("chatDto = " + chatDto);
-        }
-        return new ResponseEntity<List<ChatDto>>(chatList, HttpStatus.OK);
-    }
 
     @GetMapping("/{studyroomId}/search-user")
     //스터디룸에서 유저목록 조회
