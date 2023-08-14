@@ -59,7 +59,7 @@ auth:
       - profile_nickname
       - profile_image
       - account_email
-  redirect-url: http://localhost:3000
+  redirect-url: http://i9a206.p.ssafy.io:3000
 
 logging:
   level:
