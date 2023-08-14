@@ -13,57 +13,54 @@ const CardHoverButton = (props) => {
   // console.log(studyroom)
   const handleButtonClick = async () => {
     console.log("studyroomstudyroom", studyroom);
-    if (studyroom.maxUserNum === studyroom.userNum) {
-      alert("이미 꽉 찬 방입니다.");
+    
+    // 비공개 방일 때
+    if (studyroom.public === false) {
+      // 입장 코드 확인
+      const isEnterCodeMatch = await axios.get("/api/studyrooms/enterCode", {
+        headers: {
+          Authorization: accessToken,
+        },
+        params: {
+          enterCode: enterCode,
+          studyroomId: studyroom.id
+        },
+      });
+      
+      // 입장 코드가 일치할 때
+      if (isEnterCodeMatch.data === true) {
+        const message = await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        // 정원 초과라면 가입 불가
+        if (message.data === "정원 초과입니다.")
+          alert(message.data);
+        else if (message.data === "가입 불가")
+          alert("사용자가 차단되었습니다.");
+        // 가입
+        else
+          window.location.href = `/StudyRoomMember/${studyroom.id}`;
+      
+      } else { // 입장 코드가 일치하지 않음
+        alert("잘못된 코드입니다. 다시 입력해주세요.");
+      }
     }
     else {
-      if (studyroom.public === false) {
-        console.log("enterCode:::", enterCode);
-        
-        try {
-          const response = await axios.get("/api/studyrooms/enterCode", {
-            headers: {
-              Authorization: accessToken,
-            },
-            params: {
-              enterCode: enterCode,
-              studyroomId: studyroom.id
-            },
-          });
-      
-          if (response.data === true) {
-            // 비동기적으로 axios.post 실행
-            try {
-              await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
-                headers: {
-                  Authorization: accessToken,
-                },
-              });
-              window.location.href = `/StudyRoomMember/${studyroom.id}`;
-            } catch (error) {
-              console.error("Error joining studyroom:", error);
-            }
-          } else {
-            alert("잘못된 코드입니다. 다시 입력해주세요.");
-          }
-        } catch (error) {
-          console.error("Error sending enterCode:", error);
-        }
-      }
-      else {
-        try {
-          await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
-            headers: {
-              Authorization: accessToken,
-            },
-          });
-          window.location.href = `/StudyRoomMember/${studyroom.id}`;
-        } catch (error) {
-          console.error("Error joining studyroom:", error);
-        }
-      }
+      const message = await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+      // 정원 초과라면 가입 불가
+      if (message.data === "정원 초과입니다.")
+        alert(message.data);
+      else if (message.data === "가입 불가")
+        alert("사용자가 차단되었습니다.");
+      else
+        window.location.href = `/StudyRoomMember/${studyroom.id}`;
     }
-    
   };
   return (
     <div>

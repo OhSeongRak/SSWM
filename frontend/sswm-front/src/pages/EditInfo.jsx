@@ -17,6 +17,7 @@ const EditInfo = () => {
   const [users, setUsers] = useState([]);
   const [nickName, setNickName] = useState("");
   const [checkedNickName, setCheckedNickName] = useState("");
+  const [originNickName, setOriginNickName] = useState("");
   const [imageSrc, setImage] = useState();
 
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const EditInfo = () => {
         setUsers(response.data);
         setImage(`${process.env.REACT_APP_IMAGE_URL}/` + response.data.image);
         setNickName(response.data.nickname);
+        setOriginNickName(response.data.nickname);
         console.log(response.data); 
       })
       .catch((error) => {
@@ -119,7 +121,7 @@ const EditInfo = () => {
     console.log("nickName :" + nickName);
     console.log("checkedNickName :" + checkedNickName);
     // 닉네임 중복확인
-    if (isExist || nickName !== checkedNickName) {
+    if (originNickName != nickName && (isExist || nickName !== checkedNickName)) {
       alert("닉네임의 중복 확인이 필요합니다.");
       return;
     }

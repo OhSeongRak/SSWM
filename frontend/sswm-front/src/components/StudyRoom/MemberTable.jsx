@@ -10,17 +10,20 @@ import { Navigate, useNavigate } from "react-router";
 const MemberTable = ({ studyroomId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHostModalOpen, setIsHostModalOpen] = useState(false);
+  const [modalStates, setModalStates] = useState({});
 
-  const openModal = (event) => {
+  const openModal = (person) => {
+    // console.log("person", person);
+    setModalStates(person.userDto);
     setIsModalOpen(true);
-    setSelectedUserId(event);
-  };
+    // console.log("modalStates", modalStates);
+  }
   const closeModal = () => setIsModalOpen(false);
 
-  const openHostModal = (event) => {
+  const openHostModal = (person) => {
+    setModalStates(person.userDto);
     setIsHostModalOpen(true);
-    setSelectedUserId(event);
-  };
+  }
   const closeHostModal = () => setIsHostModalOpen(false);
 
   // Snackbar
@@ -35,7 +38,6 @@ const MemberTable = ({ studyroomId }) => {
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   const [studyPeople, setStudyPeople] = useState();
-  const [selectedUserId, setSelectedUserId] = useState();
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -45,6 +47,7 @@ const MemberTable = ({ studyroomId }) => {
             Authorization: accessToken,
           },
         });
+        console.log("스터디원 목록:::", response.data);
         setStudyPeople(response.data);
       } catch (error) {
         console.error("유저 데이터를 가져오는 데 실패했습니다:", error);
@@ -57,46 +60,39 @@ const MemberTable = ({ studyroomId }) => {
 
   const navigate = useNavigate();
 
-  //유저차단
-  const closeModalEvent = (event) => {
+  const closeModalEvent = (userDto) => {
     setIsModalOpen(false);
 
-    const setBan = { targetId: selectedUserId }; // 선택한 유저의 ID 사용
-
     axios
-      .put(`/api/studyrooms/${studyroomId}/ban`, setBan, {
+      .put(`/api/studyrooms/${studyroomId}/ban`, userDto, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
-        console.log(response.data);
-        openSnackBar(); // Open the CustomSnackBar after closing the modal
-        Navigate(`/StudyRoomMember/${studyroomId}`);
+        openSnackBar();
+        window.location.reload();
+        // Navigate(`/StudyRoomMember/${studyroomId}`);
       })
       .catch((error) => {
         // 오류 처리
-        console.log(Error);
+        console.log(error);
         alert("해당유저를 스터디룸에서 차단하는것에 실패했습니다");
       });
   };
 
-  //방장권한변경
-  const closeHostModalEvent = (event) => {
+  const closeHostModalEvent = (userDto) => {
     setIsHostModalOpen(false);
-
-    const setHost = { targetId: selectedUserId }; // 선택한 유저의 ID 사용
-
+    console.log("userDto",userDto);
     axios
-      .put(`/api/studyrooms/${studyroomId}/pass`, setHost, {
+      .put(`/api/studyrooms/${studyroomId}/pass`, userDto, {
         headers: {
           Authorization: accessToken,
-          "Content-Type": "application/json",
         },
       })
       .then((response) => {
-        console.log(response.data);
+        console.log("권한 ERROR:::", response.data);
         openHostSnackBar(); // Open the CustomSnackBar after closing the modal
         navigate(`/StudyRoomMember/${studyroomId}`);
       })
@@ -110,52 +106,57 @@ const MemberTable = ({ studyroomId }) => {
   return (
     <ContainerWrap>
       {studyPeople &&
-        studyPeople.map((person, idx) => (
-          <TableWrap>
-            <TbodyWrap>
-              <TrWrap key={idx}>
-                <TdWrap>{person.userDto.nickname}</TdWrap>
-                <TdWrap>{person.role}</TdWrap>
-                <TdWrap>
-                  <ButtonWrap onClick={() => openHostModal(person.userDto.id)}>권한</ButtonWrap>
-                  <CustomModal isOpen={isHostModalOpen} closeModal={closeHostModal}>
-                    <Box>
-                      <Typography variant="h6" component="h2">
-                        방장의 권한을 해당 유저에게 위임하겠습니까?
-                      </Typography>
-                      <Button onClick={(event) => closeHostModalEvent(event)}>확인</Button>
-                      <Button onClick={() => setIsHostModalOpen(false)}>취소</Button>
-                    </Box>
-                  </CustomModal>
-                  <Snackbar
-                    open={isSnackBarOpenHost}
-                    autoHideDuration={3000}
-                    onClose={closeHostSnackBar}
-                    message="방장이 변경되었습니다"
-                  />
-                  <ButtonWrap onClick={() => openModal(person.userDto.id)}>차단</ButtonWrap>
-                  <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
-                    <Box>
-                      <Typography variant="h6" component="h2">
-                        차단 시 해당 유저가 더 이상 해당 스터디룸을 이용하지 못합니다.
-                        <br />
-                        정말 차단하시겠습니까?
-                      </Typography>
-                      <Button onClick={(event) => closeModalEvent(event)}>확인</Button>
-                      <Button onClick={() => setIsModalOpen(false)}>취소</Button>
-                    </Box>
-                  </CustomModal>
-                  <Snackbar
-                    open={isSnackBarOpen}
-                    autoHideDuration={3000}
-                    onClose={closeSnackBar}
-                    message="정상적으로 차단되었습니다."
-                  />
-                </TdWrap>
-              </TrWrap>
-            </TbodyWrap>
-          </TableWrap>
-        ))}
+        studyPeople.map((person, idx) => {
+          if (person.role !== 'HOST') {
+            return (
+            <TableWrap key={idx}>
+              <TbodyWrap>
+                <TrWrap>
+                  <TdWrap>{person.userDto.nickname}</TdWrap>
+                  <TdWrap>{person.role}</TdWrap>
+                  <TdWrap>
+                    <ButtonWrap onClick={() => openHostModal(person)}>권한</ButtonWrap>
+                    <CustomModal isOpen={isHostModalOpen} closeModal={closeHostModal}>
+                      <Box>
+                        <Typography variant="h6" component="h2">
+                          방장의 권한을 해당 유저에게 위임하겠습니까?
+                        </Typography>
+                        <Button onClick={() => closeHostModalEvent(modalStates)}>확인</Button>
+                        <Button onClick={() => setIsHostModalOpen(false)}>취소</Button>
+                      </Box>
+                    </CustomModal>
+                    <Snackbar
+                      open={isSnackBarOpenHost}
+                      autoHideDuration={3000}
+                      onClose={closeHostSnackBar}
+                      message="방장이 변경되었습니다"
+                    />
+                    <ButtonWrap onClick={() => openModal(person)}>차단</ButtonWrap>
+                    <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
+                      <Box>
+                        <Typography variant="h6" component="h2">
+                          차단 시 해당 유저가 더 이상 해당 스터디룸을 이용하지 못합니다.
+                          <br />
+                          정말 차단하시겠습니까?
+                        </Typography>
+                        <Button onClick={() => closeModalEvent(modalStates)}>확인</Button>
+                        <Button onClick={() => setIsModalOpen(false)}>취소</Button>
+                      </Box>
+                    </CustomModal>
+                    <Snackbar
+                      open={isSnackBarOpen}
+                      autoHideDuration={3000}
+                      onClose={closeSnackBar}
+                      message="정상적으로 차단되었습니다."
+                    />
+                  </TdWrap>
+                </TrWrap>
+              </TbodyWrap>
+            </TableWrap>
+            );
+          }
+          return null;
+        })}
     </ContainerWrap>
   );
 };

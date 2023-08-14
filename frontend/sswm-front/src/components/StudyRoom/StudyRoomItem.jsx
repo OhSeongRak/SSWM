@@ -37,12 +37,12 @@ const Card = ({studyroom}) => {
             <Typography variant="h5"sx={{ color: "black" }}>{studyroom.name}</Typography>
           </div>
         </CardBlock>
-        <img
+        <div style={{display:"flex",justifyContent: "center"}}>
+         <CardImg
           alt="random pic"
-          className="card-img-top"
           src={imageUrl}
-        />
-        
+          />
+        </div>
         <CardHoverMenus studyroom = {studyroom}/>
         <div className="card-footer">
         <div disabled  style={{display:"flex",justifyContent: "space-between"}}>
@@ -76,6 +76,11 @@ const Card = ({studyroom}) => {
     </div>
   );
 };
+const CardImg =styled.img`
+display: block;
+    width: 100%;
+    height:200px;
+`
 const CardBlock = styled.div`
   display : flex;
   flex-direction :  column;

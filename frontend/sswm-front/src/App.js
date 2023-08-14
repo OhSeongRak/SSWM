@@ -93,7 +93,7 @@ function App() {
         <Routes>
           <Route path="/kakao/sign" element={<KakaoSignCallback />} />
           <Route path="/kakao/login" element={<KakaoLoginCallback />} />
-          <Route path="/" element={<Login />}></Route>
+          <Route path="/" element={isTokenValid ? <StudyRoom /> : <Login />}></Route>
           <Route
             path="/StudyRoom"
             element={isTokenValid ? <StudyRoom /> : <Login />}
@@ -110,7 +110,6 @@ function App() {
             element={isTokenValid ? <EditInfo /> : <Login />}
           ></Route>
           <Route path="/CreateStudyRoom" element={isTokenValid ? <CreateStudyRoom /> : <Login />}></Route>
-          {/* 아래 Admin은 방장일 때만 접속가능하게 하나 만들어줘야할듯? */}
           <Route path="/StudyRoomAdmin/:studyroomId" element={isTokenValid ? <StudyRoomAdmin /> : <Login />}></Route>
           <Route path="/StudyRoomMember/:studyroomId" element={isTokenValid ? <StudyRoomMember /> : <Login />}></Route>
           <Route path="/LiveRoom/:studyroomId" element={isTokenValid ? <LiveRoom /> : <Login />}></Route>
