@@ -76,7 +76,7 @@ public class UserTreeServiceImpl implements UserTreeService {
         List<UserTree> userTrees = userTreeRepository.findAllByUserId(userId);
 
         if (userTrees.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
 
         List<UserTreeResDto> userTreeResDtos = new ArrayList<>();
@@ -91,7 +91,6 @@ public class UserTreeServiceImpl implements UserTreeService {
 
             List<DailyLog> dailyLogs = dailyLogRepository.findAllByUserIdAndDateBetween(userId,
                 days[0], days[1] - 86400L);
-
 
             //dailylog에서 시간 및 점수 합산해서 가져옴
             ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId, dailyLogs);
