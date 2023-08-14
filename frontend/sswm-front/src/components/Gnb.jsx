@@ -1,12 +1,18 @@
-import React from "react";
+import { React, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import Logo from "../assets/Logo.png";
 
+let currentPath = "";
 const Gnb = (props) => {
+  let location = useLocation();
+  useEffect(() => {
+    if(currentPath === location.pathname) window.location.reload();
+     
+    currentPath = location.pathname;
+  }, [location]);
   const isLoggedIn = !!localStorage.getItem("accessToken");
-
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

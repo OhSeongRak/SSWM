@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import Gnb from "../components/Gnb";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -86,7 +85,7 @@ const SignUpName = () => {
       .catch((error) => {
         // 오류 처리
         console.log(error);
-        alert("닉네임 확인 중 오류가 발생했습니다.");
+        alert("닉네임은 빈칸이 될 수 없습니다.");
         return true;
       });
   };
@@ -128,7 +127,6 @@ const SignUpName = () => {
 
   return (
     <div>
-      <Gnb />
       <ContainerWrap>
         <AddImgWrap>
           <input

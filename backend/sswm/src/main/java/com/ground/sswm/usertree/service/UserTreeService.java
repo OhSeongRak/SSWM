@@ -1,6 +1,5 @@
 package com.ground.sswm.usertree.service;
 
-import com.ground.sswm.usertree.model.dto.UserTreeDto;
 import com.ground.sswm.usertree.model.dto.UserTreeResDto;
 import java.util.List;
 

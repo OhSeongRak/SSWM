@@ -15,7 +15,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      
     },
   },
 };
@@ -61,7 +61,23 @@ export default function MultipleSelectChip({ selectedTags, setSelectedTags }) {
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
+      <FormControl sx={{
+          m: 1,
+          width: 250,
+          '@media screen and (max-width: 1023px)': {
+            width: 150, 
+          },
+          '@media screen and (max-width: 768px)': {
+            width: 130, 
+          },
+          '@media screen and (max-width: 600px)': {
+            width: 100, 
+          },
+          '@media screen and (max-width: 480px)': {
+            width: 80, 
+          },
+        }}
+      >
         <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"

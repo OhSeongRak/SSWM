@@ -53,9 +53,8 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserResDto> get(@RequestHeader("Authorization") String token) {
-        Map<String, Object> claims = authService.getClaimsFromToken(token);
-        Long userId = Long.valueOf(claims.get("id").toString());
-        UserResDto userResDto = userService.getUserResDto(userId);
+        Long id = authService.getUserIdFromToken(token);
+        UserResDto userResDto = userService.getUserResDto(id);
         return new ResponseEntity<>(userResDto, HttpStatus.OK);
     }
 
@@ -70,8 +69,8 @@ public class UserController {
         log.debug("[PUT] /user : fileType " + fileType);
         log.debug("[PUT] /user : nickname " + nickname);
 
-        Map<String, Object> claims = authService.getClaimsFromToken(token);
-        Long userId = Long.valueOf(claims.get("id").toString());
+        Long id = authService.getUserIdFromToken(token);
+
 
         String filePath = null;
         if (fileType != null && !fileType.isBlank() && multipartFile != null
@@ -81,16 +80,17 @@ public class UserController {
 
         log.debug("[filePath]>>>> " + filePath);
 
-        userService.modifyUser(userId, nickname, filePath);
+        userService.modifyUser(id, nickname, filePath);
 
         return new ResponseEntity<>("닉네임 수정 성공", HttpStatus.OK);
     }
 
     // 닉네임 중복 확인
     @GetMapping("/exists")
-    public ResponseEntity<Boolean> exists(@RequestParam String nickname) {
-        log.debug("스터디룸이름 : " + nickname);
-        boolean isExist = userService.exists(nickname);
+    public ResponseEntity<Boolean> exists(@RequestHeader("Authorization") String token, @RequestParam String nickname) {
+        log.debug("닉네임 : " + nickname);
+        Long id = authService.getUserIdFromToken(token);
+        boolean isExist = userService.exists(nickname,id);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }
 

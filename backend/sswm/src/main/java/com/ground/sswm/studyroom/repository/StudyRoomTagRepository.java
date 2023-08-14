@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudyRoomTagRepository extends JpaRepository<StudyroomTag, Long> {
-
+    void deleteByStudyroomId(Long studyroomId);
 }

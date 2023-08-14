@@ -31,7 +31,6 @@ function App() {
     // 로그인 안했을 때
     if (accessToken === null) {
       setIsTokenValid(accessToken);
-      console.log("여기로안옴?");
       return;
     }
 
@@ -94,9 +93,8 @@ function App() {
           <Route path="/Login" element={<Login />}></Route>
           <Route path="/kakao/sign" element={<KakaoSignCallback />} />
           <Route path="/kakao/login" element={<KakaoLoginCallback />} />
-          {isTokenValid?
-            <Route path="/SignUpName" element={<SignUpName />}></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+          <Route path="/SignUpName" element={<SignUpName />}></Route>
+          
           {isTokenValid?
             <Route path="/" element={<StudyRoom /> }></Route>
               :<Route path="*" element={<Navigate to="/login" replace />} />}
