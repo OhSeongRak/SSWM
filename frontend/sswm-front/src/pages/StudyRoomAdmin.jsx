@@ -582,7 +582,6 @@ const StudyRoomTitle = styled.div`
   width: 50%;
   height: 100%;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 1vw;
   margin-left: 5vw;
 `;
@@ -598,7 +597,6 @@ const StudyRoomTitle2 = styled.div`
   width: 50%;
   height: 100%;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 1vw;
   margin-left: 5vw;
 `;
@@ -635,7 +633,6 @@ const ContentBottomTitle = styled.div`
   background-color: #b2dfdb;
   padding-left: 2vw;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
 `;
 const ContentBottomBoard = styled.div`
   width: 100%;
@@ -671,7 +668,6 @@ const NoticeContentWrap = styled.textarea`
   outline: none;
   resize: none;
   background-color: #eee;
-  font-family: "NanumSquareNeo";
 `;
 const BtnWrap = styled.div`
   display: flex;

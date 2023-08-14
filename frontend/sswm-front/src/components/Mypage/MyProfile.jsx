@@ -70,69 +70,69 @@ const MyProfile = ({ users }) => {
 
   function calculateLevel(currentExp){
     let level;
-    let LextExp;
-    console.log(currentExp);
+    let NextExp;
+
     if(currentExp < 100) {
       level = 1;
-      LextExp = 100;
+      NextExp = 100;
     } else if(currentExp < 200){
       level = 2;
-      LextExp = 200;
+      NextExp = 200;
     } else if(currentExp < 300){
       level = 3;
-      LextExp = 300;
+      NextExp = 300;
     } else if(currentExp < 400){
       level = 4;
-      LextExp = 400;
+      NextExp = 400;
     } else if(currentExp < 550){
       level = 5;
-      LextExp = 550;
+      NextExp = 550;
     } else if(currentExp < 700){
       level = 6;
-      LextExp = 700;
+      NextExp = 700;
     } else if(currentExp < 850){
       level = 7;
-      LextExp = 850;
+      NextExp = 850;
     } else if(currentExp < 1000){
       level = 8;
-      LextExp = 1000;
+      NextExp = 1000;
     } else if(currentExp < 1150){
       level = 9;
-      LextExp = 1150;
+      NextExp = 1150;
     } else if(currentExp < 1350){
       level = 10;
-      LextExp = 1350;
+      NextExp = 1350;
     } else if(currentExp < 1550){
       level = 11;
-      LextExp = 1550;
+      NextExp = 1550;
     } else if(currentExp < 1750){
       level = 12;
-      LextExp = 1750;
+      NextExp = 1750;
     } else if(currentExp < 1950){
       level = 13;
-      LextExp = 1950;
+      NextExp = 1950;
     } else if(currentExp < 2150){
       level = 14;
-      LextExp = 2150;
+      NextExp = 2150;
     } else if(currentExp < 2400 ){
       level = 15;
-      LextExp = 2400;
+      NextExp = 2400;
     } else if(currentExp < 2650){
       level = 16;
-      LextExp = 2650;
+      NextExp = 2650;
     } else if(currentExp < 2900){
       level = 17;
-      LextExp = 2900;
+      NextExp = 2900;
     } else if(currentExp < 3150){
       level = 18;
-      LextExp = 3150;
+      NextExp = 3150;
     } else if(currentExp < 3400){
       level = 19;
-      LextExp = 3400;
+      NextExp = 3400;
     } else{
       level = 20;
     }
-    return [level, LextExp]
+    return [level, NextExp]
   }
   return (
     <ContainerWrap>
@@ -252,7 +252,6 @@ const Title = styled.span`
   border-radius: 15px;
   padding: 3px 3px;
   background: #fecc47;
-  font-family: "NanumSquareNeo";
 `;
 const ContentWrap = styled.div`
   display: flex;
@@ -273,7 +272,6 @@ const InfoWrap = styled.div`
   justify-content: center;
   align-items: center;
   height: 80%;
-  font-family: "NanumSquareNeo";
 `;
 const InfoImg = styled.div`
   display: flex;
@@ -342,7 +340,6 @@ const TreeName = styled.div`
   justify-content: center;
   align-items: center;
   height: 30%;
-  font-family: "NanumSquareNeo";
 `;
 const TreeBalanceWrap = styled.div`
   display: flex;
@@ -353,7 +350,6 @@ const TreeBalanceWrap = styled.div`
 `;
 const TreeBalanceText = styled.span`
   width: 90%;
-  font-family: "NanumSquareNeo";
 `;
 const TreeBalanceContent = styled.div`
   display: flex;

@@ -296,7 +296,6 @@ const EditLeftContent = styled.div`
   border-right: 1px solid black;
   border-bottom: 1px solid black;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
 `;
 const EditRightContent = styled.div`
   display: flex;
@@ -307,7 +306,6 @@ const EditRightContent = styled.div`
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 2vw;
 `;
 const BtnWrap = styled.div`
@@ -338,6 +336,5 @@ const ButtonCustom = styled.button`
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   margin-left: 1vw;
-  font-family: "NanumSquareNeo";
 `;
 export default EditInfo;

@@ -61,7 +61,6 @@ const SocialWrap = styled.div`
 `;
 
 const Text = styled.p`
-  font-family: "NanumSquareNeo";
   font-size: 32px;
   text-align: center;
 `;
