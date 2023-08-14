@@ -61,12 +61,13 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         );
 
         //userstudyroom에서 찾아옴
-        Optional<UserStudyroom> OpUserStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
-            userId, studyroomId);
+        Optional<UserStudyroom> OpUserStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId, studyroomId);
 
         //처음 스터디룸에 참여하는 사용자라면
         if (OpUserStudyroom.isEmpty()) {
-
+            // 스터디룸이 꽉 찼다면
+            if (studyroom.getUserNum() == studyroom.getMaxUserNum())
+                return "정원 초과입니다.";
             //userStudyroom 생성
             UserStudyroom newUserStudyroom = new UserStudyroom();
 
@@ -80,6 +81,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             newUserStudyroom.setTotalStudy(0);
 
             userStudyroomRepository.save(newUserStudyroom);
+            studyroom.setUserNum(studyroom.getUserNum() + 1);
             return "가입 성공";
         }
 
@@ -118,6 +120,8 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
                 "호스트는 스터디룸에서 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
         }
 
+        Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
+        studyroom.setUserNum(studyroom.getUserNum() - 1);
         userStudyroom.setDeleted(true);
     }
 
@@ -127,22 +131,19 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         List<OnAirResDto> OnAirResDtos = new ArrayList<>(); //리턴할 리스트 생성
 
         //스터디룸 아이디로 userStudyroom 전부 가져옴
-        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(
-            studyroomId);
+//        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
+        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomIdAndIsDeletedAndIsBan(studyroomId, false, false);
 
         //해당 스터디룸에 해당하는 유저 및 현재 접속중인지 체크해서 목록 리턴해줌
-        for (UserStudyroom userStudyroom : userStudyrooms
-        ) {
+        for (UserStudyroom userStudyroom : userStudyrooms) {
             User userInStudyroom = userStudyroom.getUser();
 
             //****isInLive에 대한 정보는 이후 레디스에서 가져옴****
             List<Long> inLiveUsers = studyEventRepository.findUserIdsInLive(studyroomId);
-            boolean isInLive =
-                inLiveUsers.stream().filter(x -> x == userInStudyroom.getId()).count() == 1 ?
-                    true : false;
+            boolean isInLive = inLiveUsers.stream().filter(x -> x == userInStudyroom.getId()).count() == 1 ? true : false;
 
             //새로운 유저 생성
-            OnAirResDto nowOnAirResDto = new OnAirResDto(UserDto.from(userInStudyroom), isInLive);
+            OnAirResDto nowOnAirResDto = new OnAirResDto(UserDto.from(userInStudyroom), isInLive, userStudyroom.getRole(), userStudyroom.isBan());
 
             //유저 목록에 유저 넣기
             OnAirResDtos.add(nowOnAirResDto);
@@ -182,6 +183,10 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         //게스트 벤 및 탈퇴
         guestStudyroom.setBan(true);
         guestStudyroom.setDeleted(true);
+
+        // 인원수 감소
+        Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
+        studyroom.setUserNum(studyroom.getUserNum() - 1);
     }
 
     @Override
@@ -280,12 +285,11 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         int year = now.getYear();
         int month = now.getMonthValue();
         int hour = now.getHour();
-        if (hour < 4){
-            if (month == 1){
+        if (hour < 4) {
+            if (month == 1) {
                 year -= 1;
                 month = 12;
-            }
-            else{
+            } else {
                 month -= 1;
             }
         }
@@ -300,10 +304,10 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         //서울 시간을 기준으로 해당 달의 첫번째 날과 마지막 날의 00시 00분 을 가져옴
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");
         ZonedDateTime firstDayOfMonth = ZonedDateTime.of(year, month, 1, 0, 0, 0, 0, koreaZone);
-        ZonedDateTime lastDayOfMonth = ZonedDateTime.of(year, month, intLastOfMonth, 0, 0, 0, 0, koreaZone);
+        ZonedDateTime lastDayOfMonth = ZonedDateTime.of(year, month, intLastOfMonth, 0, 0, 0, 0,
+            koreaZone);
         long startDate = firstDayOfMonth.toEpochSecond();
         long endDate = lastDayOfMonth.toEpochSecond();
-
 
         //deleted 하지 않은 userId만 가져오기
         for (UserStudyroom userStudyroom : userStudyrooms) {
@@ -338,5 +342,11 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         userAttendTop3ResDto.setDaysOfMonth(intLastOfMonth);
 
         return userAttendTop3ResDto;
+    }
+
+    @Override
+    public boolean checkUserHost(Long userId, Long studyroomId) {
+        UserStudyroom userStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId, studyroomId).get();
+        return userStudyroom.getRole().equals(StudyMemberRole.HOST) ? true : false;
     }
 }

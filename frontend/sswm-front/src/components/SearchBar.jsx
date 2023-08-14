@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../assets/searchBarButton.svg";
-import { IconButton } from "@mui/material";
 
-const SearchBar = (props) => {
+const SearchBar = ({onSearchKeywordChange}) => {
+  const [searchKeyword, setSearchKeyword] = useState("");
+
+  const handleInputChange = (event) => {
+    setSearchKeyword(event.target.value);
+  };
+
+  const handleButtonClick = () => {
+    onSearchKeywordChange(searchKeyword);
+  };
+
   return (
     <SearchBarLayout>
       <SearchBarInputWrapper>
-        <SearchBarInput placeholder="검색어를 입력하세요" />
+        <SearchBarInput
+          placeholder="검색어를 입력하세요"
+          onChange={handleInputChange}
+        />
 
-        <SearchBarButton>
-          <IconButton>
+        <SearchBarButton onClick={handleButtonClick}>
+          {/* <IconButton> */}
             <SearchIcon />
-          </IconButton>
+          {/* </IconButton> */}
         </SearchBarButton>
       </SearchBarInputWrapper>
     </SearchBarLayout>
@@ -42,7 +54,6 @@ const SearchBarInput = styled.input`
   border-radius: 35px;
   font-weight: 700;
   font-size: 20px;
-
   &::placeholder {
     color: #ffc7a1;
     font-weight: 400;

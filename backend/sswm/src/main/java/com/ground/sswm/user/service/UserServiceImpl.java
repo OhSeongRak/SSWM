@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         User newUser = User.builder()
             .name(oauthUser.getName())
             .nickname(oauthUser.getNickname() != "" ? oauthUser.getNickname() : oauthUser.getName())
-            .image(oauthUser.getProfileImg())
+            .image("image/userDefault/fubao.jpg")
             .email(oauthUser.getEmail())
             .provider(oauthUser.getProvider())
             .providerId(oauthUser.getProviderId())
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         // 닉네임 바꾸는 경우
         if (nickname != null && !nickname.isBlank()) {
             // 다른 사람이 바꾸고자하는 닉네임 이미 사용하고 있음
-            User findUser = userRepository.findByNickname(nickname);
+            User findUser = userRepository.findByNickname(id,nickname);
             // 만약 유저 닉네임이 중복이라면 함수 종료
             if (findUser != null) {
                 throw new NicknameAlreadyExistException("이미 사용중인 닉네임 입니다.");
@@ -106,13 +106,6 @@ public class UserServiceImpl implements UserService {
         }
         // 이미지 바꾸는 경우
         if (imagePath != null && !imagePath.isBlank()) {
-            log.debug("[modifyUser] (1)");
-            if (user.getImage() != null && !user.getImage().isBlank()) {
-                // 기존 이미지 삭제
-                log.debug("[modifyUser] (2)");
-                fileManageUtil.deleteFile(user.getImage());
-            }
-            log.debug("[modifyUser] (3)");
             user.setImage(imagePath);
         }
         user.setModifiedAt(UnixTimeUtil.getCurrentUnixTime());
@@ -120,8 +113,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public boolean exists(String nickname) {
-        return userRepository.existsByNickname(nickname);
+    public boolean exists(String nickname, Long id) {
+        return userRepository.findByNickname(id,nickname)==null? false: true;
     }
 
 

@@ -1,4 +1,6 @@
 package com.ground.sswm.studyroom.service;
+
+import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.model.StudyroomTag;
 import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
@@ -18,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class StudyroomServiceImpl implements StudyroomService {
     private final UserRepository userRepository;
     private final StudyRoomTagRepository studyRoomTagRepository;
     private final TagRepository tagRepository;
+
     @Override
     public List<SearchStudyroomResDto> list(SearchStudyroomReqDto searchStudyroomReqDto) {
 
@@ -43,14 +45,20 @@ public class StudyroomServiceImpl implements StudyroomService {
 
         if (isPublic) { // 공개만 표시
             if (tagNames.isEmpty()) // 태그 선택 x
+            {
                 studyrooms = studyroomRepository.listPublic(searchKeyword);
-            else // 태그 선택 o
+            } else // 태그 선택 o
+            {
                 studyrooms = studyroomRepository.listTagPublic(tagNames, searchKeyword);
+            }
         } else { // 비공개도 표시
             if (tagNames.isEmpty()) // 태그 선택 x
+            {
                 studyrooms = studyroomRepository.list(searchKeyword);
-            else // 태그 선택 o
+            } else // 태그 선택 o
+            {
                 studyrooms = studyroomRepository.listTag(tagNames, searchKeyword);
+            }
         }
 
         List<SearchStudyroomResDto> searchStudyroomResDtos = new ArrayList<>();
@@ -75,7 +83,7 @@ public class StudyroomServiceImpl implements StudyroomService {
                     break;
                 case "CREATED":
                     searchStudyroomResDtos.sort(
-                        (o1, o2) -> Math.toIntExact(o1.getCreatedTime() - o2.getCreatedTime()));
+                        (o1, o2) -> Math.toIntExact(o2.getCreatedTime() - o1.getCreatedTime()));
                     break;
             }
         } else {
@@ -89,7 +97,7 @@ public class StudyroomServiceImpl implements StudyroomService {
                     break;
                 case "CREATED":
                     searchStudyroomResDtos.sort(
-                        (o1, o2) -> Math.toIntExact(o2.getCreatedTime() - o1.getCreatedTime()));
+                        (o1, o2) -> Math.toIntExact(o1.getCreatedTime() - o2.getCreatedTime()));
                     break;
             }
         }
@@ -136,18 +144,48 @@ public class StudyroomServiceImpl implements StudyroomService {
 
     @Override
     @Transactional
-    public void update(Long studyroomId, StudyroomDto studyroomDto) {
+    public void update(Long studyroomId, StudyroomDto studyroomDto, String imagePath) {
         Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
+
+        // 이미지 바꾸는 경우
+        if (imagePath != null && !imagePath.isBlank()) {
+//            log.debug("[modifyUser] (1)");
+//            if (studyroomDto.getImage() != null && !studyroomDto.getImage().isBlank()) {
+//                // 기존 이미지 삭제
+//                log.debug("[modifyUser] (2)");
+//                fileManageUtil.deleteFile(studyroomDto.getImage());
+//            }
+            log.debug("[modifyUser] (3)");
+            studyroomDto.setImage(imagePath);
+        }
+
+        // INSERT StudyRoomTag
+        // 먼저 tag들을 다 삭제함.
+        studyRoomTagRepository.deleteByStudyroomId(studyroomId);
+        List<TagDto> tagDtoList = studyroomDto.getTags();
+
+        // 선택한 태그가 있다면 insert
+        if (tagDtoList != null) {
+            for (TagDto tagDto : tagDtoList) {
+                StudyroomTag studyroomTag = new StudyroomTag();
+                studyroomTag.setStudyroom(studyroom);
+                studyroomTag.setTag(tagRepository.findByName(tagDto.getName()));
+                studyRoomTagRepository.save(studyroomTag);
+            }
+        }
+
         studyroom.setUpdates(studyroomDto);
     }
+
 
     @Override
     public StudyroomDto selectByStudyroomId(Long studyroomId) {
 
         Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
 
-        if (studyroom.isEmpty())
+        if (studyroom.isEmpty()) {
             return null;
+        }
 
         StudyroomDto studyroomDto = StudyroomDto.from(studyroom.get());
 
@@ -165,8 +203,6 @@ public class StudyroomServiceImpl implements StudyroomService {
 
             searchStudyroomResDtoList.add(searchStudyroomResDto);
         }
-
-
         return searchStudyroomResDtoList;
     }
 
@@ -178,8 +214,16 @@ public class StudyroomServiceImpl implements StudyroomService {
     }
 
     @Override
-    public boolean exists(String name) {
-        return studyroomRepository.findByName(name).isPresent();
+    public boolean exists(Long studyroomId, String name) {
+        Studyroom studyroom = studyroomRepository.findByName(name).orElse(null);
+        if(studyroom == null){
+            return false;
+        }
+        if(studyroomId!=null){
+            return studyroom.getId()!=studyroomId;
+
+        }
+        return true;
     }
 
     @Override

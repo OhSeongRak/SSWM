@@ -14,7 +14,7 @@ public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
     Optional<Studyroom> findByName(String name);
 
     @Query("select s from Studyroom s where s.isDeleted = false and s.id in"
-        + " (select us.studyroom.id from UserStudyroom us where us.user.id = :userId)")
+        + " (select us.studyroom.id from UserStudyroom us where us.user.id = :userId and us.isDeleted=false)")
     List<Studyroom> findByUserId(@Param("userId") Long userId);
 
     @Query("select s from Studyroom s  where s.isDeleted = false"

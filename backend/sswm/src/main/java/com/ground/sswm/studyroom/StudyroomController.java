@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,7 +53,6 @@ public class StudyroomController {
         @RequestPart(value = "file", required = false) MultipartFile multipartFile,
         @RequestPart(value = "fileType", required = false) String fileType) {
 
-        System.out.println("여기까진오나?");
         log.debug("[POST] /user : file " + multipartFile);
         log.debug("[POST] /user : fileType " + fileType);
         log.debug("[POST] /user : token " + token);
@@ -68,14 +66,14 @@ public class StudyroomController {
         log.debug("userId :" + userId);
 
         // 이미지 저장
-        String filePath = "image/jpeg/2023/08/06/ae34df9e-d6b9-46f9-9433-55f723620c8e.jpg";
+        String filePath = "image/studyDefault/dolphin.jpg";
         if (fileType != null && !fileType.isBlank() && multipartFile != null
             && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
         }
 
         log.debug("[filePath]>>>> " + filePath);
-
+        log.debug("[userNum]>>>> " + studyroomDto.getUserNum());
         studyroomDto.setImage(filePath);
 
         Long studyroomId = studyroomService.add(userId, studyroomDto);
@@ -83,18 +81,32 @@ public class StudyroomController {
         return new ResponseEntity<Long>(studyroomId, HttpStatus.OK);
     }
 
+
+
     // 스터디룸 수정
     @PutMapping("/{studyroomId}")
-    @ResponseBody
     public ResponseEntity<Void> update(@PathVariable("studyroomId") Long studyroomId,
-        @RequestBody StudyroomDto studyroomDto) {
-        studyroomService.update(studyroomId, studyroomDto);
+        @RequestPart(value = "file", required = false) MultipartFile multipartFile,
+        @RequestPart(value = "fileType", required = false) String fileType,
+        @RequestPart("studyroom") StudyroomDto studyroomDto) {
+        log.debug("PUT : update studyroom");
+        // 이미지 저장
+        String filePath = "image/studyDefault/dolphin.jpg";
+        if (fileType != null && !fileType.isBlank() && multipartFile != null
+            && !multipartFile.isEmpty()) {
+            filePath = fileManageUtil.uploadFile(fileType, multipartFile);
+        }
+
+        studyroomDto.setImage(filePath);
+
+        studyroomService.update(studyroomId, studyroomDto, filePath);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{studyroomId}")
-    @ResponseBody
+    //스터디룸 삭제
+    @PutMapping("/{studyroomId}/delete")
     public ResponseEntity<Void> delete(@PathVariable("studyroomId") Long studyroomId) {
+
         studyroomService.delete(studyroomId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -103,6 +115,7 @@ public class StudyroomController {
     @GetMapping("/{studyroomId}")
     @ResponseBody
     public ResponseEntity<StudyroomDto> selectByStudyroomId(@PathVariable("studyroomId") Long studyroomId) {
+        log.debug("studyroomId : "+studyroomId);
         StudyroomDto studyroom = studyroomService.selectByStudyroomId(studyroomId);
         return new ResponseEntity<StudyroomDto>(studyroom, HttpStatus.OK);
     }
@@ -111,8 +124,8 @@ public class StudyroomController {
     @GetMapping
     public ResponseEntity<List<SearchStudyroomResDto>> selectByUserId(
         @RequestHeader("Authorization") String token) {
-        Map<String, Object> claims = authService.getClaimsFromToken(token);
-        Long userId = Long.valueOf(claims.get("id").toString());
+        Long userId = authService.getUserIdFromToken(token);
+
         List<SearchStudyroomResDto> studyrooms = studyroomService.selectByUserId(userId);
 
         return new ResponseEntity<List<SearchStudyroomResDto>>(studyrooms, HttpStatus.OK);
@@ -125,9 +138,9 @@ public class StudyroomController {
     }
     // 룸 제목 중복 확인
     @GetMapping("/exists")
-    public ResponseEntity<Boolean> exists(@RequestParam String name) {
+    public ResponseEntity<Boolean> exists(@RequestParam(required = false) Long studyroomId, @RequestParam String name) {
         log.debug("스터디룸이름 : " + name);
-        boolean isExist = studyroomService.exists(name);
+        boolean isExist = studyroomService.exists(studyroomId,name);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }
 }

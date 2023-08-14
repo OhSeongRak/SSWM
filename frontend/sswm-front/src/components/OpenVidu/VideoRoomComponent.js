@@ -1,41 +1,74 @@
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import ChatComponent from './chat/ChatComponent';
 import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
 import './VideoRoomComponent.css';
-
+import styled from "styled-components";
 import OpenViduLayout from './layout/openvidu-layout';
 import UserModel from './models/user-model';
-import ToolbarComponent from './toolbar/ToolbarComponent';
+//import ToolbarComponent from './toolbar/ToolbarComponent';
 //import * as tmPose from '@teachablemachine/pose';
 import * as tmImage from '@teachablemachine/image';
 import sound from '../../assets/Dingdong.mp3'
+import LiveRoomSnackbar from '../LiveRoom/LiveRoomSnackbar';
+//import LiveRoomFooter from '../LiveRoom/LiveRoomFooter';
+
+import BedIcon from '@mui/icons-material/Bed';
+import Mic from '@material-ui/icons/Mic';
+import MicOff from '@material-ui/icons/MicOff';
+import Videocam from '@material-ui/icons/Videocam';
+import VideocamOff from '@material-ui/icons/VideocamOff';
+import Fullscreen from '@material-ui/icons/Fullscreen';
+import FullscreenExit from '@material-ui/icons/FullscreenExit';
+//import SwitchVideoIcon from '@material-ui/icons/SwitchVideo';
+import PictureInPicture from '@material-ui/icons/PictureInPicture';
+import ScreenShare from '@material-ui/icons/ScreenShare';
+import StopScreenShare from '@material-ui/icons/StopScreenShare';
+import Tooltip from '@material-ui/core/Tooltip';
+import PowerSettingsNew from '@material-ui/icons/PowerSettingsNew';
+import QuestionAnswer from '@material-ui/icons/QuestionAnswer';
+import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
+import IconButton from '@material-ui/core/IconButton';
+
+import Popper from '@mui/material/Popper';
+import Paper from "@mui/material/Paper";
+import Fade from '@mui/material/Fade';
+import Box from '@mui/material/Box';
+import { styled as muistyled } from "@mui/material/styles";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { Button } from "@mui/material";
+
 let model, webcam;
 var localUser = new UserModel();
 const APPLICATION_SERVER_URL = 'https://i9a206.p.ssafy.io:5443/';
-
+const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
 class VideoRoomComponent extends Component {
     constructor(props) {
         super(props);
         this.hasBeenUpdated = false;
         this.layout = new OpenViduLayout();
-        let sessionName = 'TEST_SESSION';
-        let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
+        // let userName = this.props.user ? this.props.user : 'OpenVidu_User' + Math.floor(Math.random() * 100);
         this.remotes = [];
         this.localUserAccessAllowed = false;
         this.state = {
-            mySessionId: sessionName,
-            myUserName: userName,
+            mySessionId: props.studyroomId,
+            myUserName: undefined,
             session: undefined,
             localUser: undefined,
             subscribers: [],
             chatDisplay: 'none',
             currentVideoDevice: undefined,
-        };
+            open: false,
+            anchorEl: null,
+            minute : 0,
+            restOn: false, // 휴식 상태 여부
+            restTime: 0,
 
+        };
         this.joinSession = this.joinSession.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
         this.onbeforeunload = this.onbeforeunload.bind(this);
@@ -71,6 +104,20 @@ class VideoRoomComponent extends Component {
             bigFirst: true, // Whether to place the big one in the top left (true) or bottom right
             animate: true, // Whether you want to animate the transitions
         };
+        
+        axios
+        .get("/api/users", {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            this.state.myUserName = response.data.nickname;
+        })
+        .catch(error => {
+            console.error('요청 에러:', error);
+        });
 
         this.layout.initLayoutContainer(document.getElementById('layout'), openViduLayoutOptions);
         window.addEventListener('beforeunload', this.onbeforeunload);
@@ -93,6 +140,11 @@ class VideoRoomComponent extends Component {
 
     joinSession() {
         this.OV = new OpenVidu();
+        this.sendEventAxios({
+            type: 'STUDY',
+            status: 'ON',
+            studyroomId: this.state.mySessionId,
+        })
 
         this.setState(
             {
@@ -103,6 +155,8 @@ class VideoRoomComponent extends Component {
                 await this.connectToSession();
             },
         );
+        
+        this.sendRestTimeAxios();
     }
 
     async connectToSession() {
@@ -192,7 +246,7 @@ class VideoRoomComponent extends Component {
                 subscribers: subscribers,
             },
             () => {
-                if (this.state.localUser) {
+                if (this.state.localUser) { 
                     this.sendSignalUserChanged({
                         isAudioActive: this.state.localUser.isAudioActive(),
                         isVideoActive: this.state.localUser.isVideoActive(),
@@ -205,7 +259,54 @@ class VideoRoomComponent extends Component {
         );
     }
 
+    // axios 요청 함수
+    sendEventAxios = (data) => {        
+        axios
+        .post("/api/event", data, {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+        })
+        .catch(error => {
+            console.error('요청 에러:', error);
+        });
+    };
+
+    sendRestTimeAxios() {
+        // 휴식 시간 가져오기
+        axios
+        .get(`/api/user-logs/${this.state.mySessionId}`, {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            }
+        })
+        .then((response) => {
+        this.setState({ restTime: response.data.restTime });
+        console.log("비디오룸컴포넌트에서 쉬는시간 호출:::::::::", response.data)
+        })
+        .catch(error => {
+            console.error('요청 에러:', error);
+        });            
+    }
+
     leaveSession() {
+        this.sendEventAxios({
+            type: 'REST',
+            status: 'OFF',
+            studyroomId: this.state.mySessionId,
+        })
+        this.restOn = false
+
+        this.sendEventAxios({
+            type: 'STUDY',
+            status: 'OFF',
+            studyroomId: this.state.mySessionId,
+        })
+
         const mySession = this.state.session;
 
         if (mySession) {
@@ -471,14 +572,17 @@ class VideoRoomComponent extends Component {
     }
 
     toggleChat(property) {
-        let display = property;
-
+        let display = undefined;
+         
         if (display === undefined) {
+            console.log(this.state.chatDisplay);
             display = this.state.chatDisplay === 'none' ? 'block' : 'none';
         }
         if (display === 'block') {
+            console.log("block");
             this.setState({ chatDisplay: display, messageReceived: false });
         } else {
+            console.log("else");
             console.log('chat', display);
             this.setState({ chatDisplay: display });
         }
@@ -499,6 +603,112 @@ class VideoRoomComponent extends Component {
             this.hasBeenUpdated = false;
         }
     }
+
+    //휴식 버튼 클릭
+    handleRestClick = (event) => {
+        this.setState((prevState) => ({
+          anchorEl: event.target,
+          open: !prevState.open
+        }));
+      };
+    
+    //휴식 시간 감소
+    handleMinusClick = () => {
+        if (this.state.minute > 0){
+            this.setState((prevState) => ({
+                minute: prevState.minute -1
+            }));
+        }
+    }
+
+    //휴식 시간 증가
+    handlePlusClick = () => {
+        console.log("this.state.restTime/60:::", Math.floor(this.state.restTime/60));
+        // this.props.studyroom.maxRestTime/60 - this.state.restTime/60
+        if (this.state.minute < Math.floor((this.props.studyroom.maxRestTime - this.state.restTime) / 60)) {
+        this.setState((prevState) => ({
+            minute: prevState.minute + 1
+          }));
+        }
+    }
+
+    //휴식 시작 버튼 클릭
+    handleApplyClick = () => {
+        //0초면 팝업 닫기
+        if(this.state.minute <= 0){
+            this.setState({
+                open: false,
+                timerRunning: false,
+            });
+        }
+        else {
+            const { restOn, minute } = this.state;
+            const timerValue = minute * 60; // 분을 초로 변환
+        
+            this.setState({
+            timerValue,
+            timerRunning: true,
+            open: true // 팝업 열기
+            });
+        
+            this.startTimer();
+
+            // const restStatus = restOn ? 'OFF' : 'ON';
+            // const studyStatus = restOn ? 'ON' : 'OFF';
+
+            this.sendEventAxios({
+                type: 'REST',
+                status: 'ON',
+                studyroomId: this.state.mySessionId,
+            })
+            this.restOn = true
+
+            this.sendEventAxios({
+                type: 'STUDY',
+                status: 'OFF',
+                studyroomId: this.state.mySessionId,
+            })
+        }
+    };
+    
+    //타이머 설정
+    startTimer = () => {
+        this.timerInterval = setInterval(() => {
+          this.setState((prevState) => {
+            const newTimerValue = prevState.timerValue - 1;
+    
+            if (newTimerValue <= 0) {
+              this.state.minute = 0;
+              clearInterval(this.timerInterval);
+              this.setState({
+                timerRunning: false,
+                open: false
+              });
+              
+              this.sendEventAxios({
+                type: 'REST',
+                status: 'OFF',
+                studyroomId: this.state.mySessionId,
+              })
+              this.restOn = false
+
+              this.sendEventAxios({
+                type: 'STUDY',
+                status: 'ON',
+                studyroomId: this.state.mySessionId,
+              })
+
+              setTimeout(() => {
+                this.sendRestTimeAxios();
+              }, 1000);
+            }
+            
+            return {
+              timerValue: newTimerValue
+            };
+          });
+        }, 100); // 1초마다 감소
+      };
     async init() {
         const URL = "https://teachablemachine.withgoogle.com/models/xtvI2r9Ck/";
         const modelURL = URL+"model.json";
@@ -550,6 +760,10 @@ class VideoRoomComponent extends Component {
           });
 
           var currentSound = undefined;
+          if(currentSound) {
+              currentSound.pause();
+              currentSound.currentTime = 0;
+          }
       
           // TODO: mp3 파일 경로는 맞게 수정해주세요!
           currentSound = new Audio(sound);
@@ -578,38 +792,46 @@ class VideoRoomComponent extends Component {
     displayAlarmMessage(message) {
 
         var currentSound = undefined;
+        if(currentSound) {
+            currentSound.pause();
+            currentSound.currentTime = 0;
+        }
     
         // TODO: mp3 파일 경로는 맞게 수정해주세요!
         currentSound = new Audio(sound);
         currentSound.play();
     }
     render() {
-        const mySessionId = this.state.mySessionId;
+        //const mySessionId = this.state.mySessionId;
         const localUser = this.state.localUser;
         var chatDisplay = { display: this.state.chatDisplay };
-
+        const { open, anchorEl } = this.state;
+        const canBeOpen = open && Boolean(anchorEl);
+        const id = canBeOpen ? 'transition-popper' : undefined;
+        const Item = muistyled(Paper)(({ theme }) => ({
+            textAlign: "center",
+          }));
         return (
             <div className="container" id="container">
-                <ToolbarComponent
-                    sessionId={mySessionId}
-                    user={localUser}
-                    showNotification={this.state.messageReceived}
-                    camStatusChanged={this.camStatusChanged}
-                    micStatusChanged={this.micStatusChanged}
-                    screenShare={this.screenShare}
-                    stopScreenShare={this.stopScreenShare}
-                    toggleFullscreen={this.toggleFullscreen}
-                    switchCamera={this.switchCamera}
-                    leaveSession={this.leaveSession}
-                    toggleChat={this.toggleChat}
-                />
+                <ContainerWrap>
+                    <HeaderWrap>
+                        <LiveRoomSnackbar />
+                    </HeaderWrap>
+                </ContainerWrap>
+
 
                 <DialogExtensionComponent showDialog={this.state.showExtensionDialog} cancelClicked={this.closeDialogExtension} />
 
                 <div id="layout" className="bounds">
                     {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                         <div className="OT_root OT_publisher custom-class" id="localUser">
-                            <StreamComponent user={localUser} handleNickname={this.nicknameChanged} localUser={localUser}/>
+                            <StreamComponent
+                                user={localUser}
+                                handleNickname={this.nicknameChanged}
+                                localUser={localUser}
+                                studyroom={this.props.studyroom}
+                                restTime={this.state.restTime}
+                            />
                         </div>
                     )}
                     {this.state.subscribers.map((sub, i) => (
@@ -629,6 +851,136 @@ class VideoRoomComponent extends Component {
                     )}
 
                 </div>
+
+
+               <FooterWrap>
+        <div className="buttonsContent" >
+            {/* 휴식 버튼 시작 */}
+            <IconButton
+                aria-describedby={id}
+                id="rest-button"
+                onClick={this.handleRestClick}
+            >
+                <BedIcon />
+            </IconButton>
+            <Popper id={id} open={open} anchorEl={anchorEl} transition>{({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                <Box sx={{ border: 2, p: 1, bgcolor: 'background.paper', borderRadius: '16px', borderColor: 'orange' }}>
+                                      {/* 타이머 설정 */}
+                                      {this.state.timerRunning ? (
+                    <div>
+                      <h2>타이머 실행 중</h2>
+                      <p>남은 시간: {this.state.timerValue}초</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <h2>타이머 설정</h2>
+                      <TimerWrap>
+                        <IconButton aria-label="minus" onClick={this.handleMinusClick}>
+                          <RemoveCircleOutlineIcon />
+                        </IconButton>
+                        <Item>{this.state.minute}</Item>
+                        <span>분</span>
+                        <IconButton aria-label="plus" onClick={this.handlePlusClick}>
+                          <AddCircleOutlineIcon />
+                        </IconButton>
+                      </TimerWrap>
+                      <TimerBtnWrap>
+                        <Button variant="contained" color="success" onClick={this.handleApplyClick}>
+                          적용
+                        </Button>
+                      </TimerBtnWrap>
+                    </div>
+                  )}
+                  {/* 타이머 설정 끝 */}
+                </Box>
+                </Fade>
+            )}
+            </Popper>
+            {/* 휴식 버튼 끝 */}
+
+            {/* 스트레칭 버튼 시작 */}
+            <IconButton>
+                <AccessibilityNewIcon/>
+            </IconButton>
+            {/* 스트레칭 버튼 끝 */}
+
+            <IconButton
+              color="inherit"
+              className="navButton"
+              id="navMicButton"
+              onClick={this.micStatusChanged}
+            >
+              {localUser !== undefined && localUser.isAudioActive() ? (
+                <Mic />
+              ) : (
+                <MicOff color="secondary" />
+              )}
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              className="navButton"
+              id="navCamButton"
+              onClick={this.camStatusChanged}
+            >
+              {localUser !== undefined && localUser.isVideoActive() ? (
+                <Videocam />
+              ) : (
+                <VideocamOff color="secondary" />
+              )}
+            </IconButton>
+
+            <IconButton
+              color="inherit"
+              className="navButton"
+              onClick={this.screenShare}
+            >
+              {localUser !== undefined && localUser.isScreenShareActive() ? (
+                <PictureInPicture />
+              ) : (
+                <ScreenShare />
+              )}
+            </IconButton>
+
+            {localUser !== undefined && localUser.isScreenShareActive() && (
+              <IconButton onClick={this.stopScreenShare} id="navScreenButton">
+                <StopScreenShare color="secondary" />
+              </IconButton>
+            )}
+
+            <IconButton
+              color="inherit"
+              className="navButton"
+              onClick={this.toggleFullscreen}
+            >
+              {localUser !== undefined && this.state.fullscreen ? (
+                <FullscreenExit />
+              ) : (
+                <Fullscreen />
+              )}
+            </IconButton>
+            <IconButton
+              color="secondary"
+              className="navButton"
+              onClick={this.leaveSession}
+              id="navLeaveButton"
+            >
+              <PowerSettingsNew />
+            </IconButton>
+            <IconButton
+              color="inherit"
+              onClick={this.toggleChat}
+              id="navChatButton"
+            >
+              {this.state.messageReceived && <div id="point" className="" />}
+              <Tooltip title="Chat">
+                <QuestionAnswer />
+              </Tooltip>
+            </IconButton>
+            </div>
+
+            </FooterWrap>
             </div>
         );
     }
@@ -689,4 +1041,70 @@ class VideoRoomComponent extends Component {
         return response.data; // The token
     }
 }
+
+const ContainerWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: bottom;
+  width: 100vw;
+  height: 80vh;
+`
+const HeaderWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 10vh;
+`
+// const ContentWrap = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 90%;
+//   height: 80vh;
+// `
+//const ContentLiveView = styled.div`
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  width: 80%;
+//  height: 100%;
+//  border: 1px solid black;
+//`
+
+//const ContentLiveChat = styled.div`
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  width: 20%;
+//  height: 100%;
+//  border: 1px solid black;
+//`
+const FooterWrap = styled.div`
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background-color: green;
+  color: white;
+  gap: 3vw;
+
+`
+const TimerWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+`
+const TimerBtnWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 export default VideoRoomComponent;

@@ -12,14 +12,15 @@ public interface StudyroomService {
 
     Long add(Long userId, StudyroomDto studyroomDto);
 
-    void update(Long studyroomId, StudyroomDto studyroomDto);
+    void update(Long studyroomId, StudyroomDto studyroomDto, String imagePath);
+
 
     StudyroomDto selectByStudyroomId(Long studyroomId);
 
     List<SearchStudyroomResDto> selectByUserId(Long userId);
     void delete(Long studyroomId);
 
-    boolean exists(String name);
+    boolean exists(Long studyroomId, String name);
 
     boolean checkEnterCode(Long studyroomId, String enterCode);
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import Gnb from "../components/Gnb";
 
@@ -7,36 +7,158 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Snackbar } from "@mui/material";
 
-import def from "../assets/fubao.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
 import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+let formData = new FormData();
 const EditInfo = () => {
+  const [users, setUsers] = useState([]);
+  const [nickName, setNickName] = useState("");
+  const [checkedNickName, setCheckedNickName] = useState("");
+  const navigate = useNavigate();
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+  useEffect(() => {
+    axios
+      .get("/api/users", {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        setUsers(response.data);
+        console.log(response.data); 
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+       // eslint-disable-next-line
+    }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const [isExist, setIsExist] = useState(false);
 
-  const [imageSrc, setImage] = useState(def);
+  const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
+  console.log("이미지경로", imageUrl)
+  const [imageSrc, setImage] = useState(imageUrl);
 
   const imageUp = useRef();
-
   const onClickImage = () => {
     imageUp.current.click();
   };
 
-  const fileBase = (fileUp) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(fileUp);
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setImage(reader.result);
-        resolve();
-      };
-    });
+  // 이미지 파일 변경
+  const handleFileChange = (fileUp) => {
+    const file = fileUp.target.files[0];
+
+    if (file) {
+      // 일단 formData를 초기화함으로써 파일이 여러개 추가되지않는다.
+      formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileType", file.type);
+
+      setImage(URL.createObjectURL(file));
+
+      // formData를 보고싶으면 keys와 values 값을 봐야한다.
+      for (const key of formData.keys()) {
+        console.log(key);
+      }
+      for (const value of formData.values()) {
+        console.log(value);
+      }
+    }
+  };
+  // 이름 변경
+  const handleNameChange = (event) => {
+    setNickName(event.target.value);
+    console.log("닉네임 : " + nickName);
   };
 
+  // 닉네임 중복 확인 함수
+  const checkNickName = () => {
+    console.log("닉네임 : " + nickName);
+
+    setCheckedNickName(nickName);
+
+    axios
+      .get("/api/users/exists", {
+        headers: {
+          Authorization: accessToken,
+        },
+        params: {
+          nickname: nickName,
+        },
+      })
+      .then((response) => {
+        setIsExist(response.data);
+        console.log(response.data);
+        // isExist 값에 따라 중복 확인 로직을 수행
+        if (response.data) {
+          alert("중복된 닉네임입니다.");
+        } else {
+          alert("사용 가능한 닉네임입니다.");
+        }
+        console.log("중복 확인" + response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        // 오류 처리
+        console.log(error);
+        alert("닉네임 확인 중 오류가 발생했습니다.");
+        return true;
+      });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    console.log("isExist : " + isExist);
+    console.log("nickName :" + nickName);
+    console.log("checkedNickName :" + checkedNickName);
+    // 닉네임 중복확인
+    if (isExist || nickName !== checkedNickName) {
+      alert("닉네임의 중복 확인이 필요합니다.");
+      return;
+    }
+
+    formData.append("nickname", nickName);
+
+    // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
+    // 예시로 Axios 사용
+    axios
+      .put("/api/users", formData, {
+        headers: {
+          Authorization: accessToken,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        navigate("/MyPage")
+      })
+      .catch((error) => {
+        // 오류 처리
+        alert("적용되지 않았습니다.");
+        console.log(Error);
+      });
+  };
+  const DeleteUser = () => {
+    axios
+    .delete("/api/users", {
+      headers: {
+        Authorization: accessToken,
+      },
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    }, []);
+  };
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
@@ -45,9 +167,10 @@ const EditInfo = () => {
   
   const closeModalEvent = () => {
     setIsModalOpen(false);
+    DeleteUser()
     openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
-
+  console.log('수정페이지', accessToken)
   return (
     <div>
       <Gnb />
@@ -61,9 +184,7 @@ const EditInfo = () => {
                   type="file"
                   ref={imageUp}
                   style={{ display: "none" }}
-                  onChange={(e) => {
-                    fileBase(e.target.files[0]);
-                  }}
+                  onChange={handleFileChange} 
                 />
                 {imageSrc && (
                   <Avatar
@@ -81,21 +202,21 @@ const EditInfo = () => {
                 <TextField
                   hiddenLabel
                   id="filled-hidden-label-normal"
-                  defaultValue="용인푸씨"
                   variant="filled"
+                  onChange={handleNameChange}
                 />
-                <Button variant="outlined" color="error">
+                <Button variant="outlined" color="error" onClick={checkNickName}>
                   중복확인
                 </Button>
               </EditRightContent>
             </EditContent>
             <EditContent>
               <EditLeftContent>이름</EditLeftContent>
-              <EditRightContent>푸바오</EditRightContent>
+              <EditRightContent>{users.name}</EditRightContent>
             </EditContent>
             <EditContent>
               <EditLeftContent>이메일</EditLeftContent>
-              <EditRightContent>fubao@everland.com</EditRightContent>
+              <EditRightContent>{users.email}</EditRightContent>
             </EditContent>
           </EditContentWrap>
         </EditWrap>
@@ -126,9 +247,7 @@ const EditInfo = () => {
             </div>
           </BtnLeftWrap>
           <BtnRightWrap>
-            <Link to="/MyPage" style={{ textDecoration: "none" }}>
-              <ButtonCustom>저장</ButtonCustom>
-            </Link>
+            <ButtonCustom onClick={handleSubmit}>저장</ButtonCustom>
             <Link to="/MyPage" style={{ textDecoration: "none" }}>
               <ButtonCustom>취소</ButtonCustom>
             </Link>
@@ -216,5 +335,6 @@ const ButtonCustom = styled.button`
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   margin-left: 1vw;
+  font-family: "NanumSquareNeo";
 `;
 export default EditInfo;
