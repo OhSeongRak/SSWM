@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 export default function FadeMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedOption, setSelectedOption] = React.useState("인원순");
+  const [selectedOption, setSelectedOption] = React.useState("최근순");
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -23,8 +23,8 @@ export default function FadeMenu(props) {
   };
 
   useEffect(() => {
-    // 부모 컴포넌트인 StudyRoom 컴포넌트에 선택된 메뉴 옵션을 전달하는 콜백 함수 호출
     props.onMenuItemClick(selectedOption);
+    // eslint-disable-next-line
   }, [selectedOption]);
 
   return (
@@ -35,7 +35,7 @@ export default function FadeMenu(props) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        sx={{fontFamily:"NanumSquareNeo", fontSize:16, color:"black"}}
+        sx={{ fontSize:16, color:"black", paddingRight:0}}
       >
         {selectedOption}
       </Button>
@@ -49,9 +49,9 @@ export default function FadeMenu(props) {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleMenuItemClick("공부시간순")} sx={{fontFamily: "NanumSquareNeo" }}>공부시간순</MenuItem>
-        <MenuItem onClick={handleMenuItemClick("인원순")} sx={{fontFamily: "NanumSquareNeo" }}>인원순</MenuItem>
-        <MenuItem onClick={handleMenuItemClick("최근순")} sx={{fontFamily: "NanumSquareNeo" }}>최근순</MenuItem>
+        <MenuItem onClick={handleMenuItemClick("공부시간순")} >공부시간순</MenuItem>
+        <MenuItem onClick={handleMenuItemClick("인원순")} >인원순</MenuItem>
+        <MenuItem onClick={handleMenuItemClick("최근순")} >최근순</MenuItem>
       </Menu>
     </div>
   );

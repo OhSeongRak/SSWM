@@ -7,10 +7,7 @@ import moment from "moment";
 import "./Calendar.css";
 
 const ScheduleCalendar = (props) => {
-  const [selectedDateRange, setSelectedDateRange] = useState([
-    new Date(),
-    new Date(),
-  ]);
+  const [selectedDateRange, setSelectedDateRange] = useState([new Date(), new Date()]);
 
   const [calendarDto, setcalendarDto] = useState([]);
 
@@ -55,7 +52,6 @@ const ScheduleCalendar = (props) => {
             value={selectedDateRange.map((timestamp) => new Date(timestamp))}
             selectRange={true}
             formatDay={(locale, date) => moment(date).format("D")}
-            locale="en-US"
           />
           <div>
             <p>
@@ -65,13 +61,16 @@ const ScheduleCalendar = (props) => {
           </div>
           <div>
             <h2>
-              기간 내 총 공부시간 {Math.floor(calendarDto.studyTime / 60)}시간 :{" "}
-              {calendarDto.studyTime % 60}분
+              기간 내 총 공부시간{" "}
+              {calendarDto.studyTime !== undefined
+                ? `${Math.floor(calendarDto.studyTime / 60)}시간 : ${
+                    calendarDto.studyTime % 60
+                  }분`
+                : "0시간 : 0분"}
             </h2>
           </div>
         </CalendarWrap>
         <GraphWrap>
-          그래프
           <Piechart calendarDto={calendarDto}></Piechart>
         </GraphWrap>
       </ContentWrap>
@@ -79,42 +78,37 @@ const ScheduleCalendar = (props) => {
   );
 };
 
-
 const ContainerWrap = styled.div`
   width: 100%;
+  height: 100%;
 `;
 const TitleWrap = styled.div`
   font-size: 25px;
   margin-top: 1vw;
   margin-bottom: 1vw;
+  height: 5%;
 `;
 const Title = styled.span`
   border: 2px solid #fecc47;
   border-radius: 15px;
   padding: 3px 3px;
   background: #fecc47;
-  font-family: "NanumSquareNeo";
 `;
 const ContentWrap = styled.div`
   display: flex;
+  gap: 5vw;
+  height: 95%;
 `;
 const CalendarWrap = styled.div`
-  height: 5 00px;
-  width: 60%;
+  height: 100%;
+  width: 45%;
 `;
 const GraphWrap = styled.div`
-  height: 400px;
-  width: 60%;
-  border: 2px solid orange;
-  border-radius: 15px;
-`;
-
-const Dot = styled.div`
-  height: 8px;
-  width: 8px;
-  background-color: #f87171;
-  border-radius: 50%;
-  display: flex;
-  margin-left: 1px;
+  width: 45%;
+  background-color: #fff;
+  color: #222;
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  height: 80%
 `;
 export default ScheduleCalendar;

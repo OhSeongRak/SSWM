@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from "styled-components";
-
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -44,7 +43,6 @@ const Title = styled.span`
   border-radius: 15px;
   padding: 3px 3px;
   background: #fecc47;
-  font-family: "NanumSquareNeo";
 `
 const ContentWrap = styled.div`
   display: flex;

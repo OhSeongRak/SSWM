@@ -72,6 +72,5 @@ const ContentTopRight = styled.div`
 `
 const NameText = styled.text`
   font-size: 20px;
-  font-family: "NanumSquareNeo";
 `
 export default LiveRoomViewItem;
