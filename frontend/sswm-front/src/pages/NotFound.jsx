@@ -49,4 +49,5 @@ const TextWrap = styled.div`
 const TextWrap2 = styled.div`
   font-size: 30px;
 `
+
 export default NotFound;

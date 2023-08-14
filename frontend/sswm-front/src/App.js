@@ -18,7 +18,7 @@ import LiveRoom from "./pages/LiveRoom";
 import Stretching from "./pages/Stretching";
 import KakaoSignCallback from "./shared/KakaoSignCallback";
 import KakaoLoginCallback from "./shared/KakaoLoginCallback";
-
+import NotFound from "./pages/NotFound";
 
 //import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
 
@@ -94,9 +94,9 @@ function App() {
           <Route path="/Login" element={<Login />}></Route>
           <Route path="/kakao/sign" element={<KakaoSignCallback />} />
           <Route path="/kakao/login" element={<KakaoLoginCallback />} />
-          {isTokenValid?
-            <Route path="/SignUpName" element={<SignUpName />}></Route>
-              :<Route path="/SignUpName" element={<Navigate to="/login" replace />} />}
+          <Route path="/SignUpName" element={<SignUpName />}></Route>
+          
+
           {isTokenValid?
             <Route path="/" element={<StudyRoom /> }></Route>
               :<Route path="/" element={<Navigate to="/login" replace />} />}

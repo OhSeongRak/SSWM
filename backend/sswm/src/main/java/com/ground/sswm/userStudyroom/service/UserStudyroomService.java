@@ -14,6 +14,7 @@ public interface UserStudyroomService {
 
     List<OnAirResDto> searchUser(Long userId, Long studyroomId);
 
+    void deleteUser(Long userId);
 
     void banUser(Long userId, Long targetId, Long studyroomId);
 
