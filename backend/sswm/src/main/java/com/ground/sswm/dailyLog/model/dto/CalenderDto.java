@@ -8,8 +8,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CalenderDto {
-    private int studyExp;
-    private int restTimeExp;
-    private int stretchExp;
+    private float studyExp;
+    private float restTimeExp;
+    private float stretchExp;
     private int studyTime;
 }

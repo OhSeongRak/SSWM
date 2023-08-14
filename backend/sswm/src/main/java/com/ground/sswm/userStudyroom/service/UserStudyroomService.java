@@ -22,4 +22,6 @@ public interface UserStudyroomService {
     List<UserStudyTimeResDto> searchDailyStudy(Long studyroomId);
 
     UserAttendTop3ResDto searchDailyAttend(Long studyroomId);
+
+    boolean checkUserHost(Long userId, Long studyroomId);
 }

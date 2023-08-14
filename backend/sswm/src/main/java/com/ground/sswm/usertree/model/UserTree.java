@@ -5,6 +5,7 @@ import com.ground.sswm.user.model.User;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,7 +18,7 @@ import lombok.Setter;
 public class UserTree {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,6 +29,6 @@ public class UserTree {
     @JoinColumn(name = "TREE_ID")
     private Tree tree;
 
-    private int exp;
+    private float exp;
 
 }
