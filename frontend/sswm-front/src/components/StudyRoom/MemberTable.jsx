@@ -52,6 +52,7 @@ const MemberTable = ({ studyroomId }) => {
     };
 
     fetchMembers(); // 함수 실행
+    // eslint-disable-next-line
   }, [studyroomId]);
 
   const navigate = useNavigate();
@@ -171,7 +172,6 @@ const TableWrap = styled.table`
   text-align: center;
   border: 1px solid #fff;
   border-spacing: 1px;
-  font-family: "NanumSquareNeo";
   margin: auto;
 `;
 const TbodyWrap = styled.tbody``;
@@ -181,7 +181,6 @@ const TdWrap = styled.td`
   background-color: #eee;
 `;
 const ButtonWrap = styled.button`
-  font-family: "NanumSquareNeo";
   margin-right: 10px;
 `;
 

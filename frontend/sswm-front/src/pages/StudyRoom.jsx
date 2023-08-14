@@ -110,7 +110,6 @@ const StudyRoom = (props) => {
 
 const ContainerWrap = styled.div`
   width: 100%;
-  font-family: "NanumSquareNeo";
 `;
 
 const CheckChip = styled.div`
@@ -120,7 +119,6 @@ const CheckChip = styled.div`
   margin-top: 40px;
   margin-left: 10%;
   margin-right: 10%;
-  font-family: "NanumSquareNeo";
 `;
 
 const StudyRoomBtn = styled.div`

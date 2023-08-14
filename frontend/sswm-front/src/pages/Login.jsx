@@ -65,7 +65,6 @@ const SocialWrap = styled.div`
 `;
 
 const Text = styled.p`
-  font-family: "NanumSquareNeo";
   font-size: 32px;
   text-align: center;
 `;
@@ -75,7 +74,6 @@ const ButtonWrap = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-evenly;
-  font-family: "NanumSquareNeo";
 `;
 
 export default Login;
