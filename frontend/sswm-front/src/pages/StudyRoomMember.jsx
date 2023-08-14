@@ -168,11 +168,11 @@ const StudyRoomMember = () => {
         </ContentWrap>
         <ContentWrap>
                {/* 스터디룸 탈퇴하기 */}
-               {isHost && isHost? <></>:
-               <Button variant="contained" color="success" onClick={openModal}>
-                스터디룸 탈퇴하기
-              </Button>
-               }
+               {!isHost && (
+                <Button variant="contained" color="success" onClick={openModal}>
+                  스터디룸 탈퇴하기
+                </Button>
+              )}
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
                 <Box>
                   <Typography variant="h6" component="h2">
