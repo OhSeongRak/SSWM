@@ -33,7 +33,6 @@
                 verticalAlign: "center",
                 justifyItems: "center",
                 alignItems: "center",
-                fontFamily: "NanumSquareNeo",
               }}
               studyroom = {studyroom}
             />

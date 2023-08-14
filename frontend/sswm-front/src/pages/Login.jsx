@@ -28,8 +28,8 @@ const Login = () => {
               </GoogleOAuthProvider>
               <KakaoSignIn
                 REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
-                // REDIRECT_URI="https://i9a206.p.ssafy.io"
-                REDIRECT_URI="http://localhost:3000/kakao/login"
+                REDIRECT_URI="https://i9a206.p.ssafy.io/kakao/login"
+                //REDIRECT_URI="http://localhost:3000/kakao/login"
               />
             </SocialWrap>
             <ButtonWrap>
@@ -65,7 +65,6 @@ const SocialWrap = styled.div`
 `;
 
 const Text = styled.p`
-  font-family: "NanumSquareNeo";
   font-size: 32px;
   text-align: center;
 `;
@@ -75,7 +74,6 @@ const ButtonWrap = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-evenly;
-  font-family: "NanumSquareNeo";
 `;
 
 export default Login;

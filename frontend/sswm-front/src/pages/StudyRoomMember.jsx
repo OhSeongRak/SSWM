@@ -162,11 +162,11 @@ const StudyRoomMember = () => {
         </ContentWrap>
         <ContentWrap>
                {/* 스터디룸 탈퇴하기 */}
-               {isHost && isHost? <></>:
-               <Button variant="contained" color="success" onClick={openModal}>
-                스터디룸 탈퇴하기
-              </Button>
-               }
+               {!isHost && (
+                <Button variant="contained" color="success" onClick={openModal}>
+                  스터디룸 탈퇴하기
+                </Button>
+              )}
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
                 <Box>
                   <Typography variant="h6" component="h2">
@@ -218,7 +218,6 @@ const HeaderTitle = styled.div`
   width: 80%;
   border-radius: 15px;
   font-size: 30px;
-  font-family: "NanumSquareNeo";
   
 `;
 const HeaderBtnWrap = styled.span`

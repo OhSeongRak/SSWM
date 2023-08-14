@@ -69,12 +69,24 @@ const ContainerWrap = styled.div`
   text-align: start;
   border-radius: 15px;
   background: #ffffff;
+
 `;
 
 const SidebarWrap = styled.div`
   position: fixed;
   top: 10%;
   width: 15%;
+  @media (min-width: 768px) {
+    width: 10%
+  }
+
+  @media (min-width: 992px) {
+    width: 10%;
+  }
+
+  @media (min-width: 1200px) {
+    width: 15%;
+  }
 `;
 
 const ContentWrap = styled.div`
@@ -83,6 +95,7 @@ const ContentWrap = styled.div`
   width: 85%;
   gap: 50px;
   margin-left: 20%;
+  
 `;
 
 const ProfileWrap = styled.a``;
@@ -93,7 +106,6 @@ const CalendarWrap = styled.a``;
 const SidebarItem = styled.a`
   display: block;
   padding: 10px;
-  font-family: "NanumSquareNeo";
   text-decoration: none;
 `;
 

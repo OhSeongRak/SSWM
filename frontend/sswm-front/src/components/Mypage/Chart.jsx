@@ -86,7 +86,6 @@ const Piechart = (props) => {
             text: {
               fontSize: 15,
               fill: "#000000",
-              fontFamily: "NanumSquareNeo",
             },
           },
           /**
@@ -96,7 +95,6 @@ const Piechart = (props) => {
             text: {
               fontSize: 15,
               fill: "#000000",
-              fontFamily: "NanumSquareNeo",
             },
           },
         }}

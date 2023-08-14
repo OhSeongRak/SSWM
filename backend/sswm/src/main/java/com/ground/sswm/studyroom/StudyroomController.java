@@ -91,7 +91,7 @@ public class StudyroomController {
         @RequestPart("studyroom") StudyroomDto studyroomDto) {
         log.debug("PUT : update studyroom");
         // 이미지 저장
-        String filePath = "image/jpeg/2023/08/06/ae34df9e-d6b9-46f9-9433-55f723620c8e.jpg";
+        String filePath = "image/studyDefault/dolphin.jpg";
         if (fileType != null && !fileType.isBlank() && multipartFile != null
             && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
@@ -105,10 +105,9 @@ public class StudyroomController {
 
     //스터디룸 삭제
     @PutMapping("/{studyroomId}/delete")
-    public ResponseEntity<Void> delete(@PathVariable("studyroomId") Long studyroomId,
-        @RequestPart("isDelete") boolean isDelete) {
+    public ResponseEntity<Void> delete(@PathVariable("studyroomId") Long studyroomId) {
 
-        studyroomService.delete(studyroomId, isDelete);
+        studyroomService.delete(studyroomId);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -125,8 +124,8 @@ public class StudyroomController {
     @GetMapping
     public ResponseEntity<List<SearchStudyroomResDto>> selectByUserId(
         @RequestHeader("Authorization") String token) {
-        Map<String, Object> claims = authService.getClaimsFromToken(token);
-        Long userId = Long.valueOf(claims.get("id").toString());
+        Long userId = authService.getUserIdFromToken(token);
+
         List<SearchStudyroomResDto> studyrooms = studyroomService.selectByUserId(userId);
 
         return new ResponseEntity<List<SearchStudyroomResDto>>(studyrooms, HttpStatus.OK);
@@ -139,9 +138,9 @@ public class StudyroomController {
     }
     // 룸 제목 중복 확인
     @GetMapping("/exists")
-    public ResponseEntity<Boolean> exists(@RequestParam String name) {
+    public ResponseEntity<Boolean> exists(@RequestParam(required = false) Long studyroomId, @RequestParam String name) {
         log.debug("스터디룸이름 : " + name);
-        boolean isExist = studyroomService.exists(name);
+        boolean isExist = studyroomService.exists(studyroomId,name);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }
 }

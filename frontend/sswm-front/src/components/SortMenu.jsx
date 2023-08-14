@@ -35,7 +35,7 @@ export default function FadeMenu(props) {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        sx={{fontFamily:"NanumSquareNeo", fontSize:16, color:"black", paddingRight:0}}
+        sx={{ fontSize:16, color:"black", paddingRight:0}}
       >
         {selectedOption}
       </Button>
@@ -49,9 +49,9 @@ export default function FadeMenu(props) {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleMenuItemClick("공부시간순")} sx={{fontFamily: "NanumSquareNeo" }}>공부시간순</MenuItem>
-        <MenuItem onClick={handleMenuItemClick("인원순")} sx={{fontFamily: "NanumSquareNeo" }}>인원순</MenuItem>
-        <MenuItem onClick={handleMenuItemClick("최근순")} sx={{fontFamily: "NanumSquareNeo" }}>최근순</MenuItem>
+        <MenuItem onClick={handleMenuItemClick("공부시간순")} >공부시간순</MenuItem>
+        <MenuItem onClick={handleMenuItemClick("인원순")} >인원순</MenuItem>
+        <MenuItem onClick={handleMenuItemClick("최근순")} >최근순</MenuItem>
       </Menu>
     </div>
   );

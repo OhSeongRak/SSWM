@@ -144,7 +144,6 @@ const ContentTitle = styled.div`
   height: 10%;
   background-color: #b2dfdb;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   border-bottom: 1px solid #b2dfdb;
 `
 const ContentRank = styled.div`
@@ -169,7 +168,6 @@ const ContentRankValue = styled.div`
   justify-content: center;
   width: 33%;
   height: 100%;
-  font-family: "NanumSquareNeo";
   flex-direction: column;
   align-items: center;
 `
