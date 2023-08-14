@@ -121,7 +121,7 @@ const EditInfo = () => {
     console.log("nickName :" + nickName);
     console.log("checkedNickName :" + checkedNickName);
     // 닉네임 중복확인
-    if (originNickName != nickName && (isExist || nickName !== checkedNickName)) {
+    if (originNickName !== nickName && (isExist || nickName !== checkedNickName)) {
       alert("닉네임의 중복 확인이 필요합니다.");
       return;
     }

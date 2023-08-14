@@ -6,8 +6,6 @@ import Logo from "../assets/Logo.png";
 
 const Gnb = (props) => {
   const isLoggedIn = !!localStorage.getItem("accessToken");
-
-  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

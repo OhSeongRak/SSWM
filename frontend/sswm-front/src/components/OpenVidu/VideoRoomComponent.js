@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import ChatComponent from './chat/ChatComponent';
 import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
@@ -8,21 +8,14 @@ import './VideoRoomComponent.css';
 import styled from "styled-components";
 import OpenViduLayout from './layout/openvidu-layout';
 import UserModel from './models/user-model';
-//import ToolbarComponent from './toolbar/ToolbarComponent';
-//import * as tmPose from '@teachablemachine/pose';
 import * as tmImage from '@teachablemachine/image';
 import sound from '../../assets/Dingdong.mp3'
 import LiveRoomSnackbar from '../LiveRoom/LiveRoomSnackbar';
-//import LiveRoomFooter from '../LiveRoom/LiveRoomFooter';
-
 import BedIcon from '@mui/icons-material/Bed';
 import Mic from '@material-ui/icons/Mic';
 import MicOff from '@material-ui/icons/MicOff';
-//import Videocam from '@material-ui/icons/Videocam';
-//import VideocamOff from '@material-ui/icons/VideocamOff';
 import Fullscreen from '@material-ui/icons/Fullscreen';
 import FullscreenExit from '@material-ui/icons/FullscreenExit';
-//import SwitchVideoIcon from '@material-ui/icons/SwitchVideo';
 import PictureInPicture from '@material-ui/icons/PictureInPicture';
 import ScreenShare from '@material-ui/icons/ScreenShare';
 import StopScreenShare from '@material-ui/icons/StopScreenShare';
@@ -114,6 +107,7 @@ class VideoRoomComponent extends Component {
             },
         })
         .then((response) => {
+            // eslint-disable-next-line
             this.state.myUserName = response.data.nickname;
         })
         .catch(error => {

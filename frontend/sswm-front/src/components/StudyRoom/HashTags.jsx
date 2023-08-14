@@ -4,7 +4,7 @@ import Chip from "@mui/joy/Chip";
 import Checkbox from "@mui/joy/Checkbox";
 import * as React from "react";
 import { Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 
 export default function CheckboxChip({ onTagClick }) {

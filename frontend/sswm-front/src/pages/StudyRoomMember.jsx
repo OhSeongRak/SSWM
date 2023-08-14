@@ -45,7 +45,6 @@ const StudyRoomMember = () => {
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
-  const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
 
   const closeModalEvent = () => {
