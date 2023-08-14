@@ -113,7 +113,7 @@ const StudyRoomAdmin = () => {
 
   const handleCancel = () => {
     window.location.href = `/StudyRoomMember/${studyroomId}`;
-  }
+  };
   // name 입력란이 변경될 때마다 studyroom의 name 속성 업데이트
   const handleNameChange = (event) => {
     setStudyroomDto({
@@ -136,7 +136,7 @@ const StudyRoomAdmin = () => {
         },
         params: {
           name: studyroomDto.name,
-          studyroomId:studyroomId
+          studyroomId: studyroomId,
         },
       })
       .then((response) => {
@@ -186,9 +186,11 @@ const StudyRoomAdmin = () => {
     }
   };
 
+  const minUserNum = studyroomDto.userNum;
+
   // maxUserNum 값 변경
   const handleMaxUserNumChange = (value) => {
-    if (value >= 1 && value <= 9) {
+    if (value >= 1 && value <= 9 && value >= minUserNum) {
       setStudyroomDto({
         ...studyroomDto,
         maxUserNum: value, // 인원 수 값으로 업데이트
@@ -242,7 +244,10 @@ const StudyRoomAdmin = () => {
     event.preventDefault();
 
     // 스터디룸 제목 중복확인
-    if (originName !== studyroomDto.name && (isExist || studyroomDto.name !== checkedStudyroomName)) {
+    if (
+      originName !== studyroomDto.name &&
+      (isExist || studyroomDto.name !== checkedStudyroomName)
+    ) {
       alert("스터디룸 제목의 중복 확인이 필요합니다.");
       return;
     }
@@ -300,12 +305,16 @@ const StudyRoomAdmin = () => {
     setIsModalOpen(false);
 
     axios
-      .put(`/api/studyrooms/${studyroomId}/delete`, {}, {
-        headers: {
-          Authorization: accessToken,
-          "Content-Type": "application/json",
-        },
-      })
+      .put(
+        `/api/studyrooms/${studyroomId}/delete`,
+        {},
+        {
+          headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         openSnackBar();
