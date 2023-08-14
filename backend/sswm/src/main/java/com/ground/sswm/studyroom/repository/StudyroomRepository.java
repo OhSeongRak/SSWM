@@ -10,12 +10,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
+
+    @Query("select s.id from Studyroom s")
+    List<Long> findAllStudyRoomIds();
+
     @Query("select s from Studyroom s where s.name=:name and s.isDeleted = false and s.id in"
-        + " (select us.studyroom.id from UserStudyroom us where us.isDeleted=false)")
+        + " (select us.studyroom.id from UserStudyroom us where us.isDeleted = false)")
     Optional<Studyroom> findByName(String name);
 
     @Query("select s from Studyroom s where s.isDeleted = false and s.id in"
-        + " (select us.studyroom.id from UserStudyroom us where us.user.id = :userId and us.isDeleted=false)")
+        + " (select us.studyroom.id from UserStudyroom us where us.user.id = :userId and us.isDeleted = false)")
     List<Studyroom> findByUserId(@Param("userId") Long userId);
 
     @Query("select s from Studyroom s  where s.isDeleted = false"
