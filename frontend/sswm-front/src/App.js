@@ -18,7 +18,6 @@ import LiveRoom from "./pages/LiveRoom";
 import Stretching from "./pages/Stretching";
 import KakaoSignCallback from "./shared/KakaoSignCallback";
 import KakaoLoginCallback from "./shared/KakaoLoginCallback";
-import NotFound from "./pages/NotFound";
 
 //import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
 
