@@ -190,7 +190,7 @@ const StudyRoomAdmin = () => {
 
   // maxUserNum 값 변경
   const handleMaxUserNumChange = (value) => {
-    if (value >= 1 && value <= 9 && value >= minUserNum) {
+    if (value >= minUserNum && value <= 9) {
       setStudyroomDto({
         ...studyroomDto,
         maxUserNum: value, // 인원 수 값으로 업데이트
