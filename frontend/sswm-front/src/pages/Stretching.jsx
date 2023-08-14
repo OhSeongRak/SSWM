@@ -54,7 +54,6 @@ const HeaderWrap = styled.div`
   align-items: center;
   width: 90%;
   height: 5%;
-  font-family: "NanumSquareNeo";
 `
 const ContentWrap = styled.div`
   display: flex;
@@ -84,7 +83,6 @@ const ContentTimerWrap = styled.div`
   width: 100%;
   height: 20%;
   font-size: 3vw;
-  font-family: "NanumSquareNeo";
 `
 const ContentViewWrap = styled.div`
   display: flex;
@@ -101,7 +99,6 @@ const ContentScoreWrap = styled.div`
   width: 100%;
   height: 20%;
   font-size: 3vw;
-  font-family: "NanumSquareNeo";
 `
 const ContentTextWrap = styled.div`
   display: flex;
@@ -110,7 +107,6 @@ const ContentTextWrap = styled.div`
   width: 100%;
   height: 20%;
   font-size: 1vw;
-  font-family: "NanumSquareNeo";
 `
 const FooterWrap = styled.div`
   display: flex;

@@ -51,7 +51,6 @@ const StudyRoomMember = () => {
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
-  const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
 
   const closeModalEvent = () => {
@@ -225,7 +224,6 @@ const HeaderTitle = styled.div`
   width: 80%;
   border-radius: 15px;
   font-size: 30px;
-  font-family: "NanumSquareNeo";
   
 `;
 const HeaderBtnWrap = styled.span`

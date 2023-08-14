@@ -44,7 +44,6 @@ const Title = styled.span`
   border-radius: 15px;
   padding: 3px 3px;
   background: #fecc47;
-  font-family: "NanumSquareNeo";
 `
 const ContentWrap = styled.div`
   display: flex;

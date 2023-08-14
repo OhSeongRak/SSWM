@@ -5,7 +5,7 @@ import CustomModal from "./deleteModal";
 import { Box, Typography, Snackbar } from "@mui/material";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const MemberTable = ({ studyroomId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,6 +55,7 @@ const MemberTable = ({ studyroomId }) => {
     };
 
     fetchMembers(); // 함수 실행
+    // eslint-disable-next-line
   }, [studyroomId]);
 
   const navigate = useNavigate();
@@ -172,7 +173,6 @@ const TableWrap = styled.table`
   text-align: center;
   border: 1px solid #fff;
   border-spacing: 1px;
-  font-family: "NanumSquareNeo";
   margin: auto;
 `;
 const TbodyWrap = styled.tbody``;
@@ -182,7 +182,6 @@ const TdWrap = styled.td`
   background-color: #eee;
 `;
 const ButtonWrap = styled.button`
-  font-family: "NanumSquareNeo";
   margin-right: 10px;
 `;
 
