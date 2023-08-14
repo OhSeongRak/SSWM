@@ -13,7 +13,6 @@ const Gnb = (props) => {
     currentPath = location.pathname;
   }, [location]);
   const isLoggedIn = !!localStorage.getItem("accessToken");
-
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");

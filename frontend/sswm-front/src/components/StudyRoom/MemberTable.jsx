@@ -13,10 +13,8 @@ const MemberTable = ({ studyroomId }) => {
   const [modalStates, setModalStates] = useState({});
 
   const openModal = (person) => {
-    // console.log("person", person);
     setModalStates(person.userDto);
     setIsModalOpen(true);
-    // console.log("modalStates", modalStates);
   }
   const closeModal = () => setIsModalOpen(false);
 
