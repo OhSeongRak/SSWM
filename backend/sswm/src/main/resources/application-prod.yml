@@ -23,8 +23,8 @@ spring:
         max-file-size: 5MB # 요청한 파일 한 개의 크기
         max-request-size: 5MB # 요청한 파일 전체의 크기
   redis:
-    host: localhost
-    port: 6379
+    host: http://0.0.0.0
+    port: 6380
     password: root
 
 # jwt 설정
@@ -59,7 +59,7 @@ auth:
       - profile_nickname
       - profile_image
       - account_email
-  redirect-url: http://localhost:3000
+  redirect-url: http://i9a206.p.ssafy.io:3000
 
 logging:
   level:

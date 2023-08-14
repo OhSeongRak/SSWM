@@ -44,11 +44,6 @@ public class UserTreeController {
 
         List<UserTreeResDto> userTreeResDtos = userTreeService.searchTree(userId);
 
-
-        if (userTreeResDtos==null) {
-            userTreeResDtos=new ArrayList<>();
-        }
-
         return new ResponseEntity<>(userTreeResDtos, HttpStatus.OK);
     }
 }

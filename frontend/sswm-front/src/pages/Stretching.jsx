@@ -70,7 +70,7 @@ const Streching = () => {
 
     return () => {
     };
-  }, []); 
+  }, ); 
 
 
   async function init() {

@@ -61,13 +61,15 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         );
 
         //userstudyroom에서 찾아옴
-        Optional<UserStudyroom> OpUserStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId, studyroomId);
+        Optional<UserStudyroom> OpUserStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(
+            userId, studyroomId);
 
         //처음 스터디룸에 참여하는 사용자라면
         if (OpUserStudyroom.isEmpty()) {
             // 스터디룸이 꽉 찼다면
-            if (studyroom.getUserNum() == studyroom.getMaxUserNum())
+            if (studyroom.getUserNum() == studyroom.getMaxUserNum()) {
                 return "정원 초과입니다.";
+            }
             //userStudyroom 생성
             UserStudyroom newUserStudyroom = new UserStudyroom();
 
@@ -94,6 +96,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         if (userStudyroom.isDeleted()) {
             userStudyroom.setDeleted(false);
             userStudyroomRepository.save(userStudyroom);
+            studyroom.setUserNum(studyroom.getUserNum() + 1);
             return "재가입 성공";
         }
         return "이미 가입됨";
@@ -132,7 +135,8 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
         //스터디룸 아이디로 userStudyroom 전부 가져옴
 //        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(studyroomId);
-        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomIdAndIsDeletedAndIsBan(studyroomId, false, false);
+        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomIdAndIsDeletedAndIsBan(
+            studyroomId, false, false);
 
         //해당 스터디룸에 해당하는 유저 및 현재 접속중인지 체크해서 목록 리턴해줌
         for (UserStudyroom userStudyroom : userStudyrooms) {
@@ -140,10 +144,13 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
             //****isInLive에 대한 정보는 이후 레디스에서 가져옴****
             List<Long> inLiveUsers = studyEventRepository.findUserIdsInLive(studyroomId);
-            boolean isInLive = inLiveUsers.stream().filter(x -> x == userInStudyroom.getId()).count() == 1 ? true : false;
+            boolean isInLive =
+                inLiveUsers.stream().filter(x -> x == userInStudyroom.getId()).count() == 1 ? true
+                    : false;
 
             //새로운 유저 생성
-            OnAirResDto nowOnAirResDto = new OnAirResDto(UserDto.from(userInStudyroom), isInLive, userStudyroom.getRole(), userStudyroom.isBan());
+            OnAirResDto nowOnAirResDto = new OnAirResDto(UserDto.from(userInStudyroom), isInLive,
+                userStudyroom.getRole(), userStudyroom.isBan());
 
             //유저 목록에 유저 넣기
             OnAirResDtos.add(nowOnAirResDto);
@@ -152,6 +159,30 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         return OnAirResDtos;
     }
 
+    @Override
+    @Transactional
+    public void deleteUser(Long userId) {
+        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByUserIdAndIsDeleted(
+            userId, false);
+
+        System.out.println("userStudyrooms.toString() = " + userStudyrooms.toString());
+        for (UserStudyroom userStudyroom : userStudyrooms) {
+
+            //호스트라면
+            if (userStudyroom.getRole() == StudyMemberRole.HOST) {
+                throw new UserStudyroomUnauthorizedException(
+                    "호스트는 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
+            }
+
+            // 게스트라면 삭제시키고
+            // 인원수를 줄인다
+            userStudyroom.setDeleted(true);
+            Studyroom studyroom = studyroomRepository.findById(userStudyroom.getStudyroom().getId())
+                .get();
+            studyroom.setUserNum(studyroom.getUserNum() - 1);
+        }
+
+    }
 
     @Override
     @Transactional
@@ -314,6 +345,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             if (userStudyroom.isDeleted()) {
                 continue;
             }
+            System.out.println("hereuser" + userStudyroom);
 
             //새 userAttendResDto 생성
             UserAttendDto nowUserAttenedResDto = new UserAttendDto();
@@ -331,8 +363,10 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             userAttendDtoQueue.add(nowUserAttenedResDto);
         }
 
+        System.out.println("userAttendDtoQueue.size() = " + userAttendDtoQueue.size());
+        int queueSize = userAttendDtoQueue.size();
         //출석일이 가장 많은 3명 뽑기
-        for (int i = 0; i < Math.min(3, userAttendDtoQueue.size()); i++) {
+        for (int i = 0; i < Math.min(3, queueSize); i++) {
             userAttendDtos.add(userAttendDtoQueue.poll());
         }
 
@@ -346,7 +380,8 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
     @Override
     public boolean checkUserHost(Long userId, Long studyroomId) {
-        UserStudyroom userStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId, studyroomId).get();
+        UserStudyroom userStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId,
+            studyroomId).get();
         return userStudyroom.getRole().equals(StudyMemberRole.HOST) ? true : false;
     }
 }
