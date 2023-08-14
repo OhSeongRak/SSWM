@@ -19,21 +19,29 @@ import Typography from "@mui/material/Typography";
 import { Snackbar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import GFooter from "../components/GFooter";
+import { useNavigate } from 'react-router-dom';
 
-function formatTime(minutes) {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+function formatTime(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
   const formattedHours = hours.toString().padStart(2, "0");
-  const formattedMinutes = remainingMinutes.toString().padStart(2, "0");
-  return `${formattedHours}:${formattedMinutes}`;
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = seconds.toString().padStart(2, "0");
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
 const StudyRoomMember = () => {
+  const navigate = useNavigate();
+
   const { studyroomId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [studyroom, setStudyroom] = useState([]);
   const [studyAvgTime, setStudyAvgTime] = useState("");
   const [maxRestTime, setMaxRestTime] = useState("");
+  const [isHost, setIsHost] = useState(false);
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -48,7 +56,16 @@ const StudyRoomMember = () => {
 
   const closeModalEvent = () => {
     setIsModalOpen(false);
-    openSnackBar(); // Open the CustomSnackBar after closing the modal
+    axios.put(`/api/studyrooms/${studyroomId}/leave`,{},{
+      headers:{
+          Authorization : accessToken
+      }
+    }).then((response) => {
+      console.log(response);
+      navigate("/StudyRoom")
+    }).catch((error)=>{
+      console.log(error);
+    });
   };
 
   const handleenterAdmin = () => {
@@ -56,56 +73,42 @@ const StudyRoomMember = () => {
   };
 
   useEffect(() => {
-    // 스터디룸 관련 정보 조회
-    axios
-      .get(`/api/studyrooms/${studyroomId}`, {
-        headers: {
-          Authorization: accessToken,
-        },
-      })
-      .then((response) => {
-        setStudyroom(response.data); // API 호출 완료 후에 studyrooms 업데이트
-        console.log("studyroom", response.data);
-        setStudyAvgTime(formatTime(response.data.studyAvgTime));
-        setMaxRestTime(formatTime(response.data.maxRestTime));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    // 스터디룸 가입
-    axios
-      .post(
-        `/api/studyrooms/${studyroomId}/join`,
-        {},
-        {
+    const fetchData = async () => {
+      try {
+        // dailylog 생성
+        await axios.post(`/api/user-logs/${studyroomId}`, {}, {
           headers: {
             Authorization: accessToken,
           },
+        });
+
+        // 스터디룸 조회
+        const studyroomResponse = await axios.get(`/api/studyrooms/${studyroomId}`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        console.log("studyroomResponse", studyroomResponse);
+        setStudyroom(studyroomResponse.data);
+        setStudyAvgTime(formatTime(studyroomResponse.data.studyAvgTime));
+        setMaxRestTime(formatTime(studyroomResponse.data.maxRestTime));
+
+        axios.get(`/api/studyrooms/${studyroomId}/isHost`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        })
+        .then((response) => {
+          setIsHost(response.data);
+        })
+
+        } catch (error) {
+          console.log(error);
+          console.log("dailylog 에러", error);
         }
-      )
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-   // dailylog생성
-   axios
-    .post(`/api/user-logs/${studyroomId}`, {}, {
-       headers: {
-         Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-       console.log("create daily log!!!!!!!!!!!!");
-    })
-    .catch((error) => {
-       console.log("dailylog 에러",error);
-    });
 
-
-    // 접속중인 유저들 정보 -> 컴포넌트 안에서 호출
+    };    
+    fetchData();
   }, [studyroomId, accessToken]);
 
   return (
@@ -117,13 +120,13 @@ const StudyRoomMember = () => {
             <Background>
               {studyroom.name}
             </Background>
-            <HeaderBtnWrap>
-              <Link to="/StudyRoomAdmin" style={{ textDecoration: "none" }}>
+            {isHost && (
+              <HeaderBtnWrap>
                 <IconButton onClick={handleenterAdmin} aria-label="setting" size="large">
                   <SettingsIcon fontSize="inherit" />
                 </IconButton>
-              </Link>
-            </HeaderBtnWrap>
+              </HeaderBtnWrap>
+            )}
           </HeaderTitle>
         </HeaderWrap>
         <ContentWrap>
@@ -140,7 +143,7 @@ const StudyRoomMember = () => {
 
               {/* 공부,휴식 시간 */}
               <SideBanner>
-                <Link to={`/LiveRoom/${studyroomId}`} style={{ textDecoration: "none" }}>
+                <Link to={`/LiveRoom/${studyroomId}`} target="_blank" style={{ textDecoration: "none" }}>
                   <Button variant="contained" 
                     sx={{
                       m : 1,
@@ -166,13 +169,15 @@ const StudyRoomMember = () => {
         </ContentWrap>
         <ContentWrap>
                {/* 스터디룸 탈퇴하기 */}
+               {isHost && isHost? <></>:
                <Button variant="contained" color="success" onClick={openModal}>
                 스터디룸 탈퇴하기
               </Button>
+               }
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
                 <Box>
                   <Typography variant="h6" component="h2">
-                    삭제 시 더 이상 해당 스터디룸을 이용하지 못합니다.
+                    탈퇴 시 더 이상 해당 스터디룸을 이용하지 못합니다.
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
@@ -180,6 +185,7 @@ const StudyRoomMember = () => {
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
+              
               <Snackbar
                 open={isSnackBarOpen}
                 autoHideDuration={3000}

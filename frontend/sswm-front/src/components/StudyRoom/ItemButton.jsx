@@ -11,12 +11,13 @@ const CardHoverButton = (props) => {
     setEnterCode(event.target.value);
   };
   // console.log(studyroom)
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
+    console.log("studyroomstudyroom", studyroom);
+    
+    // 비공개 방일 때
     if (studyroom.public === false) {
-    // axios GOGO
-      console.log("enterCode:::", enterCode)
-      // 패스워드를 서버로 보내는 Axios 요청
-      axios.get("/api/studyrooms/enterCode", {
+      // 입장 코드 확인
+      const isEnterCodeMatch = await axios.get("/api/studyrooms/enterCode", {
         headers: {
           Authorization: accessToken,
         },
@@ -24,23 +25,42 @@ const CardHoverButton = (props) => {
           enterCode: enterCode,
           studyroomId: studyroom.id
         },
-      })
-      .then((response) => {
-        if (response.data === true) {
-          window.location.href = `/StudyRoomMember/${studyroom.id}`;
-        } else {
-          alert("잘못된 코드입니다. 다시 입력해주세요.");
-        }
-      })
-      .catch((error) => {
-        // 요청이 실패했을 때 수행할 작업
-        console.error("Error sending enterCode:", error);
       });
+      
+      // 입장 코드가 일치할 때
+      if (isEnterCodeMatch.data === true) {
+        const message = await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        // 정원 초과라면 가입 불가
+        if (message.data === "정원 초과입니다.")
+          alert(message.data);
+        else if (message.data === "가입 불가")
+          alert("사용자가 차단되었습니다.");
+        // 가입
+        else
+          window.location.href = `/StudyRoomMember/${studyroom.id}`;
+      
+      } else { // 입장 코드가 일치하지 않음
+        alert("잘못된 코드입니다. 다시 입력해주세요.");
+      }
     }
     else {
-      window.location.href = `/StudyRoomMember/${studyroom.id}`;
+      const message = await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
+      // 정원 초과라면 가입 불가
+      if (message.data === "정원 초과입니다.")
+        alert(message.data);
+      else if (message.data === "가입 불가")
+        alert("사용자가 차단되었습니다.");
+      else
+        window.location.href = `/StudyRoomMember/${studyroom.id}`;
     }
-    
   };
   return (
     <div>

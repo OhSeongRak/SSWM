@@ -29,7 +29,7 @@ public class StudyEventRepository { // Redis
     }
 
     public List<Long> findUserIdsInLive(Long studyroomId) {
-        String pattern = "*_" + studyroomId + "_" + StudyEventType.LIVE;
+        String pattern = "*_" + studyroomId + "_" + StudyEventType.STUDY;
         ScanOptions scanOptions = ScanOptions.scanOptions()
             .match(pattern) // *_{studyroomId}_LIVE
             .build();

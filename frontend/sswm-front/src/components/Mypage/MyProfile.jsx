@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
 import ExpBar from "./ExpBar";
 
 import Avatar from "@mui/material/Avatar";
@@ -10,19 +9,19 @@ import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 
 import axios from "axios";
-import tree2 from "../../assets/tree2.jpg"
 
 const MyProfile = ({ users }) => {
-  const treesName = {
-    1: "벚꽃나무",
-    2: "등나무",
-    3: "은행나무",
-    4: "크리스마스나무"
-  }
-  const [trees, setTrees] = useState([]);
-  const [createtrees, setCreateTrees] = useState([]);
-  const [isTreeCreated, setIsTreeCreated] = useState(false);
+  const [trees, setTrees] = useState([
+    {
+      dayExp: 0,
+      userExp: 0,
+      image: "",
+      name: "",
+      current: false,
+    },
+  ]);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
   useEffect(() => {
     axios
       .get("/api/user/trees",{
@@ -37,23 +36,15 @@ const MyProfile = ({ users }) => {
       .catch((error) => {
         console.log(error);
       });
-    // axios
-    //   .get("/api/trees", {
-    //     headers: {
-    //       Authorization: accessToken,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log("나무이름:::", response.data)
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
       // eslint-disable-next-line
     }, []);
     
   
-    const CreateTree = () => {
+  const CreateTree = () => {
+    console.log("trees : "+trees);
+    const hasCurrentTree = trees.some(tree => tree.current);
+    
+    if (!hasCurrentTree) {
       axios
         .post("/api/user/trees", null ,{
           headers: {
@@ -61,20 +52,88 @@ const MyProfile = ({ users }) => {
           },
         })
         .then((response) => {
-          console.log(response.data)
-          setCreateTrees(response.data.tree.id)
-          setIsTreeCreated(true);
-          // Use the newly created tree data directly from the response
+          console.log("여기",response.data)
           const newTree = response.data;
-          setTrees(prevTrees => [...prevTrees, newTree]); // Add the new tree to the existing list
+          setTrees(prevTrees => [...prevTrees, newTree]);     
         })
         .catch((error) => {
           console.log(error);
+          alert("모든 나무를 다 키웠습니다.");
         });
-    };
-  const currentExp = 75;
-  const maxExp = 100;
+    } else {
+      console.log("A current tree already exists.");
+    }
+  };
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
+  const existingTree = trees.find(tree => tree.current);
+ 
+
+  function calculateLevel(currentExp){
+    let level;
+    let LextExp;
+    console.log(currentExp);
+    if(currentExp < 100) {
+      level = 1;
+      LextExp = 100;
+    } else if(currentExp < 200){
+      level = 2;
+      LextExp = 200;
+    } else if(currentExp < 300){
+      level = 3;
+      LextExp = 300;
+    } else if(currentExp < 400){
+      level = 4;
+      LextExp = 400;
+    } else if(currentExp < 550){
+      level = 5;
+      LextExp = 550;
+    } else if(currentExp < 700){
+      level = 6;
+      LextExp = 700;
+    } else if(currentExp < 850){
+      level = 7;
+      LextExp = 850;
+    } else if(currentExp < 1000){
+      level = 8;
+      LextExp = 1000;
+    } else if(currentExp < 1150){
+      level = 9;
+      LextExp = 1150;
+    } else if(currentExp < 1350){
+      level = 10;
+      LextExp = 1350;
+    } else if(currentExp < 1550){
+      level = 11;
+      LextExp = 1550;
+    } else if(currentExp < 1750){
+      level = 12;
+      LextExp = 1750;
+    } else if(currentExp < 1950){
+      level = 13;
+      LextExp = 1950;
+    } else if(currentExp < 2150){
+      level = 14;
+      LextExp = 2150;
+    } else if(currentExp < 2400 ){
+      level = 15;
+      LextExp = 2400;
+    } else if(currentExp < 2650){
+      level = 16;
+      LextExp = 2650;
+    } else if(currentExp < 2900){
+      level = 17;
+      LextExp = 2900;
+    } else if(currentExp < 3150){
+      level = 18;
+      LextExp = 3150;
+    } else if(currentExp < 3400){
+      level = 19;
+      LextExp = 3400;
+    } else{
+      level = 20;
+    }
+    return [level, LextExp]
+  }
   return (
     <ContainerWrap>
       <TitleWrap>
@@ -90,45 +149,64 @@ const MyProfile = ({ users }) => {
           </InfoWrap>
 
           <BtnWrap>
-            <Link to="/EditInfo" style={{ textDecoration: "none" }}>
-              <Button variant="contained" color="success">
-                회원정보
-              </Button>
+            <Link to="/EditInfo">
+                <Button variant="contained" color="success">
+                  회원정보
+                </Button>
             </Link>
           </BtnWrap>
         </UserWrap>
 
         <TreeWrap>
-          <TreeInfo>
-            {isTreeCreated ? ( 
+          {existingTree ? (
+            <TreeInfo>
               <TreeInfoWrap>
-                <TreeImg src={tree2}>
-                </TreeImg>
+                <TreeImg src={existingTree.image} />
                 <TreeName>
-                  <div>{treesName[createtrees]}</div>
-                  <div>LV.0</div>
+                  <div>{existingTree.name}</div>
+                  {existingTree ? ( // Check if userTreeDto is defined
+                    <div>
+                      <div>LV. {calculateLevel(existingTree.userExp)[0]}</div>
+                    </div>
+                  ) : null}
                 </TreeName>
               </TreeInfoWrap>
-            ) : (
+            </TreeInfo>
+          ) : (
+            <TreeInfo>
               <IconButton aria-label="add" size="large" onClick={CreateTree}>
                 <AddIcon fontSize="inherit" />
               </IconButton>
-            )}
-          </TreeInfo>
+            </TreeInfo>
+          )}
 
-
-          <TreeBalanceWrap>
-            <TreeBalanceText>전체 밸런스</TreeBalanceText>
+{existingTree ?
+          (<TreeBalanceWrap>
+            <TreeBalanceText>일일 EXP ({existingTree.dayExp}/100)</TreeBalanceText>
             <TreeBalanceContent>
-              <ExpBar value={currentExp} maxValue={maxExp} />
-              <div>75%</div>
+              <ExpBar value={existingTree.dayExp} maxValue={100} />
+              <div>{existingTree.dayExp}%</div>
             </TreeBalanceContent>
-            <TreeBalanceText>일일 밸런스</TreeBalanceText>
+            <TreeBalanceText>전체 EXP ({existingTree.userExp}/{calculateLevel(existingTree.userExp)[1]})</TreeBalanceText>
             <TreeBalanceContent>
-              <ExpBar value={currentExp} maxValue={maxExp} />
-              <div>75%</div>
+              <ExpBar value={existingTree.userExp} maxValue={calculateLevel(existingTree.userExp)[1]} />
+              <div>{Math.floor((existingTree.userExp)/(calculateLevel(existingTree.userExp)[1])*100)}%</div>
             </TreeBalanceContent>
           </TreeBalanceWrap>
+          ):(
+          <TreeBalanceWrap>
+            <TreeBalanceText>일일 EXP (0/100)</TreeBalanceText>
+            <TreeBalanceContent>
+              <ExpBar value={0} maxValue={100} />
+              <div>0%</div>
+            </TreeBalanceContent>
+            <TreeBalanceText>전체 EXP (0/100)</TreeBalanceText>
+            <TreeBalanceContent>
+              <ExpBar value={0} maxValue={100} />
+              <div>0%</div>
+            </TreeBalanceContent>
+          </TreeBalanceWrap>
+          )}
         </TreeWrap>
       </ContentWrap>
 
@@ -136,21 +214,22 @@ const MyProfile = ({ users }) => {
         <Title>나무도감</Title>
       </TitleWrap>
       <ContentWrap>
-      <TreeListWrap>
+        <TreeListWrap>
           {trees.map((tree) => {
-            // Check if tree.current is false, and render accordingly
             if (!tree.current) {
               return (
-                <TreeInfo2 key={tree.id}>
-                  <TreeImg src={tree2}></TreeImg>
+                <TreeInfo2 key={tree.name}>
+                  <TreeImg src={tree.image}></TreeImg>
                   <TreeName>
                     <div>{tree.name}</div>
-                    <div>LV.20</div>
+                    {tree ? (
+                      <div>LV. {calculateLevel(tree.userExp)}</div>
+                    ) : null}
                   </TreeName>
                 </TreeInfo2>
               );
             } else {
-              return null; // Don't render anything if tree.current is true
+              return null;
             }
           })}
         </TreeListWrap>
@@ -229,6 +308,7 @@ const TreeInfo = styled.div`
   justify-content: center;
   align-items: center;
   width: 30%;
+  overflow: hidden;
 `;
 const TreeInfoWrap = styled.div`
   display: flex;

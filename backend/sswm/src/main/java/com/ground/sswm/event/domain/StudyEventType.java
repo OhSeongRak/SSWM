@@ -1,7 +1,7 @@
 package com.ground.sswm.event.domain;
 
 public enum StudyEventType {
-    LIVE,
+    STUDY,
     REST,
     STRETCH
 }
