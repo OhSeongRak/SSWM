@@ -44,6 +44,7 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic, sorting 
         // 오류 처리
         console.log(error);
       });
+      // eslint-disable-next-line
   }, [option, searchKeyword, selectedTags, isPublic, sorting, token]);
 
   console.log(studyrooms);

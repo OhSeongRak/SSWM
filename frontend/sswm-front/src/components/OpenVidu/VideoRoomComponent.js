@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import ChatComponent from './chat/ChatComponent';
 import DialogExtensionComponent from './dialog-extension/DialogExtension';
 import StreamComponent from './stream/StreamComponent';
@@ -114,6 +114,7 @@ class VideoRoomComponent extends Component {
             },
         })
         .then((response) => {
+            // eslint-disable-next-line
             this.state.myUserName = response.data.nickname;
         })
         .catch(error => {

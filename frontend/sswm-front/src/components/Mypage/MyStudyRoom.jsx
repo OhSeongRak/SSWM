@@ -25,6 +25,7 @@ const MyStudyRoom = (props) => {
         // 오류 처리
         console.log(error);
       });
+      // eslint-disable-next-line
   }, []);
 
   return (
@@ -56,7 +57,6 @@ const Title = styled.span`
   border-radius: 15px;
   padding: 3px 3px;
   background: #fecc47;
-  font-family: "NanumSquareNeo";
 `;
 const RoomListLayout = styled.div`
   flex: 1;

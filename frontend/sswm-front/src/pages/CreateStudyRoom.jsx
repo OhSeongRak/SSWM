@@ -19,7 +19,6 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import def from "../assets/dolphin.jpg";
 import { Avatar, RadioGroup, Switch, Typography } from "@mui/material";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
-import { useNavigate } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
@@ -489,7 +488,6 @@ const StudyRoomTitle = styled.div`
   width: 50%;
   height: 100%;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 1vw;
 `;
 const StudyRoomTitle2 = styled.div`
@@ -498,7 +496,6 @@ const StudyRoomTitle2 = styled.div`
   width: 20%;
   height: 100%;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 1vw;
   margin-left: 10vw;
 `;
