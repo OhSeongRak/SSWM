@@ -121,7 +121,7 @@ const EditInfo = () => {
     console.log("nickName :" + nickName);
     console.log("checkedNickName :" + checkedNickName);
     // 닉네임 중복확인
-    if (originNickName != nickName && (isExist || nickName !== checkedNickName)) {
+    if (originNickName !== nickName && (isExist || nickName !== checkedNickName)) {
       alert("닉네임의 중복 확인이 필요합니다.");
       return;
     }
@@ -156,6 +156,9 @@ const EditInfo = () => {
     })
     .then((response) => {
       console.log(response.data);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      window.location.replace("/Login");
     })
     .catch((error) => {
       console.log(error);
@@ -169,8 +172,8 @@ const EditInfo = () => {
   
   const closeModalEvent = () => {
     setIsModalOpen(false);
-    DeleteUser()
     openSnackBar(); // Open the CustomSnackBar after closing the modal
+    DeleteUser()
   };
   console.log('수정페이지', accessToken)
   return (
@@ -296,7 +299,6 @@ const EditLeftContent = styled.div`
   border-right: 1px solid black;
   border-bottom: 1px solid black;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
 `;
 const EditRightContent = styled.div`
   display: flex;
@@ -307,7 +309,6 @@ const EditRightContent = styled.div`
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 2vw;
 `;
 const BtnWrap = styled.div`
@@ -338,6 +339,5 @@ const ButtonCustom = styled.button`
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   margin-left: 1vw;
-  font-family: "NanumSquareNeo";
 `;
 export default EditInfo;

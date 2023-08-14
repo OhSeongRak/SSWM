@@ -46,7 +46,6 @@ const BoardTitle = styled.div`
 width: 100%;
 font-size: 20px;
 padding : 20px 0px 0px 0px;
-font-family: "NanumSquareNeo";
 margin-bottom: 1vw;
 
 `

@@ -93,12 +93,10 @@ const Title = styled.span`
   border-radius: 15px;
   padding: 3px 3px;
   background: #fecc47;
-  font-family: "NanumSquareNeo";
 `;
 const ContentWrap = styled.div`
   display: flex;
   gap: 5vw;
-  font-family: "NanumSquareNeo";
   height: 95%;
 `;
 const CalendarWrap = styled.div`
@@ -112,14 +110,5 @@ const GraphWrap = styled.div`
   border-radius: 8px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   height: 80%
-`;
-
-const Dot = styled.div`
-  height: 8px;
-  width: 8px;
-  background-color: #f87171;
-  border-radius: 50%;
-  display: flex;
-  margin-left: 1px;
 `;
 export default ScheduleCalendar;
