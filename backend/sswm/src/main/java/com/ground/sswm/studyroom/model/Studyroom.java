@@ -45,14 +45,16 @@ public class Studyroom {
     private long createdAt;
 
     private int userNum;
-    public boolean getIsPublic() {
-    return this.isPublic;
-  }
-    public boolean getIsDeleted() {
-    return this.isDeleted;
-  }
 
-  @Builder
+    public boolean getIsPublic() {
+        return this.isPublic;
+    }
+
+    public boolean getIsDeleted() {
+        return this.isDeleted;
+    }
+
+    @Builder
     public Studyroom(String name, String notice, boolean isPublic, String enterCode,
         int maxUserNum, int maxRestTime, int studyAvgTime, String image, boolean isDeleted,
         long createdAt, int userNum) {
@@ -70,8 +72,6 @@ public class Studyroom {
     }
 
     @Builder
-
-
     public static Studyroom from(StudyroomDto studyroomDto) {
         return Studyroom.builder()
             .name(studyroomDto.getName())
