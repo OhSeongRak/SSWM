@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudyroomRepository extends JpaRepository<Studyroom, Long> {
 
+    @Query("select s.id from Studyroom s")
+    List<Long> findAllStudyRoomIds();
     Optional<Studyroom> findByName(String name);
 
     @Query("select s from Studyroom s where s.isDeleted = false and s.id in"
