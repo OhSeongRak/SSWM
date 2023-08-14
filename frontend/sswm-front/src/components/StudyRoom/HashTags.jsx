@@ -31,7 +31,7 @@ export default function CheckboxChip({ onTagClick }) {
   }, [selected,onTagClick]);
 
   return (
-    <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+    <Box sx={{ display: "flex", gap: 1, alignItems: "center",}}>
       <Typography
         sx={{
           display: "flex",

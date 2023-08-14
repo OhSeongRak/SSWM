@@ -33,7 +33,6 @@ const ChatTitleWrap = styled.div`
   width: 100%;
   height: 10%;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   margin-bottom: 0.5vw;
 `
 const ChatContentWrap = styled.div`

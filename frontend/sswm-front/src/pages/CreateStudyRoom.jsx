@@ -488,7 +488,6 @@ const StudyRoomTitle = styled.div`
   width: 50%;
   height: 100%;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 1vw;
 `;
 const StudyRoomTitle2 = styled.div`
@@ -497,7 +496,6 @@ const StudyRoomTitle2 = styled.div`
   width: 20%;
   height: 100%;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 1vw;
   margin-left: 10vw;
 `;

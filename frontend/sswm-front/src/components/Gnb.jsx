@@ -7,7 +7,6 @@ import Logo from "../assets/Logo.png";
 const Gnb = (props) => {
   const isLoggedIn = !!localStorage.getItem("accessToken");
 
-
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
@@ -56,7 +55,6 @@ const LogoImg = styled.img`
 
 const GnbBtn = styled.div`
   display: inline-flex;
-  font-family: "NanumSquareNeo";
   font-size: 20px;
   margin-left: 15px;
   white-space: nowrap;
