@@ -1,6 +1,6 @@
 
 import styled from "styled-components";
-import KakaoLogo from "../assets/Kakao_Logo.svg";
+import KakaoLogo from "../assets/kakao_login_large_narrow.png";
 
 const KakaoSign = ({REST_API_KEY, REDIRECT_URI}) => {
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
@@ -24,6 +24,6 @@ const KakaoSign = ({REST_API_KEY, REDIRECT_URI}) => {
 export default KakaoSign;
 
 const LogoImg = styled.img`
-  width: 240px;
-  height: 100px;
+width: 300px;
+height: 65px;
 `;

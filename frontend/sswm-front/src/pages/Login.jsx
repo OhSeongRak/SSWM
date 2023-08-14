@@ -11,15 +11,12 @@ import KakaoSignIn from "../shared/KakaoSign";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-
-
 const Login = () => {
-  
   return (
     <div>
       <Gnb />
       <ContainerWrap>
-        <Box component="span" sx={{ p: 2, border: "3px solid orange",borderRadius:"35px" }}>
+        <Box component="span" sx={{ p: 2, border: "3px solid orange", borderRadius: "35px" }}>
           <LoginWrap>
             <Text> 간편로그인 </Text>
             <SocialWrap>
@@ -28,14 +25,14 @@ const Login = () => {
               </GoogleOAuthProvider>
               <KakaoSignIn
                 REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
-                REDIRECT_URI="https://i9a206.p.ssafy.io/kakao/login"
-                //REDIRECT_URI="http://localhost:3000/kakao/login"
+                // REDIRECT_URI="https://i9a206.p.ssafy.io/kakao/login"
+                REDIRECT_URI="http://localhost:3000/kakao/login"
               />
             </SocialWrap>
             <ButtonWrap>
               아직 회원이 아니신가요?
-              <Link to="/SignUp" style={{ textDecoration: "none"}}>
-                <div style={{color:"orange"}} >회원가입 하러 가기</div>
+              <Link to="/SignUp" style={{ textDecoration: "none" }}>
+                <div style={{ color: "orange" }}>회원가입 하러 가기</div>
               </Link>
             </ButtonWrap>
           </LoginWrap>
@@ -62,6 +59,8 @@ const SocialWrap = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const Text = styled.p`

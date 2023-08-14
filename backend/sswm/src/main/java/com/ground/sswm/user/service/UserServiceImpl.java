@@ -4,11 +4,13 @@ import com.ground.sswm.auth.oauth.model.OAuthUserInfo;
 import com.ground.sswm.common.util.UnixTimeUtil;
 import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.user.exception.NicknameAlreadyExistException;
+import com.ground.sswm.user.exception.NicknameNullException;
 import com.ground.sswm.user.exception.UserNotFoundException;
 import com.ground.sswm.user.model.User;
 import com.ground.sswm.user.model.dto.UserDto;
 import com.ground.sswm.user.model.dto.UserResDto;
 import com.ground.sswm.user.repository.UserRepository;
+import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserStudyroomService userStudyroomService;
     private final FileManageUtil fileManageUtil;
 
     @Override
@@ -56,9 +59,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
-            () -> new UserNotFoundException("" + id));
+    public void delete(Long userId) {
+        userStudyroomService.deleteUser(userId);
+
+        User user = userRepository.findById(userId).orElseThrow(
+            () -> new UserNotFoundException("" + userId));
 
         userRepository.delete(user);
 
@@ -66,6 +71,7 @@ public class UserServiceImpl implements UserService {
         if (user.getImage() != null) {
             fileManageUtil.deleteFile(user.getImage());
         }
+
     }
 
     @Override
@@ -97,7 +103,7 @@ public class UserServiceImpl implements UserService {
         // 닉네임 바꾸는 경우
         if (nickname != null && !nickname.isBlank()) {
             // 다른 사람이 바꾸고자하는 닉네임 이미 사용하고 있음
-            User findUser = userRepository.findByNickname(id,nickname);
+            User findUser = userRepository.findByNickname(id, nickname);
             // 만약 유저 닉네임이 중복이라면 함수 종료
             if (findUser != null) {
                 throw new NicknameAlreadyExistException("이미 사용중인 닉네임 입니다.");
@@ -113,8 +119,13 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public boolean exists(String nickname, Long id) {
-        return userRepository.findByNickname(id,nickname)==null? false: true;
+    public boolean exists(String nickname, Long userId) {
+        log.debug("닉네임 : " + nickname);
+        if (nickname == null || nickname.trim().isEmpty()) {
+            throw new NicknameNullException("닉네임은 빈칸이 될 수 없습니다.");
+        }
+
+        return userRepository.findByNickname(userId, nickname) == null ? false : true;
     }
 
 
