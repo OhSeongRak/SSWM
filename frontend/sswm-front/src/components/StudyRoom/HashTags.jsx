@@ -4,7 +4,7 @@ import Chip from "@mui/joy/Chip";
 import Checkbox from "@mui/joy/Checkbox";
 import * as React from "react";
 import { Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 
 export default function CheckboxChip({ onTagClick }) {
@@ -28,7 +28,7 @@ export default function CheckboxChip({ onTagClick }) {
   useEffect(() => {
     // selected 값이 변경될 때마다 부모로 새로운 selected 값을 전달
     onTagClick(selected);
-  }, [selected]);
+  }, [selected,onTagClick]);
 
   return (
     <Box sx={{ display: "flex", gap: 1, alignItems: "center",}}>

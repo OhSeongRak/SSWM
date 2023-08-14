@@ -5,7 +5,7 @@ import CustomModal from "./deleteModal";
 import { Box, Typography, Snackbar } from "@mui/material";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const MemberTable = ({ studyroomId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

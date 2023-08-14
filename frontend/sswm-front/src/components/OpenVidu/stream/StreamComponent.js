@@ -12,10 +12,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import axios from 'axios';
 // import { useParams } from "react-router-dom";
-
-const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
 export default class StreamComponent extends Component {
     constructor(props) {

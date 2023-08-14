@@ -111,5 +111,4 @@ const GraphWrap = styled.div`
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   height: 80%
 `;
-
 export default ScheduleCalendar;

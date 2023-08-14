@@ -8,10 +8,7 @@ import TextField from "@mui/material/TextField";
 
 import def from "../assets/dolphin.jpg";
 
-import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
-import GFooter from "../components/GFooter";
 
 let formData = new FormData();
 const SignUpName = () => {
@@ -20,8 +17,6 @@ const SignUpName = () => {
   const [checkedNickName, setCheckedNickName] = useState("");
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-
-  const navigate = useNavigate();
 
   const [isExist, setIsExist] = useState(true);
 
