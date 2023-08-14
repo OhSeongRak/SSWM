@@ -25,8 +25,8 @@ const SignUp = () => {
               </GoogleOAuthProvider>
               <KakaoSignIn
                 REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
-                // REDIRECT_URI="https://i9a206.p.ssafy.io"
-                REDIRECT_URI="http://localhost:3000/kakao/sign"
+                REDIRECT_URI="https://i9a206.p.ssafy.io/kakao/sign"
+                //REDIRECT_URI="http://localhost:3000/kakao/sign"
               />
             </SocialWrap>
             <ButtonWrap>
