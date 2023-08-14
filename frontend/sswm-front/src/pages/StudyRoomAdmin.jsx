@@ -15,7 +15,6 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { styled as muistyled } from "@mui/material/styles";
 import { Avatar, RadioGroup, Snackbar } from "@mui/material";
 
-import def from "../assets/dolphin.jpg";
 import CustomModal from "../components/StudyRoom/deleteModal";
 import { Box, Switch, Typography } from "@mui/material";
 
@@ -24,6 +23,8 @@ import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
 import GFooter from "../components/GFooter";
+
+import { css } from "styled-components";
 
 const Item = muistyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -72,6 +73,7 @@ const StudyRoomAdmin = () => {
       })
       .then((response) => {
         setStudyroomDto(response.data); // API 호출 완료 후에 studyrooms 업데이트
+        setImage(`${process.env.REACT_APP_IMAGE_URL}/` + response.data.image);
         setCheckedStudyroomName(response.data.name);
         setOriginName(response.data.name);
         console.log("studyroom", response.data);
@@ -81,7 +83,7 @@ const StudyRoomAdmin = () => {
       });
   }, [studyroomId, accessToken]);
 
-  const [imageSrc, setImage] = useState(def);
+  const [imageSrc, setImage] = useState();
 
   const imageUp = useRef();
 
@@ -113,7 +115,7 @@ const StudyRoomAdmin = () => {
 
   const handleCancel = () => {
     window.location.href = `/StudyRoomMember/${studyroomId}`;
-  }
+  };
   // name 입력란이 변경될 때마다 studyroom의 name 속성 업데이트
   const handleNameChange = (event) => {
     setStudyroomDto({
@@ -136,7 +138,7 @@ const StudyRoomAdmin = () => {
         },
         params: {
           name: studyroomDto.name,
-          studyroomId:studyroomId
+          studyroomId: studyroomId,
         },
       })
       .then((response) => {
@@ -186,9 +188,11 @@ const StudyRoomAdmin = () => {
     }
   };
 
+  const minUserNum = studyroomDto.userNum;
+
   // maxUserNum 값 변경
   const handleMaxUserNumChange = (value) => {
-    if (value >= 1 && value <= 9) {
+    if (value >= minUserNum && value <= 9) {
       setStudyroomDto({
         ...studyroomDto,
         maxUserNum: value, // 인원 수 값으로 업데이트
@@ -242,7 +246,10 @@ const StudyRoomAdmin = () => {
     event.preventDefault();
 
     // 스터디룸 제목 중복확인
-    if (originName !== studyroomDto.name && (isExist || studyroomDto.name !== checkedStudyroomName)) {
+    if (
+      originName !== studyroomDto.name &&
+      (isExist || studyroomDto.name !== checkedStudyroomName)
+    ) {
       alert("스터디룸 제목의 중복 확인이 필요합니다.");
       return;
     }
@@ -282,13 +289,13 @@ const StudyRoomAdmin = () => {
       })
       .then((response) => {
         console.log(response.data);
-        alert("스터디방이 수정되었습니다.");
+        alert("스터디룸이 수정되었습니다.");
         navigate(`/StudyRoomMember/${studyroomId}`);
       })
       .catch((error) => {
         // 오류 처리
         console.log(Error);
-        alert("스터디방이 수정되지 않았습니다.");
+        alert("스터디룸이 수정되지 않았습니다.");
       });
     navigate(`/StudyRoomAdmin/${studyroomId}`);
   };
@@ -300,12 +307,16 @@ const StudyRoomAdmin = () => {
     setIsModalOpen(false);
 
     axios
-      .put(`/api/studyrooms/${studyroomId}/delete`, {}, {
-        headers: {
-          Authorization: accessToken,
-          "Content-Type": "application/json",
-        },
-      })
+      .put(
+        `/api/studyrooms/${studyroomId}/delete`,
+        {},
+        {
+          headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         openSnackBar();
@@ -315,7 +326,7 @@ const StudyRoomAdmin = () => {
         // 오류 처리
         console.log(Error);
         console.log(error.data);
-        alert("스터디방이 삭제되지 않았습니다.");
+        alert("스터디룸이 삭제되지 않았습니다.");
       });
     navigate(`/StudyRoomAdmin/${studyroomId}`);
   };
@@ -337,7 +348,6 @@ const StudyRoomAdmin = () => {
                 onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
               />
               <Button
-                sx={{ width: "50px", marginLeft: "10px" }}
                 variant="contained"
                 color="success"
                 onClick={checkStudyroomName}
@@ -345,7 +355,6 @@ const StudyRoomAdmin = () => {
                 중복확인
               </Button>
             </HeaderBtn>
-            <StudyRoomTitle>입장코드</StudyRoomTitle>
             <HeaderBtn>
               <TextField
                 disabled={studyroomDto.isPublic}
@@ -378,12 +387,9 @@ const StudyRoomAdmin = () => {
                 onChange={handleFileChange}
               />
               {imageSrc && (
-                <Avatar
-                  onClick={onClickImage}
-                  alt="Default Img"
-                  src={imageSrc}
-                  sx={{ width: 200, height: 200 }}
-                ></Avatar>
+                <AvatarWrap onClick={onClickImage}>
+                  <Avatar alt="Default Img" src={imageSrc} sx={{ height: '100%', width: '100%' }} />
+                </AvatarWrap>
               )}
             </ContentTopLeftWrap>
             <ContentTopRightWrap>
@@ -528,6 +534,12 @@ const ContainerWrap = styled.div`
   justify-content: center;
   width: 100%;
   height: 100vh;
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
 `;
 const HeaderWrap = styled.div`
   display: flex;
@@ -552,9 +564,18 @@ const ContentWrap = styled.div`
 `;
 const ContentTop = styled.div`
   display: flex;
+  flex-direction: row;
   width: 100%;
   height: 50%;
   border: 1px solid black;
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50%;
+    padding: 2vw 0;
+  }
 `;
 const ContentTopLeftWrap = styled.div`
   display: flex;
@@ -581,24 +602,34 @@ const StudyRoomTitle = styled.div`
   align-items: center;
   width: 50%;
   height: 100%;
-  font-size: 20px;
+  font-size: 150%;
   gap: 1vw;
   margin-left: 5vw;
+  @media (max-width: 768px) {
+    font-size: 110%;
+  }
 `;
 const StudyRoomContent = styled.div`
   display: flex;
   align-items: center;
   width: 50%;
   height: 100%;
+  @media (max-width: 768px) {
+    width: 30%;
+    height: 100%;
+  }
 `;
 const StudyRoomTitle2 = styled.div`
   display: flex;
   align-items: center;
   width: 50%;
   height: 100%;
-  font-size: 20px;
+  font-size: 150%;
   gap: 1vw;
   margin-left: 5vw;
+  @media (max-width: 768px) {
+    font-size: 110%;
+  }
 `;
 
 const ContentBottom = styled.div`
@@ -609,6 +640,13 @@ const ContentBottom = styled.div`
   height: 50%;
   border: 1px solid black;
   gap: 2vw;
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50%;
+    padding: 2vw 0;
+  }
 `;
 const ContentBottomLeft = styled.div`
   width: 46.5%;
@@ -677,5 +715,29 @@ const BtnWrap = styled.div`
   height: 15%;
   margin: 0;
   padding: 0;
+`;
+
+const AvatarStyle = css`
+  width: 200px;
+  height: 200px;
+  @media (max-width: 1023px) {
+    width: 150px;
+    height: 150px;
+  }
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 150px;
+  }
+  @media (max-width: 600px) {
+    width: 100px;
+    height: 100px;
+  }
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 60px;
+  }
+`;
+const AvatarWrap = styled.div`
+  ${AvatarStyle}
 `;
 export default StudyRoomAdmin;

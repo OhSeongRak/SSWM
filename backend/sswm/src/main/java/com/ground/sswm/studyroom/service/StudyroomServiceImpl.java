@@ -34,7 +34,6 @@ public class StudyroomServiceImpl implements StudyroomService {
     private final UserRepository userRepository;
     private final StudyRoomTagRepository studyRoomTagRepository;
     private final TagRepository tagRepository;
-    private final FileManageUtil fileManageUtil;
 
     @Override
     public List<SearchStudyroomResDto> list(SearchStudyroomReqDto searchStudyroomReqDto) {
@@ -84,7 +83,7 @@ public class StudyroomServiceImpl implements StudyroomService {
                     break;
                 case "CREATED":
                     searchStudyroomResDtos.sort(
-                        (o1, o2) -> Math.toIntExact(o1.getCreatedTime() - o2.getCreatedTime()));
+                        (o1, o2) -> Math.toIntExact(o2.getCreatedTime() - o1.getCreatedTime()));
                     break;
             }
         } else {
@@ -98,7 +97,7 @@ public class StudyroomServiceImpl implements StudyroomService {
                     break;
                 case "CREATED":
                     searchStudyroomResDtos.sort(
-                        (o1, o2) -> Math.toIntExact(o2.getCreatedTime() - o1.getCreatedTime()));
+                        (o1, o2) -> Math.toIntExact(o1.getCreatedTime() - o2.getCreatedTime()));
                     break;
             }
         }
@@ -161,12 +160,18 @@ public class StudyroomServiceImpl implements StudyroomService {
         }
 
         // INSERT StudyRoomTag
+        // 먼저 tag들을 다 삭제함.
+        studyRoomTagRepository.deleteByStudyroomId(studyroomId);
         List<TagDto> tagDtoList = studyroomDto.getTags();
-        for (TagDto tagDto : tagDtoList) {
-            StudyroomTag studyroomTag = new StudyroomTag();
-            studyroomTag.setStudyroom(studyroom);
-            studyroomTag.setTag(tagRepository.findByName(tagDto.getName()));
-            studyRoomTagRepository.save(studyroomTag);
+
+        // 선택한 태그가 있다면 insert
+        if (tagDtoList != null) {
+            for (TagDto tagDto : tagDtoList) {
+                StudyroomTag studyroomTag = new StudyroomTag();
+                studyroomTag.setStudyroom(studyroom);
+                studyroomTag.setTag(tagRepository.findByName(tagDto.getName()));
+                studyRoomTagRepository.save(studyroomTag);
+            }
         }
 
         studyroom.setUpdates(studyroomDto);
@@ -203,14 +208,22 @@ public class StudyroomServiceImpl implements StudyroomService {
 
     @Override
     @Transactional
-    public void delete(Long studyroomId, boolean isDelete) {
+    public void delete(Long studyroomId) {
         Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
-        studyroom.setDeleted(isDelete);
+        studyroom.setDeleted(true);
     }
 
     @Override
-    public boolean exists(String name) {
-        return studyroomRepository.findByName(name).isPresent();
+    public boolean exists(Long studyroomId, String name) {
+        Studyroom studyroom = studyroomRepository.findByName(name).orElse(null);
+        if(studyroom == null){
+            return false;
+        }
+        if(studyroomId!=null){
+            return studyroom.getId()!=studyroomId;
+
+        }
+        return true;
     }
 
     @Override

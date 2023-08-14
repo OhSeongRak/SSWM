@@ -19,7 +19,7 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import def from "../assets/dolphin.jpg";
 import { Avatar, RadioGroup, Switch, Typography } from "@mui/material";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
-// import { useDispatch, useSelector } from "react-redux";
+
 
 import axios from "axios";
 
@@ -171,6 +171,7 @@ const CreateStudyRoom = () => {
         maxRestTime: value * 60, // 휴식 시간 값으로 업데이트
       });
     }
+    
   };
 
   // tag값 변경

@@ -109,7 +109,7 @@ const EditInfo = () => {
       .catch((error) => {
         // 오류 처리
         console.log(error);
-        alert("닉네임 확인 중 오류가 발생했습니다.");
+        alert("닉네임은 빈칸이 될 수 없습니다.");
         return true;
       });
   };
@@ -158,10 +158,13 @@ const EditInfo = () => {
       console.log(response.data);
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      openSnackBar(); // Open the CustomSnackBar after closing the modal
       window.location.replace("/Login");
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error.response.data);
+      closeSnackBar();
+      alert("호스트는 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
     }, []);
   };
   // Snackbar
@@ -172,7 +175,6 @@ const EditInfo = () => {
   
   const closeModalEvent = () => {
     setIsModalOpen(false);
-    openSnackBar(); // Open the CustomSnackBar after closing the modal
     DeleteUser()
   };
   console.log('수정페이지', accessToken)

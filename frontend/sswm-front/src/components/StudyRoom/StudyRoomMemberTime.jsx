@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 
 const StudyRoomMemberTime = ({studyAvgTime, maxAvgTime}) => {
-  console.log(studyAvgTime);
   return (
     <ContainerWrap>
       <TimeWrap>

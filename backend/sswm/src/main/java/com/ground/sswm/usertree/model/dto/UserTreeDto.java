@@ -11,5 +11,5 @@ public class UserTreeDto {
 
     private Long userId;
     private Long treeId;
-    private int exp;
+    private float exp;
 }
