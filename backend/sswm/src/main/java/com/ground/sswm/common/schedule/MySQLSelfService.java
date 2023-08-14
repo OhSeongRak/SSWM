@@ -20,12 +20,15 @@ import com.ground.sswm.usertree.repository.UserTreeRepository;
 import java.time.ZoneId;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MySQLSelfService {
 
     private final DailyLogRepository dailyLogRepository;
@@ -33,6 +36,8 @@ public class MySQLSelfService {
     private final StudyroomRepository studyroomRepository;
     private final UserRepository userRepository;
     private final UserTreeRepository userTreeRepository;
+
+    @Transactional
     public void dailyLogToUserStudyroom() {
         // [0] 작업을 진행할 초기 시간 ~ 끝 시간 선택
         long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 1);
@@ -53,6 +58,9 @@ public class MySQLSelfService {
                 if (userStudyroom == null) {
                     return;
                 }
+                if (userStudyroom.isDeleted()) {
+                    return;
+                }
                 userStudyroom.setTotalRest(x.getRestTime() + userStudyroom.getTotalRest());
                 userStudyroom.setTotalStudy(x.getStudyTime() + userStudyroom.getTotalStudy());
                 userStudyroomRepository.save(userStudyroom);
@@ -61,25 +69,30 @@ public class MySQLSelfService {
     }
 
     //userStudyroom -> Studyroom
+    @Transactional
     public void UserStudyroomToStudyroom() {
-        long count = studyroomRepository.count();
-        for(long i=1; i<=count; i++){
+        List<Long> indexs = studyroomRepository.findAllStudyRoomIds();
+        
+        for (Long i : indexs) {
             Studyroom studyroom = studyroomRepository.findById(i).get();
 
             List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(i);
             int sum = 0, cnt = 0;
-            for (UserStudyroom userStudyroom:userStudyrooms
-            ) {
-               if(userStudyroom.isDeleted()) continue;
+            System.out.println("studyroom name = " + studyroom.getName());
+            for (UserStudyroom userStudyroom:userStudyrooms) {
+                if(userStudyroom.isDeleted()) continue;
                 sum += userStudyroom.getTotalStudy();
                 cnt += 1;
+                System.out.println("NAME = " + userStudyroom.getUser().getName());
             }
+            System.out.println("sum = " + sum);
+            System.out.println("cnt = " + cnt);
             studyroom.setStudyAvgTime(sum / cnt);
-            studyroomRepository.save(studyroom);
-
         }
     }
     //dayillog -> usertree (04시)
+
+    @Transactional
     public void dailylogToUsesTree(){
 
         //유저를 전부 가져옴

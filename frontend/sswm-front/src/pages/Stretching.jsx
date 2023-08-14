@@ -1,7 +1,6 @@
 import React, {useRef, useState, useEffect} from "react";
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
-import { useNavigate  } from 'react-router-dom';
 
 import Gnb from "../components/Gnb";
 import Button from "@mui/material/Button";
@@ -9,10 +8,9 @@ import GFooter from "../components/GFooter";
 
 import * as tmPose from "@teachablemachine/pose";
 
-let model, webcam, ctx, maxPredictions;
+let model, webcam, ctx;
 
 const Streching = () => {
-  const navigate = useNavigate();
 
   const [currentScore, setCurrentScore] = useState(0);
   const [showState, setShowState] = useState(0);
@@ -56,13 +54,13 @@ const Streching = () => {
 
     return () => {
     };
-  }, []); 
+  }, ); 
 
 
   async function init() {
 
     model = await tmPose.load(modelURL, metadataURL);
-    maxPredictions = model.getTotalClasses();
+    //maxPredictions = model.getTotalClasses();
     maxScoreRef.current = 0;
     const width = 400;
     const height = 300;
