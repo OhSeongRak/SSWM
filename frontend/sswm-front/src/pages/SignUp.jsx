@@ -10,28 +10,26 @@ import Box from "@mui/material/Box";
 import GoogleSignIn from "../shared/GoogleSignIn";
 import KakaoSignIn from "../shared/KakaoSign";
 import { GoogleOAuthProvider } from "@react-oauth/google";
- 
+
 const SignUp = () => {
   return (
     <div>
       <Gnb />
       <ContainerWrap>
-        <Box component="span" sx={{  p: 2, border: "3px solid orange",borderRadius:"35px" }}>
+        <Box component="span" sx={{ p: 2, border: "3px solid orange", borderRadius: "35px" }}>
           <SignUpWrap>
             <Text> 회원가입 </Text>
-            <SocialWrap>
-              <GoogleOAuthProvider clientId="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com">
-                <GoogleSignIn />
-              </GoogleOAuthProvider>
-              <KakaoSignIn
-                REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
-                REDIRECT_URI="https://i9a206.p.ssafy.io/kakao/sign"
-                //REDIRECT_URI="http://localhost:3000/kakao/sign"
-              />
-            </SocialWrap>
+            <GoogleOAuthProvider clientId="508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com">
+              <GoogleSignIn />
+            </GoogleOAuthProvider>
+            <KakaoSignIn
+              REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
+              // REDIRECT_URI="https://i9a206.p.ssafy.io/kakao/sign"
+              REDIRECT_URI="http://localhost:3000/kakao/sign"
+            />
             <ButtonWrap>
-              <Link to="/Login" style={{ textDecoration: "none"}}>
-              <div style={{color:"orange"}} >로그인하러 가기</div>
+              <Link to="/Login" style={{ textDecoration: "none" }}>
+                <div style={{ color: "orange" }}>로그인하러 가기</div>
               </Link>
             </ButtonWrap>
           </SignUpWrap>
@@ -50,14 +48,9 @@ const ContainerWrap = styled.div`
 `;
 const SignUpWrap = styled.div`
   position: relative;
-  width: 480px;
+  width: auto;
   height: 300px;
   background-color: #ffffff;
-`;
-const SocialWrap = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly;
 `;
 
 const Text = styled.p`
