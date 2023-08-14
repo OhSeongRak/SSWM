@@ -289,13 +289,13 @@ const StudyRoomAdmin = () => {
       })
       .then((response) => {
         console.log(response.data);
-        alert("스터디방이 수정되었습니다.");
+        alert("스터디룸이 수정되었습니다.");
         navigate(`/StudyRoomMember/${studyroomId}`);
       })
       .catch((error) => {
         // 오류 처리
         console.log(Error);
-        alert("스터디방이 수정되지 않았습니다.");
+        alert("스터디룸이 수정되지 않았습니다.");
       });
     navigate(`/StudyRoomAdmin/${studyroomId}`);
   };
@@ -326,7 +326,7 @@ const StudyRoomAdmin = () => {
         // 오류 처리
         console.log(Error);
         console.log(error.data);
-        alert("스터디방이 삭제되지 않았습니다.");
+        alert("스터디룸이 삭제되지 않았습니다.");
       });
     navigate(`/StudyRoomAdmin/${studyroomId}`);
   };
