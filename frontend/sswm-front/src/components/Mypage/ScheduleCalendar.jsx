@@ -113,13 +113,4 @@ const GraphWrap = styled.div`
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   height: 80%
 `;
-
-const Dot = styled.div`
-  height: 8px;
-  width: 8px;
-  background-color: #f87171;
-  border-radius: 50%;
-  display: flex;
-  margin-left: 1px;
-`;
 export default ScheduleCalendar;

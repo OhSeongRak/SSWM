@@ -25,7 +25,7 @@ export default function FadeMenu(props) {
   useEffect(() => {
     // 부모 컴포넌트인 StudyRoom 컴포넌트에 선택된 메뉴 옵션을 전달하는 콜백 함수 호출
     props.onMenuItemClick(selectedOption);
-  }, [selectedOption]);
+  }, [selectedOption,props]);
 
   return (
     <div>

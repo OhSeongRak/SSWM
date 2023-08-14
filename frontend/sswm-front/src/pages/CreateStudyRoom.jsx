@@ -19,7 +19,6 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import def from "../assets/dolphin.jpg";
 import { Avatar, RadioGroup, Switch, Typography } from "@mui/material";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
-import { useNavigate } from "react-router-dom";
 // import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";

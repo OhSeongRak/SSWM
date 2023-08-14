@@ -25,6 +25,7 @@ const MyStudyRoom = (props) => {
         // 오류 처리
         console.log(error);
       });
+      // eslint-disable-next-line
   }, []);
 
   return (
