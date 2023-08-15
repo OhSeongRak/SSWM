@@ -22,8 +22,8 @@ const GoogleLogin = () => {
       console.log(codeResponse);
 
       await Axios.post(
-        // "https://i9a206.p.ssafy.io/api/auth/google/login",
-        "/api/auth/google/login",
+        // `/api/auth/google/login`,
+        `/api/auth/google/login`,
         JSON.stringify(codeResponse),
         config
       )

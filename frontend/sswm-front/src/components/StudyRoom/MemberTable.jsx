@@ -40,7 +40,7 @@ const MemberTable = ({ studyroomId }) => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await axios.get("/api/studyrooms/" + studyroomId + "/search-user", {
+        const response = await axios.get(`/api/studyrooms/${studyroomId}/search-user`, {
           headers: {
             Authorization: accessToken,
           },

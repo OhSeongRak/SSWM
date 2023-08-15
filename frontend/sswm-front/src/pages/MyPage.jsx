@@ -18,7 +18,7 @@ const MyPage = () => {
 
   useEffect(() => {
     axios
-      .get("/api/users", {
+      .get(`/api/users`, {
         headers: {
           Authorization: accessToken,
         },
