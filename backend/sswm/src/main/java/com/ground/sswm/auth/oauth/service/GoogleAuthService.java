@@ -23,7 +23,8 @@ public class GoogleAuthService implements SocialAuthService {
     private String GOOGLE_TOKEN_REQUEST_URL = "https://oauth2.googleapis.com";
     private String CLIENT_ID = "508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com";
     private String CLIENT_SECRET = "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";
-    private String REDIRECT_URI = "https://i9a206.p.ssafy.io";
+//    private String REDIRECT_URI = "https://i9a206.p.ssafy.io";
+    private String REDIRECT_URI = "http://localhost:3000";
     @Autowired
     private RestTemplate restTemplate;
 

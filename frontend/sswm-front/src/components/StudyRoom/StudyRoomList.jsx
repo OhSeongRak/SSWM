@@ -52,7 +52,7 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic, sorting 
     <RoomListLayout ref={ref}>
       <RoomList>
         {studyrooms.map((studyroom) => (
-          <RecipeReviewCard key={studyroom.id} studyroom={studyroom} />
+          <RecipeReviewCard key={studyroom.id} studyroom={studyroom} isMyPage={false}/>
         ))}
       </RoomList>
     </RoomListLayout>

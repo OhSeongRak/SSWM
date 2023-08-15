@@ -23,7 +23,7 @@ spring:
         max-file-size: 5MB # 요청한 파일 한 개의 크기
         max-request-size: 5MB # 요청한 파일 전체의 크기
   redis:
-    host: http://0.0.0.0
+    host: i9a206.p.ssafy.io
     port: 6380
     password: root
 
@@ -52,6 +52,7 @@ auth:
       - email
       - profile
     token-req-url : https://oauth2.googleapis.com
+    redirect-url: https://i9a206.p.ssafy.io
   kakao:
     client-id: a8cdfb7c6e1ce33857c1ff4df66c348c
     client-secret: ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV
@@ -59,8 +60,9 @@ auth:
       - profile_nickname
       - profile_image
       - account_email
-  redirect-url: http://i9a206.p.ssafy.io:3000
-
+    token-req-url : https://kauth.kakao.com/oauth/token
+    redirect-url-sign: https://i9a206.p.ssafy.io/kakao/sign
+    redirect-url-login: https://i9a206.p.ssafy.io/kakao/login
 logging:
   level:
     com.ground.sswm : INFO
