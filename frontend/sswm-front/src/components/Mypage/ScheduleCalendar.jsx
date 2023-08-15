@@ -21,7 +21,7 @@ const ScheduleCalendar = (props) => {
   useEffect(() => {
     console.log(selectedDateRange);
     axios
-      .get("/api/user-logs", {
+      .get(`/api/user-logs`, {
         params: {
           start: selectedDateRange[0],
           end: selectedDateRange[1],

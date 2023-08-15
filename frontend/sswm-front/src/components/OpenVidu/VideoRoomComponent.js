@@ -100,7 +100,7 @@ class VideoRoomComponent extends Component {
         };
         
         axios
-        .get("/api/users", {
+        .get(`/api/users`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -257,7 +257,7 @@ class VideoRoomComponent extends Component {
     // axios 요청 함수
     sendEventAxios = (data) => {        
         axios
-        .post("/api/event", data, {
+        .post(`/api/event`, data, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -1144,7 +1144,7 @@ const FooterWrap = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 50px;
+  height: 60px;
   background-color: green;
   color: white;
   gap: 3vw;
