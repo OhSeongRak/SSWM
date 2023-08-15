@@ -29,7 +29,7 @@ function App() {
     const refreshToken = JSON.parse(localStorage.getItem("refreshToken"));
 
     // 로그인 안했을 때
-    if (accessToken === null) {
+    if (accessToken === null && refreshToken===null) {
       setIsTokenValid(accessToken);
       return;
     }
@@ -89,38 +89,44 @@ function App() {
     <ContentWrap>
       <BrowserRouter>
         <Routes>
-          <Route path="/SignUp" element={<SignUp />}></Route>
-          <Route path="/Login" element={<Login />}></Route>
           <Route path="/kakao/sign" element={<KakaoSignCallback />} />
           <Route path="/kakao/login" element={<KakaoLoginCallback />} />
-          <Route path="/SignUpName" element={<SignUpName />}></Route>
+          {isTokenValid?
+            <Route path="/SignUpName" element={<Navigate to="/StudyRoom" replace />}></Route>
+              :<Route path="/SignUpName" element={<SignUpName />}></Route> }
+          {isTokenValid?
+            <Route path="/SignUp" element={<Navigate to="/StudyRoom" replace />}></Route>
+              :<Route path="/SignUp" element={<SignUp />}></Route> }
+          {isTokenValid?
+            <Route path="/Login" element={<Navigate to="/StudyRoom" replace />}></Route>
+              :<Route path="/Login" element={<Login />}></Route> }
           {isTokenValid?
             <Route path="/" element={<StudyRoom /> }></Route>
-              :<Route path="/" element={<Navigate to="/login" replace />} />}
+              :<Route path="/" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?
             <Route path="/StudyRoom" element={<StudyRoom />}></Route>
-              :<Route path="/StudyRoom" element={<Navigate to="/login" replace />} />}
+              :<Route path="/StudyRoom" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?
             <Route path="/MyPage" element={<MyPage />}></Route>
-              :<Route path="/MyPage" element={<Navigate to="/login" replace />} />}
+              :<Route path="/MyPage" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?
             <Route path="/EditInfo" element={<EditInfo />}></Route>
-              :<Route path="/EditInfo" element={<Navigate to="/login" replace />} />}
+              :<Route path="/EditInfo" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?  
             <Route path="/CreateStudyRoom" element={<CreateStudyRoom />}></Route>
-             :<Route path="/CreateStudyRoom" element={<Navigate to="/login" replace />} />}
+             :<Route path="/CreateStudyRoom" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?
             <Route path="/StudyRoomAdmin/:studyroomId" element={<StudyRoomAdmin />}></Route>
-            :<Route path="/StudyRoomAdmin/:studyroomId" element={<Navigate to="/login" replace />} />}
+            :<Route path="/StudyRoomAdmin/:studyroomId" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?  
             <Route path="/StudyRoomMember/:studyroomId" element={<StudyRoomMember /> }></Route>
-            :<Route path="/StudyRoomMember/:studyroomId" element={<Navigate to="/login" replace />} />}
+            :<Route path="/StudyRoomMember/:studyroomId" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?    
             <Route path="/LiveRoom/:studyroomId" element={<LiveRoom />}></Route>
-            :<Route path="/LiveRoom/:studyroomId" element={<Navigate to="/login" replace />} />}
+            :<Route path="/LiveRoom/:studyroomId" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?     
             <Route path="/Stretching" element={<Stretching /> }></Route>
-            :<Route path="/Stretching" element={<Navigate to="/login" replace />} />}
+            :<Route path="/Stretching" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?     
             <Route path="/*" element={<NotFound /> }></Route>
             :<Route path="/*" element={<NotFound /> } />}
