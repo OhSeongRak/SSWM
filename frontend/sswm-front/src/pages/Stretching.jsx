@@ -1,6 +1,20 @@
 import React, {useRef, useState, useEffect} from "react";
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
+import pose0 from '../assets/stretching/pose0.jpg';
+import pose1 from '../assets/stretching/pose1.jpg';
+import pose2 from '../assets/stretching/pose2.jpg';
+import pose3 from '../assets/stretching/pose3.jpg';
+import pose4 from '../assets/stretching/pose4.jpg';
+import pose5 from '../assets/stretching/pose5.jpg';
+import pose6 from '../assets/stretching/pose6.jpg';
+import pose7 from '../assets/stretching/pose7.jpg';
+import pose8 from '../assets/stretching/pose8.jpg';
+import pose9 from '../assets/stretching/pose9.jpg';
+import pose10 from '../assets/stretching/pose10.jpg';
+import pose11 from '../assets/stretching/pose11.jpg';
+import pose12 from '../assets/stretching/pose12.jpg';
+import pose13 from '../assets/stretching/pose13.jpg';
 
 import Gnb from "../components/Gnb";
 import Button from "@mui/material/Button";
@@ -11,27 +25,9 @@ import * as tmPose from "@teachablemachine/pose";
 let model, webcam, ctx;
 
 const Streching = () => {
-
   const [currentScore, setCurrentScore] = useState(0);
   const [showState, setShowState] = useState(0);
   const [classSelected, setClassSelected] = useState(0);
-  
-  const stretchingPose = [
-    "팔 오른쪽",
-    "팔 왼쪽",
-    "목 오른쪽",
-    "목 왼쪽",
-    "목 아래",
-    "목 위",
-    "팔 뒤 오른쪽(애매)",
-    "팔 뒤 왼쪽(애매)",
-    "팔 위쪽",
-    "손 왼쪽(애매)",
-    "손 오른쪽(애매)",
-    "등 왼쪽",
-    "등 오른쪽"
-  ];
-
   // ...
 
   //const [maxScore, setMaxScore] = useState(0);
@@ -44,10 +40,30 @@ const Streching = () => {
   //const videoRef = useRef(null);
   //const labelContainerRef = useRef(null);
   var sc = null;
+  const imagePaths = [
+    pose0,
+    pose1,
+    pose2,
+    pose3,
+    pose4,
+    pose5,
+    pose6,
+    pose7,
+    pose8,
+    pose9,
+    pose10,
+    pose11,
+    pose12,
+    pose13,
+    // ... 다른 클래스에 대한 이미지 경로들
+  ];
+  
+
 
   const URL = "https://teachablemachine.withgoogle.com/models/Joe_qHU_I/";
   const modelURL = URL + "model.json";
   const metadataURL = URL + "metadata.json";
+  const imagePath = imagePaths[classSelected + 1];
   //var remainingTime = 0;
   useEffect(() => {
     init(); 
@@ -58,9 +74,7 @@ const Streching = () => {
 
 
   async function init() {
-
     model = await tmPose.load(modelURL, metadataURL);
-    //maxPredictions = model.getTotalClasses();
     maxScoreRef.current = 0;
     const width = 400;
     const height = 300;
@@ -81,7 +95,6 @@ const Streching = () => {
 
   const resetModel = () => {
     sumScore.current += Math.floor(currentSumScore.current / 800);
-    //setMaxScore(0); // 최고 점수 초기화
     maxScoreRef.current = 0;
     currentSumScore.current = 0;
 
@@ -94,7 +107,7 @@ const Streching = () => {
         sc = null;
         resetModel();
         sc = getRandomClass();
-        remainingTime.current = 100; 
+        remainingTime.current = 800; 
     }
 
     if (sc !== null) {
@@ -113,7 +126,6 @@ const Streching = () => {
       const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
 
       const prediction = await model.predict(posenetOutput);
-      //const currentClassScore = Math.floor(prediction[selectClass].probability * 10000000);
       
       const currentClassScore = prediction[selectClass].probability * 100;
       setShowState(currentClassScore + Math.floor(Math.random() * 13));
@@ -158,7 +170,7 @@ const Streching = () => {
     unusedIndexes.current = unusedIndexes.current.filter(index => index !== result);
     console.log(unusedIndexes.current);
   
-    return result;
+    return result+1;
   }
 
   return (
@@ -171,8 +183,10 @@ const Streching = () => {
 
         <ContentWrap>
           <ContentLeftWrap> {/* 요가 사진 */} 
-            <ContentTimerWrapYoga>요가 타이머</ContentTimerWrapYoga> {/*hidden */}
-            <ContentViewWrap>{stretchingPose[classSelected]}</ContentViewWrap>
+            <ContentTimerWrapYoga>요가 타이머 : {classSelected}</ContentTimerWrapYoga> {/*hidden */}
+            <ContentViewWrap>
+              <img src={imagePath} alt="Selected Pose" style={{ maxWidth: '100%', maxHeight: '100%' }}/>
+            </ContentViewWrap>
             <ContentScoreWrap>누적점수 : {sumScore.current} / 1300 </ContentScoreWrap>
           </ContentLeftWrap>
 
@@ -180,7 +194,6 @@ const Streching = () => {
             <ContentTimerWrap>{Math.floor(remainingTime.current / 100)}</ContentTimerWrap>
             <ContentViewWrap>
               <div><canvas id="canvas"></canvas></div>
-              {/* <div ref={labelContainerRef}></div> */}
             </ContentViewWrap>
             <ContentTextWrap>
               <h1 style={{alignContent:'left'}}>최고 점수 : {maxScoreRef.current} / 100 </h1>
@@ -253,7 +266,7 @@ const ContentTimerWrapYoga = styled.div`
   height: 20%;
   font-size: 3vw;
   font-family: "NanumSquareNeo";
-  visibility: hidden;
+  visibility : hidden;
 `
 
 const ContentViewWrap = styled.div`
@@ -262,7 +275,6 @@ const ContentViewWrap = styled.div`
   align-items: center;
   width: 80%;
   height: 60%;
-  border: 1px solid black;
   position: relative; /* 추가된 부분 */
   video {
     width: 100%;
