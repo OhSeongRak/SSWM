@@ -24,7 +24,7 @@ const EditInfo = () => {
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/api/users`, {
+      .get(`/api/users`, {
         headers: {
           Authorization: accessToken,
         },
@@ -86,7 +86,7 @@ const EditInfo = () => {
     setCheckedNickName(nickName);
 
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/api/users/exists`, {
+      .get(`/api/users/exists`, {
         headers: {
           Authorization: accessToken,
         },
@@ -131,7 +131,7 @@ const EditInfo = () => {
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .put(`${process.env.REACT_APP_BASE_URL}/api/users`, formData, {
+      .put(`/api/users`, formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",
@@ -149,7 +149,7 @@ const EditInfo = () => {
   };
   const DeleteUser = () => {
     axios
-    .delete(`${process.env.REACT_APP_BASE_URL}/api/users`, {
+    .delete(`/api/users`, {
       headers: {
         Authorization: accessToken,
       },

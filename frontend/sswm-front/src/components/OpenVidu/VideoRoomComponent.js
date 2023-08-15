@@ -100,7 +100,7 @@ class VideoRoomComponent extends Component {
         };
         
         axios
-        .get(`${process.env.REACT_APP_BASE_URL}/api/users`, {
+        .get(`/api/users`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -257,7 +257,7 @@ class VideoRoomComponent extends Component {
     // axios 요청 함수
     sendEventAxios = (data) => {        
         axios
-        .post(`${process.env.REACT_APP_BASE_URL}/api/event`, data, {
+        .post(`/api/event`, data, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -274,7 +274,7 @@ class VideoRoomComponent extends Component {
     sendRestTimeAxios() {
         // 휴식 시간 가져오기
         axios
-        .get(`${process.env.REACT_APP_BASE_URL}/api/user-logs/${this.state.mySessionId}`, {
+        .get(`/api/user-logs/${this.state.mySessionId}`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
