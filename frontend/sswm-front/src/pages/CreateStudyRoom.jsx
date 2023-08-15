@@ -125,7 +125,8 @@ const CreateStudyRoom = () => {
       .catch((error) => {
         // 오류 처리
         console.log(error);
-        alert("스터디룸 이름 확인 중 오류가 발생했습니다.");
+        setIsExist(true);
+        alert("스터디룸 제목은 빈칸이 될 수 없습니다.");
       });
   };
 
