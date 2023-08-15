@@ -7,6 +7,13 @@ const StudyRoomMemberScore = ({studyroomId}) => {
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   const [top3Study, setTop3Study] = useState();
   const [top3Attend, setTop3Attend] = useState();
+
+  const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  }
+
   useEffect(() => {
     const fetchTop3Attend = async () => {
       try {
@@ -52,10 +59,10 @@ const StudyRoomMemberScore = ({studyroomId}) => {
           </ContentTitle>
           <ContentRank>
             <ContentRankValueWrap>
-              {top3Study && top3Study.map((v,idx)=>
+              {top3Study && top3Study.map((v, idx)=>
                 <ContentRankValue key={idx}>
                   <MemberContent key={idx}>
-                  <div>{v.studyTime}</div>
+                  <div>{formatTime(v.studyTime)}</div>
                   <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${v.userDto.image}`} />
                   <div style={{display:"flex", textAlign: "center"}}>
                     <Nickname>
@@ -137,7 +144,6 @@ const ContentTitle = styled.div`
   height: 10%;
   background-color: #b2dfdb;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   border-bottom: 1px solid #b2dfdb;
 `
 const ContentRank = styled.div`
@@ -162,7 +168,6 @@ const ContentRankValue = styled.div`
   justify-content: center;
   width: 33%;
   height: 100%;
-  font-family: "NanumSquareNeo";
   flex-direction: column;
   align-items: center;
 `

@@ -12,6 +12,7 @@ import com.ground.sswm.user.model.dto.UserResDto;
 import com.ground.sswm.user.repository.UserRepository;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,11 +68,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(user);
 
-        // 이미지 지우기
-        if (user.getImage() != null) {
-            fileManageUtil.deleteFile(user.getImage());
-        }
-
     }
 
     @Override
@@ -123,6 +119,15 @@ public class UserServiceImpl implements UserService {
         log.debug("닉네임 : " + nickname);
         if (nickname == null || nickname.trim().isEmpty()) {
             throw new NicknameNullException("닉네임은 빈칸이 될 수 없습니다.");
+        }
+        // 정규 표현식을 사용하여 닉네임에 공백이 들어가는지 확인
+        // ^ : 문자열의 시작
+        // \\s : 공백 문자 (스페이스, 탭, 줄바꿈 등)
+        // * : 0개 이상의 연속된 공백 문자
+        // $ : 문자열의 끝
+        String regex = "^\\s+.*|.*\\s+$|.*\\s+.*";
+        if (Pattern.matches(regex, nickname)) {
+            throw new NicknameNullException("닉네임은 빈칸이 될 수 없습니다."); // 닉네임에 공백이 들어가는 경우
         }
 
         return userRepository.findByNickname(userId, nickname) == null ? false : true;

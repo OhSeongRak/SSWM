@@ -23,20 +23,20 @@ const Piechart = (props) => {
 
   return (
     // chart height이 100%이기 때문이 chart를 덮는 마크업 요소에 height 설정
-    <div style={{ width: "auto", height: "90%" }}>
+    <div style={{ width: "auto", height: "90%"}}>
       <ResponsivePie
         /**
          * chart에 사용될 데이터
          */
         data={[
-          { id: "공부 시간", value: studyExp },
-          { id: "휴식 시간", value: restTimeExp },
-          { id: "스트레칭 시간", value: stretchExp },
+          { id: "공부", value: studyExp },
+          { id: "휴식", value: restTimeExp },
+          { id: "스트레칭", value: stretchExp },
         ]}
         /**
          * chart margin
          */
-        margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+        margin={{ top: 40, right: 100, bottom: 70, left: 100 }}
         /**
          * chart 중간 빈공간 반지름
          */
@@ -45,7 +45,7 @@ const Piechart = (props) => {
          * pad 간격
          */
         padAngle={1.8}
-        /**
+        /**x
          * pad radius 설정 (pad별 간격이 있을 시 보임)
          */
         cornerRadius={8}
@@ -84,7 +84,7 @@ const Piechart = (props) => {
            */
           labels: {
             text: {
-              fontSize: 14,
+              fontSize: 15,
               fill: "#000000",
             },
           },
@@ -93,7 +93,7 @@ const Piechart = (props) => {
            */
           legends: {
             text: {
-              fontSize: 12,
+              fontSize: 15,
               fill: "#000000",
             },
           },
@@ -114,7 +114,7 @@ const Piechart = (props) => {
             translateY: 56, // chart와 Y 간격
             itemsSpacing: 0, // item간 간격
             itemWidth: 100, // item width
-            itemHeight: 18, // item height
+            itemHeight: 0, // item height
             itemDirection: "left-to-right", // item 내부에 그려지는 방향
             itemOpacity: 1, // item opacity
             symbolSize: 18, // symbol (색상 표기) 크기

@@ -1,13 +1,18 @@
-import React from "react";
+import { React, useEffect } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import Logo from "../assets/Logo.png";
 
+let currentPath = "";
 const Gnb = (props) => {
+  let location = useLocation();
+  useEffect(() => {
+    if(currentPath === location.pathname) window.location.reload();
+     
+    currentPath = location.pathname;
+  }, [location]);
   const isLoggedIn = !!localStorage.getItem("accessToken");
-
-  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
@@ -56,7 +61,6 @@ const LogoImg = styled.img`
 
 const GnbBtn = styled.div`
   display: inline-flex;
-  font-family: "NanumSquareNeo";
   font-size: 20px;
   margin-left: 15px;
   white-space: nowrap;

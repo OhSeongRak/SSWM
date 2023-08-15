@@ -14,14 +14,18 @@ import Checkbox from "@mui/material/Checkbox";
 import FadeMenu from "../components/SortMenu";
 import CheckboxChip from "../components/StudyRoom/HashTags";
 import GFooter from "../components/GFooter";
-
+import IconButton from "@mui/material/IconButton";
+import NorthIcon from '@mui/icons-material/North';
+import SouthIcon from '@mui/icons-material/South';
 const StudyRoom = (props) => {
-  const [selectedOption, setSelectedOption] = useState("인원순");
+  const [selectedOption, setSelectedOption] = useState("최근순");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [isPublic, setIsPublic] = useState(1);
-
-  
+  const [sorting, setSorting] = useState(true);
+  const handleAlarm = () => {
+    setSorting(!sorting)
+  }
 
   const handleSearchKeywordChange = (keyword) => {
     setSearchKeyword(keyword);
@@ -52,6 +56,15 @@ const StudyRoom = (props) => {
         <StudyRoomBtn>
           <SortBtn>
             <FadeMenu selectedOption={selectedOption} onMenuItemClick={handleMenuItemClick} />
+            <span>
+              <IconButton aria-label="sort" onClick={handleAlarm} color='primary' sx={{padding: 0}}>
+                { sorting ? (
+                  <NorthIcon />
+                ) : (
+                  <SouthIcon />
+                )}
+              </IconButton>
+            </span>
           </SortBtn>
           <FormGroup style={{ display: "inline-block" }}>
             <FormControlLabel
@@ -63,7 +76,7 @@ const StudyRoom = (props) => {
               control={<Checkbox onChange={handleShowPrivateRoomsChange} />}
               label="비공개 스터디룸 표시"
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               sx={{
                 "& .MuiFormControlLabel-label": {
                   fontFamily: "NanumSquareNeo",
@@ -71,7 +84,7 @@ const StudyRoom = (props) => {
               }}
               control={<Checkbox />}
               label="꽉 찬 스터디룸 표시"
-            />
+            /> */}
           </FormGroup>
         </StudyRoomBtn>
 
@@ -80,6 +93,7 @@ const StudyRoom = (props) => {
           searchKeyword={searchKeyword}
           selectedTags={selectedTags}
           isPublic={isPublic}
+          sorting={sorting}
         />
         <AddBtn>
           <Link to="/CreateStudyRoom">
@@ -96,7 +110,6 @@ const StudyRoom = (props) => {
 
 const ContainerWrap = styled.div`
   width: 100%;
-  font-family: "NanumSquareNeo";
 `;
 
 const CheckChip = styled.div`
@@ -106,7 +119,6 @@ const CheckChip = styled.div`
   margin-top: 40px;
   margin-left: 10%;
   margin-right: 10%;
-  font-family: "NanumSquareNeo";
 `;
 
 const StudyRoomBtn = styled.div`
@@ -115,7 +127,11 @@ const StudyRoomBtn = styled.div`
   margin: 0 80px;
   margin-top: 30px;
 `;
-const SortBtn = styled.div``;
+const SortBtn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 const AddBtn = styled.div`
   position: fixed;
   bottom: 1vw;

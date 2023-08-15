@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
-import RecipeReviewCard from "./StudyRoomItem2";
+import RecipeReviewCard from "./StudyRoomItem";
 import "./Style.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -17,14 +17,14 @@ const RoomList = styled.ul`
   gap: 1.8em;
 `;
 
-const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
+const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic, sorting }) => {
   const [studyrooms, setStudyrooms] = useState([]);
   const [ref] = useInView();
   const token = JSON.parse(localStorage.getItem("accessToken"));
 
   const data = {
     "sortBy" : option === "인원순" ? "USER_NUM" : option === "최근순" ? "CREATED" : "STUDY_TIME", // 공부시간(STUDY_TIME), 인원(USER_NUM), 생성시간(CREATED), 
-    "orderBy" : "DESC", // ASC
+    "orderBy" : sorting === true ? "ASC" : "DESC",
     "searchKeyword" : searchKeyword, // 방제목, 방아이디
     "tagNames" : selectedTags,
     "isPublic" : isPublic,
@@ -44,7 +44,8 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic }) => {
         // 오류 처리
         console.log(error);
       });
-  }, [option, searchKeyword, selectedTags, isPublic,token]);
+      // eslint-disable-next-line
+  }, [option, searchKeyword, selectedTags, isPublic, sorting, token]);
 
   console.log(studyrooms);
   return (

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 
 const StudyRoomMemberTime = ({studyAvgTime, maxAvgTime}) => {
-  console.log(studyAvgTime);
   return (
     <ContainerWrap>
       <TimeWrap>
@@ -43,7 +42,6 @@ const TimeWrap = styled.div`
   width: 80%;
   height: 40%;
   gap: 1vw;
-  font-family: "NanumSquareNeo";  
 `
 const TimeTitle = styled.div`
   font-size: 12px;

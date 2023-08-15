@@ -17,6 +17,9 @@ const EditInfo = () => {
   const [users, setUsers] = useState([]);
   const [nickName, setNickName] = useState("");
   const [checkedNickName, setCheckedNickName] = useState("");
+  const [originNickName, setOriginNickName] = useState("");
+  const [imageSrc, setImage] = useState();
+
   const navigate = useNavigate();
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   useEffect(() => {
@@ -28,6 +31,9 @@ const EditInfo = () => {
       })
       .then((response) => {
         setUsers(response.data);
+        setImage(`${process.env.REACT_APP_IMAGE_URL}/` + response.data.image);
+        setNickName(response.data.nickname);
+        setOriginNickName(response.data.nickname);
         console.log(response.data); 
       })
       .catch((error) => {
@@ -35,16 +41,12 @@ const EditInfo = () => {
       });
        // eslint-disable-next-line
     }, []);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const [isExist, setIsExist] = useState(false);
-
-  const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
-  console.log("이미지경로", imageUrl)
-  const [imageSrc, setImage] = useState(imageUrl);
-
   const imageUp = useRef();
   const onClickImage = () => {
     imageUp.current.click();
@@ -107,7 +109,7 @@ const EditInfo = () => {
       .catch((error) => {
         // 오류 처리
         console.log(error);
-        alert("닉네임 확인 중 오류가 발생했습니다.");
+        alert("닉네임은 빈칸이 될 수 없습니다.");
         return true;
       });
   };
@@ -119,7 +121,7 @@ const EditInfo = () => {
     console.log("nickName :" + nickName);
     console.log("checkedNickName :" + checkedNickName);
     // 닉네임 중복확인
-    if (isExist || nickName !== checkedNickName) {
+    if (originNickName !== nickName && (isExist || nickName !== checkedNickName)) {
       alert("닉네임의 중복 확인이 필요합니다.");
       return;
     }
@@ -154,9 +156,15 @@ const EditInfo = () => {
     })
     .then((response) => {
       console.log(response.data);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      openSnackBar(); // Open the CustomSnackBar after closing the modal
+      window.location.replace("/Login");
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error.response.data);
+      closeSnackBar();
+      alert("호스트는 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
     }, []);
   };
   // Snackbar
@@ -168,7 +176,6 @@ const EditInfo = () => {
   const closeModalEvent = () => {
     setIsModalOpen(false);
     DeleteUser()
-    openSnackBar(); // Open the CustomSnackBar after closing the modal
   };
   console.log('수정페이지', accessToken)
   return (
@@ -204,8 +211,9 @@ const EditInfo = () => {
                   id="filled-hidden-label-normal"
                   variant="filled"
                   onChange={handleNameChange}
+                  value = {nickName}
                 />
-                <Button variant="outlined" color="error" onClick={checkNickName}>
+                <Button variant="outlined" color="error" onClick={checkNickName} >
                   중복확인
                 </Button>
               </EditRightContent>
@@ -293,7 +301,6 @@ const EditLeftContent = styled.div`
   border-right: 1px solid black;
   border-bottom: 1px solid black;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
 `;
 const EditRightContent = styled.div`
   display: flex;
@@ -304,7 +311,6 @@ const EditRightContent = styled.div`
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   font-size: 20px;
-  font-family: "NanumSquareNeo";
   gap: 2vw;
 `;
 const BtnWrap = styled.div`
@@ -335,6 +341,5 @@ const ButtonCustom = styled.button`
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   margin-left: 1vw;
-  font-family: "NanumSquareNeo";
 `;
 export default EditInfo;

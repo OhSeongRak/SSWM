@@ -3,8 +3,7 @@ import "./index.css";
 import styled from "styled-components";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route ,Navigate} from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import SignUpName from "./pages/SignUpName";
 import Login from "./pages/Login";
@@ -32,7 +31,6 @@ function App() {
     // 로그인 안했을 때
     if (accessToken === null) {
       setIsTokenValid(accessToken);
-      console.log("여기로안옴?");
       return;
     }
 
@@ -91,30 +89,39 @@ function App() {
     <ContentWrap>
       <BrowserRouter>
         <Routes>
+          <Route path="/SignUp" element={<SignUp />}></Route>
+          <Route path="/Login" element={<Login />}></Route>
           <Route path="/kakao/sign" element={<KakaoSignCallback />} />
           <Route path="/kakao/login" element={<KakaoLoginCallback />} />
-          <Route path="/" element={<Login />}></Route>
-          <Route
-            path="/StudyRoom"
-            element={isTokenValid ? <StudyRoom /> : <Login />}
-          ></Route>
-          <Route path="/SignUp" element={<SignUp />}></Route>
           <Route path="/SignUpName" element={<SignUpName />}></Route>
-          <Route path="/Login" element={<Login />}></Route>
-          <Route
-            path="/MyPage"
-            element={isTokenValid ? <MyPage /> : <Login />}
-          ></Route>
-          <Route
-            path="/EditInfo"
-            element={isTokenValid ? <EditInfo /> : <Login />}
-          ></Route>
-          <Route path="/CreateStudyRoom" element={isTokenValid ? <CreateStudyRoom /> : <Login />}></Route>
-          {/* 아래 Admin은 방장일 때만 접속가능하게 하나 만들어줘야할듯? */}
-          <Route path="/StudyRoomAdmin/:studyroomId" element={isTokenValid ? <StudyRoomAdmin /> : <Login />}></Route>
-          <Route path="/StudyRoomMember/:studyroomId" element={isTokenValid ? <StudyRoomMember /> : <Login />}></Route>
-          <Route path="/LiveRoom/:studyroomId" element={isTokenValid ? <LiveRoom /> : <Login />}></Route>
-          <Route path="/Stretching" element={isTokenValid ? <Stretching /> : <Login />}></Route>
+          
+          {isTokenValid?
+            <Route path="/" element={<StudyRoom /> }></Route>
+              :<Route path="*" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?
+            <Route path="/StudyRoom" element={<StudyRoom />}></Route>
+              :<Route path="*" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?
+            <Route path="/MyPage" element={<MyPage />}></Route>
+              :<Route path="*" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?
+            <Route path="/EditInfo" element={<EditInfo />}></Route>
+              :<Route path="*" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?  
+            <Route path="/CreateStudyRoom" element={<CreateStudyRoom />}></Route>
+             :<Route path="*" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?
+            <Route path="/StudyRoomAdmin/:studyroomId" element={<StudyRoomAdmin />}></Route>
+            :<Route path="*" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?  
+            <Route path="/StudyRoomMember/:studyroomId" element={<StudyRoomMember /> }></Route>
+            :<Route path="*" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?    
+            <Route path="/LiveRoom/:studyroomId" element={<LiveRoom />}></Route>
+            :<Route path="*" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?     
+            <Route path="/Stretching" element={<Stretching /> }></Route>
+            :<Route path="*" element={<Navigate to="/login" replace />} />}
         </Routes>
       </BrowserRouter>
     </ContentWrap>

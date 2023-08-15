@@ -19,25 +19,23 @@ import Typography from "@mui/material/Typography";
 import { Snackbar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import GFooter from "../components/GFooter";
+import { useNavigate } from 'react-router-dom';
 
-function formatTime(totalSeconds) {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  
-  const formattedHours = hours.toString().padStart(2, "0");
-  const formattedMinutes = minutes.toString().padStart(2, "0");
-  const formattedSeconds = seconds.toString().padStart(2, "0");
-
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+const formatTime = (seconds) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 }
 
 const StudyRoomMember = () => {
+  const navigate = useNavigate();
+
   const { studyroomId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [studyroom, setStudyroom] = useState([]);
   const [studyAvgTime, setStudyAvgTime] = useState("");
   const [maxRestTime, setMaxRestTime] = useState("");
+  const [isHost, setIsHost] = useState(false);
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -47,12 +45,20 @@ const StudyRoomMember = () => {
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
-  const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
 
   const closeModalEvent = () => {
     setIsModalOpen(false);
-    openSnackBar(); // Open the CustomSnackBar after closing the modal
+    axios.put(`/api/studyrooms/${studyroomId}/leave`,{},{
+      headers:{
+          Authorization : accessToken
+      }
+    }).then((response) => {
+      console.log(response);
+      navigate("/StudyRoom")
+    }).catch((error)=>{
+      console.log(error);
+    });
   };
 
   const handleenterAdmin = () => {
@@ -68,7 +74,6 @@ const StudyRoomMember = () => {
             Authorization: accessToken,
           },
         });
-        console.log("create daily log!!!!!!!!!!!!");
 
         // 스터디룸 조회
         const studyroomResponse = await axios.get(`/api/studyrooms/${studyroomId}`, {
@@ -76,10 +81,19 @@ const StudyRoomMember = () => {
             Authorization: accessToken,
           },
         });
-        console.log("studyroomResponse:", studyroomResponse);
+        console.log("studyroomResponse", studyroomResponse);
         setStudyroom(studyroomResponse.data);
         setStudyAvgTime(formatTime(studyroomResponse.data.studyAvgTime));
         setMaxRestTime(formatTime(studyroomResponse.data.maxRestTime));
+
+        axios.get(`/api/studyrooms/${studyroomId}/isHost`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        })
+        .then((response) => {
+          setIsHost(response.data);
+        })
 
         } catch (error) {
           console.log(error);
@@ -99,13 +113,13 @@ const StudyRoomMember = () => {
             <Background>
               {studyroom.name}
             </Background>
-            <HeaderBtnWrap>
-              <Link to="/StudyRoomAdmin" style={{ textDecoration: "none" }}>
+            {isHost && (
+              <HeaderBtnWrap>
                 <IconButton onClick={handleenterAdmin} aria-label="setting" size="large">
                   <SettingsIcon fontSize="inherit" />
                 </IconButton>
-              </Link>
-            </HeaderBtnWrap>
+              </HeaderBtnWrap>
+            )}
           </HeaderTitle>
         </HeaderWrap>
         <ContentWrap>
@@ -122,7 +136,7 @@ const StudyRoomMember = () => {
 
               {/* 공부,휴식 시간 */}
               <SideBanner>
-                <Link to={`/LiveRoom/${studyroomId}`} style={{ textDecoration: "none" }}>
+                <Link to={`/LiveRoom/${studyroomId}`} target="_blank" style={{ textDecoration: "none" }}>
                   <Button variant="contained" 
                     sx={{
                       m : 1,
@@ -148,13 +162,15 @@ const StudyRoomMember = () => {
         </ContentWrap>
         <ContentWrap>
                {/* 스터디룸 탈퇴하기 */}
-               <Button variant="contained" color="success" onClick={openModal}>
-                스터디룸 탈퇴하기
-              </Button>
+               {!isHost && (
+                <Button variant="contained" color="success" onClick={openModal}>
+                  스터디룸 탈퇴하기
+                </Button>
+              )}
               <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
                 <Box>
                   <Typography variant="h6" component="h2">
-                    삭제 시 더 이상 해당 스터디룸을 이용하지 못합니다.
+                    탈퇴 시 더 이상 해당 스터디룸을 이용하지 못합니다.
                     <br />
                     정말 삭제하시겠습니까?
                   </Typography>
@@ -162,6 +178,7 @@ const StudyRoomMember = () => {
                   <Button onClick={() => setIsModalOpen(false)}>취소</Button>
                 </Box>
               </CustomModal>
+              
               <Snackbar
                 open={isSnackBarOpen}
                 autoHideDuration={3000}
@@ -201,7 +218,6 @@ const HeaderTitle = styled.div`
   width: 80%;
   border-radius: 15px;
   font-size: 30px;
-  font-family: "NanumSquareNeo";
   
 `;
 const HeaderBtnWrap = styled.span`
