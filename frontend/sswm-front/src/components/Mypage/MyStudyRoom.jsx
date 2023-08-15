@@ -36,7 +36,7 @@ const MyStudyRoom = (props) => {
       <RoomListLayout ref={ref}>
       <RoomList>
         {studyrooms.map((studyroom) => (
-          <RecipeReviewCard key={studyroom.id} studyroom={studyroom} />
+          <RecipeReviewCard key={studyroom.id} studyroom={studyroom} isMyPage={true}/>
         ))}
       </RoomList>
     </RoomListLayout>

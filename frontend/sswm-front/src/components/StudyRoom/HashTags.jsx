@@ -43,7 +43,6 @@ export default function CheckboxChip({ onTagClick }) {
         id="fav-movie"
         mr={2}
       >
-        검색태그(최대3개)
       </Typography>
       <Box
         role="group"
@@ -67,10 +66,6 @@ export default function CheckboxChip({ onTagClick }) {
                 label={name}
                 checked={checked}
                 onChange={(event) => {
-                  if (selected.length > 2) {
-                    setSelected(selected.filter((n) => n !== name));
-                    event.target.checked = false;
-                  }
                   setSelected((names) =>
                     !event.target.checked ? names.filter((n) => n !== name) : [...names, name]
                   );

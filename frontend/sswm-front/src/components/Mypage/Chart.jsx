@@ -29,9 +29,9 @@ const Piechart = (props) => {
          * chart에 사용될 데이터
          */
         data={[
-          { id: "공부", value: studyExp },
-          { id: "휴식", value: restTimeExp },
-          { id: "스트레칭", value: stretchExp },
+          { id: "공부", value: Math.round(studyExp*100)/100 },
+          { id: "휴식", value: Math.round(restTimeExp*100)/100 },
+          { id: "스트레칭", value: Math.round(stretchExp*100)/100 },
         ]}
         /**
          * chart margin

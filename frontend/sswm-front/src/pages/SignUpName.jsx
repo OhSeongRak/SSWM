@@ -5,8 +5,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-import def from "../assets/dolphin.jpg";
-
 import axios from "axios";
 
 let formData = new FormData();
@@ -19,7 +17,7 @@ const SignUpName = () => {
 
   const [isExist, setIsExist] = useState(true);
 
-  const [imageSrc, setImage] = useState(def);
+  const [imageSrc, setImage] = useState('https://sswm-image.s3.ap-northeast-2.amazonaws.com/image/userDefault/fubao.jpg');
 
   const imageUp = useRef();
 
@@ -80,13 +78,12 @@ const SignUpName = () => {
           alert("사용 가능한 닉네임입니다.");
         }
         console.log("중복 확인" + response.data);
-        return response.data;
       })
       .catch((error) => {
         // 오류 처리
         console.log(error);
+        setIsExist(true);
         alert("닉네임은 빈칸이 될 수 없습니다.");
-        return true;
       });
   };
 
@@ -102,8 +99,8 @@ const SignUpName = () => {
       return;
     }
 
-    formData.append("nickname", nickName);
-
+    formData.append("nickname", encodeURIComponent(nickName));
+    
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios

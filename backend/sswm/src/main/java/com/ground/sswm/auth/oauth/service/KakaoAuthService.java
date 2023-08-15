@@ -29,8 +29,10 @@ public class KakaoAuthService implements SocialAuthService {
     private String KAKAO_USER_INFO_REQUEST_URL = "https://kapi.kakao.com/v2/user/me";
     private String CLIENT_ID = "a8cdfb7c6e1ce33857c1ff4df66c348c";
     private String CLIENT_SECRET = "ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV";
-    private String REDIRECT_URI_SIGN = "https://i9a206.p.ssafy.io/kakao/sign";
-    private String REDIRECT_URI_LOGIN = "https://i9a206.p.ssafy.io/kakao/login";
+//    private String REDIRECT_URI_SIGN = "https://i9a206.p.ssafy.io/kakao/sign";
+    private String REDIRECT_URI_SIGN = "http://localhost:3000/kakao/sign";
+//    private String REDIRECT_URI_LOGIN = "https://i9a206.p.ssafy.io/kakao/login";
+    private String REDIRECT_URI_LOGIN = "http://localhost:3000/kakao/login";
 
     @Autowired
     private RestTemplate restTemplate;
