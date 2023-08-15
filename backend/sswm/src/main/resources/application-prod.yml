@@ -52,6 +52,7 @@ auth:
       - email
       - profile
     token-req-url : https://oauth2.googleapis.com
+    redirect-url: https://i9a206.p.ssafy.io
   kakao:
     client-id: a8cdfb7c6e1ce33857c1ff4df66c348c
     client-secret: ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV
@@ -59,7 +60,8 @@ auth:
       - profile_nickname
       - profile_image
       - account_email
-  redirect-url: http://i9a206.p.ssafy.io:3000
+    redirect-url-sign: https://i9a206.p.ssafy.io/kakao/sign
+    redirect-url-login: https://i9a206.p.ssafy.io/kakao/login
 
 logging:
   level:

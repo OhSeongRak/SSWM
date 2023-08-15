@@ -17,4 +17,4 @@ services:
     container_name: sswm-redis-container
     restart: always
     ports:
-      - 6379:6379
+      - 6380:6379
