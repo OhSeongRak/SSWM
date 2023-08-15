@@ -3,13 +3,13 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:mysql://localhost:3306/sswm
+    url: jdbc:mysql://localhost:3316/sswm
     username: root
     password: root
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
 
     properties:
       hibernate:
@@ -58,6 +58,8 @@ auth:
       - profile_nickname
       - profile_image
       - account_email
+    token-req-url : https://kauth.kakao.com/oauth/token
+    user-info-request-url: https://kapi.kakao.com/v2/user/me
     redirect-url-sign: http://localhost:3000/kakao/sign
     redirect-url-login: http://localhost:3000/kakao/login
 
