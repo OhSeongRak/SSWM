@@ -28,6 +28,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -159,15 +160,23 @@ public class DailyLogServiceImpl implements DailyLogService {
         LocalTime currentTime = LocalTime.now();
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
-        log.debug("now : " + now);
         int dayBefore = (hour < 4) ? 1 : 0;
         long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
-        for (long day : days) {
-            log.debug("days : " + day);
-        }
-        log.debug("date :" + days[0]);
 
         return DailyLogDto.from(
             dailyLogRepository.findAllByUserIdAndStudyroomIdAndDate(userId, studyroomId, days[0]));
+    }
+
+    @Override
+    @Transactional
+    public void setStretchingScore(Long userId,Long studyroomId, int score) {
+        LocalTime currentTime = LocalTime.now();
+        int hour = currentTime.getHour();
+        long now = UnixTimeUtil.getCurrentUnixTime();
+        int dayBefore = (hour < 4) ? 1 : 0;
+        long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
+
+        DailyLog dailyLog = dailyLogRepository.findAllByUserIdAndStudyroomIdAndDate(userId, studyroomId, days[0]);
+        dailyLog.setStretchScore(dailyLog.getStretchScore() + score);
     }
 }
