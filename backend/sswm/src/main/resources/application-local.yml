@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3316/sswm
     username: root
-    password: ssjjmt206
+    password: root
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
@@ -21,7 +21,7 @@ spring:
         max-request-size: 50MB # 요청한 파일 전체의 크기
   redis:
     host: localhost
-    port: 6379
+    port: 6380
     password: root
 
 # jwt 설정
@@ -50,6 +50,7 @@ auth:
       - email
       - profile
     token-req-url : https://oauth2.googleapis.com
+    redirect-url: http://localhost:3000
   kakao:
     client-id: a8cdfb7c6e1ce33857c1ff4df66c348c
     client-secret: ViVXmJMU0xE6pgqJOTmdc8drLdj3n5BV
@@ -57,7 +58,10 @@ auth:
       - profile_nickname
       - profile_image
       - account_email
-  redirect-url: http://localhost:3000
+    token-req-url : https://kauth.kakao.com/oauth/token
+    user-info-request-url: https://kapi.kakao.com/v2/user/me
+    redirect-url-sign: http://localhost:3000/kakao/sign
+    redirect-url-login: http://localhost:3000/kakao/login
 
 logging:
   level:
