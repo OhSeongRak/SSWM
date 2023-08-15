@@ -4,6 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route ,Navigate} from "react-router-dom";
+import NotFound from "./pages/NotFound";
 import SignUp from "./pages/SignUp";
 import SignUpName from "./pages/SignUpName";
 import Login from "./pages/Login";
@@ -17,7 +18,6 @@ import LiveRoom from "./pages/LiveRoom";
 import Stretching from "./pages/Stretching";
 import KakaoSignCallback from "./shared/KakaoSignCallback";
 import KakaoLoginCallback from "./shared/KakaoLoginCallback";
-
 
 //import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
 
@@ -93,36 +93,39 @@ function App() {
           <Route path="/Login" element={<Login />}></Route>
           <Route path="/kakao/sign" element={<KakaoSignCallback />} />
           <Route path="/kakao/login" element={<KakaoLoginCallback />} />
-          {isTokenValid?
-            <Route path="/SignUpName" element={<SignUpName />}></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+          <Route path="/SignUpName" element={<SignUpName />}></Route>
+          
+
           {isTokenValid?
             <Route path="/" element={<StudyRoom /> }></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+              :<Route path="/" element={<Navigate to="/login" replace />} />}
           {isTokenValid?
             <Route path="/StudyRoom" element={<StudyRoom />}></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+              :<Route path="/StudyRoom" element={<Navigate to="/login" replace />} />}
           {isTokenValid?
             <Route path="/MyPage" element={<MyPage />}></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+              :<Route path="/MyPage" element={<Navigate to="/login" replace />} />}
           {isTokenValid?
             <Route path="/EditInfo" element={<EditInfo />}></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+              :<Route path="/EditInfo" element={<Navigate to="/login" replace />} />}
           {isTokenValid?  
             <Route path="/CreateStudyRoom" element={<CreateStudyRoom />}></Route>
-             :<Route path="*" element={<Navigate to="/login" replace />} />}
+             :<Route path="/CreateStudyRoom" element={<Navigate to="/login" replace />} />}
           {isTokenValid?
             <Route path="/StudyRoomAdmin/:studyroomId" element={<StudyRoomAdmin />}></Route>
-            :<Route path="*" element={<Navigate to="/login" replace />} />}
+            :<Route path="/StudyRoomAdmin/:studyroomId" element={<Navigate to="/login" replace />} />}
           {isTokenValid?  
             <Route path="/StudyRoomMember/:studyroomId" element={<StudyRoomMember /> }></Route>
-            :<Route path="*" element={<Navigate to="/login" replace />} />}
+            :<Route path="/StudyRoomMember/:studyroomId" element={<Navigate to="/login" replace />} />}
           {isTokenValid?    
             <Route path="/LiveRoom/:studyroomId" element={<LiveRoom />}></Route>
-            :<Route path="*" element={<Navigate to="/login" replace />} />}
+            :<Route path="/LiveRoom/:studyroomId" element={<Navigate to="/login" replace />} />}
           {isTokenValid?     
             <Route path="/Stretching" element={<Stretching /> }></Route>
-            :<Route path="*" element={<Navigate to="/login" replace />} />}
+            :<Route path="/Stretching" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?     
+            <Route path="/*" element={<NotFound /> }></Route>
+            :<Route path="/*" element={<NotFound /> } />}
         </Routes>
       </BrowserRouter>
     </ContentWrap>
