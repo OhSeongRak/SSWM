@@ -8,8 +8,8 @@ let currentPath = "";
 const Gnb = (props) => {
   let location = useLocation();
   useEffect(() => {
-    if(currentPath === location.pathname) window.location.reload();
-     
+    if (currentPath === location.pathname) window.location.reload();
+
     currentPath = location.pathname;
   }, [location]);
   const isLoggedIn = !!localStorage.getItem("accessToken");
@@ -27,10 +27,7 @@ const Gnb = (props) => {
       <GnbBtn>
         {isLoggedIn ? (
           <>
-            <Link
-              to="/MyPage"
-              style={{ textDecoration: "none", color: "black" }}
-            >
+            <Link to="/MyPage" style={{ textDecoration: "none", color: "black" }}>
               <GnbBtn>마이페이지</GnbBtn>
             </Link>
             <GnbBtn onClick={handleLogout} style={{ cursor: "pointer" }}>
@@ -49,15 +46,16 @@ const Gnb = (props) => {
 
 const Header = styled.header`
   display: flex;
+  margin: 40px 80px;
   justify-content: space-between;
   align-items: center;
   height: 50px;
 `;
 
 const LogoImg = styled.img`
-  width: 10%;
-  height: 80%;
-`
+  width: 20%;
+  height: 70%;
+`;
 
 const GnbBtn = styled.div`
   display: inline-flex;

@@ -15,8 +15,8 @@ import FadeMenu from "../components/SortMenu";
 import CheckboxChip from "../components/StudyRoom/HashTags";
 import GFooter from "../components/GFooter";
 import IconButton from "@mui/material/IconButton";
-import NorthIcon from '@mui/icons-material/North';
-import SouthIcon from '@mui/icons-material/South';
+import NorthIcon from "@mui/icons-material/North";
+import SouthIcon from "@mui/icons-material/South";
 const StudyRoom = (props) => {
   const [selectedOption, setSelectedOption] = useState("최근순");
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -24,8 +24,8 @@ const StudyRoom = (props) => {
   const [isPublic, setIsPublic] = useState(1);
   const [sorting, setSorting] = useState(true);
   const handleAlarm = () => {
-    setSorting(!sorting)
-  }
+    setSorting(!sorting);
+  };
 
   const handleSearchKeywordChange = (keyword) => {
     setSearchKeyword(keyword);
@@ -57,12 +57,13 @@ const StudyRoom = (props) => {
           <SortBtn>
             <FadeMenu selectedOption={selectedOption} onMenuItemClick={handleMenuItemClick} />
             <span>
-              <IconButton aria-label="sort" onClick={handleAlarm} color='primary' sx={{padding: 0}}>
-                { sorting ? (
-                  <NorthIcon />
-                ) : (
-                  <SouthIcon />
-                )}
+              <IconButton
+                aria-label="sort"
+                onClick={handleAlarm}
+                color="primary"
+                sx={{ padding: 0 }}
+              >
+                {sorting ? <NorthIcon /> : <SouthIcon />}
               </IconButton>
             </span>
           </SortBtn>
@@ -103,7 +104,7 @@ const StudyRoom = (props) => {
           </Link>
         </AddBtn>
       </ContainerWrap>
-      <GFooter/>
+      <GFooter />
     </div>
   );
 };
@@ -134,8 +135,8 @@ const SortBtn = styled.div`
 `;
 const AddBtn = styled.div`
   position: fixed;
-  bottom: 1vw;
-  right: 1vw;
+  bottom: 2.5vw;
+  right: 2.5vw;
 `;
 
 export default StudyRoom;
