@@ -103,7 +103,7 @@ const CreateStudyRoom = () => {
     setCheckedStudyroomName(studyroomDto.name);
 
     axios
-      .get("/api/studyrooms/exists", {
+      .get(`/api/studyrooms/exists`, {
         headers: {
           Authorization: accessToken,
         },
@@ -217,7 +217,7 @@ const CreateStudyRoom = () => {
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .post("/api/studyrooms", formData, {
+      .post(`/api/studyrooms`, formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",

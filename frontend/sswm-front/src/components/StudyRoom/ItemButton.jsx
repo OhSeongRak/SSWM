@@ -17,7 +17,7 @@ const CardHoverButton = (props) => {
     // 비공개 방일 때
     if (studyroom.public === false) {
       // 입장 코드 확인
-      const isEnterCodeMatch = await axios.get("/api/studyrooms/enterCode", {
+      const isEnterCodeMatch = await axios.get(`/api/studyrooms/enterCode`, {
         headers: {
           Authorization: accessToken,
         },

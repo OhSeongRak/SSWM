@@ -10,6 +10,8 @@ import com.ground.sswm.event.domain.StudyEventType;
 import com.ground.sswm.event.domain.dto.StudyEventDto;
 import com.ground.sswm.event.exception.BadEventRequestException;
 import com.ground.sswm.event.repository.StudyEventRepository;
+import com.ground.sswm.studyroom.model.Studyroom;
+import com.ground.sswm.studyroom.repository.StudyroomRepository;
 import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,15 @@ public class StudyEventServiceImpl implements StudyEventService {
 
     private final StudyEventRepository studyEventRepository;
     private final DailyLogRepository dailyLogRepository;
+    private final StudyroomRepository studyroomRepository;
 
-    //    private final UserRepository userRepository;
-//    private final StudyroomRepository studyroomRepository;
     @Override
     public void addEventLog(Long userId, Long eventOccurTime, StudyEventDto studyEventDto,
         int dayBefore) {
+        Studyroom studyroom = studyroomRepository.findById(studyEventDto.getStudyroomId()).get();
+        long maxRestTime = studyroom.getMaxRestTime();
+        System.out.println("maxRestTime = " + maxRestTime);
+
         if (studyEventDto.getStatus() == StudyEventStatus.OFF) { // 이벤트 종료 요청
             Long prevTime = studyEventRepository.findById(
                 keyBuilder(userId, studyEventDto.getStudyroomId(), studyEventDto.getType()));
@@ -45,9 +50,9 @@ public class StudyEventServiceImpl implements StudyEventService {
                     if (studyEventDto.getType() == StudyEventType.STUDY) {
                         dailyLog.setStudyTime(duration + dailyLog.getStudyTime());
                     } else if (studyEventDto.getType() == StudyEventType.REST) {
-                        dailyLog.setRestTime(duration + dailyLog.getRestTime());
+                        dailyLog.setRestTime(Long.min(maxRestTime, duration + dailyLog.getRestTime()));
                     } else if (studyEventDto.getType() == StudyEventType.STRETCH) {
-                        dailyLog.setRestTime(duration + dailyLog.getRestTime());
+                        dailyLog.setRestTime(Long.min(maxRestTime, duration + dailyLog.getRestTime()));
                     }
                     // 현재 날짜의 시작 시간으로 설정
                     dailyLog.setDate(

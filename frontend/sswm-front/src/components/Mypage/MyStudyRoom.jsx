@@ -12,7 +12,7 @@ const MyStudyRoom = (props) => {
   console.log(accessToken);
   useEffect(() => {
     axios
-      .get("/api/studyrooms", {
+      .get(`/api/studyrooms`, {
         headers: {
           Authorization: accessToken,
         },

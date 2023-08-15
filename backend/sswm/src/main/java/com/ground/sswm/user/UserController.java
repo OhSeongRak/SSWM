@@ -7,7 +7,6 @@ import com.ground.sswm.user.exception.NicknameAlreadyExistException;
 import com.ground.sswm.user.model.dto.UserDto;
 import com.ground.sswm.user.model.dto.UserResDto;
 import com.ground.sswm.user.service.UserService;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,7 +69,6 @@ public class UserController {
 
         Long id = authService.getUserIdFromToken(token);
 
-
         String filePath = null;
         if (fileType != null && !fileType.isBlank() && multipartFile != null
             && !multipartFile.isEmpty()) {
@@ -87,20 +84,26 @@ public class UserController {
 
     // 닉네임 중복 확인
     @GetMapping("/exists")
-    public ResponseEntity<Boolean> exists(@RequestHeader("Authorization") String token, @RequestParam String nickname) {
+    public ResponseEntity<Boolean> exists(@RequestHeader("Authorization") String token,
+        @RequestParam String nickname) {
         log.debug("닉네임 : " + nickname);
-        Long id = authService.getUserIdFromToken(token);
-        boolean isExist = userService.exists(nickname,id);
+        Long userId = authService.getUserIdFromToken(token);
+        boolean isExist = userService.exists(nickname, userId);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestHeader("Authorization") String token) {
         Map<String, Object> claims = authService.getClaimsFromToken(token);
-        long userId = Long.valueOf(claims.get("id").toString());
+        Long userId = Long.valueOf(claims.get("id").toString());
 
+        // todo
+        // 방장인지 확인
+        // userStudyRoom is_deleted=1
+        // 해당 studyroom의 usernum -1
         userService.delete(userId);
-        return new ResponseEntity<>("", HttpStatus.OK);
+
+        return new ResponseEntity<>("삭제 완료", HttpStatus.OK);
     }
 
 

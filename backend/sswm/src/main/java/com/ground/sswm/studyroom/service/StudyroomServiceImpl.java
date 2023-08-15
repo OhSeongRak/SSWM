@@ -1,6 +1,5 @@
 package com.ground.sswm.studyroom.service;
 
-import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.model.StudyroomTag;
 import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
@@ -210,17 +209,23 @@ public class StudyroomServiceImpl implements StudyroomService {
     @Transactional
     public void delete(Long studyroomId) {
         Studyroom studyroom = studyroomRepository.findById(studyroomId).get();
+        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByStudyroomId(
+            studyroomId);
         studyroom.setDeleted(true);
+
+        for (UserStudyroom userStudyroom : userStudyrooms) {
+            userStudyroom.setDeleted(true);
+        }
     }
 
     @Override
     public boolean exists(Long studyroomId, String name) {
         Studyroom studyroom = studyroomRepository.findByName(name).orElse(null);
-        if(studyroom == null){
+        if (studyroom == null) {
             return false;
         }
-        if(studyroomId!=null){
-            return studyroom.getId()!=studyroomId;
+        if (studyroomId != null) {
+            return studyroom.getId() != studyroomId;
 
         }
         return true;

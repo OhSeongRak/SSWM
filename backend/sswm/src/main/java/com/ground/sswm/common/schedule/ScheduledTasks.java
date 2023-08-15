@@ -1,6 +1,8 @@
 package com.ground.sswm.common.schedule;
 
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,9 +16,10 @@ public class ScheduledTasks {
     private final RedisToMySQLService redisToMySQLService;
     private final MySQLSelfService mySQLSelfService;
 
-    @Scheduled(cron = "0 0/30 * * * ?") // Runs every 30 minutes
+//    @Scheduled(cron = "0 0/30 * * * ?") // Runs every 30 minutes
+    @Scheduled(cron = "0 0/30 * * * ?") // Runs every 1 minutes
     public void updateRedisDataToMySQL() {
-        LocalTime currentTime = LocalTime.now();
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         int minute = currentTime.getMinute();
 

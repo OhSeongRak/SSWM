@@ -60,7 +60,7 @@ const SignUpName = () => {
     setCheckedNickName(nickName);
 
     axios
-      .get("/api/users/exists", {
+      .get(`/api/users/exists`, {
         headers: {
           Authorization: accessToken,
         },
@@ -105,7 +105,7 @@ const SignUpName = () => {
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .put("/api/users", formData, {
+      .put(`/api/users`, formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",
