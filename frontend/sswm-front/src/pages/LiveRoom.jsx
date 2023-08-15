@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // import { Link } from 'react-router-dom';
 
+import Gnb from "../components/Gnb";
 
 //import LiveRoomSnackbar from "../components/LiveRoom/LiveRoomSnackbar";
 //import LiveRoomFooter from "../components/LiveRoom/LiveRoomFooter";
@@ -23,7 +24,7 @@ const LiveRoom = () => {
   useEffect(() => {
     const fetchStudyroom = async () => {
       try {
-        const response = await axios.get(`/api/studyrooms/${studyroomId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`, {
           headers: {
             Authorization: accessToken,
           },
@@ -58,7 +59,7 @@ const ContainerWrap = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height:90vh;
+  height: 100%;
 `
 // const HeaderWrap = styled.div`
 //   display: flex;
@@ -71,8 +72,8 @@ const ContentWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  height: 80vh;
+  width: 100%;
+  height: 100%;
 `
 // const ContentLiveView = styled.div`
 //  display: flex;

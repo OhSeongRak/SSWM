@@ -22,8 +22,8 @@ const GoogleSignIn = () => {
       console.log(codeResponse);
 
       await Axios.post(
-        // "https://i9a206.p.ssafy.io/api/auth/google/signin",
-        "/api/auth/google/signin",
+        // `${process.env.REACT_APP_BASE_URL}/api/auth/google/signin`,
+        `${process.env.REACT_APP_BASE_URL}/api/auth/google/signin`,
         JSON.stringify(codeResponse),
         config
       )

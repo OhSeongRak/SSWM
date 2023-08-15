@@ -32,7 +32,7 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic, sorting 
   // console.log(token);
   useEffect(() => {
     axios
-      .post("/api/studyrooms/list", data, {
+      .post(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/list`, data, {
         headers: {
           Authorization: token,
         },

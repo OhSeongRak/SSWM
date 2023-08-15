@@ -4,6 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route ,Navigate} from "react-router-dom";
+import NotFound from "./pages/NotFound";
 import SignUp from "./pages/SignUp";
 import SignUpName from "./pages/SignUpName";
 import Login from "./pages/Login";
@@ -17,7 +18,6 @@ import LiveRoom from "./pages/LiveRoom";
 import Stretching from "./pages/Stretching";
 import KakaoSignCallback from "./shared/KakaoSignCallback";
 import KakaoLoginCallback from "./shared/KakaoLoginCallback";
-import NotFound from "./pages/NotFound";
 
 //import VideoRoomComponent from './components/OpenVidu/VideoRoomComponent';
 
@@ -35,7 +35,7 @@ function App() {
     }
 
     axios
-      .post("/api/auth/access-token", accessToken, {
+      .post(`${process.env.REACT_APP_BASE_URL}/api/auth/access-token`, accessToken, {
         headers: {
           Authorization: accessToken,
         },
@@ -48,7 +48,7 @@ function App() {
         // 로그인 했지만 access 토큰 만료 재발급 필요
         console.error("Access 토큰 만료: ", error);
         axios
-          .post("/api/auth/refresh-access-token", refreshToken, {
+          .post(`${process.env.REACT_APP_BASE_URL}/api/auth/refresh-access-token`, refreshToken, {
             headers: {
               Authorization: refreshToken,
             },
@@ -95,35 +95,37 @@ function App() {
           <Route path="/kakao/login" element={<KakaoLoginCallback />} />
           <Route path="/SignUpName" element={<SignUpName />}></Route>
           
+
           {isTokenValid?
             <Route path="/" element={<StudyRoom /> }></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+              :<Route path="/" element={<Navigate to="/login" replace />} />}
           {isTokenValid?
             <Route path="/StudyRoom" element={<StudyRoom />}></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+              :<Route path="/StudyRoom" element={<Navigate to="/login" replace />} />}
           {isTokenValid?
             <Route path="/MyPage" element={<MyPage />}></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+              :<Route path="/MyPage" element={<Navigate to="/login" replace />} />}
           {isTokenValid?
             <Route path="/EditInfo" element={<EditInfo />}></Route>
-              :<Route path="*" element={<Navigate to="/login" replace />} />}
+              :<Route path="/EditInfo" element={<Navigate to="/login" replace />} />}
           {isTokenValid?  
             <Route path="/CreateStudyRoom" element={<CreateStudyRoom />}></Route>
-             :<Route path="*" element={<Navigate to="/login" replace />} />}
+             :<Route path="/CreateStudyRoom" element={<Navigate to="/login" replace />} />}
           {isTokenValid?
             <Route path="/StudyRoomAdmin/:studyroomId" element={<StudyRoomAdmin />}></Route>
-            :<Route path="*" element={<Navigate to="/login" replace />} />}
+            :<Route path="/StudyRoomAdmin/:studyroomId" element={<Navigate to="/login" replace />} />}
           {isTokenValid?  
             <Route path="/StudyRoomMember/:studyroomId" element={<StudyRoomMember /> }></Route>
-            :<Route path="*" element={<Navigate to="/login" replace />} />}
+            :<Route path="/StudyRoomMember/:studyroomId" element={<Navigate to="/login" replace />} />}
           {isTokenValid?    
             <Route path="/LiveRoom/:studyroomId" element={<LiveRoom />}></Route>
-            :<Route path="*" element={<Navigate to="/login" replace />} />}
+            :<Route path="/LiveRoom/:studyroomId" element={<Navigate to="/login" replace />} />}
           {isTokenValid?     
             <Route path="/Stretching" element={<Stretching /> }></Route>
-            :<Route path="*" element={<Navigate to="/login" replace />} />}
-          <Route path={"*"} component={NotFound}/>
-
+            :<Route path="/Stretching" element={<Navigate to="/login" replace />} />}
+          {isTokenValid?     
+            <Route path="/*" element={<NotFound /> }></Route>
+            :<Route path="/*" element={<NotFound /> } />}
         </Routes>
       </BrowserRouter>
     </ContentWrap>

@@ -66,7 +66,7 @@ const StudyRoomAdmin = () => {
   useEffect(() => {
     formData = new FormData();
     axios
-      .get(`/api/studyrooms/${studyroomId}`, {
+      .get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`, {
         headers: {
           Authorization: accessToken,
         },
@@ -132,7 +132,7 @@ const StudyRoomAdmin = () => {
     setCheckedStudyroomName(studyroomDto.name);
 
     axios
-      .get(`/api/studyrooms/exists`, {
+      .get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/exists`, {
         headers: {
           Authorization: accessToken,
         },
@@ -281,7 +281,7 @@ const StudyRoomAdmin = () => {
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .put(`/api/studyrooms/${studyroomId}`, formData, {
+      .put(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`, formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",
@@ -308,7 +308,7 @@ const StudyRoomAdmin = () => {
 
     axios
       .put(
-        `/api/studyrooms/${studyroomId}/delete`,
+        `${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/delete`,
         {},
         {
           headers: {
