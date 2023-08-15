@@ -5,12 +5,13 @@ import com.ground.sswm.common.interceptor.JwtInterceptor;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@EnableWebMvc
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     //TODO: http method check
@@ -29,13 +30,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    @CrossOrigin
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOriginPatterns("*")
-            .allowedOrigins("http://localhost:3000")
-            .allowedMethods("GET", "POST", "PUT", "DELETE")
-            .allowedHeaders("*")
-            .allowCredentials(true);
+            .allowedOrigins("http://localhost:3000") // Allow all origins, you can customize this
+            .allowedMethods("*") // Allow all HTTP methods
+            .allowedHeaders("*") // Allow all headers
+            .allowCredentials(true); // Allow credentials (cookies, authentication, etc.)
     }
 }

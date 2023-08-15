@@ -1,45 +1,90 @@
-  import React from "react";
-  import CardHoverButton from "./ItemButton";
-  import "./Style.css";
+import React, { Component } from "react";
+import CardHoverButton from "./ItemButton";
+import axios from "axios";
+import "./Style.css";
 
-  const evStop = (ev) => {
+class CardHoverMenus extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isHost: false,
+    };
+  }
+
+  evStop = (ev) => {
     ev.stopPropagation();
     ev.nativeEvent.stopImmediatePropagation();
   };
-  //----==============-----------------------------------
-  class CardHoverMenus extends React.Component {
-    clkBtn = (ev) => {
-      evStop(ev);
-    };
-    render() {
-      const p = {
-        funcs: {
-          viewBoard: (e) => this.clkBtn(e, "viewBoard"),
+
+  componentDidMount() {
+    this.checkIsHost();
+  }
+
+  checkIsHost = async () => {
+    try {
+      const { studyroom } = this.props;
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+      const response = await axios.get(`/api/studyrooms/${studyroom.id}/isHost`, {
+        headers: {
+          Authorization: accessToken,
         },
-      };
+      });
+      this.setState({ isHost: response.data });
+    } catch (error) {
+      console.log(error);
+      console.log("dailylog 에러", error);
+    }
+  };
 
-      const {studyroom} = this.props;
+  clkBtn = (ev) => {
+    this.evStop(ev);
+  };
 
-      return (
-        <div className="whenhovered" onClick={this.toggle}>
-          <div className="setting">
-            <div className="mt-5 pt-5" />
-            <div className="mt-5" />
+  render() {
+    const { isHost } = this.state;
+    const p = {
+      funcs: {
+        viewBoard: (e) => this.clkBtn(e, "viewBoard"),
+      },
+    };
 
+    const { studyroom } = this.props;
+    const { isMyPage } = this.props;
+
+    return (
+      <div className="whenhovered" onClick={this.toggle}>
+        <div className="setting">
+          <div className="mt-5 pt-5" />
+          <div className="mt-5" />
+
+          <CardHoverButton
+            txt="입장하기"
+            clicked={p.funcs.viewBoard}
+            sx={{
+              verticalAlign: "center",
+              justifyItems: "center",
+              alignItems: "center",
+            }}
+            studyroom={studyroom}
+            type="enter"
+          />
+          {isHost === false && isMyPage === true && (
             <CardHoverButton
-              txt="입장하기"
+              txt="탈퇴하기"
               clicked={p.funcs.viewBoard}
               sx={{
                 verticalAlign: "center",
                 justifyItems: "center",
                 alignItems: "center",
               }}
-              studyroom = {studyroom}
+              studyroom={studyroom}
+              type="leave"
             />
-          </div>
+          )}
         </div>
-      );
-    }
+      </div>
+    );
   }
+}
 
-  export default CardHoverMenus;
+export default CardHoverMenus;
