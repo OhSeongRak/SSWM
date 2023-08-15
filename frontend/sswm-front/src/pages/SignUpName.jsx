@@ -5,8 +5,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-import def from "../assets/dolphin.jpg";
-
 import axios from "axios";
 
 let formData = new FormData();
@@ -19,7 +17,7 @@ const SignUpName = () => {
 
   const [isExist, setIsExist] = useState(true);
 
-  const [imageSrc, setImage] = useState(def);
+  const [imageSrc, setImage] = useState('https://sswm-image.s3.ap-northeast-2.amazonaws.com/image/userDefault/fubao.jpg');
 
   const imageUp = useRef();
 
