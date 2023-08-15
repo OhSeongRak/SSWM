@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // import { Link } from 'react-router-dom';
 
-import Gnb from "../components/Gnb";
+//import Gnb from "../components/Gnb";
 
 //import LiveRoomSnackbar from "../components/LiveRoom/LiveRoomSnackbar";
 //import LiveRoomFooter from "../components/LiveRoom/LiveRoomFooter";
