@@ -134,6 +134,6 @@ export default App;
 
 const ContentWrap = styled.div`
   min-height: 100%;
-  margin: 0px;
+  margin: 20px 80px;
   padding: 0px;
 `;

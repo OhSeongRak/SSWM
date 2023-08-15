@@ -41,8 +41,8 @@ const StudyRoom = (props) => {
     window.location.href = `/CreateStudyRoom`;
   }
   const handleAlarm = () => {
-    setSorting(!sorting)
-  }
+    setSorting(!sorting);
+  };
 
   const handleSearchKeywordChange = (keyword) => {
     setSearchKeyword(keyword);
@@ -74,12 +74,13 @@ const StudyRoom = (props) => {
           <SortBtn>
             <FadeMenu selectedOption={selectedOption} onMenuItemClick={handleMenuItemClick} />
             <span>
-              <IconButton aria-label="sort" onClick={handleAlarm} color='primary' sx={{padding: 0}}>
-                { sorting ? (
-                  <NorthIcon />
-                ) : (
-                  <SouthIcon />
-                )}
+              <IconButton
+                aria-label="sort"
+                onClick={handleAlarm}
+                color="primary"
+                sx={{ padding: 0 }}
+              >
+                {sorting ? <NorthIcon /> : <SouthIcon />}
               </IconButton>
             </span>
           </SortBtn>
@@ -109,7 +110,7 @@ const StudyRoom = (props) => {
           </Fab>
         </AddBtn>
       </ContainerWrap>
-      <GFooter/>
+      <GFooter />
     </div>
   );
 };
@@ -140,8 +141,8 @@ const SortBtn = styled.div`
 `;
 const AddBtn = styled.div`
   position: fixed;
-  bottom: 1vw;
-  right: 1vw;
+  bottom: 2.5vw;
+  right: 2.5vw;
 `;
 
 export default StudyRoom;
