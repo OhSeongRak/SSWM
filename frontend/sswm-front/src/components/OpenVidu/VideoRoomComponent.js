@@ -257,7 +257,7 @@ class VideoRoomComponent extends Component {
     // axios 요청 함수
     sendEventAxios = (data) => {        
         axios
-        .post(`/api/event`, data, {
+        .post("/api/event", data, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -915,6 +915,7 @@ class VideoRoomComponent extends Component {
                                 chatDisplay={this.state.chatDisplay}
                                 close={this.toggleChat}
                                 messageReceived={this.checkNotification}
+                                studyroom={this.props.studyroom}
                             />
                         </div>
                     )}

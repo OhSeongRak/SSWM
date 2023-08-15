@@ -94,7 +94,6 @@ const StudyRoomMember = () => {
         .then((response) => {
           setIsHost(response.data);
         })
-
         } catch (error) {
           console.log(error);
           console.log("dailylog 에러", error);

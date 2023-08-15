@@ -16,7 +16,7 @@ function formatTime(minutes) {
 }
 
 //----====---------------------------------------------------
-const Card = ({studyroom}) => {
+const Card = ({studyroom, isMyPage}) => {
   const timestamp = studyroom.createdTime; // Unix timestamp
   const dateObject = new Date(timestamp * 1000); // Unix timestamp를 밀리초 단위로 변환해야 함
   const formattedDate = dateObject.toLocaleDateString(); // 날짜만 포맷으로 변환
@@ -43,7 +43,7 @@ const Card = ({studyroom}) => {
           src={imageUrl}
           />
         </div>
-        <CardHoverMenus studyroom = {studyroom}/>
+        <CardHoverMenus studyroom = {studyroom} isMyPage={isMyPage}/>
         <div className="card-footer">
         <div disabled  style={{display:"flex",justifyContent: "space-between"}}>
             <Typography className="card-title">{formattedDate} ~ </Typography>
