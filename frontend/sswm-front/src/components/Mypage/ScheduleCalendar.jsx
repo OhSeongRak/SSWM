@@ -21,7 +21,7 @@ const ScheduleCalendar = (props) => {
   useEffect(() => {
     console.log(selectedDateRange);
     axios
-      .get("/api/user-logs", {
+      .get(`/api/user-logs`, {
         params: {
           start: selectedDateRange[0],
           end: selectedDateRange[1],
@@ -54,19 +54,19 @@ const ScheduleCalendar = (props) => {
             formatDay={(locale, date) => moment(date).format("D")}
           />
           <div>
-            <p>
+            <h2>
               {new Date(selectedDateRange[0]).toLocaleDateString()} ~{" "}
               {new Date(selectedDateRange[1]).toLocaleDateString()}
-            </p>
+            </h2>
           </div>
           <div>
             <h2>
-              기간 내 총 공부시간{" "}
+              기간 내 총 공부시간{" "}: {" "}
               {calendarDto.studyTime !== undefined
                 ? `${Math.floor(calendarDto.studyTime / 60)}시간 : ${
                     calendarDto.studyTime % 60
                   }분`
-                : "0시간 : 0분"}
+                : "0시간 0분"}
             </h2>
           </div>
         </CalendarWrap>

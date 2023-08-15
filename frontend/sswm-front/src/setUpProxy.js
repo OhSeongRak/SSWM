@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://i9a206.p.ssafy.io',
+      target: `${process.env.REACT_APP_BASE_URL}`,
       changeOrigin: true,
     })
   );
