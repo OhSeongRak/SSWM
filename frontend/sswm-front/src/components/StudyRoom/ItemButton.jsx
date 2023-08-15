@@ -17,7 +17,7 @@ const CardHoverButton = (props) => {
     // 비공개 방일 때
     if (studyroom.public === false) {
       // 입장 코드 확인
-      const isEnterCodeMatch = await axios.get("/api/studyrooms/enterCode", {
+      const isEnterCodeMatch = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/enterCode`, {
         headers: {
           Authorization: accessToken,
         },
@@ -29,7 +29,7 @@ const CardHoverButton = (props) => {
       
       // 입장 코드가 일치할 때
       if (isEnterCodeMatch.data === true) {
-        const message = await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
+        const message = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/join`, {}, {
           headers: {
             Authorization: accessToken,
           },
@@ -48,7 +48,7 @@ const CardHoverButton = (props) => {
       }
     }
     else {
-      const message = await axios.post(`/api/studyrooms/${studyroom.id}/join`, {}, {
+      const message = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/join`, {}, {
         headers: {
           Authorization: accessToken,
         },

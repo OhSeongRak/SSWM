@@ -13,7 +13,7 @@ const KakaoLoginCallback = () => {
     console.log(code);
     axios
       .post(
-        "/api/auth/kakao/login",
+        `${process.env.REACT_APP_BASE_URL}/api/auth/kakao/login`,
         { code: code },
         {
           headers: { "Content-Type": "application/json; charset=utf-8" },
