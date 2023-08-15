@@ -1,7 +1,6 @@
 import React, {useRef, useState, useEffect} from "react";
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
-import { useNavigate  } from 'react-router-dom';
 
 import Gnb from "../components/Gnb";
 import Button from "@mui/material/Button";
@@ -12,7 +11,6 @@ import * as tmPose from "@teachablemachine/pose";
 let model, webcam, ctx, maxPredictions;
 
 const Streching = () => {
-  const navigate = useNavigate();
 
   const [currentScore, setCurrentScore] = useState(0);
   const [showState, setShowState] = useState(0);
