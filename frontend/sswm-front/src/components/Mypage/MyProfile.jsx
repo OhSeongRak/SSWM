@@ -182,12 +182,12 @@ const MyProfile = ({ users }) => {
 
 {existingTree ?
           (<TreeBalanceWrap>
-            <TreeBalanceText>일일 EXP ({existingTree.dayExp}/100)</TreeBalanceText>
+            <TreeBalanceText>일일 EXP ({Math.round(existingTree.dayExp*100)/100}/100)</TreeBalanceText>
             <TreeBalanceContent>
               <ExpBar value={existingTree.dayExp} maxValue={100} />
-              <div>{existingTree.dayExp}%</div>
+              <div>{Math.floor(existingTree.dayExp)}%</div>
             </TreeBalanceContent>
-            <TreeBalanceText>전체 EXP ({existingTree.userExp}/{calculateLevel(existingTree.userExp)[1]})</TreeBalanceText>
+            <TreeBalanceText>전체 EXP ({Math.round(existingTree.userExp*100)/100}/{calculateLevel(existingTree.userExp)[1]})</TreeBalanceText>
             <TreeBalanceContent>
               <ExpBar value={existingTree.userExp} maxValue={calculateLevel(existingTree.userExp)[1]} />
               <div>{Math.floor((existingTree.userExp)/(calculateLevel(existingTree.userExp)[1])*100)}%</div>
@@ -254,6 +254,7 @@ const Title = styled.span`
   border-radius: 15px;
   padding: 3px 3px;
   background: #fecc47;
+  font-family: "NanumSquareNeo";
 `;
 const ContentWrap = styled.div`
   display: flex;
@@ -274,6 +275,7 @@ const InfoWrap = styled.div`
   justify-content: center;
   align-items: center;
   height: 80%;
+  font-family: "NanumSquareNeo";
 `;
 const InfoImg = styled.div`
   display: flex;
@@ -342,6 +344,7 @@ const TreeName = styled.div`
   justify-content: center;
   align-items: center;
   height: 30%;
+  font-family: "NanumSquareNeo";
 `;
 const TreeBalanceWrap = styled.div`
   display: flex;
@@ -352,6 +355,7 @@ const TreeBalanceWrap = styled.div`
 `;
 const TreeBalanceText = styled.span`
   width: 90%;
+  font-family: "NanumSquareNeo";
 `;
 const TreeBalanceContent = styled.div`
   display: flex;
