@@ -60,9 +60,9 @@ auth:
       - profile_nickname
       - profile_image
       - account_email
+    token-req-url : https://kauth.kakao.com/oauth/token
     redirect-url-sign: https://i9a206.p.ssafy.io/kakao/sign
     redirect-url-login: https://i9a206.p.ssafy.io/kakao/login
-
 logging:
   level:
     com.ground.sswm : INFO
