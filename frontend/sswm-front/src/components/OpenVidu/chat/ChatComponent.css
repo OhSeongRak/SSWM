@@ -7,7 +7,7 @@
   
   #chatToolbar {
     height: 35px;
-    background-color: #27ae60;
+    background-color: #CFDBDA;
     box-sizing: border-box;
     font-weight: bold;
     font-size: 14px;
@@ -25,7 +25,7 @@
   }
   
   #chatComponent {
-    background-color: #2ecc71;
+    background-color: #E2EEEC;
     position: absolute;
     z-index: 99999;
     top: 0;
@@ -51,8 +51,8 @@
   .user-img {
     position: absolute;
     border-radius: 45px;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
   }
   
   .msg-detail {
@@ -62,11 +62,13 @@
   
   .msg-detail p {
     margin: 0;
-    font-size: 1.5em; 
+    font-size: 1.2em; 
+    margin-right: 5px;
+    margin-left: 5px;
   }
   
   .msg-info p {
-    font-size: 1.2em;
+    font-size: 1.0em;
     color: #000000;
     font-style: italic;
   }
@@ -113,12 +115,12 @@
   }
   
   .message.left .msg-detail .msg-content {
-    background-color: #f0f0f0;
+    background-color: #fff;
     float: left;
-    height: 40px;
+    height: 25px;
   }
   .message.left .msg-detail .msg-content span.triangle {
-    background-color: #f0f0f0;
+    background-color: #fff;
     border-bottom-width: 0;
     border-left-width: 0;
     left: -5px;
@@ -137,12 +139,12 @@
   }
   
   .message.right .msg-detail .msg-content {
-    background-color: #c8ffe8;
+    background-color: #fff;
     float: right;
-    height: 40px;
+    height: 25px;
   }
   .message.right .msg-detail .msg-content span.triangle {
-    background-color: #c8ffe8;
+    background-color: #fff;
     border-bottom-width: 0;
     border-left-width: 0;
     right: -5px;
@@ -154,7 +156,7 @@
     position: absolute;
     bottom: 0px;
     width: 100%;
-    background-color: #2ecc71;
+    background-color: #CFDBDA;
     text-align: center;
     padding: 10px 0px;
     height: 30px;
@@ -169,17 +171,17 @@
     font-size: 14px;
     margin-left: -6%;
     color: #000000;
-    background-color: #2ecc71;
+    background-color: #CFDBDA;
   }
   
   #sendButton {
-    background-color: #81e9b0;
+    background-color: #8AAAA5;
     position: absolute;
     right: 10px;
     top: 0;
     bottom: 0;
     margin: auto;
-    border: 1px solid #7ae2a9;
+    border: 1px solid #8AAAA5;
     box-shadow: none !important;
   }
   #sendButton {

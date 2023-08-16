@@ -125,8 +125,8 @@ function App() {
             <Route path="/LiveRoom/:studyroomId" element={<LiveRoom />}></Route>
             :<Route path="/LiveRoom/:studyroomId" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?     
-            <Route path="/Stretching" element={<Stretching /> }></Route>
-            :<Route path="/Stretching" element={<Navigate to="/Login" replace />} />}
+            <Route path="/Stretching/:mySessionId" element={<Stretching /> }></Route>
+            :<Route path="/Stretching/:mySessionId" element={<Navigate to="/Login" replace />} />}
           {isTokenValid?     
             <Route path="/*" element={<NotFound /> }></Route>
             :<Route path="/*" element={<NotFound /> } />}
