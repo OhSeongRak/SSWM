@@ -50,6 +50,8 @@ export default function MultipleSelectChip({ selectedTags, setSelectedTags }) {
 
   const handleChange = (event) => {
     const value = event.target.value;
+    console.log(value);
+    console.log(tags);
 
     // 최대 3개
     if (value.length > 3) {
@@ -58,6 +60,11 @@ export default function MultipleSelectChip({ selectedTags, setSelectedTags }) {
 
     setSelectedTags(value);
   };
+
+  const handleDelete = (tagToDelete) => () => {
+    setSelectedTags(selectedTags.filter(tag => tag !== tagToDelete));
+  };
+
 
   return (
     <div>
@@ -89,7 +96,9 @@ export default function MultipleSelectChip({ selectedTags, setSelectedTags }) {
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => (
-                <Chip key={value} label={value} />
+                <Chip key={value} label={value} onDelete={handleDelete(value)} onMouseDown={(event) => {
+                  event.stopPropagation();
+                }} />
               ))}
             </Box>
           )}
