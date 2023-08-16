@@ -56,7 +56,7 @@ const GoogleLogin = () => {
     <LogoImg
       src={GoogleLogo}
       alt="Google 로그인"
-      style={{ cursor: "pointer" }}
+      style={{ cursor: "pointer", marginBottom: "20px" }}
       onClick={() => login()}
     />
   );
