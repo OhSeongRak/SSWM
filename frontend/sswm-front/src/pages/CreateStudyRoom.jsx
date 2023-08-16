@@ -306,6 +306,7 @@ const CreateStudyRoom = () => {
                       size="small"
                       placeholder={studyroomDto.name} // 상태값으로 설정
                       onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
+                      inputProps={{maxLength:13}}
                     />
                     <Button
                       sx={{ width: "50px", marginLeft: "10px" }}

@@ -148,6 +148,7 @@ const SignUpName = () => {
             id="demo-helper-text-aligned"
             label="Nickname"
             onChange={handleNameChange}
+            inputProps={{maxLength:8}}
           />
           <Button
             sx={{ width: "100px", marginLeft: "10px", height: 52 }}

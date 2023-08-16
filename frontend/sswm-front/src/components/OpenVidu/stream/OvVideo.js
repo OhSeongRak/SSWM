@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './StreamComponent.css';
+import MicOff from '@material-ui/icons/MicOff';
+
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import IconButton from '@material-ui/core/IconButton';
 import VolumeUp from '@material-ui/icons/VolumeUp';
 import VolumeOff from '@material-ui/icons/VolumeOff';
-import MicOff from '@material-ui/icons/MicOff';
 
 export default class OvVideoComponent extends Component {
     constructor(props) {
@@ -64,6 +65,22 @@ export default class OvVideoComponent extends Component {
                         <NotificationsActiveIcon/>
                     </IconButton>
                 )}
+                <div>
+                    {!this.props.user.isAudioActive() ? (
+                        <div                         style={{
+                            position: 'absolute',
+                            top: '24px',
+                            right: '100px',
+                            zIndex: 150, // 버튼이 비디오 위에 보이도록 설정
+                            backgroundColor: 'transparent',
+                            border: 'none',
+                            color: 'white',
+                            cursor:'pointer',
+                        }}>
+                            <MicOff id="statusMic" />
+                        </div>
+                    ) : null}
+                </div>
                 <div>
                     {!this.props.user.isLocal() && (
                         <IconButton id="volumeButton" onClick={this.toggleSound}>

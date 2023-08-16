@@ -123,12 +123,6 @@ export default class StreamComponent extends Component {
                                     <VideocamOff id="statusCam" />
                                 </div>
                             ) : null}
-
-                        {!this.props.user.isAudioActive() ? (
-                            <div id="micIcon">
-                                <MicOff id="statusMic" />
-                            </div>
-                        ) : null}
                         </div>
                     </div>
                 ) : null}

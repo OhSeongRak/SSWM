@@ -53,8 +53,8 @@ const Header = styled.header`
 `;
 
 const LogoImg = styled.img`
-  width: 20%;
-  height: 70%;
+  width: auto;
+  height: 60px;
 `;
 
 const GnbBtn = styled.div`

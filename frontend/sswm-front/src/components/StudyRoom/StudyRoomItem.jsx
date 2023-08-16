@@ -27,7 +27,7 @@ const Card = ({studyroom, isMyPage}) => {
     <div
       className="col-sm-6 col-md-6 col-lg-4 mt-4"
       style={{
-        boxShadow: "8px 8px 8px 8px #eeeeee",
+        boxShadow: "5px 5px 10px 5px #eeeeee",
         borderRadius: "5px",
         width: "95%",
         height: "90%",

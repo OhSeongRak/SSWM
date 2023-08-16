@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useGoogleLogin } from "@react-oauth/google";
 
-import GoogleLogo from "../assets/btn_google_signin_light_normal_web@2x.png";
+import GoogleLogo from "../assets/btn_google_light_normal_ios.svg";
 
 const GoogleSignIn = () => {
   const config = {
@@ -71,6 +71,6 @@ const GoogleSignIn = () => {
 export default GoogleSignIn;
 
 const LogoImg = styled.img`
-width: 300px;
-height: 65px;
+width: 100px;
+height: 100px;
 `;

@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const StudyRoomMemberBoard = ({ notice }) => {
   // '.'을 만날 때마다 줄 바꿈 추가하는 함수
