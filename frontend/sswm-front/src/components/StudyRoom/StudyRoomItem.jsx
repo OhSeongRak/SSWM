@@ -7,6 +7,8 @@ import styled from "styled-components";
 // import def from "../../assets/dolphin.jpg";
 import { Chip, IconButton, Typography } from "@mui/material";
 
+import LockIcon from "@mui/icons-material/Lock";
+
 function formatTime(minutes) {
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
@@ -16,7 +18,7 @@ function formatTime(minutes) {
 }
 
 //----====---------------------------------------------------
-const Card = ({studyroom, isMyPage}) => {
+const Card = ({ studyroom, isMyPage }) => {
   const timestamp = studyroom.createdTime; // Unix timestamp
   const dateObject = new Date(timestamp * 1000); // Unix timestamp를 밀리초 단위로 변환해야 함
   const formattedDate = dateObject.toLocaleDateString(); // 날짜만 포맷으로 변환
@@ -36,13 +38,28 @@ const Card = ({studyroom, isMyPage}) => {
     >
       <div className="card">
         <CardBlock>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <div style={{ display: "flex" }}>
+          <div
+            style={{
+              flexDirection: "column",
+              marginTop: "5px",
+              marginLeft: "5px",
+              marginRight: "10px",
+            }}
+          >
+            <div style={{ display: "flex", float: "left" }}>
+              {studyroom.public === false && (
+                <div>
+                  <LockIcon />
+                </div>
+              )}
+            </div>
+
+            <div style={{ justifyContent: "end", display: "flex" }}>
               <LocalFireDepartmentIcon sx={{ color: "#FA990E" }} />
-              <Typography sx={{ color: "#FA990E", display: "flex" }}>{studyAvgTime}</Typography>
+              <Typography sx={{ color: "#FA990E" }}>{studyAvgTime}</Typography>
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
             <Typography variant="h5" sx={{ color: "black" }}>
               {studyroom.name}
             </Typography>
@@ -51,7 +68,7 @@ const Card = ({studyroom, isMyPage}) => {
         <div style={{ display: "flex", justifyContent: "center" }}>
           <CardImg alt="random pic" src={imageUrl} />
         </div>
-        <CardHoverMenus studyroom = {studyroom} isMyPage={isMyPage}/>
+        <CardHoverMenus studyroom={studyroom} isMyPage={isMyPage} />
         <div className="card-footer">
           <div disabled style={{ display: "flex", justifyContent: "space-between" }}>
             <Typography className="card-title">{formattedDate} ~ </Typography>

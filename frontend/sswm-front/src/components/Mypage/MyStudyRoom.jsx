@@ -25,7 +25,7 @@ const MyStudyRoom = (props) => {
         // 오류 처리
         console.log(error);
       });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -34,12 +34,12 @@ const MyStudyRoom = (props) => {
         <Title>내 스터디룸</Title>
       </TitleWrap>
       <RoomListLayout ref={ref}>
-      <RoomList>
-        {studyrooms.map((studyroom) => (
-          <RecipeReviewCard key={studyroom.id} studyroom={studyroom} isMyPage={true}/>
-        ))}
-      </RoomList>
-    </RoomListLayout>
+        <RoomList>
+          {studyrooms.map((studyroom) => (
+            <RecipeReviewCard key={studyroom.id} studyroom={studyroom} isMyPage={true} />
+          ))}
+        </RoomList>
+      </RoomListLayout>
     </ContainerWrap>
   );
 };
@@ -53,14 +53,15 @@ const TitleWrap = styled.div`
   margin-bottom: 1vw;
 `;
 const Title = styled.span`
-  border: 2px solid #fecc47;
-  border-radius: 15px;
-  padding: 3px 3px;
-  background: #fecc47;
+  border-radius: 10px;
+  padding: 10px 10px;
+  background: #a4dbe4;
 `;
 const RoomListLayout = styled.div`
   flex: 1;
   background-color: green;
+  margin-top: 30px;
+  margin-bottom: 100px;
 `;
 
 const RoomList = styled.ul`
