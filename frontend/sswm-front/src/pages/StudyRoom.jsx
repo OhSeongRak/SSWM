@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 import Gnb from "../components/Gnb";
 import SearchBar from "../components/SearchBar";
@@ -15,14 +14,31 @@ import FadeMenu from "../components/SortMenu";
 import CheckboxChip from "../components/StudyRoom/HashTags";
 import GFooter from "../components/GFooter";
 import IconButton from "@mui/material/IconButton";
-import NorthIcon from "@mui/icons-material/North";
-import SouthIcon from "@mui/icons-material/South";
+import NorthIcon from '@mui/icons-material/North';
+import SouthIcon from '@mui/icons-material/South';
+import axios from 'axios';
+
 const StudyRoom = (props) => {
   const [selectedOption, setSelectedOption] = useState("최근순");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [isPublic, setIsPublic] = useState(1);
   const [sorting, setSorting] = useState(true);
+  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+  
+  const handleCanCreate = async () => {
+    const roomList = await axios.get(`/api/studyrooms`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    });
+
+    if (roomList.data.length >= 5) {
+      alert("가입할 수 있는 스터디룸 개수를 초과하였습니다.");
+      return;
+    }
+    window.location.href = `/CreateStudyRoom`;
+  }
   const handleAlarm = () => {
     setSorting(!sorting);
   };
@@ -77,15 +93,6 @@ const StudyRoom = (props) => {
               control={<Checkbox onChange={handleShowPrivateRoomsChange} />}
               label="비공개 스터디룸 표시"
             />
-            {/* <FormControlLabel
-              sx={{
-                "& .MuiFormControlLabel-label": {
-                  fontFamily: "NanumSquareNeo",
-                },
-              }}
-              control={<Checkbox />}
-              label="꽉 찬 스터디룸 표시"
-            /> */}
           </FormGroup>
         </StudyRoomBtn>
 
@@ -96,12 +103,10 @@ const StudyRoom = (props) => {
           isPublic={isPublic}
           sorting={sorting}
         />
-        <AddBtn>
-          <Link to="/CreateStudyRoom">
-            <Fab color="primary" aria-label="add" sx={{ zIndex: "tooltip" }}>
-              <AddIcon />
-            </Fab>
-          </Link>
+        <AddBtn onClick={handleCanCreate}>
+          <Fab color="primary" aria-label="add" sx={{ zIndex: "tooltip" }}>
+            <AddIcon />
+          </Fab>
         </AddBtn>
       </ContainerWrap>
       <GFooter />

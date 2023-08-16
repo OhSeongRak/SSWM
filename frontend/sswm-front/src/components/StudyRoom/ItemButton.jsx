@@ -7,13 +7,37 @@ const CardHoverButton = (props) => {
   const [enterCode, setEnterCode] = useState("");
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   
+  const buttonColor = props.type === "enter" ? "primary" : "error";
+
   const handleenterCodeChange = (event) => {
     setEnterCode(event.target.value);
   };
-  // console.log(studyroom)
+  
+  const handleLeaveClick = () => {
+    const confirmLeave = window.confirm("정말 탈퇴하시겠습니까?");
+    if (confirmLeave) {
+      axios.put(`/api/studyrooms/${studyroom.id}/leave`, {}, {
+        headers: {
+          Authorization: accessToken
+        }
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+    window.location.reload();
+  }
+
   const handleButtonClick = async () => {
     console.log("studyroomstudyroom", studyroom);
-    
+    const roomList = await axios.get(`/api/studyrooms`, {
+      headers: {
+        Authorization: accessToken,
+      },
+    });
     // 비공개 방일 때
     if (studyroom.public === false) {
       // 입장 코드 확인
@@ -39,6 +63,8 @@ const CardHoverButton = (props) => {
           alert(message.data);
         else if (message.data === "가입 불가")
           alert("사용자가 차단되었습니다.");
+        else if (message.data === "스터디룸 초과입니다.")
+          alert("가입할 수 있는 스터디룸 개수를 초과하였습니다.");
         // 가입
         else
           window.location.href = `/StudyRoomMember/${studyroom.id}`;
@@ -57,14 +83,36 @@ const CardHoverButton = (props) => {
       if (message.data === "정원 초과입니다.")
         alert(message.data);
       else if (message.data === "가입 불가")
-        alert("사용자가 차단되었습니다.");
+        alert("가입이 불가능합니다.");
+      else if (message.data !== "이미 가입됨" && roomList.data.length >= 5)
+        alert("가입할 수 있는 스터디룸 개수를 초과하였습니다.");
       else
         window.location.href = `/StudyRoomMember/${studyroom.id}`;
     }
   };
+
   return (
     <div>
-      {studyroom.public === false && (
+      <Button
+        sx={{ margin: "10px", height: "40px", alignItems: "center"}}
+        variant="outlined"
+        onClick={handleButtonClick}
+        color="primary"
+        >
+        입장하기
+      </Button>
+      {props.isHost === false && props.isMyPage === true && (
+        <Button
+        sx={{ margin: "10px", height: "40px", alignItems: "center"}}
+        variant="outlined"
+        onClick={handleLeaveClick}
+        color="error"
+        >
+        탈퇴하기
+        </Button>
+      )}
+
+      {studyroom.public === false && props.isHost === false && ( //비공개 and 방장x 
         <TextField
           sx={{
             margin: "30px",
@@ -79,19 +127,6 @@ const CardHoverButton = (props) => {
           onChange={handleenterCodeChange} // 입력 시 호출되는 함수 설정
         />
       )}
-      {/* <a
-        href="/StudyRoomMember"
-        type="button"
-        onClick={handleButtonClick} // 버튼 클릭 시 handleButtonClick 함수 호출
-        className="btn btn-light w-75 m-3 text-left"
-      > */}
-        <Button
-          sx={{ margin: "10px", height: "40px", alignItems: "center" }}
-          variant="outlined"
-          onClick={handleButtonClick}
-          >
-          {props.txt}
-        </Button>
     </div>
   );
 };
