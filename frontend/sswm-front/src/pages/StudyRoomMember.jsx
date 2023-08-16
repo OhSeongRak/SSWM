@@ -101,6 +101,7 @@ const StudyRoomMember = () => {
 
     };    
     fetchData();
+    // eslint-disable-next-line
   }, [studyroomId, accessToken]);
 
   return (
