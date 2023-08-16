@@ -15,7 +15,7 @@ const CardHoverButton = (props) => {
   const handleLeaveClick = () => {
     const confirmLeave = window.confirm("정말 탈퇴하시겠습니까?");
     if (confirmLeave) {
-      axios.put(`{REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/leave`, {}, {
+      axios.put(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/leave`, {}, {
         headers: {
           Authorization: accessToken
         }
@@ -32,7 +32,7 @@ const CardHoverButton = (props) => {
 
   const handleButtonClick = async () => {
     console.log("studyroomstudyroom", studyroom);
-    const roomList = await axios.get(`{REACT_APP_BASE_URL}/api/studyrooms`, {
+    const roomList = await axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms`, {
       headers: {
         Authorization: accessToken,
       },
@@ -44,7 +44,7 @@ const CardHoverButton = (props) => {
         window.location.href = `/StudyRoomMember/${studyroom.id}`;
 
       // 입장 코드 확인
-      const isEnterCodeMatch = await axios.get(`{REACT_APP_BASE_URL}/api/studyrooms/enterCode`, {
+      const isEnterCodeMatch = await axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/enterCode`, {
         headers: {
           Authorization: accessToken,
         },
@@ -56,7 +56,7 @@ const CardHoverButton = (props) => {
       
       // 입장 코드가 일치할 때
       if (isEnterCodeMatch.data === true) {
-        const message = await axios.post(`{REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/join`, {}, {
+        const message = await axios.post(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/join`, {}, {
           headers: {
             Authorization: accessToken,
           },
@@ -77,7 +77,7 @@ const CardHoverButton = (props) => {
       }
     }
     else {
-      const message = await axios.post(`{REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/join`, {}, {
+      const message = await axios.post(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/join`, {}, {
         headers: {
           Authorization: accessToken,
         },

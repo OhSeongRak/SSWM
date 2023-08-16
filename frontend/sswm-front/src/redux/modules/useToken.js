@@ -16,7 +16,7 @@
 //       }
 
 //       try {
-//         const response = await axios.post("`{REACT_APP_BASE_URL}/api/auth/access-token", accessToken, {
+//         const response = await axios.post("`{process.env.REACT_APP_BASE_URL}/api/auth/access-token", accessToken, {
 //           headers: {
 //             Authorization: accessToken,
 //           },
@@ -27,7 +27,7 @@
 //       } catch (error) {
 //         console.error("Access 토큰 만료: ", error);
 //         try {
-//           const response = await axios.post("`{REACT_APP_BASE_URL}/api/auth/refresh-access-token", refreshToken, {
+//           const response = await axios.post("`{process.env.REACT_APP_BASE_URL}/api/auth/refresh-access-token", refreshToken, {
 //             headers: {
 //               Authorization: refreshToken,
 //             },

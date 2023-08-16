@@ -103,7 +103,7 @@ const CreateStudyRoom = () => {
     setCheckedStudyroomName(studyroomDto.name);
 
     axios
-      .get(`{REACT_APP_BASE_URL}/api/studyrooms/exists`, {
+      .get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/exists`, {
         headers: {
           Authorization: accessToken,
         },
@@ -218,7 +218,7 @@ const CreateStudyRoom = () => {
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .post(`{REACT_APP_BASE_URL}/api/studyrooms`, formData, {
+      .post(`{process.env.REACT_APP_BASE_URL}/api/studyrooms`, formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",
