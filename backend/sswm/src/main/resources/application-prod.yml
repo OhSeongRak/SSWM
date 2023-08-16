@@ -66,7 +66,7 @@ auth:
     redirect-url-login: https://i9a206.p.ssafy.io/kakao/login
 logging:
   level:
-    com.ground.sswm : INFO
-    org.hibernate.SQL: INFO
-    org.hibernate.type.descriptor.sql.BasicBinder: INFO
+    com.ground.sswm : DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
 
