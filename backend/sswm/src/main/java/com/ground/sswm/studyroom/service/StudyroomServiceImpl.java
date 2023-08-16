@@ -1,5 +1,6 @@
 package com.ground.sswm.studyroom.service;
 
+import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.model.StudyroomTag;
 import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;

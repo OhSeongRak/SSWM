@@ -102,5 +102,8 @@ public class StudyEventServiceImpl implements StudyEventService {
         }
     }
 
-
+    @Override
+    public boolean checkInLive(Long userId) {
+        return studyEventRepository.existsByUserId(userId);
+    }
 }
