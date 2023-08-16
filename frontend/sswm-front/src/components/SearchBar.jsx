@@ -48,7 +48,6 @@ const SearchBarLayout = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 25px;
   margin-botton: 10px;
 `;
 
@@ -64,12 +63,12 @@ const SearchBarInput = styled.input`
   width: 100%;
   padding: 20px 75px 20px 44px;
   background: white;
-  border: 3px solid orange;
+  border: 3px solid #87c159;
   border-radius: 35px;
   font-weight: 700;
   font-size: 20px;
   &::placeholder {
-    color: #ffc7a1;
+    color: #87c159;
     font-weight: 400;
   }
   outline: none;

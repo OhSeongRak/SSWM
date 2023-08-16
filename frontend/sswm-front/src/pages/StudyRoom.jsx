@@ -14,9 +14,9 @@ import FadeMenu from "../components/SortMenu";
 import CheckboxChip from "../components/StudyRoom/HashTags";
 import GFooter from "../components/GFooter";
 import IconButton from "@mui/material/IconButton";
-import NorthIcon from '@mui/icons-material/North';
-import SouthIcon from '@mui/icons-material/South';
-import axios from 'axios';
+import NorthIcon from "@mui/icons-material/North";
+import SouthIcon from "@mui/icons-material/South";
+import axios from "axios";
 
 const StudyRoom = (props) => {
   const [selectedOption, setSelectedOption] = useState("최근순");
@@ -25,7 +25,7 @@ const StudyRoom = (props) => {
   const [isPublic, setIsPublic] = useState(1);
   const [sorting, setSorting] = useState(true);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-  
+
   const handleCanCreate = async () => {
     const roomList = await axios.get(`/api/studyrooms`, {
       headers: {
@@ -38,7 +38,7 @@ const StudyRoom = (props) => {
       return;
     }
     window.location.href = `/CreateStudyRoom`;
-  }
+  };
   const handleAlarm = () => {
     setSorting(!sorting);
   };
@@ -65,7 +65,7 @@ const StudyRoom = (props) => {
     <div>
       <Gnb />
       <ContainerWrap>
-        <SearchBar onSearchKeywordChange={handleSearchKeywordChange} />
+        <SearchBar style={{}} onSearchKeywordChange={handleSearchKeywordChange} />
         <CheckChip>
           <CheckboxChip onTagClick={handleSelectedTagsChange} />
         </CheckChip>

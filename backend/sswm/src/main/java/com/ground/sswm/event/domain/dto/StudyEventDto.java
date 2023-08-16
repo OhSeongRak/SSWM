@@ -3,12 +3,14 @@ package com.ground.sswm.event.domain.dto;
 import com.ground.sswm.event.domain.StudyEventStatus;
 import com.ground.sswm.event.domain.StudyEventType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class StudyEventDto {
 
     private Long studyroomId;
