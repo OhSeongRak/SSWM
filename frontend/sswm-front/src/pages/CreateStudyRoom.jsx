@@ -45,7 +45,7 @@ const CreateStudyRoom = () => {
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
   const [studyroomDto, setStudyroomDto] = useState({
-    name: "스터디룸 이름",
+    name: "",
     isPublic: true,
     enterCode: "",
     maxUserNum: 1,
