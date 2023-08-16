@@ -24,7 +24,7 @@ class CardHoverMenus extends Component {
     try {
       const { studyroom } = this.props;
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-      const response = await axios.get(`/api/studyrooms/${studyroom.id}/isHost`, {
+      const response = await axios.get(`{REACT_APP_BASE_URL}/api/studyrooms/${studyroom.id}/isHost`, {
         headers: {
           Authorization: accessToken,
         },

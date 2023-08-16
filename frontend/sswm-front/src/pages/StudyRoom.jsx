@@ -27,7 +27,7 @@ const StudyRoom = (props) => {
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
   const handleCanCreate = async () => {
-    const roomList = await axios.get(`/api/studyrooms`, {
+    const roomList = await axios.get(`{REACT_APP_BASE_URL}/api/studyrooms`, {
       headers: {
         Authorization: accessToken,
       },
