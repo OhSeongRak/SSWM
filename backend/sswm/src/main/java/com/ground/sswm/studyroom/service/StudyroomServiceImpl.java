@@ -8,6 +8,7 @@ import com.ground.sswm.studyroom.model.dto.SearchStudyroomResDto;
 import com.ground.sswm.studyroom.model.dto.StudyroomDto;
 import com.ground.sswm.studyroom.repository.StudyRoomTagRepository;
 import com.ground.sswm.studyroom.repository.StudyroomRepository;
+import com.ground.sswm.tag.model.Tag;
 import com.ground.sswm.tag.model.dto.TagDto;
 import com.ground.sswm.tag.repository.TagRepository;
 import com.ground.sswm.user.model.User;
@@ -184,10 +185,21 @@ public class StudyroomServiceImpl implements StudyroomService {
         Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
 
         if (studyroom.isEmpty()) {
-            throw new StudyroomNotFoundException("스터디룸이 없어요");
+            return new StudyroomDto();
+        }
+
+        List<StudyroomTag> studyroomTags = studyRoomTagRepository.findAllByStudyroomId(studyroomId);
+
+        List<TagDto> tagDtos=new ArrayList<>();
+        for (StudyroomTag studyroomTag : studyroomTags) {
+            Long tagId = studyroomTag.getTag().getId();
+            Optional<Tag> tag = tagRepository.findById(tagId);
+            TagDto tagDto = TagDto.from(tag.get());
+            tagDtos.add(tagDto);
         }
 
         StudyroomDto studyroomDto = StudyroomDto.from(studyroom.get());
+        studyroomDto.setTags(tagDtos);
 
         return studyroomDto;
     }
