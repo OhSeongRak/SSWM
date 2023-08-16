@@ -4,10 +4,14 @@ package com.ground.sswm.user;
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.user.exception.NicknameAlreadyExistException;
+import com.ground.sswm.user.exception.NicknameNullException;
 import com.ground.sswm.user.model.dto.UserDto;
 import com.ground.sswm.user.model.dto.UserResDto;
 import com.ground.sswm.user.service.UserService;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -65,7 +69,7 @@ public class UserController {
         throws NicknameAlreadyExistException {
 //        log.debug("[PUT] /user : file " + multipartFile.getOriginalFilename());
         log.debug("[PUT] /user : fileType " + fileType);
-        log.debug("[PUT] /user : nickname " + nickname);
+        log.debug("[PUT] /user : nickname " + URLDecoder.decode(nickname, StandardCharsets.UTF_8));
 
         Long id = authService.getUserIdFromToken(token);
 
@@ -77,7 +81,7 @@ public class UserController {
 
         log.debug("[filePath]>>>> " + filePath);
 
-        userService.modifyUser(id, nickname, filePath);
+        userService.modifyUser(id, URLDecoder.decode(nickname, StandardCharsets.UTF_8), filePath);
 
         return new ResponseEntity<>("닉네임 수정 성공", HttpStatus.OK);
     }
@@ -87,6 +91,20 @@ public class UserController {
     public ResponseEntity<Boolean> exists(@RequestHeader("Authorization") String token,
         @RequestParam String nickname) {
         log.debug("닉네임 : " + nickname);
+        if (nickname == null || nickname.trim().isEmpty()) {
+            throw new NicknameNullException("닉네임은 빈칸이 될 수 없습니다.");
+        }
+        // 정규 표현식을 사용하여 닉네임에 공백이 들어가는지 확인
+        // ^ : 문자열의 시작
+        // \\s : 공백 문자 (스페이스, 탭, 줄바꿈 등)
+        // * : 0개 이상의 연속된 공백 문자
+        // $ : 문자열의 끝
+        String regex = "^\\s+.*|.*\\s+$|.*\\s+.*";
+
+        if (Pattern.matches(regex, nickname)) {
+            throw new NicknameNullException("닉네임은 빈칸이 될 수 없습니다."); // 닉네임에 공백이 들어가는 경우
+        }
+
         Long userId = authService.getUserIdFromToken(token);
         boolean isExist = userService.exists(nickname, userId);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);

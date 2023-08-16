@@ -70,6 +70,10 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             if (studyroom.getUserNum() == studyroom.getMaxUserNum()) {
                 return "정원 초과입니다.";
             }
+
+            if (userStudyroomRepository.findAllByUserIdAndIsDeleted(userId, false).size() >= 5) {
+                return "스터디룸 초과입니다.";
+            }
             //userStudyroom 생성
             UserStudyroom newUserStudyroom = new UserStudyroom();
 
