@@ -209,6 +209,7 @@ const EditInfo = () => {
                   variant="filled"
                   onChange={handleNameChange}
                   value = {nickName}
+                  inputProps={{maxLength:8}}
                 />
                 <Button variant="outlined" color="error" onClick={checkNickName} >
                   중복확인

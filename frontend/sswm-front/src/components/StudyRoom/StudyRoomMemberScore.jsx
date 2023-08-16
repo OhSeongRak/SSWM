@@ -63,7 +63,8 @@ const StudyRoomMemberScore = ({studyroomId}) => {
                 <ContentRankValue key={idx}>
                   <MemberContent key={idx}>
                   <div>{formatTime(v.studyTime)}</div>
-                  <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${v.userDto.image}`} />
+                  <Avatar alt="Study-Member" src={`${process.env.REACT_APP_IMAGE_URL}/${v.userDto.image}`} 
+                    sx={{ height: 70, width: 70 }}/>
                   <div style={{display:"flex", textAlign: "center"}}>
                     <Nickname>
                       {v.userDto.nickname}
@@ -90,7 +91,8 @@ const StudyRoomMemberScore = ({studyroomId}) => {
               <ContentRankValue key={idx}>
                 <MemberContent key={idx}>
                   <div>{user.attendDays}/{top3Attend.daysOfMonth}</div>
-                  <Avatar alt="Study-Member"src={`${process.env.REACT_APP_IMAGE_URL}/${user.userDto.image}`} />
+                  <Avatar alt="Study-Member"src={`${process.env.REACT_APP_IMAGE_URL}/${user.userDto.image}`} 
+                    sx={{ height: 70, width: 70 }} />
                   <div style={{display:"flex", textAlign: "center"}}>
                     <Nickname>
                       {user.userDto.nickname}
@@ -131,15 +133,18 @@ const ContentWrap = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 45%;
+  width: 50%;
   height: 100%;
   border-radius: 15px;
   overflow: hidden;
+  border: 2px solid #b2dfdb;
 `
 const ContentTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  align-items: center;
+  user:ckp;om/
   width: 100%;
   height: 10%;
   background-color: #b2dfdb;
@@ -177,11 +182,13 @@ const MemberContent = styled.div`
   align-items: center;
   justify-content: center;
   width: 80px;
+  font-size: 20px;
 `
 const Nickname = styled.div`
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;  width: 80px;
+  font-size: 18px;
 `
 export default StudyRoomMemberScore;

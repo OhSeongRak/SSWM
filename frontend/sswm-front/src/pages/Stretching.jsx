@@ -1,6 +1,6 @@
+import axios from 'axios';
 import React, {useRef, useState, useEffect} from "react";
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
 import pose0 from '../assets/stretching/pose0.jpg';
 import pose1 from '../assets/stretching/pose1.jpg';
 import pose2 from '../assets/stretching/pose2.jpg';
@@ -15,6 +15,7 @@ import pose10 from '../assets/stretching/pose10.jpg';
 import pose11 from '../assets/stretching/pose11.jpg';
 import pose12 from '../assets/stretching/pose12.jpg';
 import pose13 from '../assets/stretching/pose13.jpg';
+import { useParams } from 'react-router-dom';
 
 import Gnb from "../components/Gnb";
 import Button from "@mui/material/Button";
@@ -23,8 +24,10 @@ import GFooter from "../components/GFooter";
 import * as tmPose from "@teachablemachine/pose";
 
 let model, webcam, ctx;
-
+const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 const Streching = () => {
+  const { mySessionId } = useParams();
+
   const [currentScore, setCurrentScore] = useState(0);
   const [showState, setShowState] = useState(0);
   const [classSelected, setClassSelected] = useState(0);
@@ -70,27 +73,28 @@ const Streching = () => {
 
     return () => {
     };
-  }, ); 
+    // eslint-disable-next-line
+  }, []); 
 
 
   async function init() {
     model = await tmPose.load(modelURL, metadataURL);
     maxScoreRef.current = 0;
-    const width = 400;
-    const height = 300;
+
+
     const flip = true; 
-    webcam = new tmPose.Webcam(width, 300, flip); 
-    await webcam.setup(); 
-    await webcam.play();
-    await resetModel();
-
+    webcam = new tmPose.Webcam(400, 300, flip); 
+    if(webcam){
+      await webcam.setup(); 
+      await webcam.play();
+      await resetModel();
     
-    const canvas = document.getElementById("canvas");
-    canvas.width = width; canvas.height = 300;
-    ctx = canvas.getContext("2d");
+      const canvas = document.getElementById("canvas");
+      canvas.width = 400; canvas.height = 300;
+      ctx = canvas.getContext("2d");
 
-    window.requestAnimationFrame(loop);
-
+      window.requestAnimationFrame(loop);
+    }
   }
 
   const resetModel = () => {
@@ -106,60 +110,76 @@ const Streching = () => {
     if (remainingTime.current <= 0) {
         sc = null;
         resetModel();
-        sc = getRandomClass();
+        while(sc === null || sc === 7 || sc === 8 || sc === 9 || sc === 10){
+          sc = getRandomClass();
+        }
         remainingTime.current = 800; 
     }
 
-    if (sc !== null) {
-      predict(sc);
-      setClassSelected(sc);
-      remainingTime.current -= 1;
+    if (sc !== null && sc !== undefined) {
+      const cv = webcam.canvas;
+      setTimeout(() => {
+        if (cv){
+          predict(sc, cv);
+          setClassSelected(sc);
+        }
+        remainingTime.current -= 1;
+      }, 10);
     } 
-    setTimeout(() => {
-      window.requestAnimationFrame(loop);
-  }, 10);
+    window.requestAnimationFrame(loop);
+
 
   }
   
-  async function predict(selectClass) {
+  async function predict(selectClass, cv) {
+      if(cv){
+        const { pose, posenetOutput } = await model.estimatePose(cv);
+        const prediction = await model.predict(posenetOutput);
+        if (prediction){
+          const currentClassScore = prediction[selectClass].probability * 100;
+          setShowState(currentClassScore + Math.floor(Math.random() * 13));
 
-      const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+          const intCurrentClassScore = Math.floor(currentClassScore);
+          setCurrentScore(intCurrentClassScore);
 
-      const prediction = await model.predict(posenetOutput);
-      
-      const currentClassScore = prediction[selectClass].probability * 100;
-      setShowState(currentClassScore + Math.floor(Math.random() * 13));
-
-      const intCurrentClassScore = Math.floor(currentClassScore);
-      setCurrentScore(intCurrentClassScore);
-
-      currentSumScore.current += intCurrentClassScore;
-      if (intCurrentClassScore > maxScoreRef.current) {
-        maxScoreRef.current = intCurrentClassScore;
-
-        //await setMaxScore(currentClassScore);
+          currentSumScore.current += intCurrentClassScore;
+          if (intCurrentClassScore > maxScoreRef.current) {
+            maxScoreRef.current = intCurrentClassScore;
+          }
+        
+          // finally draw the poses
+          drawPose(pose, cv);
+        }
       }
-    
-      // finally draw the poses
-      drawPose(pose);
   }
 
-  function drawPose(pose) {
-      if (webcam.canvas) {
-          ctx.drawImage(webcam.canvas, 0, 0);
-          if (pose) {
-              const minPartConfidence = 0.5;
-              tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
-              tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
-          }
+  function drawPose(pose, cv) {
+    ctx.drawImage(cv, 0, 0);
+      if (pose) {
+        const minPartConfidence = 0.5;
+        tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+        tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
       }
   }
 
   function getRandomClass() {
-    console.log(unusedIndexes.current.length);
     if (unusedIndexes.current.length === 0) {
-      // 모든 숫자가 뽑혔을 경우 나가기
-      window.close();
+//    모든 숫자가 뽑혔을 경우 나가기
+      axios
+      .post(`/api/user-logs/${mySessionId}/stretching`, Math.floor(sumScore.current / 9), {
+          headers: {
+          Authorization: accessToken,
+          "Content-Type": "application/json",
+          },
+      })
+      .then(response => {
+        console.log(response);
+        outStretch();
+      })
+      .catch(error => {
+          console.error('점수 전달 에러 :', error);
+          outStretch();
+      });
     }
   
     // 미사용 숫자 중에서 랜덤으로 선택
@@ -168,11 +188,14 @@ const Streching = () => {
   
     // 선택된 숫자를 미사용 목록에서 제거
     unusedIndexes.current = unusedIndexes.current.filter(index => index !== result);
-    console.log(unusedIndexes.current);
   
-    return result+1;
+    return result;
   }
 
+  function outStretch() {
+    window.close();
+  }
+  
   return (
     <div>
       <Gnb />
@@ -187,7 +210,7 @@ const Streching = () => {
             <ContentViewWrap>
               <img src={imagePath} alt="Selected Pose" style={{ maxWidth: '100%', maxHeight: '100%' }}/>
             </ContentViewWrap>
-            <ContentScoreWrap>누적점수 : {sumScore.current} / 1300 </ContentScoreWrap>
+            <ContentScoreWrap>누적점수 : {sumScore.current} / 900 </ContentScoreWrap>
           </ContentLeftWrap>
 
           <ContentRightWrap> {/* 유저 화면 */}
@@ -203,9 +226,7 @@ const Streching = () => {
         </ContentWrap>
 
         <FooterWrap>
-          <Link to="/LiveRoom">
-            <Button variant="outlined">나가기</Button>
-          </Link>
+            <Button variant="outlined" onClick={outStretch}>나가기</Button>
         </FooterWrap>
       </ContainerWrap>
       <GFooter/>
