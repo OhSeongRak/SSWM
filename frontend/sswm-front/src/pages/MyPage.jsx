@@ -15,23 +15,22 @@ const MyPage = () => {
   const [users, setUsers] = useState([]);
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
-
   useEffect(() => {
     axios
-      .get("/api/users", {
+      .get(`/api/users`, {
         headers: {
           Authorization: accessToken,
         },
       })
       .then((response) => {
-        setUsers(response.data)
+        setUsers(response.data);
         console.log("user:::", response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-       // eslint-disable-next-line
-    }, []);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div>
@@ -58,26 +57,27 @@ const MyPage = () => {
           </CalendarWrap>
         </ContentWrap>
       </ContainerWrap>
-      <GFooter/>
+      <GFooter />
     </div>
   );
 };
 
 const ContainerWrap = styled.div`
-  width: 80%;
   display: flex;
   text-align: start;
+  width: 90%;
   border-radius: 15px;
   background: #ffffff;
-
 `;
 
 const SidebarWrap = styled.div`
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
   position: fixed;
-  top: 10%;
-  width: 15%;
+  top: 25%;
+  left: 12%;
   @media (min-width: 768px) {
-    width: 10%
+    width: 10%;
   }
 
   @media (min-width: 992px) {
@@ -85,17 +85,15 @@ const SidebarWrap = styled.div`
   }
 
   @media (min-width: 1200px) {
-    width: 15%;
+    width: 10%;
   }
 `;
 
 const ContentWrap = styled.div`
   display: flex;
   flex-direction: column;
-  width: 85%;
   gap: 50px;
-  margin-left: 20%;
-  
+  margin-left: 23%;
 `;
 
 const ProfileWrap = styled.a``;
@@ -107,6 +105,8 @@ const SidebarItem = styled.a`
   display: block;
   padding: 10px;
   text-decoration: none;
+  color: black;
+  font-weight: bold;
 `;
 
 export default MyPage;

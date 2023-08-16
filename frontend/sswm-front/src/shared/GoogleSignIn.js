@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useGoogleLogin } from "@react-oauth/google";
 
-import GoogleLogo from "../assets/Google_Logo.svg";
+import GoogleLogo from "../assets/btn_google_light_normal_ios.svg";
 
 const GoogleSignIn = () => {
   const config = {
@@ -22,8 +22,7 @@ const GoogleSignIn = () => {
       console.log(codeResponse);
 
       await Axios.post(
-        // "https://i9a206.p.ssafy.io/api/auth/google/signin",
-        "/api/auth/google/signin",
+        `${process.env.REACT_APP_BASE_URL}/api/auth/google/signin`,
         JSON.stringify(codeResponse),
         config
       )
@@ -71,6 +70,6 @@ const GoogleSignIn = () => {
 export default GoogleSignIn;
 
 const LogoImg = styled.img`
-  width: 240px;
-  height: 100px;
+width: 100px;
+height: 100px;
 `;

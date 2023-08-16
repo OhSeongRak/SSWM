@@ -10,13 +10,13 @@ import Box from "@mui/material/Box";
 import GoogleSignIn from "../shared/GoogleSignIn";
 import KakaoSignIn from "../shared/KakaoSign";
 import { GoogleOAuthProvider } from "@react-oauth/google";
- 
+
 const SignUp = () => {
   return (
     <div>
       <Gnb />
       <ContainerWrap>
-        <Box component="span" sx={{  p: 2, border: "3px solid orange",borderRadius:"35px" }}>
+        <Box component="span" sx={{ p: 2, border: "1px solid #5B8D27", borderRadius: "30px" }}>
           <SignUpWrap>
             <Text> 회원가입 </Text>
             <SocialWrap>
@@ -25,13 +25,12 @@ const SignUp = () => {
               </GoogleOAuthProvider>
               <KakaoSignIn
                 REST_API_KEY="a8cdfb7c6e1ce33857c1ff4df66c348c"
-                REDIRECT_URI="https://i9a206.p.ssafy.io/kakao/sign"
-                //REDIRECT_URI="http://localhost:3000/kakao/sign"
+                REDIRECT_URI={`${process.env.REACT_APP_REDIRECT_URI}/kakao/sign`}
               />
             </SocialWrap>
             <ButtonWrap>
-              <Link to="/Login" style={{ textDecoration: "none"}}>
-              <div style={{color:"orange"}} >로그인하러 가기</div>
+              <Link to="/Login" style={{ textDecoration: "none" }}>
+                <div style={{ color: "#87C159" }}>로그인하러 가기</div>
               </Link>
             </ButtonWrap>
           </SignUpWrap>
@@ -54,10 +53,13 @@ const SignUpWrap = styled.div`
   height: 300px;
   background-color: #ffffff;
 `;
+
 const SocialWrap = styled.div`
   display: flex;
   width: 100%;
+  margin-top: 50px;
   justify-content: space-evenly;
+  align-items: center;
 `;
 
 const Text = styled.p`

@@ -4,13 +4,13 @@ import { ResponsivePie } from "@nivo/pie";
 const Piechart = (props) => {
   const { calendarDto } = props;
 
-  const studyExp= calendarDto.studyExp;
-  const restTimeExp= calendarDto.restTimeExp;
-  const stretchExp= calendarDto.stretchExp;
+  const studyExp = calendarDto.studyExp;
+  const restTimeExp = calendarDto.restTimeExp;
+  const stretchExp = calendarDto.stretchExp;
   console.log(studyExp);
   console.log(restTimeExp);
   console.log(stretchExp);
-  
+
   const handle = {
     padClick: (data) => {
       console.log(data);
@@ -23,15 +23,15 @@ const Piechart = (props) => {
 
   return (
     // chart height이 100%이기 때문이 chart를 덮는 마크업 요소에 height 설정
-    <div style={{ width: "auto", height: "90%"}}>
+    <div style={{ width: "auto", height: "90%" }}>
       <ResponsivePie
         /**
          * chart에 사용될 데이터
          */
         data={[
-          { id: "공부", value: studyExp },
-          { id: "휴식", value: restTimeExp },
-          { id: "스트레칭", value: stretchExp },
+          { id: "공부", value: Math.round(studyExp * 100) / 100 },
+          { id: "휴식", value: Math.round(restTimeExp * 100) / 100 },
+          { id: "스트레칭", value: Math.round(stretchExp * 100) / 100 },
         ]}
         /**
          * chart margin
@@ -57,7 +57,7 @@ const Piechart = (props) => {
         /**
          * pad border 두께 설정
          */
-        borderWidth={2}
+        borderWidth={0.5}
         /**
          * link label skip할 기준 각도
          */
