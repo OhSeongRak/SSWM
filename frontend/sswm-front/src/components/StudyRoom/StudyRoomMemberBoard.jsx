@@ -1,28 +1,24 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-
-const StudyRoomMemberBoard = ({notice}) => {
+const StudyRoomMemberBoard = ({ notice }) => {
   return (
     <ContainerWrap>
       <BoardWrap>
         <BoardTitle>
-          <Background>
-            공지사항
-          </Background>
-          
+          <Background>공지사항</Background>
         </BoardTitle>
         <BoardContent>
-          <div>{notice}</div>
+          <div style={{ padding: "15px" }}>{notice}</div>
         </BoardContent>
       </BoardWrap>
     </ContainerWrap>
   );
 };
 const Background = styled.span`
-  background-color: #F2CC47;  
+  background-color: #f2cc47;
   padding: 7px;
-  border-radius : 10px;
+  border-radius: 10px;
 `;
 const ContainerWrap = styled.div`
   display: flex;
@@ -32,8 +28,7 @@ const ContainerWrap = styled.div`
   width: 100%;
   height: 100%;
   gap: 1vw;
-
-`
+`;
 const BoardWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,21 +36,20 @@ const BoardWrap = styled.div`
   justify-content: center;
   width: 100%;
   height: 90%;
-`
+`;
 const BoardTitle = styled.div`
-width: 100%;
-font-size: 20px;
-padding : 20px 0px 0px 0px;
-margin-bottom: 1vw;
-
-`
+  width: 100%;
+  font-size: 20px;
+  padding: 20px 0px 0px 0px;
+  margin-bottom: 1vw;
+`;
 const BoardContent = styled.div`
   margin: 10px;
   display: flex;
   width: 100%;
   height: 90%;
-  border: 1px solid gray;  
+  border: 1px solid gray;
   border-radius: 10px;
-`
+`;
 
 export default StudyRoomMemberBoard;
