@@ -233,7 +233,7 @@ const StudyRoomAdmin = () => {
   };
 
   //notice
-  const CONTENT_LIMIT = 300;
+  const CONTENT_LIMIT = 200;
 
   const handleEnterNoticeChange = (event) => {
     setStudyroomDto((studyroomDto) => ({
@@ -347,6 +347,7 @@ const StudyRoomAdmin = () => {
                 size="small"
                 placeholder={studyroomDto.name} // 상태값으로 설정
                 onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
+                inputProps={{maxLength:13}}
               />
               <Button
                 variant="contained"
