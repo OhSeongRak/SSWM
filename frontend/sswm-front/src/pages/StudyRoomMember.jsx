@@ -96,7 +96,7 @@ const StudyRoomMember = () => {
         })
         } catch (error) {
           console.log(error);
-          console.log("dailylog 에러", error);
+          navigate("/NOTFOUND");
         }
 
     };    
