@@ -4,7 +4,6 @@ import com.ground.sswm.auth.oauth.model.OAuthUserInfo;
 import com.ground.sswm.common.util.UnixTimeUtil;
 import com.ground.sswm.image.util.FileManageUtil;
 import com.ground.sswm.user.exception.NicknameAlreadyExistException;
-import com.ground.sswm.user.exception.NicknameNullException;
 import com.ground.sswm.user.exception.UserNotFoundException;
 import com.ground.sswm.user.model.User;
 import com.ground.sswm.user.model.dto.UserDto;
@@ -12,11 +11,11 @@ import com.ground.sswm.user.model.dto.UserResDto;
 import com.ground.sswm.user.repository.UserRepository;
 import com.ground.sswm.userStudyroom.service.UserStudyroomService;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -99,9 +98,9 @@ public class UserServiceImpl implements UserService {
         // 닉네임 바꾸는 경우
         if (nickname != null && !nickname.isBlank()) {
             // 다른 사람이 바꾸고자하는 닉네임 이미 사용하고 있음
-            User findUser = userRepository.findByNickname(id, nickname);
+            User findUser = userRepository.findByNickname(nickname);
             // 만약 유저 닉네임이 중복이라면 함수 종료
-            if (findUser != null) {
+            if (findUser != null && findUser.getId()!=id) {
                 throw new NicknameAlreadyExistException("이미 사용중인 닉네임 입니다.");
             }
             user.setNickname(nickname);
@@ -115,22 +114,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
     public boolean exists(String nickname, Long userId) {
-        log.debug("닉네임 : " + nickname);
-        if (nickname == null || nickname.trim().isEmpty()) {
-            throw new NicknameNullException("닉네임은 빈칸이 될 수 없습니다.");
-        }
-        // 정규 표현식을 사용하여 닉네임에 공백이 들어가는지 확인
-        // ^ : 문자열의 시작
-        // \\s : 공백 문자 (스페이스, 탭, 줄바꿈 등)
-        // * : 0개 이상의 연속된 공백 문자
-        // $ : 문자열의 끝
-        String regex = "^\\s+.*|.*\\s+$|.*\\s+.*";
-        if (Pattern.matches(regex, nickname)) {
-            throw new NicknameNullException("닉네임은 빈칸이 될 수 없습니다."); // 닉네임에 공백이 들어가는 경우
+        User user = userRepository.findByNickname(nickname);
+
+        if (user == null || user.getId() == userId) {
+            return false;
         }
 
-        return userRepository.findByNickname(userId, nickname) == null ? false : true;
+        return true;
     }
 
 
