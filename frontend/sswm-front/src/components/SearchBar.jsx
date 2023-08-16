@@ -29,7 +29,7 @@ const SearchBar = ({ onSearchKeywordChange }) => {
           value={searchKeyword}
           onChange={handleInputChange}
           onKeyPress={handleInputKeyPress}
-          maxlength='20'
+          maxLength='20'
         />
 
         <SearchBarButton onClick={handleButtonClick}>
