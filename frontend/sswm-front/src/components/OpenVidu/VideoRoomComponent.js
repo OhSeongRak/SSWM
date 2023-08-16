@@ -61,6 +61,7 @@ class VideoRoomComponent extends Component {
             outTime: 0,
             restTime: 0,
             isOut: false,
+            cancel: false,
         };
         this.joinSession = this.joinSession.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
@@ -303,30 +304,31 @@ class VideoRoomComponent extends Component {
             studyroomId: this.state.mySessionId,
         })
 
-        setTimeout(() => {
-            window.close();
-        }, 500)
-        // 원래 오픈비두에 있던 코드
         // setTimeout(() => {
-        //     const mySession = this.state.session;
+        //     window.location.href = `/`
+        // }, 500)
+        // 원래 오픈비두에 있던 코드
+        setTimeout(() => {
+            const mySession = this.state.session;
 
-        //     if (mySession) {
-        //         mySession.disconnect();
-        //     }
+            if (mySession) {
+                mySession.disconnect();
+            }
 
-        //     // Empty all properties...
-        //     this.OV = null;
-        //     this.setState({
-        //         session: undefined,
-        //         subscribers: [],
-        //         mySessionId: 'Session2270callreact',
-        //         myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
-        //         localUser: undefined,
-        //     });
-        //     if (this.props.leaveSession) {
-        //         this.props.leaveSession();
-        //     }
-        // }, 200);
+            // Empty all properties...
+            this.OV = null;
+            this.setState({
+                session: undefined,
+                subscribers: [],
+                mySessionId: 'Session2270callreact',
+                myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
+                localUser: undefined,
+            });
+            if (this.props.leaveSession) {
+                this.props.leaveSession();
+            }
+            window.location.href = `/StudyRoomMember/${this.state.mySessionId}`
+        }, 200);
     }
 
     camStatusChanged(type, status) {
@@ -664,23 +666,23 @@ class VideoRoomComponent extends Component {
         }
         else {
             const timerValue = this.state.minute * 60; // 분을 초로 변환
-        
+            
             this.setState({
-            timerValue,
-            timerRunning: true,
-            open: true // 팝업 열기
+                timerValue,
+                timerRunning: true,
+                open: true // 팝업 열기
             });
-        
+            
             this.startTimer();
-
+            
             this.sendEventAxios({
                 type: 'REST',
                 status: 'ON',
                 studyroomId: this.state.mySessionId,
             })
-
+            
             this.restOn = true
-
+            
             this.sendEventAxios({
                 type: 'STUDY',
                 status: 'OFF',
@@ -688,6 +690,14 @@ class VideoRoomComponent extends Component {
             })
         }
     };
+    
+    // 타이머 취소
+    handleCancelTimer = () => {
+        this.setState({
+            cancel: true,
+        })
+        console.log("this.state.cancel::", this.state.cancel);
+    }
 
     //타이머 설정
     startTimer = () => {
@@ -695,11 +705,13 @@ class VideoRoomComponent extends Component {
         this.timerInterval = setInterval(() => {
           this.setState((prevState) => {
             const newTimerValue = prevState.timerValue - 1;
-    
-            if (newTimerValue <= 0) {
+            
+
+            if (this.state.cancel === true || newTimerValue <= 0) {
                 this.setState({
                     minute: 0,
-                    timerOn: false
+                    timerOn: false,
+                    cancel: false
                 });
 
                 clearInterval(this.timerInterval);
@@ -938,11 +950,12 @@ class VideoRoomComponent extends Component {
             <Popper id={id} open={open} anchorEl={anchorEl} transition>{({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
                 <Box sx={{ border: 2, p: 1, bgcolor: 'background.paper', borderRadius: '16px', borderColor: 'orange' }}>
-                                      {/* 타이머 설정 */}
-                                      {this.state.timerRunning ? (
+                {/* 타이머 설정 */}
+                {this.state.timerRunning ? (
                     <div>
-                      <h2>타이머 실행 중</h2>
-                      <p>남은 시간: {this.state.timerValue}초</p>
+                        <h2>타이머 실행 중</h2>
+                        <p>남은 시간: {this.state.timerValue}초</p>
+                        <button onClick={this.handleCancelTimer}>취소</button>
                     </div>
                   ) : (
                     <div>
