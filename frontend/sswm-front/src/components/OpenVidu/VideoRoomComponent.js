@@ -144,10 +144,11 @@ class VideoRoomComponent extends Component {
         this.restOn = false;
         this.timerOn = false;
 
-        this.setState(  {
+        this.setState({
                 session: this.OV.initSession(),
             },
             async () => {
+                console.log("세션이다", this.state.session);
                 this.subscribeToStreamCreated();
                 await this.connectToSession();
             },
@@ -371,7 +372,8 @@ class VideoRoomComponent extends Component {
     subscribeToStreamCreated() {
         this.state.session.on('streamCreated', (event) => {
             const subscriber = this.state.session.subscribe(event.stream, undefined);
-            // var subscribers = this.state.subscribers;
+            console.log("subscriber:", subscriber);
+            this.updateSubscribers();
             subscriber.on('streamPlaying', (e) => {
                 this.checkSomeoneShareScreen();
                 subscriber.videos[0].video.parentElement.classList.remove('custom-class');
