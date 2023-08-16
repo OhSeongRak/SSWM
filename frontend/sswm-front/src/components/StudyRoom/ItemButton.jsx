@@ -7,7 +7,6 @@ const CardHoverButton = (props) => {
   const [enterCode, setEnterCode] = useState("");
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   
-  const buttonColor = props.type === "enter" ? "primary" : "error";
 
   const handleenterCodeChange = (event) => {
     setEnterCode(event.target.value);
