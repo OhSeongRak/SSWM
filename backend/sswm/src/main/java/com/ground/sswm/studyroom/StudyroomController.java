@@ -118,8 +118,8 @@ public class StudyroomController {
     @ResponseBody
     public ResponseEntity<StudyroomDto> selectByStudyroomId(@PathVariable("studyroomId") Long studyroomId) {
         log.debug("studyroomId : "+studyroomId);
-        StudyroomDto studyroom = studyroomService.selectByStudyroomId(studyroomId);
-        return new ResponseEntity<StudyroomDto>(studyroom, HttpStatus.OK);
+        StudyroomDto studyroomDto = studyroomService.selectByStudyroomId(studyroomId);
+        return new ResponseEntity<StudyroomDto>(studyroomDto, HttpStatus.OK);
     }
 
     // 유저 ID로 스터디룸 조회
