@@ -84,6 +84,7 @@ class VideoRoomComponent extends Component {
         this.init = this.init.bind(this);
         this.sendAlarm = this.sendAlarm.bind(this);
         this.displayAlarmMessage = this.displayAlarmMessage.bind(this);
+        this.toggleCam = this.toggleCam.bind(this);
     }
 
     componentDidMount() {
@@ -601,6 +602,21 @@ class VideoRoomComponent extends Component {
             this.setState({ chatDisplay: display });
         }
         this.updateLayout();
+    }
+
+    toggleCam(){
+        localUser.setVideoActive(false);
+        localUser.getStreamManager().publishVideo(localUser.isVideoActive());
+        this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
+        this.setState({ localUser: localUser });
+
+        setTimeout(() => {
+            localUser.setVideoActive(true);
+            localUser.getStreamManager().publishVideo(localUser.isVideoActive());
+            this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
+            this.setState({ localUser: localUser });
+          }, 72000); // 72초를 밀리초로 변환한 값        
+
     }
 
     checkNotification(event) {
