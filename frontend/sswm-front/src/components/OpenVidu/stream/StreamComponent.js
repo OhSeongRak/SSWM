@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import './StreamComponent.css';
 import OvVideoComponent from './OvVideo';
 
-import MicOff from '@material-ui/icons/MicOff';
-import VideocamOff from '@material-ui/icons/VideocamOff';
+
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import HighlightOff from '@material-ui/icons/HighlightOff';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 
 export default class StreamComponent extends Component {
     constructor(props) {
@@ -104,7 +104,10 @@ export default class StreamComponent extends Component {
                         <div>
                             <span id="nickname">{this.props.user.getNickname()}</span>
                             {this.props.user.isLocal() && <span id=""></span> && (
-                            <div style={{ marginTop: "10px" }}>남은 쉬는 시간 : {this.formatTime(this.props.studyroom.maxRestTime - this.props.restTime)}</div>
+                            <span style={{ marginTop: "10px" }}>
+                                <IconButton aria-label="fire" style={{ color: 'white' }} >
+                                    <LocalFireDepartmentIcon />
+                                </IconButton> {this.formatTime(this.props.studyroom.maxRestTime - this.props.restTime)}</span>
                             )}
                         </div>
                     )}
@@ -113,19 +116,6 @@ export default class StreamComponent extends Component {
                 {this.props.user !== undefined && this.props.user.getStreamManager() !== undefined ? (
                     <div className="streamComponent">
                         <OvVideoComponent user={this.props.user} mutedSound={this.state.mutedSound} localUser={this.props.localUser} onNotificationButtonClick={this.handleNotificationButtonClick} micButtonClick={this.toggleSound}/>
-                        <div id="statusIcons">
-                            {!this.props.user.isVideoActive() ? (
-                                <div id="camIcon">
-                                    <VideocamOff id="statusCam" />
-                                </div>
-                            ) : null}
-
-                            {!this.props.user.isAudioActive() ? (
-                                <div id="micIcon">
-                                    <MicOff id="statusMic" />
-                                </div>
-                            ) : null}
-                        </div>
                     </div>
                 ) : null}
             </div>

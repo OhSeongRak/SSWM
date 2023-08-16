@@ -49,12 +49,20 @@ const StudyRoomAdmin = () => {
   const closeSnackBar = () => setIsSnackBarOpen(false);
 
   const { studyroomId } = useParams();
-  const [studyroomDto, setStudyroomDto] = useState([]);
+  const [studyroomDto, setStudyroomDto] = useState({
+    name: "",
+    isPublic: true,
+    enterCode: "",
+    maxUserNum: 1,
+    userNum: 1,
+    maxRestTime: 90 * 60,
+    tags: [],
+  });
+  
 
   const [isExist, setIsExist] = useState(false);
 
   const [checkedStudyroomName, setCheckedStudyroomName] = useState("");
-  const [originName, setOriginName] = useState("");
 
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -65,6 +73,7 @@ const StudyRoomAdmin = () => {
 
   useEffect(() => {
     formData = new FormData();
+    console.log("여기오냐?");
     axios
       .get(`/api/studyrooms/${studyroomId}`, {
         headers: {
@@ -75,8 +84,7 @@ const StudyRoomAdmin = () => {
         setStudyroomDto(response.data); // API 호출 완료 후에 studyrooms 업데이트
         setImage(`${process.env.REACT_APP_IMAGE_URL}/` + response.data.image);
         setCheckedStudyroomName(response.data.name);
-        setOriginName(response.data.name);
-        console.log("studyroom", response.data);
+        console.log("studyroomDto", response.data);
       })
       .catch((error) => {
         console.log("errorerrorerrorerror");
@@ -155,7 +163,8 @@ const StudyRoomAdmin = () => {
       .catch((error) => {
         // 오류 처리
         console.log(error);
-        alert("스터디룸 이름 확인 중 오류가 발생했습니다.");
+        setIsExist(true);
+        alert("스터디룸 제목은 빈칸이 될 수 없습니다.");
       });
   };
 
@@ -212,10 +221,24 @@ const StudyRoomAdmin = () => {
 
   // tag값 변경
   const handleTagsChange = (selectedTags) => {
-    setStudyroomDto((studyroomDto) => ({
+    console.log("여기로오나?");
+    console.log(studyroomDto.tags)
+    console.log(selectedTags);
+    // setStudyroomDto(prevStudyroomDto => {
+    //   if (!Array.isArray(prevStudyroomDto)) {
+    //     // 초기값을 배열로 설정하고 첫 데이터 추가
+    //     return [{ tags: selectedTags }];
+    //   }
+    //   // 배열인 경우에 데이터 추가
+    //   const updatedStudyroomDto = [...prevStudyroomDto, { tags: selectedTags }];
+    //   return updatedStudyroomDto;
+    // });
+    setStudyroomDto({
       ...studyroomDto,
       tags: selectedTags,
-    }));
+    });
+    console.log("여기도?")
+    console.log(studyroomDto.tags)
   };
 
   //enterCode
@@ -232,7 +255,7 @@ const StudyRoomAdmin = () => {
   };
 
   //notice
-  const CONTENT_LIMIT = 300;
+  const CONTENT_LIMIT = 200;
 
   const handleEnterNoticeChange = (event) => {
     setStudyroomDto((studyroomDto) => ({
@@ -246,10 +269,7 @@ const StudyRoomAdmin = () => {
     event.preventDefault();
 
     // 스터디룸 제목 중복확인
-    if (
-      originName !== studyroomDto.name &&
-      (isExist || studyroomDto.name !== checkedStudyroomName)
-    ) {
+    if (isExist || studyroomDto.name !== checkedStudyroomName) {
       alert("스터디룸 제목의 중복 확인이 필요합니다.");
       return;
     }
@@ -332,6 +352,7 @@ const StudyRoomAdmin = () => {
   };
 
   return (
+    console.log(studyroomDto.tags),
     <div>
       <Gnb />
       <ContainerWrap>
@@ -346,6 +367,7 @@ const StudyRoomAdmin = () => {
                 size="small"
                 placeholder={studyroomDto.name} // 상태값으로 설정
                 onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
+                inputProps={{maxLength:13}}
               />
               <Button
                 variant="contained"
@@ -360,7 +382,6 @@ const StudyRoomAdmin = () => {
                 disabled={studyroomDto.isPublic}
                 hiddenLabel
                 id="filled-hidden-label-normal"
-                defaultValue=""
                 variant="filled"
                 value={studyroomDto.enterCode}
                 size="small"
@@ -453,7 +474,12 @@ const StudyRoomAdmin = () => {
                 </StudyRoomTitle2>
                 <StudyRoomContent>
                   <MultipleSelectChip
-                    selectedTags={studyroomDto.tags || []} // null이면 빈 배열로 설정
+                    // selectedTags={studyroomDto.tags.name !== null ? studyroomDto.tags.map(tag => tag.name) : studyroomDto.tags}
+                    selectedTags={
+                      Array.isArray(studyroomDto.tags) && studyroomDto.tags.length > 0 && typeof studyroomDto.tags[0] === 'object' && 'name' in studyroomDto.tags[0]
+                        ? studyroomDto.tags.map(tag => tag.name)
+                        : studyroomDto.tags
+                    }
                     setSelectedTags={handleTagsChange}
                   />
                 </StudyRoomContent>

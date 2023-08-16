@@ -28,13 +28,14 @@ export default function CheckboxChip({ onTagClick }) {
   useEffect(() => {
     // selected 값이 변경될 때마다 부모로 새로운 selected 값을 전달
     onTagClick(selected);
-  }, [selected,onTagClick]);
+  }, [selected, onTagClick]);
 
   return (
-    <Box sx={{ display: "flex", gap: 1, alignItems: "center",}}>
+    <Box sx={{ display: "flex", width: "700px", height: "100px", gap: 1, alignItems: "center" }}>
       <Typography
-        sx={{
-          display: "flex",
+        style={{
+          display: "static",
+          width: "120px",
           alignItems: "center",
           textAlign: "center",
           justifyContent: "center",
@@ -42,13 +43,11 @@ export default function CheckboxChip({ onTagClick }) {
         level="title-lg"
         id="fav-movie"
         mr={2}
-      >
-        검색태그(최대3개)
-      </Typography>
+      ></Typography>
       <Box
         role="group"
         aria-labelledby="fav-movie"
-        sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}
+        sx={{ display: "flex", flexWrap: "wrap", gap: 1, margin: "2px" }}
       >
         {tagList.map((name) => {
           const checked = selected.includes(name);
@@ -67,10 +66,6 @@ export default function CheckboxChip({ onTagClick }) {
                 label={name}
                 checked={checked}
                 onChange={(event) => {
-                  if (selected.length > 2) {
-                    setSelected(selected.filter((n) => n !== name));
-                    event.target.checked = false;
-                  }
                   setSelected((names) =>
                     !event.target.checked ? names.filter((n) => n !== name) : [...names, name]
                   );

@@ -38,7 +38,7 @@ export default function MultipleSelectChip({ selectedTags, setSelectedTags }) {
     // 서버에서 태그 데이터를 가져오는 함수
     const fetchTags = async () => {
       try {
-        const response = await axios.get("/api/tags"); // 서버의 태그 컨트롤러 엔드포인트로 요청
+        const response = await axios.get(`/api/tags`); // 서버의 태그 컨트롤러 엔드포인트로 요청
         settags(response.data); // 가져온 데이터를 chipData 상태로 설정
       } catch (error) {
         console.error("태그 데이터를 가져오는 데 실패했습니다:", error);
@@ -50,6 +50,8 @@ export default function MultipleSelectChip({ selectedTags, setSelectedTags }) {
 
   const handleChange = (event) => {
     const value = event.target.value;
+    console.log(value);
+    console.log(tags);
 
     // 최대 3개
     if (value.length > 3) {
@@ -58,6 +60,11 @@ export default function MultipleSelectChip({ selectedTags, setSelectedTags }) {
 
     setSelectedTags(value);
   };
+
+  const handleDelete = (tagToDelete) => () => {
+    setSelectedTags(selectedTags.filter(tag => tag !== tagToDelete));
+  };
+
 
   return (
     <div>
@@ -89,7 +96,9 @@ export default function MultipleSelectChip({ selectedTags, setSelectedTags }) {
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((value) => (
-                <Chip key={value} label={value} />
+                <Chip key={value} label={value} onDelete={handleDelete(value)} onMouseDown={(event) => {
+                  event.stopPropagation();
+                }} />
               ))}
             </Box>
           )}

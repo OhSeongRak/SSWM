@@ -94,14 +94,14 @@ const StudyRoomMember = () => {
         .then((response) => {
           setIsHost(response.data);
         })
-
         } catch (error) {
           console.log(error);
-          console.log("dailylog 에러", error);
+          navigate("/NOTFOUND");
         }
 
     };    
     fetchData();
+    // eslint-disable-next-line
   }, [studyroomId, accessToken]);
 
   return (
@@ -136,7 +136,7 @@ const StudyRoomMember = () => {
 
               {/* 공부,휴식 시간 */}
               <SideBanner>
-                <Link to={`/LiveRoom/${studyroomId}`} target="_blank" style={{ textDecoration: "none" }}>
+                <Link to={`/LiveRoom/${studyroomId}`} style={{ textDecoration: "none" }}>
                   <Button variant="contained" 
                     sx={{
                       m : 1,

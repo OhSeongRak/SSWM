@@ -17,14 +17,13 @@ const EditInfo = () => {
   const [users, setUsers] = useState([]);
   const [nickName, setNickName] = useState("");
   const [checkedNickName, setCheckedNickName] = useState("");
-  const [originNickName, setOriginNickName] = useState("");
   const [imageSrc, setImage] = useState();
 
   const navigate = useNavigate();
   const accessToken = JSON.parse(localStorage.getItem("accessToken"));
   useEffect(() => {
     axios
-      .get("/api/users", {
+      .get(`/api/users`, {
         headers: {
           Authorization: accessToken,
         },
@@ -33,7 +32,6 @@ const EditInfo = () => {
         setUsers(response.data);
         setImage(`${process.env.REACT_APP_IMAGE_URL}/` + response.data.image);
         setNickName(response.data.nickname);
-        setOriginNickName(response.data.nickname);
         console.log(response.data); 
       })
       .catch((error) => {
@@ -86,7 +84,7 @@ const EditInfo = () => {
     setCheckedNickName(nickName);
 
     axios
-      .get("/api/users/exists", {
+      .get(`/api/users/exists`, {
         headers: {
           Authorization: accessToken,
         },
@@ -96,7 +94,6 @@ const EditInfo = () => {
       })
       .then((response) => {
         setIsExist(response.data);
-        console.log(response.data);
         // isExist 값에 따라 중복 확인 로직을 수행
         if (response.data) {
           alert("중복된 닉네임입니다.");
@@ -104,13 +101,13 @@ const EditInfo = () => {
           alert("사용 가능한 닉네임입니다.");
         }
         console.log("중복 확인" + response.data);
-        return response.data;
+        
       })
       .catch((error) => {
         // 오류 처리
         console.log(error);
         alert("닉네임은 빈칸이 될 수 없습니다.");
-        return true;
+        setIsExist(true);
       });
   };
 
@@ -121,17 +118,17 @@ const EditInfo = () => {
     console.log("nickName :" + nickName);
     console.log("checkedNickName :" + checkedNickName);
     // 닉네임 중복확인
-    if (originNickName !== nickName && (isExist || nickName !== checkedNickName)) {
+    if (isExist || nickName !== checkedNickName) {
       alert("닉네임의 중복 확인이 필요합니다.");
       return;
     }
 
-    formData.append("nickname", nickName);
+    formData.append("nickname", encodeURIComponent(nickName));
 
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .put("/api/users", formData, {
+      .put(`/api/users`, formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",
@@ -149,7 +146,7 @@ const EditInfo = () => {
   };
   const DeleteUser = () => {
     axios
-    .delete("/api/users", {
+    .delete(`/api/users`, {
       headers: {
         Authorization: accessToken,
       },
@@ -212,6 +209,7 @@ const EditInfo = () => {
                   variant="filled"
                   onChange={handleNameChange}
                   value = {nickName}
+                  inputProps={{maxLength:8}}
                 />
                 <Button variant="outlined" color="error" onClick={checkNickName} >
                   중복확인

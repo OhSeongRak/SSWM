@@ -34,6 +34,7 @@ import { styled as muistyled } from "@mui/material/styles";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Button } from "@mui/material";
+import HomeIcon from '@mui/icons-material/Home';
 
 let model, webcam;
 var localUser = new UserModel();
@@ -58,10 +59,10 @@ class VideoRoomComponent extends Component {
             open: false,
             anchorEl: null,
             minute : 0,
-            restOn: false, // 휴식 상태 여부
+            outTime: 0,
             restTime: 0,
             isOut: false,
-            autoRestTime: 0
+            cancel: false,
         };
         this.joinSession = this.joinSession.bind(this);
         this.leaveSession = this.leaveSession.bind(this);
@@ -83,9 +84,10 @@ class VideoRoomComponent extends Component {
         this.init = this.init.bind(this);
         this.sendAlarm = this.sendAlarm.bind(this);
         this.displayAlarmMessage = this.displayAlarmMessage.bind(this);
+        this.toggleCam = this.toggleCam.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const openViduLayoutOptions = {
             maxRatio: 3 / 2, // The narrowest ratio that will be used (default 2x3)
             minRatio: 9 / 16, // The widest ratio that will be used (default 16x9)
@@ -100,7 +102,7 @@ class VideoRoomComponent extends Component {
         };
         
         axios
-        .get("/api/users", {
+        .get(`/api/users`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -118,7 +120,7 @@ class VideoRoomComponent extends Component {
         window.addEventListener('beforeunload', this.onbeforeunload);
         window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
-        this.joinSession();
+        await this.joinSession();
         this.init();
     }
 
@@ -133,30 +135,46 @@ class VideoRoomComponent extends Component {
         event.preventDefault();
         this.leaveSession();
     }
-
-    joinSession() {
-        this.OV = new OpenVidu();
-        this.sendEventAxios({
-            type: 'STUDY',
-            status: 'ON',
-            studyroomId: this.state.mySessionId,
-        })
-
-        this.setState(  {
-                session: this.OV.initSession(),
-            },
-            async () => {
-                this.subscribeToStreamCreated();
-                await this.connectToSession();
-            },
-        );
         
-        this.sendRestTimeAxios();
+    async joinSession() {
+        const response = await axios
+        .get("/api/event/check-inlive", {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            },
+        })
+        
+        if (response.data === true) {
+            alert("이미 라이브 중인 스터디룸이 있습니다!");
+            this.leaveSession();
+        }
+
+        else {
+            this.OV = new OpenVidu();
+            this.setState({
+                session: this.OV.initSession(),
+                },
+                async () => {
+                    this.subscribeToStreamCreated();
+                    await this.connectToSession();
+                });
+
+            this.sendEventAxios({
+                type: 'STUDY',
+                status: 'ON',
+                studyroomId: this.state.mySessionId,
+            })
+
+            this.restOn = false;
+            this.timerOn = false;
+            
+            this.sendRestTimeAxios();
+        }
     }
 
     async connectToSession() {
         if (this.props.token !== undefined) {
-            console.log('token received: ', this.props.token);
             this.connect(this.props.token);
         } else {
             try {
@@ -173,7 +191,6 @@ class VideoRoomComponent extends Component {
     }
 
     connect(token) {
-	    console.log("connect token", token);
         this.state.session
             .connect(
                 token.token,
@@ -255,7 +272,7 @@ class VideoRoomComponent extends Component {
     }
 
     // axios 요청 함수
-    sendEventAxios = (data) => {        
+    sendEventAxios = (data) => { 
         axios
         .post("/api/event", data, {
             headers: {
@@ -301,31 +318,29 @@ class VideoRoomComponent extends Component {
             status: 'OFF',
             studyroomId: this.state.mySessionId,
         })
-
-        setTimeout(() => {
-            window.close();
-        }, 500)
+        
         // 원래 오픈비두에 있던 코드
-        // setTimeout(() => {
-        //     const mySession = this.state.session;
+        setTimeout(() => {
+            const mySession = this.state.session;
 
-        //     if (mySession) {
-        //         mySession.disconnect();
-        //     }
+            if (mySession) {
+                mySession.disconnect();
+            }
 
-        //     // Empty all properties...
-        //     this.OV = null;
-        //     this.setState({
-        //         session: undefined,
-        //         subscribers: [],
-        //         mySessionId: 'Session2270callreact',
-        //         myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
-        //         localUser: undefined,
-        //     });
-        //     if (this.props.leaveSession) {
-        //         this.props.leaveSession();
-        //     }
-        // }, 200);
+            // Empty all properties...
+            this.OV = null;
+            this.setState({
+                session: undefined,
+                subscribers: [],
+                // mySessionId: 'Session2270callreact',
+                myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
+                localUser: undefined,
+            });
+            if (this.props.leaveSession) {
+                this.props.leaveSession();
+            }
+            window.location.href = `/StudyRoomMember/${this.state.mySessionId}`
+        }, 200);
     }
 
     camStatusChanged(type, status) {
@@ -371,7 +386,7 @@ class VideoRoomComponent extends Component {
     subscribeToStreamCreated() {
         this.state.session.on('streamCreated', (event) => {
             const subscriber = this.state.session.subscribe(event.stream, undefined);
-            // var subscribers = this.state.subscribers;
+            this.updateSubscribers();
             subscriber.on('streamPlaying', (e) => {
                 this.checkSomeoneShareScreen();
                 subscriber.videos[0].video.parentElement.classList.remove('custom-class');
@@ -598,6 +613,21 @@ class VideoRoomComponent extends Component {
         this.updateLayout();
     }
 
+    toggleCam(){
+        localUser.setVideoActive(false);
+        localUser.getStreamManager().publishVideo(localUser.isVideoActive());
+        this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
+        this.setState({ localUser: localUser });
+
+        setTimeout(() => {
+            localUser.setVideoActive(true);
+            localUser.getStreamManager().publishVideo(localUser.isVideoActive());
+            this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
+            this.setState({ localUser: localUser });
+          }, 72000); // 72초를 밀리초로 변환한 값        
+
+    }
+
     checkNotification(event) {
         this.setState({
             messageReceived: this.state.chatDisplay === 'none',
@@ -616,7 +646,6 @@ class VideoRoomComponent extends Component {
 
     //휴식 버튼 클릭
     handleRestClick = (event) => {
-        console.log("event : ", event);
         if (event){
             this.setState((prevState) => ({
                 anchorEl: event.target,
@@ -642,8 +671,6 @@ class VideoRoomComponent extends Component {
 
     //휴식 시간 증가
     handlePlusClick = () => {
-        console.log("this.state.restTime/60:::", Math.floor(this.state.restTime/60));
-        // this.props.studyroom.maxRestTime/60 - this.state.restTime/60
         if (this.state.minute < Math.floor((this.props.studyroom.maxRestTime - this.state.restTime) / 60)) {
         this.setState((prevState) => ({
             minute: prevState.minute + 1
@@ -664,26 +691,24 @@ class VideoRoomComponent extends Component {
             });
         }
         else {
-            const { minute } = this.state;
-            console.log("minute!!: ", minute);
-
-            const timerValue = minute * 60; // 분을 초로 변환
-        
+            const timerValue = this.state.minute * 60; // 분을 초로 변환
+            
             this.setState({
-            timerValue,
-            timerRunning: true,
-            open: true // 팝업 열기
+                timerValue,
+                timerRunning: true,
+                open: true // 팝업 열기
             });
-        
+            
             this.startTimer();
-
+            
             this.sendEventAxios({
                 type: 'REST',
                 status: 'ON',
                 studyroomId: this.state.mySessionId,
             })
+            
             this.restOn = true
-
+            
             this.sendEventAxios({
                 type: 'STUDY',
                 status: 'OFF',
@@ -692,38 +717,26 @@ class VideoRoomComponent extends Component {
         }
     };
     
-    autoRest = () => {
-        if(this.state.minute === -1) {
-            this.leaveSession();
-        }
-        else {
-            const { minute } = this.state;
-            console.log("minute!!: ", minute);
-
-            this.sendEventAxios({
-                type: 'REST',
-                status: 'ON',
-                studyroomId: this.state.mySessionId,
-            })
-            this.restOn = true
-
-            this.sendEventAxios({
-                type: 'STUDY',
-                status: 'OFF',
-                studyroomId: this.state.mySessionId,
-            })
-        }
-    };
+    // 타이머 취소
+    handleCancelTimer = () => {
+        this.setState({
+            cancel: true,
+        })
+    }
 
     //타이머 설정
     startTimer = () => {
+        this.timerOn = true;
         this.timerInterval = setInterval(() => {
           this.setState((prevState) => {
             const newTimerValue = prevState.timerValue - 1;
-    
-            if (newTimerValue <= 0) {
+            
+
+            if (this.state.cancel === true || newTimerValue <= 0) {
                 this.setState({
                     minute: 0,
+                    timerOn: false,
+                    cancel: false
                 });
 
                 clearInterval(this.timerInterval);
@@ -762,17 +775,14 @@ class VideoRoomComponent extends Component {
         const modelURL = URL+"model.json";
         const metadataURL = URL+"metadata.json";
 
-        console.log("before model");
         model = await tmImage.load(modelURL, metadataURL);
-        console.log("after model");
 
         const size = 200;
         const flip = true; 
         webcam = new tmImage.Webcam(size, size, flip); 
         await webcam.setup(); 
         await webcam.play();
-        window.requestAnimationFrame(this.loop);
-
+        window.requestAnimationFrame(this.loop);    
     }
 
     async loop(timestamp) {
@@ -786,19 +796,21 @@ class VideoRoomComponent extends Component {
     
     async predict() {
         const prediction = await model.predict(webcam.canvas);
+        if (this.timerOn === true) {
+            return;
+        }
+            
         if(prediction[1].probability > 0.9) {
-            console.log("start rest");
+            console.log("***autoRest START***");
             
             this.setState((prevState) => ({
-                minute: prevState.minute + 5
+                outTime: prevState.outTime + 5
             }));
 
-            if (this.props.studyroom.maxRestTime < this.state.restTime + this.state.minute)
+            if (this.props.studyroom.maxRestTime < this.state.restTime + this.state.outTime)
                 this.leaveSession();
             
             if(this.state.isOut === false) {
-                console.log("START: maxRestTime:", this.props.studyroom.maxRestTime);
-                console.log("STart: restTime:", this.state.restTime);
 
                 this.setState({
                     isOut : true,
@@ -810,7 +822,7 @@ class VideoRoomComponent extends Component {
                     studyroomId: this.state.mySessionId,
                 })
                 this.restOn = true
-    
+
                 this.sendEventAxios({
                     type: 'STUDY',
                     status: 'OFF',
@@ -820,9 +832,10 @@ class VideoRoomComponent extends Component {
         } 
         else {
             if(this.state.isOut === true) {
-                console.log("stop rest");
+                console.log("***autoRest STOP***");
                 this.setState({
                     isOut : false,
+                    outTime: 0
                 });
                 setTimeout(() => {
                     this.sendEventAxios({
@@ -830,7 +843,7 @@ class VideoRoomComponent extends Component {
                         status: 'OFF',
                         studyroomId: this.state.mySessionId,
                     })
-                    this.restOn = true
+                    this.restOn = false
         
                     this.sendEventAxios({
                         type: 'STUDY',
@@ -843,9 +856,6 @@ class VideoRoomComponent extends Component {
                     }, 100);
 
                 }, 100);
-                
-                console.log("stop here");
-
             }
         }
     }
@@ -872,15 +882,9 @@ class VideoRoomComponent extends Component {
               currentSound.currentTime = 0;
           }
       
-          // TODO: mp3 파일 경로는 맞게 수정해주세요!
           currentSound = new Audio(sound);
           currentSound.play();
         }
-        else{
-            console.log("알람 전송 실패");
-        }
-        
-
           
     }
     //알람 수신
@@ -888,7 +892,6 @@ class VideoRoomComponent extends Component {
 
         this.state.session.on('signal:alarm', (event) => {
                 // 알람 메시지를 화면에 표시합니다.
-                console.log("get alarm");
                 this.displayAlarmMessage(event.data);
             }
         );
@@ -951,6 +954,7 @@ class VideoRoomComponent extends Component {
                                 chatDisplay={this.state.chatDisplay}
                                 close={this.toggleChat}
                                 messageReceived={this.checkNotification}
+                                studyroom={this.props.studyroom}
                             />
                         </div>
                     )}
@@ -959,6 +963,11 @@ class VideoRoomComponent extends Component {
 
 
         <FooterWrap>
+        <Link to="/" >
+            <IconButton>
+                <HomeIcon/>
+            </IconButton>
+        </Link>
         <div className="buttonsContent" >
             {/* 휴식 버튼 시작 */}
             <IconButton
@@ -971,15 +980,22 @@ class VideoRoomComponent extends Component {
             <Popper id={id} open={open} anchorEl={anchorEl} transition>{({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
                 <Box sx={{ border: 2, p: 1, bgcolor: 'background.paper', borderRadius: '16px', borderColor: 'orange' }}>
-                                      {/* 타이머 설정 */}
-                                      {this.state.timerRunning ? (
+                {/* 타이머 설정 */}
+                {this.state.timerRunning ? (
                     <div>
-                      <h2>타이머 실행 중</h2>
-                      <p>남은 시간: {this.state.timerValue}초</p>
+                        <TimeTitleWrap>타이머 실행 중</TimeTitleWrap>
+                        <TimerWrap>
+                            <span>남은 시간: {this.state.timerValue}초</span>
+                            </TimerWrap>
+                        <TimerBtnWrap>
+                            <Button variant="contained" color="success" onClick={this.handleCancelTimer}>
+                            취소
+                            </Button>
+                        </TimerBtnWrap>
                     </div>
                   ) : (
                     <div>
-                      <h2>타이머 설정</h2>
+                      <TimeTitleWrap>타이머 설정</TimeTitleWrap>
                       <TimerWrap>
                         <IconButton aria-label="minus" onClick={this.handleMinusClick}>
                           <RemoveCircleOutlineIcon />
@@ -1005,8 +1021,8 @@ class VideoRoomComponent extends Component {
             {/* 휴식 버튼 끝 */}
 
             {/* 스트레칭 버튼 시작 */}
-            <Link to="/Stretching" target="_blank" >
-                <IconButton>
+            <Link to={`/Stretching/${this.state.mySessionId}`} target="_blank">
+                <IconButton onClick={this.toggleCam}>
                     <AccessibilityNewIcon/>
                 </IconButton>
             </Link>
@@ -1091,7 +1107,6 @@ class VideoRoomComponent extends Component {
  
     }
 
-
     async checkSessionId(sessionId){
 	const response = await axios.get(APPLICATION_SERVER_URL + 'openvidu/api/sessions', {
 		headers: { 'Authorization' : 'Basic T1BFTlZJRFVBUFA6TVlfU0VDUkVU', 'Content-Type': 'application/json', },
@@ -1144,11 +1159,16 @@ const FooterWrap = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 50px;
-  background-color: green;
+  height: 60px;
+  background-color: #A9AC5D;
   color: white;
   gap: 3vw;
 
+`
+const TimeTitleWrap = styled.h2`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 const TimerWrap = styled.div`
   display: flex;

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // import { Link } from 'react-router-dom';
 
+//import Gnb from "../components/Gnb";
 
 //import LiveRoomSnackbar from "../components/LiveRoom/LiveRoomSnackbar";
 //import LiveRoomFooter from "../components/LiveRoom/LiveRoomFooter";
@@ -31,6 +32,7 @@ const LiveRoom = () => {
         setStudyroom(response.data);
         setIsLoading(false); // Set loading to false after data is fetched
       } catch (error) {
+        window.location.href = `/NOTFOUND`
       }
     };
     fetchStudyroom();
@@ -58,7 +60,7 @@ const ContainerWrap = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height:90vh;
+  height: 100%;
 `
 // const HeaderWrap = styled.div`
 //   display: flex;
@@ -71,8 +73,8 @@ const ContentWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  height: 80vh;
+  width: 100%;
+  height: 100%;
 `
 // const ContentLiveView = styled.div`
 //  display: flex;
