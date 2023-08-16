@@ -11,6 +11,7 @@ import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.model.dto.CalenderDto;
 import com.ground.sswm.dailyLog.model.dto.DailyLogDto;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
+import com.ground.sswm.event.repository.StudyEventRepository;
 import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.repository.StudyroomRepository;
@@ -39,6 +40,7 @@ public class DailyLogServiceImpl implements DailyLogService {
     private final UserRepository userRepository;
     private final StudyroomRepository studyroomRepository;
     private final UserStudyroomRepository userStudyroomRepository;
+    private final StudyEventRepository studyEventRepository;
 
     @Override
     public void create(Long studyroomId, Long userId) {
