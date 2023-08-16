@@ -46,15 +46,15 @@ const Gnb = (props) => {
 
 const Header = styled.header`
   display: flex;
-  margin: 40px 80px;
+  margin: 60px 80px;
   justify-content: space-between;
   align-items: center;
   height: 50px;
 `;
 
 const LogoImg = styled.img`
-  width: 20%;
-  height: 70%;
+  width: auto;
+  height: 60px;
 `;
 
 const GnbBtn = styled.div`

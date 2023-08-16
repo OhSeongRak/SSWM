@@ -1,8 +1,8 @@
 .react-calendar {
   width: 100%;
   max-width: 100%;
-  background-color: #2ecc71;
-  color: #fff;
+  background-color: #fff;
+  color: black;
   border-radius: 8px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   line-height: 140px;
@@ -49,7 +49,7 @@
 }
 
 .react-calendar__navigation button {
-  color: #fff;
+  color: black;
   min-width: 44px;
   background: none;
   font-size: 30px;
@@ -57,20 +57,21 @@
 }
 
 .react-calendar__navigation button:disabled {
-  background-color: #27ae60;
+  /* background-color: #27ae60; */
 }
 
 .react-calendar__navigation button:enabled:hover,
 .react-calendar__navigation button:enabled:focus {
-  background-color: #27ae60;
+  /* background-color: #27ae60; */
 }
 
 .react-calendar__month-view__weekdays {
-  background-color: #27ae60;
+  /* background-color: #27ae60; */
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.4em;
   height: 40px;
+  
 }
 
 .react-calendar__month-view__weekdays__weekday {
@@ -78,6 +79,8 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  background-color: #f5f5f5;
+  text-decoration: underline none;
 }
 
 .react-calendar__month-view__weekNumbers .react-calendar__tile {
@@ -86,6 +89,7 @@
   justify-content: center;
   font-size: 0.75em;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .react-calendar__month-view__days__day {
@@ -129,7 +133,7 @@
 
 /* 오늘 날짜 색 */
 .react-calendar__tile--now {
-  background: #27ae60;
+  background: #87C159;
   border-radius: 6px;
   font-weight: bold;
   color: #fff;
@@ -164,19 +168,19 @@
 /* 날짜 간격 선택할 때 날짜 색 */
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background: #d8d8fb;
+  background: #F2CC47;
   color: white;
 }
 
 /* 날짜 간격 선택할 때 간격의 색깔 */
 .react-calendar--selectRange .react-calendar__tile--hover {
-  background-color: #d8d8fb;
+  background-color: #F2CC47;
 }
 
 /* 날짜 간격 선택 완료 후 간격의 색깔 */
 .react-calendar__tile--range {
-  background: #d8d8fb;
-  color: #27ae60;
+  background: #F2CC47;
+  color: white;
   border-radius: 0; 
 }
 
@@ -186,7 +190,7 @@
   border-bottom-right-radius: 0;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
-  background: #d8d8fb;
+  background: #F2CC47;
   color: white;
 }
 
@@ -196,6 +200,6 @@
   border-bottom-left-radius: 0;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
-  background: #d8d8fb;
+  background: #F2CC47;
   color: white;
 }

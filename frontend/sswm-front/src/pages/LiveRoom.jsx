@@ -32,6 +32,7 @@ const LiveRoom = () => {
         setStudyroom(response.data);
         setIsLoading(false); // Set loading to false after data is fetched
       } catch (error) {
+        window.location.href = `/NOTFOUND`
       }
     };
     fetchStudyroom();

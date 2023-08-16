@@ -4,7 +4,7 @@ import { ReactComponent as SearchIcon } from "../assets/searchBarButton.svg";
 
 // ... (이전 코드와 동일)
 
-const SearchBar = ({onSearchKeywordChange}) => {
+const SearchBar = ({ onSearchKeywordChange }) => {
   const [searchKeyword, setSearchKeyword] = useState("");
 
   const handleInputChange = (event) => {
@@ -29,11 +29,12 @@ const SearchBar = ({onSearchKeywordChange}) => {
           value={searchKeyword}
           onChange={handleInputChange}
           onKeyPress={handleInputKeyPress}
+          maxLength='20'
         />
 
         <SearchBarButton onClick={handleButtonClick}>
           {/* <IconButton> */}
-            <SearchIcon />
+          <SearchIcon />
           {/* </IconButton> */}
         </SearchBarButton>
       </SearchBarInputWrapper>
@@ -43,12 +44,11 @@ const SearchBar = ({onSearchKeywordChange}) => {
 
 // ... (이후 코드와 동일)
 
-
 const SearchBarLayout = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 25px;
+  margin-botton: 10px;
 `;
 
 const SearchBarInputWrapper = styled.div`
@@ -63,14 +63,15 @@ const SearchBarInput = styled.input`
   width: 100%;
   padding: 20px 75px 20px 44px;
   background: white;
-  border: 3px solid orange;
+  border: 3px solid #87c159;
   border-radius: 35px;
   font-weight: 700;
   font-size: 20px;
   &::placeholder {
-    color: #ffc7a1;
+    color: #87c159;
     font-weight: 400;
   }
+  outline: none;
 `;
 
 const SearchBarButton = styled.button`

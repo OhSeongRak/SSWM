@@ -54,7 +54,7 @@ const ScheduleCalendar = (props) => {
             selectRange={true}
             formatDay={(locale, date) => moment(date).format("D")}
           />
-          <div>
+          <div style={{ marginTop: "40px" }}>
             <h2>
               {new Date(selectedDateRange[0]).toLocaleDateString().replace(/\.$/, "")} ~{" "}
               {new Date(selectedDateRange[1]).toLocaleDateString().replace(/\.$/, "")}
@@ -62,7 +62,7 @@ const ScheduleCalendar = (props) => {
           </div>
           <div>
             <h2>
-              기간 내 총 공부시간{" "}: {" "}
+              기간 내 총 공부시간 :{" "}
               {calendarDto.studyTime !== undefined
                 ? `${Math.floor(calendarDto.studyTime / 60)}시간 ${
                     calendarDto.studyTime % 60
@@ -90,15 +90,16 @@ const TitleWrap = styled.div`
   height: 5%;
 `;
 const Title = styled.span`
-  border: 2px solid #fecc47;
-  border-radius: 15px;
-  padding: 3px 3px;
-  background: #fecc47;
+  border-radius: 10px;
+  padding: 10px 10px;
+  background: #a4dbe4;
 `;
 const ContentWrap = styled.div`
   display: flex;
   gap: 5vw;
   height: 95%;
+  margin-top: 30px;
+  margin-bottom: 100px;
 `;
 const CalendarWrap = styled.div`
   height: 100%;
@@ -110,6 +111,6 @@ const GraphWrap = styled.div`
   color: #222;
   border-radius: 8px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  height: 80%
+  height: 80%;
 `;
 export default ScheduleCalendar;
