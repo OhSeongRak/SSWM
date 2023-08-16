@@ -79,14 +79,14 @@ const Streching = () => {
     const width = 400;
     const height = 300;
     const flip = true; 
-    webcam = new tmPose.Webcam(width, height, flip); 
+    webcam = new tmPose.Webcam(width, 300, flip); 
     await webcam.setup(); 
     await webcam.play();
     await resetModel();
 
     
     const canvas = document.getElementById("canvas");
-    canvas.width = width; canvas.height = height;
+    canvas.width = width; canvas.height = 300;
     ctx = canvas.getContext("2d");
 
     window.requestAnimationFrame(loop);
@@ -219,7 +219,7 @@ const ContainerWrap = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 90vh;
+  height: 90%;
 `
 const HeaderWrap = styled.div`
   display: flex;
