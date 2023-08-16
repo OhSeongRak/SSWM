@@ -122,7 +122,7 @@ const Streching = () => {
   }
   
   async function predict(selectClass) {
-
+    if(webcam.canvas){
       const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
 
       const prediction = await model.predict(posenetOutput);
@@ -142,6 +142,7 @@ const Streching = () => {
     
       // finally draw the poses
       drawPose(pose);
+    }
   }
 
   function drawPose(pose) {

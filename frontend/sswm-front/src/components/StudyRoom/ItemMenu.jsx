@@ -69,19 +69,6 @@ class CardHoverMenus extends Component {
             isHost={isHost}
             isMyPage={isMyPage}
           />
-          {/* {isHost === false && isMyPage === true && (
-            <CardHoverButton
-              txt="탈퇴하기"
-              clicked={p.funcs.viewBoard}
-              sx={{
-                verticalAlign: "center",
-                justifyItems: "center",
-                alignItems: "center",
-              }}
-              studyroom={studyroom}
-              type="leave"
-            />
-          )} */}
         </div>
       </div>
     );
