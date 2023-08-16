@@ -166,7 +166,7 @@ const Streching = () => {
     if (unusedIndexes.current.length === 0) {
 //    모든 숫자가 뽑혔을 경우 나가기
       axios
-      .post(`{process.env.REACT_APP_BASE_URL}/api/user-logs/${mySessionId}/stretching`, Math.floor(sumScore.current / 9), {
+      .post(`${process.env.REACT_APP_BASE_URL}/api/user-logs/${mySessionId}/stretching`, Math.floor(sumScore.current / 9), {
           headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",

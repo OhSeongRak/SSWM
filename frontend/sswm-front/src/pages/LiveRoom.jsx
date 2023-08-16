@@ -24,7 +24,7 @@ const LiveRoom = () => {
   useEffect(() => {
     const fetchStudyroom = async () => {
       try {
-        const response = await axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`, {
           headers: {
             Authorization: accessToken,
           },
