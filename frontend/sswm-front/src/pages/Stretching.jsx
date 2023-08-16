@@ -78,14 +78,13 @@ const Streching = () => {
     model = await tmPose.load(modelURL, metadataURL);
     maxScoreRef.current = 0;
 
+
     const flip = true; 
     webcam = new tmPose.Webcam(400, 300, flip); 
     if(webcam){
       await webcam.setup(); 
       await webcam.play();
       await resetModel();
-    
-
     
       const canvas = document.getElementById("canvas");
       canvas.width = 400; canvas.height = 300;
@@ -231,7 +230,7 @@ const ContainerWrap = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 90vh;
+  height: 90%;
 `
 const HeaderWrap = styled.div`
   display: flex;

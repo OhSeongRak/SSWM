@@ -66,9 +66,10 @@ class CardHoverMenus extends Component {
               alignItems: "center",
             }}
             studyroom={studyroom}
-            type="enter"
+            isHost={isHost}
+            isMyPage={isMyPage}
           />
-          {isHost === false && isMyPage === true && (
+          {/* {isHost === false && isMyPage === true && (
             <CardHoverButton
               txt="탈퇴하기"
               clicked={p.funcs.viewBoard}
@@ -80,7 +81,7 @@ class CardHoverMenus extends Component {
               studyroom={studyroom}
               type="leave"
             />
-          )}
+          )} */}
         </div>
       </div>
     );

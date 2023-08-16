@@ -30,6 +30,7 @@ const CardHoverButton = (props) => {
     }
     window.location.reload();
   }
+
   const handleButtonClick = async () => {
     console.log("studyroomstudyroom", studyroom);
     const roomList = await axios.get(`/api/studyrooms`, {
@@ -89,9 +90,29 @@ const CardHoverButton = (props) => {
         window.location.href = `/StudyRoomMember/${studyroom.id}`;
     }
   };
+
   return (
     <div>
-      {studyroom.public === false && (
+      <Button
+        sx={{ margin: "10px", height: "40px", alignItems: "center"}}
+        variant="outlined"
+        onClick={handleButtonClick}
+        color="primary"
+        >
+        입장하기
+      </Button>
+      {props.isHost === false && props.isMyPage === true && (
+        <Button
+        sx={{ margin: "10px", height: "40px", alignItems: "center"}}
+        variant="outlined"
+        onClick={handleLeaveClick}
+        color="error"
+        >
+        탈퇴하기
+        </Button>
+      )}
+
+      {studyroom.public === false && props.isHost === false && ( //비공개 and 방장x 
         <TextField
           sx={{
             margin: "30px",
@@ -106,20 +127,6 @@ const CardHoverButton = (props) => {
           onChange={handleenterCodeChange} // 입력 시 호출되는 함수 설정
         />
       )}
-      {/* <a
-        href="/StudyRoomMember"
-        type="button"
-        onClick={handleButtonClick} // 버튼 클릭 시 handleButtonClick 함수 호출
-        className="btn btn-light w-75 m-3 text-left"
-      > */}
-        <Button
-          sx={{ margin: "10px", height: "40px", alignItems: "center"}}
-          variant="outlined"
-          onClick={props.type === "enter" ? handleButtonClick : handleLeaveClick}
-          color={buttonColor}
-          >
-          {props.txt}
-        </Button>
     </div>
   );
 };
