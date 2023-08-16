@@ -120,6 +120,7 @@ const CardHoverButton = (props) => {
             display: "inline-flex",
             justifyItems: "center",
           }}
+          inputProps={{maxLength:8}}
           required
           id="outlined-required"
           label="enterCode"
