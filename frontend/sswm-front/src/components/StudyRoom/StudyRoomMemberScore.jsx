@@ -17,7 +17,7 @@ const StudyRoomMemberScore = ({studyroomId}) => {
   useEffect(() => {
     const fetchTop3Attend = async () => {
       try {
-        const response = await axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/daily-attend`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/daily-attend`, {
           headers: {
             Authorization: accessToken,
           },
@@ -31,7 +31,7 @@ const StudyRoomMemberScore = ({studyroomId}) => {
     };
     const fetchTop3Study = async () => {// 출석률 top3
       try {
-        const response = await axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/daily-study`, {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/daily-study`, {
           headers: {
             Authorization: accessToken,
           },

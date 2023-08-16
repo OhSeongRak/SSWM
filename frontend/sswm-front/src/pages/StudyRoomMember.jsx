@@ -49,7 +49,7 @@ const StudyRoomMember = () => {
 
   const closeModalEvent = () => {
     setIsModalOpen(false);
-    axios.put(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/leave`,{},{
+    axios.put(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/leave`,{},{
       headers:{
           Authorization : accessToken
       }
@@ -69,14 +69,14 @@ const StudyRoomMember = () => {
     const fetchData = async () => {
       try {
         // dailylog 생성
-        await axios.post(`{process.env.REACT_APP_BASE_URL}/api/user-logs/${studyroomId}`, {}, {
+        await axios.post(`${process.env.REACT_APP_BASE_URL}/api/user-logs/${studyroomId}`, {}, {
           headers: {
             Authorization: accessToken,
           },
         });
 
         // 스터디룸 조회
-        const studyroomResponse = await axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`, {
+        const studyroomResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`, {
           headers: {
             Authorization: accessToken,
           },
@@ -86,7 +86,7 @@ const StudyRoomMember = () => {
         setStudyAvgTime(formatTime(studyroomResponse.data.studyAvgTime));
         setMaxRestTime(formatTime(studyroomResponse.data.maxRestTime));
 
-        axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/isHost`, {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/isHost`, {
           headers: {
             Authorization: accessToken,
           },
