@@ -35,7 +35,7 @@ function App() {
     }
 
     axios
-      .post(`/api/auth/access-token`, accessToken, {
+      .post(`${process.env.REACT_APP_BASE_URL}/api/auth/access-token`, accessToken, {
         headers: {
           Authorization: accessToken,
         },
@@ -48,7 +48,7 @@ function App() {
         // 로그인 했지만 access 토큰 만료 재발급 필요
         console.error("Access 토큰 만료: ", error);
         axios
-          .post(`/api/auth/refresh-access-token`, refreshToken, {
+          .post(`${process.env.REACT_APP_BASE_URL}/api/auth/refresh-access-token`, refreshToken, {
             headers: {
               Authorization: refreshToken,
             },
