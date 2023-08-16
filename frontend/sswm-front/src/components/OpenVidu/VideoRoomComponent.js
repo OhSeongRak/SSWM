@@ -133,7 +133,7 @@ class VideoRoomComponent extends Component {
 
     onbeforeunload(event) {
         event.preventDefault();
-        this.leaveSession(true);
+        this.leaveSession();
     }
         
     async joinSession() {
@@ -147,7 +147,7 @@ class VideoRoomComponent extends Component {
         
         if (response.data === true) {
             alert("이미 라이브 중인 스터디룸이 있습니다!");
-            this.leaveSession(response.data);
+            this.leaveSession();
         }
 
         else {
@@ -305,21 +305,20 @@ class VideoRoomComponent extends Component {
         });            
     }
 
-    leaveSession(data) {
-        if (data !== true) {
-            this.sendEventAxios({
-                type: 'REST',
-                status: 'OFF',
-                studyroomId: this.state.mySessionId,
-            })
-            this.restOn = false
-    
-            this.sendEventAxios({
-                type: 'STUDY',
-                status: 'OFF',
-                studyroomId: this.state.mySessionId,
-            })
-        }
+    leaveSession() {
+        this.sendEventAxios({
+            type: 'REST',
+            status: 'OFF',
+            studyroomId: this.state.mySessionId,
+        })
+        this.restOn = false
+
+        this.sendEventAxios({
+            type: 'STUDY',
+            status: 'OFF',
+            studyroomId: this.state.mySessionId,
+        })
+        
         // 원래 오픈비두에 있던 코드
         setTimeout(() => {
             const mySession = this.state.session;

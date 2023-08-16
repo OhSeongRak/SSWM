@@ -5,10 +5,13 @@ import ExpBar from "./ExpBar";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import IconButton from '@mui/material/IconButton';
-import AddIcon from '@mui/icons-material/Add';
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+
+import SentimentVeryDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentVeryDissatisfiedOutlined";
 
 import axios from "axios";
+import { Typography } from "@mui/material";
 
 const MyProfile = ({ users }) => {
   const [trees, setTrees] = useState([
@@ -24,37 +27,36 @@ const MyProfile = ({ users }) => {
 
   useEffect(() => {
     axios
-      .get(`/api/user/trees`,{
+      .get(`/api/user/trees`, {
         headers: {
           Authorization: accessToken,
         },
       })
       .then((response) => {
-        console.log("내나무:::",response.data)
-        setTrees(response.data)
+        console.log("내나무:::", response.data);
+        setTrees(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-      // eslint-disable-next-line
-    }, []);
-    
-  
+    // eslint-disable-next-line
+  }, []);
+
   const CreateTree = () => {
-    console.log("trees : "+trees);
-    const hasCurrentTree = trees.some(tree => tree.current);
-    
+    console.log("trees : " + trees);
+    const hasCurrentTree = trees.some((tree) => tree.current);
+
     if (!hasCurrentTree) {
       axios
-        .post(`/api/user/trees`, null ,{
+        .post(`/api/user/trees`, null, {
           headers: {
             Authorization: accessToken,
           },
         })
         .then((response) => {
-          console.log("여기",response.data)
+          console.log("여기", response.data);
           const newTree = response.data;
-          setTrees(prevTrees => [...prevTrees, newTree]);     
+          setTrees((prevTrees) => [...prevTrees, newTree]);
         })
         .catch((error) => {
           console.log(error);
@@ -65,75 +67,106 @@ const MyProfile = ({ users }) => {
     }
   };
   const imageUrl = `${process.env.REACT_APP_IMAGE_URL}/` + users.image;
-  const existingTree = trees.find(tree => tree.current);
- 
+  const existingTree = trees.find((tree) => tree.current);
 
-  function calculateLevel(currentExp){
+  function calculateLevel(currentExp) {
     let level;
     let NextExp;
 
-    if(currentExp < 100) {
+    if (currentExp < 100) {
       level = 1;
       NextExp = 100;
-    } else if(currentExp < 200){
+    } else if (currentExp < 200) {
       level = 2;
       NextExp = 200;
-    } else if(currentExp < 300){
+    } else if (currentExp < 300) {
       level = 3;
       NextExp = 300;
-    } else if(currentExp < 400){
+    } else if (currentExp < 400) {
       level = 4;
       NextExp = 400;
-    } else if(currentExp < 550){
+    } else if (currentExp < 550) {
       level = 5;
       NextExp = 550;
-    } else if(currentExp < 700){
+    } else if (currentExp < 700) {
       level = 6;
       NextExp = 700;
-    } else if(currentExp < 850){
+    } else if (currentExp < 850) {
       level = 7;
       NextExp = 850;
-    } else if(currentExp < 1000){
+    } else if (currentExp < 1000) {
       level = 8;
       NextExp = 1000;
-    } else if(currentExp < 1150){
+    } else if (currentExp < 1150) {
       level = 9;
       NextExp = 1150;
-    } else if(currentExp < 1350){
+    } else if (currentExp < 1350) {
       level = 10;
       NextExp = 1350;
-    } else if(currentExp < 1550){
+    } else if (currentExp < 1550) {
       level = 11;
       NextExp = 1550;
-    } else if(currentExp < 1750){
+    } else if (currentExp < 1750) {
       level = 12;
       NextExp = 1750;
-    } else if(currentExp < 1950){
+    } else if (currentExp < 1950) {
       level = 13;
       NextExp = 1950;
-    } else if(currentExp < 2150){
+    } else if (currentExp < 2150) {
       level = 14;
       NextExp = 2150;
-    } else if(currentExp < 2400 ){
+    } else if (currentExp < 2400) {
       level = 15;
       NextExp = 2400;
-    } else if(currentExp < 2650){
+    } else if (currentExp < 2650) {
       level = 16;
       NextExp = 2650;
-    } else if(currentExp < 2900){
+    } else if (currentExp < 2900) {
       level = 17;
       NextExp = 2900;
-    } else if(currentExp < 3150){
+    } else if (currentExp < 3150) {
       level = 18;
       NextExp = 3150;
-    } else if(currentExp < 3400){
+    } else if (currentExp < 3400) {
       level = 19;
       NextExp = 3400;
-    } else{
+    } else {
       level = 20;
     }
-    return [level, NextExp]
+    return [level, NextExp];
   }
+  // 나무 리스트가 비어있을 때의 출력
+  const emptyTreeOutput = (
+    <TreeNoti>
+      <Typography>
+        <SentimentVeryDissatisfiedOutlinedIcon
+          style={{ width: "30px", height: "30px", marginRight: "10px" }}
+        />
+        아직 완성된 나무가 없습니다
+      </Typography>
+    </TreeNoti>
+  );
+
+  // 나무 리스트가 비어있지 않을 때의 출력
+  const treeListOutput = trees.map((tree) => {
+    if (!tree.current) {
+      return (
+        <TreeInfo2 key={tree.name}>
+          <TreeImg src={tree.image}></TreeImg>
+          <TreeName>
+            <div>{tree.name}</div>
+            {tree ? <div>LV. {calculateLevel(tree.userExp)}</div> : null}
+          </TreeName>
+        </TreeInfo2>
+      );
+    } else {
+      return null;
+    }
+  });
+
+  // 나무 리스트에 나무가 하나밖에 없으면 해당 조건을 검사하여 출력을 결정
+  const treeOutput = trees.length == 0 ? emptyTreeOutput : treeListOutput;
+
   return (
     <ContainerWrap>
       <TitleWrap>
@@ -142,7 +175,7 @@ const MyProfile = ({ users }) => {
       <ContentWrap>
         <UserWrap>
           <InfoWrap>
-            <InfoImg> 
+            <InfoImg>
               <Avatar alt="profile Img" src={imageUrl} sx={{ width: 100, height: 100 }} />
             </InfoImg>
             <InfoName>{users.nickname}</InfoName>
@@ -150,9 +183,9 @@ const MyProfile = ({ users }) => {
 
           <BtnWrap>
             <Link to="/EditInfo">
-                <Button variant="contained" color="success">
-                  회원정보
-                </Button>
+              <Button variant="contained" color="success">
+                회원정보
+              </Button>
             </Link>
           </BtnWrap>
         </UserWrap>
@@ -180,32 +213,45 @@ const MyProfile = ({ users }) => {
             </TreeInfo>
           )}
 
-{existingTree ?
-          (<TreeBalanceWrap>
-            <TreeBalanceText>일일 EXP ({Math.round(existingTree.dayExp*100)/100}/100)</TreeBalanceText>
-            <TreeBalanceContent>
-              <ExpBar value={existingTree.dayExp} maxValue={100} />
-              <div>{Math.floor(existingTree.dayExp)}%</div>
-            </TreeBalanceContent>
-            <TreeBalanceText>전체 EXP ({Math.round(existingTree.userExp*100)/100}/{calculateLevel(existingTree.userExp)[1]})</TreeBalanceText>
-            <TreeBalanceContent>
-              <ExpBar value={existingTree.userExp} maxValue={calculateLevel(existingTree.userExp)[1]} />
-              <div>{Math.floor((existingTree.userExp)/(calculateLevel(existingTree.userExp)[1])*100)}%</div>
-            </TreeBalanceContent>
-          </TreeBalanceWrap>
-          ):(
-          <TreeBalanceWrap>
-            <TreeBalanceText>일일 EXP (0/100)</TreeBalanceText>
-            <TreeBalanceContent>
-              <ExpBar value={0} maxValue={100} />
-              <div>0%</div>
-            </TreeBalanceContent>
-            <TreeBalanceText>전체 EXP (0/100)</TreeBalanceText>
-            <TreeBalanceContent>
-              <ExpBar value={0} maxValue={100} />
-              <div>0%</div>
-            </TreeBalanceContent>
-          </TreeBalanceWrap>
+          {existingTree ? (
+            <TreeBalanceWrap>
+              <TreeBalanceText>
+                일일 EXP ({Math.round(existingTree.dayExp * 100) / 100}/100)
+              </TreeBalanceText>
+              <TreeBalanceContent>
+                <ExpBar value={existingTree.dayExp} maxValue={100} />
+                <div>{Math.floor(existingTree.dayExp)}%</div>
+              </TreeBalanceContent>
+              <TreeBalanceText>
+                전체 EXP ({Math.round(existingTree.userExp * 100) / 100}/
+                {calculateLevel(existingTree.userExp)[1]})
+              </TreeBalanceText>
+              <TreeBalanceContent>
+                <ExpBar
+                  value={existingTree.userExp}
+                  maxValue={calculateLevel(existingTree.userExp)[1]}
+                />
+                <div>
+                  {Math.floor(
+                    (existingTree.userExp / calculateLevel(existingTree.userExp)[1]) * 100
+                  )}
+                  %
+                </div>
+              </TreeBalanceContent>
+            </TreeBalanceWrap>
+          ) : (
+            <TreeBalanceWrap>
+              <TreeBalanceText>일일 EXP (0/100)</TreeBalanceText>
+              <TreeBalanceContent>
+                <ExpBar value={0} maxValue={100} />
+                <div>0%</div>
+              </TreeBalanceContent>
+              <TreeBalanceText>전체 EXP (0/100)</TreeBalanceText>
+              <TreeBalanceContent>
+                <ExpBar value={0} maxValue={100} />
+                <div>0%</div>
+              </TreeBalanceContent>
+            </TreeBalanceWrap>
           )}
         </TreeWrap>
       </ContentWrap>
@@ -215,30 +261,34 @@ const MyProfile = ({ users }) => {
       </TitleWrap>
       <ContentWrap>
         <TreeListWrap>
-          {trees.map((tree) => {
+          {
+            /* {trees.map((tree) => {
             if (!tree.current) {
               return (
                 <TreeInfo2 key={tree.name}>
                   <TreeImg src={tree.image}></TreeImg>
                   <TreeName>
                     <div>{tree.name}</div>
-                    {tree ? (
-                      <div>LV. {calculateLevel(tree.userExp)}</div>
-                    ) : null}
+                    {tree ? <div>LV. {calculateLevel(tree.userExp)}</div> : null}
                   </TreeName>
                 </TreeInfo2>
               );
             } else {
               return null;
             }
-          })}
-
-          
+          })} */ treeOutput
+          }
         </TreeListWrap>
       </ContentWrap>
     </ContainerWrap>
   );
 };
+
+const TreeNoti = styled.div`
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+`;
 
 const ContainerWrap = styled.div`
   width: 100%;
@@ -250,23 +300,24 @@ const TitleWrap = styled.div`
   margin-bottom: 1vw;
 `;
 const Title = styled.span`
-  border: 2px solid #fecc47;
-  border-radius: 15px;
-  padding: 3px 3px;
-  background: #fecc47;
+  border-radius: 10px;
+  padding: 10px 10px;
+  background: #a4dbe4;
   font-family: "NanumSquareNeo";
 `;
 const ContentWrap = styled.div`
   display: flex;
   gap: 5%;
   justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 100px;
 `;
 const UserWrap = styled.div`
   display: flex;
   flex-direction: column;
   width: 30%;
-  height: 200px;
-  border: 2px solid orange;
+  height: 250px;
+  border: 1px solid #a4dbe4;
   border-radius: 15px;
 `;
 const InfoWrap = styled.div`
@@ -282,6 +333,7 @@ const InfoImg = styled.div`
   justify-content: center;
   align-items: center;
   height: 70%;
+  margin-top: 10px;
 `;
 const InfoName = styled.div`
   display: flex;
@@ -294,14 +346,14 @@ const BtnWrap = styled.div`
   display: flex;
   justify-content: flex-end;
   height: 20%;
-  margin-right: 0.5vw;
+  margin-right: 1vw;
   margin-bottom: 0.5vw;
 `;
 const TreeWrap = styled.div`
   display: flex;
-  width: 70%;
-  height: 200px;
-  border: 2px solid orange;
+  width: 60%;
+  height: 250px;
+  border: 1px solid #a4dbe4;
   border-radius: 15px;
 `;
 const TreeInfo = styled.div`
@@ -309,7 +361,8 @@ const TreeInfo = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  width: 35%;
+  margin-top: 20px;
   overflow: hidden;
 `;
 const TreeInfoWrap = styled.div`
@@ -317,23 +370,25 @@ const TreeInfoWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 80%;
   height: 100%;
-`
+`;
 const TreeInfo2 = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 30%;
-  height: 200px;
-  border: 2px solid orange;
+  height: 250px;
+
+  border: 1px solid #a4dbe4;
   border-radius: 15px;
   overflow: hidden;
 `;
 
 const TreeImg = styled.img`
   display: flex;
+  margin-top: 20px;
   justify-content: center;
   align-items: center;
   height: 60%;
@@ -373,5 +428,5 @@ const TreeListWrap = styled.div`
   justify-content: center;
   flex-direction: row;
   gap: 3vw;
-`
+`;
 export default MyProfile;

@@ -6,8 +6,10 @@ import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
 import com.ground.sswm.studyroom.model.dto.SearchStudyroomResDto;
 import com.ground.sswm.studyroom.model.dto.StudyroomDto;
 import com.ground.sswm.studyroom.service.StudyroomService;
+import com.ground.sswm.user.exception.NicknameNullException;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -140,6 +142,17 @@ public class StudyroomController {
     @GetMapping("/exists")
     public ResponseEntity<Boolean> exists(@RequestParam(required = false) Long studyroomId, @RequestParam String name) {
         log.debug("스터디룸이름 : " + name);
+
+        if (name == null || name.trim().isEmpty()) {
+            throw new NicknameNullException("제목은 빈칸이 될 수 없습니다.");
+        }
+
+        String regex = "^\\s+.*|.*\\s+$";
+
+        if (Pattern.matches(regex, name)) {
+            throw new NicknameNullException("제목은 빈칸이 될 수 없습니다."); // 제목에 공백이 들어가는 경우
+        }
+
         boolean isExist = studyroomService.exists(studyroomId,name);
         return new ResponseEntity<Boolean>(isExist, HttpStatus.OK);
     }

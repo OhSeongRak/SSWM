@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 const RoomListLayout = styled.div`
   flex: 1;
-  padding : 0 5.4em 0 3.4em;
+  padding: 0 5.4em 0 3.4em;
 `;
 
 const RoomList = styled.ul`
@@ -23,11 +23,11 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic, sorting 
   const token = JSON.parse(localStorage.getItem("accessToken"));
 
   const data = {
-    "sortBy" : option === "인원순" ? "USER_NUM" : option === "최근순" ? "CREATED" : "STUDY_TIME", // 공부시간(STUDY_TIME), 인원(USER_NUM), 생성시간(CREATED), 
-    "orderBy" : sorting === true ? "ASC" : "DESC",
-    "searchKeyword" : searchKeyword, // 방제목, 방아이디
-    "tagNames" : selectedTags,
-    "isPublic" : isPublic,
+    sortBy: option === "인원순" ? "USER_NUM" : option === "최근순" ? "CREATED" : "STUDY_TIME", // 공부시간(STUDY_TIME), 인원(USER_NUM), 생성시간(CREATED),
+    orderBy: sorting === true ? "ASC" : "DESC",
+    searchKeyword: searchKeyword, // 방제목, 방아이디
+    tagNames: selectedTags,
+    isPublic: isPublic,
   };
   // console.log(token);
   useEffect(() => {
@@ -44,7 +44,7 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic, sorting 
         // 오류 처리
         console.log(error);
       });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [option, searchKeyword, selectedTags, isPublic, sorting, token]);
 
   console.log(studyrooms);
@@ -52,7 +52,12 @@ const StudyRoomList = ({ option, searchKeyword, selectedTags, isPublic, sorting 
     <RoomListLayout ref={ref}>
       <RoomList>
         {studyrooms.map((studyroom) => (
-          <RecipeReviewCard key={studyroom.id} studyroom={studyroom} isMyPage={false}/>
+          <RecipeReviewCard
+            key={studyroom.id}
+            studyroom={studyroom}
+            isMyPage={false}
+            isPublic={studyroom.isPublic}
+          />
         ))}
       </RoomList>
     </RoomListLayout>
