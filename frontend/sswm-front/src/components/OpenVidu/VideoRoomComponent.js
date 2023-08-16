@@ -1014,7 +1014,7 @@ class VideoRoomComponent extends Component {
 
             {/* 스트레칭 버튼 시작 */}
             <Link to={`/Stretching/${this.state.mySessionId}`} target="_blank">
-                <IconButton>
+                <IconButton onClick={this.toggleCam}>
                     <AccessibilityNewIcon/>
                 </IconButton>
             </Link>
