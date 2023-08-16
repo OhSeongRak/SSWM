@@ -34,6 +34,7 @@ import { styled as muistyled } from "@mui/material/styles";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Button } from "@mui/material";
+import HomeIcon from '@mui/icons-material/Home';
 
 let model, webcam;
 var localUser = new UserModel();
@@ -938,6 +939,11 @@ class VideoRoomComponent extends Component {
 
 
         <FooterWrap>
+        <Link to="/" >
+            <IconButton>
+                <HomeIcon/>
+            </IconButton>
+        </Link>
         <div className="buttonsContent" >
             {/* 휴식 버튼 시작 */}
             <IconButton
@@ -953,13 +959,19 @@ class VideoRoomComponent extends Component {
                 {/* 타이머 설정 */}
                 {this.state.timerRunning ? (
                     <div>
-                        <h2>타이머 실행 중</h2>
-                        <p>남은 시간: {this.state.timerValue}초</p>
-                        <button onClick={this.handleCancelTimer}>취소</button>
+                        <TimeTitleWrap>타이머 실행 중</TimeTitleWrap>
+                        <TimerWrap>
+                            <span>남은 시간: {this.state.timerValue}초</span>
+                            </TimerWrap>
+                        <TimerBtnWrap>
+                            <Button variant="contained" color="success" onClick={this.handleCancelTimer}>
+                            취소
+                            </Button>
+                        </TimerBtnWrap>
                     </div>
                   ) : (
                     <div>
-                      <h2>타이머 설정</h2>
+                      <TimeTitleWrap>타이머 설정</TimeTitleWrap>
                       <TimerWrap>
                         <IconButton aria-label="minus" onClick={this.handleMinusClick}>
                           <RemoveCircleOutlineIcon />
@@ -1124,10 +1136,15 @@ const FooterWrap = styled.div`
   bottom: 0;
   width: 100%;
   height: 60px;
-  background-color: green;
+  background-color: #A9AC5D;
   color: white;
   gap: 3vw;
 
+`
+const TimeTitleWrap = styled.h2`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
 const TimerWrap = styled.div`
   display: flex;
