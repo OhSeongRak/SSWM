@@ -27,7 +27,7 @@ const MyProfile = ({ users }) => {
 
   useEffect(() => {
     axios
-      .get(`{REACT_APP_BASE_URL}/api/user/trees`, {
+      .get(`{process.env.REACT_APP_BASE_URL}/api/user/trees`, {
         headers: {
           Authorization: accessToken,
         },
@@ -48,7 +48,7 @@ const MyProfile = ({ users }) => {
 
     if (!hasCurrentTree) {
       axios
-        .post(`{REACT_APP_BASE_URL}/api/user/trees`, null, {
+        .post(`{process.env.REACT_APP_BASE_URL}/api/user/trees`, null, {
           headers: {
             Authorization: accessToken,
           },

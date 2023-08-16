@@ -40,7 +40,7 @@ const MemberTable = ({ studyroomId }) => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await axios.get(`{REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/search-user`, {
+        const response = await axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/search-user`, {
           headers: {
             Authorization: accessToken,
           },
@@ -62,7 +62,7 @@ const MemberTable = ({ studyroomId }) => {
     setIsModalOpen(false);
 
     axios
-      .put(`{REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/ban`, userDto, {
+      .put(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/ban`, userDto, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
@@ -84,7 +84,7 @@ const MemberTable = ({ studyroomId }) => {
     setIsHostModalOpen(false);
     console.log("userDto",userDto);
     axios
-      .put(`{REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/pass`, userDto, {
+      .put(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/pass`, userDto, {
         headers: {
           Authorization: accessToken,
         },

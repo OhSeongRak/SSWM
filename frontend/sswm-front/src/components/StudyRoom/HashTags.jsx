@@ -14,7 +14,7 @@ export default function CheckboxChip({ onTagClick }) {
 
   useEffect(() => {
     axios
-      .get(`{REACT_APP_BASE_URL}/api/tags`, {
+      .get(`{process.env.REACT_APP_BASE_URL}/api/tags`, {
         headers: {
           Authorization: token,
         },
