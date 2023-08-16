@@ -111,7 +111,7 @@ const Streching = () => {
         remainingTime.current = 800; 
     }
 
-    if (sc !== null) {
+    if (sc !== null && sc !== undefined) {
       const cv = webcam.canvas;
       setTimeout(() => {
         if (cv){
@@ -119,7 +119,7 @@ const Streching = () => {
           setClassSelected(sc);
         }
         remainingTime.current -= 1;
-      }, 10);
+      }, 100);
     } 
     window.requestAnimationFrame(loop);
 
@@ -127,23 +127,27 @@ const Streching = () => {
   }
   
   async function predict(selectClass, cv) {
-      if(cv){
+      if(cv && selectClass){
         const { pose, posenetOutput } = await model.estimatePose(cv);
         const prediction = await model.predict(posenetOutput);
-        const currentClassScore = prediction[selectClass].probability * 100;
+        if (prediction){
+          console.log(prediction);
+          console.log(selectClass);
+          const currentClassScore = prediction[selectClass].probability * 100;
 
-        setShowState(currentClassScore + Math.floor(Math.random() * 13));
+          setShowState(currentClassScore + Math.floor(Math.random() * 13));
 
-        const intCurrentClassScore = Math.floor(currentClassScore);
-        setCurrentScore(intCurrentClassScore);
+          const intCurrentClassScore = Math.floor(currentClassScore);
+          setCurrentScore(intCurrentClassScore);
 
-        currentSumScore.current += intCurrentClassScore;
-        if (intCurrentClassScore > maxScoreRef.current) {
-          maxScoreRef.current = intCurrentClassScore;
-        }
+          currentSumScore.current += intCurrentClassScore;
+          if (intCurrentClassScore > maxScoreRef.current) {
+            maxScoreRef.current = intCurrentClassScore;
+          }
         
-        // finally draw the poses
-        drawPose(pose, cv);
+          // finally draw the poses
+          drawPose(pose, cv);
+        }
       }
   }
 
@@ -179,7 +183,7 @@ const Streching = () => {
     // 선택된 숫자를 미사용 목록에서 제거
     unusedIndexes.current = unusedIndexes.current.filter(index => index !== result);
   
-    return result+1;
+    return result;
   }
 
   function outStretch() {
