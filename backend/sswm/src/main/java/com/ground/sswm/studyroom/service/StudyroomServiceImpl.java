@@ -1,5 +1,6 @@
 package com.ground.sswm.studyroom.service;
 
+import com.ground.sswm.studyroom.exception.StudyroomNotFoundException;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.model.StudyroomTag;
 import com.ground.sswm.studyroom.model.dto.SearchStudyroomReqDto;
@@ -183,7 +184,7 @@ public class StudyroomServiceImpl implements StudyroomService {
         Optional<Studyroom> studyroom = studyroomRepository.findById(studyroomId);
 
         if (studyroom.isEmpty()) {
-            return null;
+            throw new StudyroomNotFoundException("스터디룸이 없어요");
         }
 
         StudyroomDto studyroomDto = StudyroomDto.from(studyroom.get());
