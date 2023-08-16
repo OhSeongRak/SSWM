@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './StreamComponent.css';
 import OvVideoComponent from './OvVideo';
 
+
+import VideocamOff from '@material-ui/icons/VideocamOff';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';

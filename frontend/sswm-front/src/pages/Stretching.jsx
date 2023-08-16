@@ -15,6 +15,7 @@ import pose10 from '../assets/stretching/pose10.jpg';
 import pose11 from '../assets/stretching/pose11.jpg';
 import pose12 from '../assets/stretching/pose12.jpg';
 import pose13 from '../assets/stretching/pose13.jpg';
+import { useParams } from 'react-router-dom';
 
 import Gnb from "../components/Gnb";
 import Button from "@mui/material/Button";
@@ -25,6 +26,8 @@ import * as tmPose from "@teachablemachine/pose";
 let model, webcam, ctx;
 const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 const Streching = () => {
+  const { mySessionId } = useParams();
+
   const [currentScore, setCurrentScore] = useState(0);
   const [showState, setShowState] = useState(0);
   const [classSelected, setClassSelected] = useState(0);
@@ -107,7 +110,9 @@ const Streching = () => {
     if (remainingTime.current <= 0) {
         sc = null;
         resetModel();
-        sc = getRandomClass();
+        while(sc === null || sc === 7 || sc === 8 || sc === 9 || sc === 10){
+          sc = getRandomClass();
+        }
         remainingTime.current = 800; 
     }
 
@@ -119,7 +124,7 @@ const Streching = () => {
           setClassSelected(sc);
         }
         remainingTime.current -= 1;
-      }, 100);
+      }, 10);
     } 
     window.requestAnimationFrame(loop);
 
@@ -127,14 +132,11 @@ const Streching = () => {
   }
   
   async function predict(selectClass, cv) {
-      if(cv && selectClass){
+      if(cv){
         const { pose, posenetOutput } = await model.estimatePose(cv);
         const prediction = await model.predict(posenetOutput);
         if (prediction){
-          console.log(prediction);
-          console.log(selectClass);
           const currentClassScore = prediction[selectClass].probability * 100;
-
           setShowState(currentClassScore + Math.floor(Math.random() * 13));
 
           const intCurrentClassScore = Math.floor(currentClassScore);
@@ -164,16 +166,20 @@ const Streching = () => {
     if (unusedIndexes.current.length === 0) {
 //    모든 숫자가 뽑혔을 경우 나가기
       axios
-      .post("/user-logs/"+this.mySessionId+"/stretching", Math.floor(sumScore.current / 13), {
+      .post(`/api/user-logs/${mySessionId}/stretching`, Math.floor(sumScore.current / 9), {
           headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
           },
       })
+      .then(response => {
+        console.log(response);
+        outStretch();
+      })
       .catch(error => {
           console.error('점수 전달 에러 :', error);
+          outStretch();
       });
-      outStretch();
     }
   
     // 미사용 숫자 중에서 랜덤으로 선택
@@ -204,7 +210,7 @@ const Streching = () => {
             <ContentViewWrap>
               <img src={imagePath} alt="Selected Pose" style={{ maxWidth: '100%', maxHeight: '100%' }}/>
             </ContentViewWrap>
-            <ContentScoreWrap>누적점수 : {sumScore.current} / 1300 </ContentScoreWrap>
+            <ContentScoreWrap>누적점수 : {sumScore.current} / 900 </ContentScoreWrap>
           </ContentLeftWrap>
 
           <ContentRightWrap> {/* 유저 화면 */}

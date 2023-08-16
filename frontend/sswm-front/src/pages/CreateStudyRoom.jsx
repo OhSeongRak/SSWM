@@ -17,7 +17,7 @@ import ForestIcon from "@mui/icons-material/Forest";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 import def from "../assets/dolphin.jpg";
-import { Avatar, RadioGroup, Switch, Typography } from "@mui/material";
+import { Avatar, Grid, RadioGroup, Switch, Typography } from "@mui/material";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
 
 
@@ -273,9 +273,9 @@ const CreateStudyRoom = () => {
       <ContainerWrap>
         <CreateWrap>
           <CreateContent>
-            <ContentWrap>
-              <ContentLeftWrap>
-                <input
+            <Grid container   justifyContent="center"  alignItems="center">
+            <ImageWrap>
+            <input
                   type="file"
                   ref={imageUp}
                   style={{ display: "none" }}
@@ -289,15 +289,15 @@ const CreateStudyRoom = () => {
                     sx={{ width: 200, height: 200 }}
                   ></Avatar>
                 )}
-              </ContentLeftWrap>
 
-              <ContentRightWrap>
+            </ImageWrap>
+            <ContentWrap>
                 <StudyRoomWrap>
-                  <StudyRoomTitle>
+                  <SubTitle>
                     <HomeIcon fontSize="large" />
                     스터디룸 이름
-                  </StudyRoomTitle>
-                  <StudyRoomContent>
+                  </SubTitle>
+                  <SubContent>
                     <TextField
                       hiddenLabel
                       id="filled-hidden-label-normal"
@@ -309,35 +309,37 @@ const CreateStudyRoom = () => {
                       inputProps={{maxLength:13}}
                     />
                     <Button
-                      sx={{ width: "50px", marginLeft: "10px" }}
+                      sx={{  marginLeft: "10px",
+                      whiteSpace: "nowrap", 
+                      minWidth: "auto" }}
                       variant="contained"
                       color="success"
                       onClick={checkStudyroomName}
                     >
                       중복확인
                     </Button>
-                  </StudyRoomContent>
+                  </SubContent>
                 </StudyRoomWrap>
                 <StudyRoomWrap>
-                  <StudyRoomTitle>
+                  <SubTitle>
                     <LockIcon fontSize="large" />
                     공개 여부
-                  </StudyRoomTitle>
-                  <StudyRoomContent>
+                  </SubTitle>
+                  <SubContent>
                     <RadioGroup row defaultValue="공개">
                       <Switch
                         checked={studyroomDto.isPublic}
                         onChange={handleIsPublicChange}
                       />
                     </RadioGroup>
-                  </StudyRoomContent>
+                  </SubContent>
                 </StudyRoomWrap>
                 <StudyRoomWrap>
-                  <StudyRoomTitle>
+                  <SubTitle>
                     <QrCode2Icon error={codeValidation()} fontSize="large" />
                     입장코드
-                  </StudyRoomTitle>
-                  <StudyRoomContent>
+                  </SubTitle>
+                  <SubContent>
                     <TextField
                       disabled={studyroomDto.isPublic}
                       hiddenLabel
@@ -358,18 +360,14 @@ const CreateStudyRoom = () => {
                     <Typography sx={{ marginLeft: "10px" }}>
                       {(studyroomDto.enterCode !== "") ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
                     </Typography>
-                  </StudyRoomContent>
+                  </SubContent>
                 </StudyRoomWrap>
-              </ContentRightWrap>
-            </ContentWrap>
-
-            <ContentWrap2>
               <StudyRoomWrap>
-                <StudyRoomTitle2>
+                <SubTitle>
                   <GroupsIcon fontSize="large" />
                   최대 인원
-                </StudyRoomTitle2>
-                <StudyRoomContent>
+                </SubTitle>
+                <SubContent>
                   <IconButton
                     aria-label="minus"
                     onClick={() =>
@@ -387,14 +385,14 @@ const CreateStudyRoom = () => {
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
-                </StudyRoomContent>
+                </SubContent>
               </StudyRoomWrap>
               <StudyRoomWrap>
-                <StudyRoomTitle2>
+                <SubTitle>
                   <ForestIcon fontSize="large" />
                   일일 최대 휴식 시간
-                </StudyRoomTitle2>
-                <StudyRoomContent>
+                </SubTitle>
+                <SubContent>
                   <IconButton
                     aria-label="minus"
                     onClick={() =>
@@ -412,27 +410,29 @@ const CreateStudyRoom = () => {
                   >
                     <AddCircleOutlineIcon />
                   </IconButton>
-                </StudyRoomContent>
+                </SubContent>
               </StudyRoomWrap>
               <StudyRoomWrap>
-                <StudyRoomTitle2>
+                <SubTitle>
                   <LocalOfferIcon fontSize="large" />
                   태그
-                </StudyRoomTitle2>
-                <StudyRoomContent>
+                </SubTitle>
+                <SubContent>
                   <MultipleSelectChip
                     selectedTags={studyroomDto.tags}
                     setSelectedTags={handleTagsChange}
                   />
-                </StudyRoomContent>
+                </SubContent>
               </StudyRoomWrap>
-            </ContentWrap2>
+              <CreateBtn>
+              <Button variant="contained" color="success" onClick={handleSubmit}>
+                스터디 룸 생성하기
+              </Button>
+              </CreateBtn>
+            </ContentWrap> 
+            </Grid>
           </CreateContent>
-          <CreateBtn>
-            <Button variant="contained" color="success" onClick={handleSubmit}>
-              스터디 룸 생성하기
-            </Button>
-          </CreateBtn>
+      
         </CreateWrap>
       </ContainerWrap>
     </div>
@@ -446,66 +446,51 @@ const ContainerWrap = styled.div`
   justify-content: center;
   width: 100%;
   height: 100vh;
+
 `;
 const CreateWrap = styled.div`
-  width: 80%;
-  height: 80%;
-  border: 1px solid black;
+  display:flex;
+  width: 100%;
+  flex-direction: column;
+
 `;
 const CreateContent = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 80%;
+  justify-content: space-around;
+  border: 1px solid black;
+
 `;
-const ContentWrap = styled.div`
+const ImageWrap = styled.div`
   display: flex;
-  width: 80%;
-  height: 50%;
-`;
-const ContentWrap2 = styled.div`
-  width: 80%;
-  height: 50%;
-`;
-const ContentLeftWrap = styled.div`
-  display: flex;
-  align-items: center;
   justify-content: center;
-  width: 50%;
-  height: 100%;
+  padding : 20px;
 `;
-const ContentRightWrap = styled.div`
-  width: 50%;
-  height: 100%;
-`;
+const ContentWrap=styled.div`
+  display : flex;
+  flex-direction : column;
+  padding : 10px;
+`
+
 const StudyRoomWrap = styled.div`
   display: flex;
   width: 100%;
   height: 33.3%;
 `;
-const StudyRoomTitle = styled.div`
-  display: flex;
-  align-items: center;
-  width: 50%;
-  height: 100%;
-  font-size: 20px;
-  gap: 1vw;
+
+const SubTitle = styled.div`
+display: flex;
+align-items: center;
+width: 100%;
+height: 45px;
+font-size: 20px;
+gap: 1vw;
 `;
-const StudyRoomTitle2 = styled.div`
+const SubContent = styled.div`
   display: flex;
   align-items: center;
-  width: 20%;
-  height: 100%;
-  font-size: 20px;
-  gap: 1vw;
-  margin-left: 10vw;
-`;
-const StudyRoomContent = styled.div`
-  display: flex;
-  align-items: center;
-  width: 50%;
+  width: 100%;
   height: 100%;
 `;
 const CreateBtn = styled.div`
