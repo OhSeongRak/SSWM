@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './StreamComponent.css';
 import OvVideoComponent from './OvVideo';
 
+
 import VideocamOff from '@material-ui/icons/VideocamOff';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
@@ -116,13 +117,6 @@ export default class StreamComponent extends Component {
                 {this.props.user !== undefined && this.props.user.getStreamManager() !== undefined ? (
                     <div className="streamComponent">
                         <OvVideoComponent user={this.props.user} mutedSound={this.state.mutedSound} localUser={this.props.localUser} onNotificationButtonClick={this.handleNotificationButtonClick} micButtonClick={this.toggleSound}/>
-                        <div id="statusIcons">
-                            {!this.props.user.isVideoActive() ? (
-                                <div id="camIcon">  
-                                    <VideocamOff id="statusCam" />
-                                </div>
-                            ) : null}
-                        </div>
                     </div>
                 ) : null}
             </div>
