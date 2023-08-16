@@ -102,7 +102,7 @@ class VideoRoomComponent extends Component {
         };
         
         axios
-        .get(`/api/users`, {
+        .get(`{process.env.REACT_APP_BASE_URL}/api/users`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -291,7 +291,7 @@ class VideoRoomComponent extends Component {
     sendRestTimeAxios() {
         // 휴식 시간 가져오기
         axios
-        .get(`/api/user-logs/${this.state.mySessionId}`, {
+        .get(`{process.env.REACT_APP_BASE_URL}/api/user-logs/${this.state.mySessionId}`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",

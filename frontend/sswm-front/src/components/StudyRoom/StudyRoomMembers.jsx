@@ -41,7 +41,7 @@ const StudyRoomMembers = ({ studyroomId }) => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await axios.get(`/api/studyrooms/${studyroomId}/search-user`, {
+        const response = await axios.get(`{process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/search-user`, {
           headers: {
             Authorization: token,
           },
