@@ -2,21 +2,29 @@ import React from "react";
 import styled from "styled-components";
 
 const StudyRoomMemberBoard = ({ notice }) => {
+  // '.'을 만날 때마다 줄 바꿈 추가하는 함수
+  const formatNotice = (text) => {
+    return text ? text.split('.').join('.\n') : ''; // notice가 undefined일 경우에 대한 처리
+  };
+
   return (
     <ContainerWrap>
       <BoardWrap>
         <BoardTitle>
-          <Background>공지사항</Background>
+          <Background>
+            공지사항
+          </Background>
         </BoardTitle>
         <BoardContent>
-          <div style={{ padding: "15px" }}>{notice}</div>
+          <Boardnotice>{formatNotice(notice)}</Boardnotice>
         </BoardContent>
       </BoardWrap>
     </ContainerWrap>
   );
 };
+
 const Background = styled.span`
-  background-color: #f2cc47;
+  background-color: #F2CC47;
   padding: 7px;
   border-radius: 10px;
 `;
@@ -44,12 +52,18 @@ const BoardTitle = styled.div`
   margin-bottom: 1vw;
 `;
 const BoardContent = styled.div`
-  margin: 10px;
   display: flex;
   width: 100%;
   height: 90%;
-  border: 1px solid gray;
+  border: 2px solid #b2dfdb;
   border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+`;
+const Boardnotice = styled.div`
+  width: 95%;
+  height: 90%;
+  white-space: pre-line; /* 줄 바꿈을 표시하기 위한 스타일 */
 `;
 
 export default StudyRoomMemberBoard;

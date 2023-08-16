@@ -53,7 +53,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  height: inherit;
+  height: 90%;
   min-width: 400px !important;
   width: inherit;
 }
@@ -79,8 +79,8 @@
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
-  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-family: "NanumSquareNeo";
   vertical-align: baseline;
 }
 
