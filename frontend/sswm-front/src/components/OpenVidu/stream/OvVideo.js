@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './StreamComponent.css';
+import MicOff from '@material-ui/icons/MicOff';
+
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import IconButton from '@material-ui/core/IconButton';
 import VolumeUp from '@material-ui/icons/VolumeUp';
