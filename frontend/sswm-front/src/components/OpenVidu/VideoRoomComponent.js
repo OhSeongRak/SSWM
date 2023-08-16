@@ -85,7 +85,7 @@ class VideoRoomComponent extends Component {
         this.displayAlarmMessage = this.displayAlarmMessage.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const openViduLayoutOptions = {
             maxRatio: 3 / 2, // The narrowest ratio that will be used (default 2x3)
             minRatio: 9 / 16, // The widest ratio that will be used (default 16x9)
@@ -118,7 +118,7 @@ class VideoRoomComponent extends Component {
         window.addEventListener('beforeunload', this.onbeforeunload);
         window.addEventListener('resize', this.updateLayout);
         window.addEventListener('resize', this.checkSize);
-        this.joinSession();
+        await this.joinSession();
         this.init();
     }
 
@@ -131,31 +131,44 @@ class VideoRoomComponent extends Component {
 
     onbeforeunload(event) {
         event.preventDefault();
-        this.leaveSession();
+        this.leaveSession(true);
     }
-
-    joinSession() {
-        this.OV = new OpenVidu();
-        this.sendEventAxios({
-            type: 'STUDY',
-            status: 'ON',
-            studyroomId: this.state.mySessionId,
-        })
-
-        this.restOn = false;
-        this.timerOn = false;
-
-        this.setState({
-                session: this.OV.initSession(),
-            },
-            async () => {
-                console.log("세션이다", this.state.session);
-                this.subscribeToStreamCreated();
-                await this.connectToSession();
-            },
-        );
         
-        this.sendRestTimeAxios();
+    async joinSession() {
+        const response = await axios
+        .get("/api/event/check-inlive", {
+            headers: {
+            Authorization: accessToken,
+            "Content-Type": "application/json",
+            },
+        })
+        
+        if (response.data === true) {
+            alert("이미 라이브 중인 스터디룸이 있습니다!");
+            this.leaveSession(response.data);
+        }
+
+        else {
+            this.OV = new OpenVidu();
+            this.setState({
+                session: this.OV.initSession(),
+                },
+                async () => {
+                    this.subscribeToStreamCreated();
+                    await this.connectToSession();
+                });
+
+            this.sendEventAxios({
+                type: 'STUDY',
+                status: 'ON',
+                studyroomId: this.state.mySessionId,
+            })
+
+            this.restOn = false;
+            this.timerOn = false;
+            
+            this.sendRestTimeAxios();
+        }
     }
 
     async connectToSession() {
@@ -257,7 +270,7 @@ class VideoRoomComponent extends Component {
     }
 
     // axios 요청 함수
-    sendEventAxios = (data) => {        
+    sendEventAxios = (data) => { 
         axios
         .post("/api/event", data, {
             headers: {
@@ -290,23 +303,21 @@ class VideoRoomComponent extends Component {
         });            
     }
 
-    leaveSession() {
-        this.sendEventAxios({
-            type: 'REST',
-            status: 'OFF',
-            studyroomId: this.state.mySessionId,
-        })
-        this.restOn = false
-
-        this.sendEventAxios({
-            type: 'STUDY',
-            status: 'OFF',
-            studyroomId: this.state.mySessionId,
-        })
-
-        // setTimeout(() => {
-        //     window.location.href = `/`
-        // }, 500)
+    leaveSession(data) {
+        if (data !== true) {
+            this.sendEventAxios({
+                type: 'REST',
+                status: 'OFF',
+                studyroomId: this.state.mySessionId,
+            })
+            this.restOn = false
+    
+            this.sendEventAxios({
+                type: 'STUDY',
+                status: 'OFF',
+                studyroomId: this.state.mySessionId,
+            })
+        }
         // 원래 오픈비두에 있던 코드
         setTimeout(() => {
             const mySession = this.state.session;
@@ -320,7 +331,7 @@ class VideoRoomComponent extends Component {
             this.setState({
                 session: undefined,
                 subscribers: [],
-                mySessionId: 'Session2270callreact',
+                // mySessionId: 'Session2270callreact',
                 myUserName: 'OpenVidu_User' + Math.floor(Math.random() * 100),
                 localUser: undefined,
             });
@@ -374,7 +385,6 @@ class VideoRoomComponent extends Component {
     subscribeToStreamCreated() {
         this.state.session.on('streamCreated', (event) => {
             const subscriber = this.state.session.subscribe(event.stream, undefined);
-            console.log("subscriber:", subscriber);
             this.updateSubscribers();
             subscriber.on('streamPlaying', (e) => {
                 this.checkSomeoneShareScreen();
@@ -696,7 +706,6 @@ class VideoRoomComponent extends Component {
         this.setState({
             cancel: true,
         })
-        console.log("this.state.cancel::", this.state.cancel);
     }
 
     //타이머 설정
