@@ -22,8 +22,7 @@ const GoogleSignIn = () => {
       console.log(codeResponse);
 
       await Axios.post(
-        // `/api/auth/google/signin`,
-        `/api/auth/google/signin`,
+        `${process.env.REACT_APP_BASE_URL}/api/auth/google/signin`,
         JSON.stringify(codeResponse),
         config
       )
