@@ -17,7 +17,7 @@ const MyPage = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/users`, {
+      .get(`${process.env.REACT_APP_BASE_URL}/api/users`, {
         headers: {
           Authorization: accessToken,
         },
