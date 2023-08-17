@@ -83,14 +83,14 @@ const Streching = () => {
 
 
     const flip = true; 
-    webcam = new tmPose.Webcam(400, 300, flip); 
+    webcam = new tmPose.Webcam(600, 450, flip); 
     if(webcam){
       await webcam.setup(); 
       await webcam.play();
       await resetModel();
     
       const canvas = document.getElementById("canvas");
-      canvas.width = 400; canvas.height = 300;
+      canvas.width = 600; canvas.height = 450;
       ctx = canvas.getContext("2d");
 
       window.requestAnimationFrame(loop);
@@ -110,7 +110,7 @@ const Streching = () => {
     if (remainingTime.current <= 0) {
         sc = null;
         resetModel();
-        while(sc === null || sc === 7 || sc === 8 || sc === 9 || sc === 10){
+        while(sc === null || sc === 7 || sc === 8 || sc === 9 || sc === 10 || sc === 2 || sc === 3 || sc === 4 || sc === 5 ){
           sc = getRandomClass();
         }
         remainingTime.current = 800; 
@@ -118,7 +118,7 @@ const Streching = () => {
 
     if (sc !== null && sc !== undefined) {
       const cv = webcam.canvas;
-      setTimeout(() => {
+      setTimeout(() => { 
         if (cv){
           predict(sc, cv);
           setClassSelected(sc);
@@ -166,7 +166,7 @@ const Streching = () => {
     if (unusedIndexes.current.length === 0) {
 //    모든 숫자가 뽑혔을 경우 나가기
       axios
-      .post(`${process.env.REACT_APP_BASE_URL}/api/user-logs/${mySessionId}/stretching`, Math.floor(sumScore.current / 9), {
+      .post(`${process.env.REACT_APP_BASE_URL}/api/user-logs/${mySessionId}/stretching`, Math.floor(sumScore.current / 5), {
           headers: {
           Authorization: accessToken,
           "Content-Type": "application/json",
@@ -181,15 +181,16 @@ const Streching = () => {
           outStretch();
       });
     }
+    else{
+      // 미사용 숫자 중에서 랜덤으로 선택
+      const randomIndex = Math.floor(Math.random() * unusedIndexes.current.length);
+      const result = unusedIndexes.current[randomIndex];
   
-    // 미사용 숫자 중에서 랜덤으로 선택
-    const randomIndex = Math.floor(Math.random() * unusedIndexes.current.length);
-    const result = unusedIndexes.current[randomIndex];
+      // 선택된 숫자를 미사용 목록에서 제거
+      unusedIndexes.current = unusedIndexes.current.filter(index => index !== result);
   
-    // 선택된 숫자를 미사용 목록에서 제거
-    unusedIndexes.current = unusedIndexes.current.filter(index => index !== result);
-  
-    return result;
+      return result;
+    }
   }
 
   function outStretch() {
@@ -210,7 +211,7 @@ const Streching = () => {
             <ContentViewWrap>
               <img src={imagePath} alt="Selected Pose" style={{ maxWidth: '100%', maxHeight: '100%' }}/>
             </ContentViewWrap>
-            <ContentScoreWrap>누적점수 : {sumScore.current} / 900 </ContentScoreWrap>
+            <ContentScoreWrap>누적점수 : {sumScore.current} / 500 </ContentScoreWrap>
           </ContentLeftWrap>
 
           <ContentRightWrap> {/* 유저 화면 */}
