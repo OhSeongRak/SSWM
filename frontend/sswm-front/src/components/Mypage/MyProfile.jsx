@@ -165,7 +165,7 @@ const MyProfile = ({ users }) => {
   });
 
   // 나무 리스트에 나무가 하나밖에 없으면 해당 조건을 검사하여 출력을 결정
-  const treeOutput = trees.length == 0 ? emptyTreeOutput : treeListOutput;
+  const treeOutput = trees.length <= 1 ? emptyTreeOutput : treeListOutput;
 
   return (
     <ContainerWrap>
