@@ -25,4 +25,6 @@ public interface UserStudyroomService {
     UserAttendTop3ResDto searchDailyAttend(Long studyroomId);
 
     boolean checkUserHost(Long userId, Long studyroomId);
+
+    boolean checkMember(Long userId, Long studyroomId);
 }
