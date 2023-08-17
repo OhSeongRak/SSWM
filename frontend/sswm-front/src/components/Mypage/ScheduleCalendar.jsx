@@ -35,7 +35,7 @@ const ScheduleCalendar = (props) => {
         console.log(response.data);
       })
       .catch((error) => {
-        setcalendarDto({studyTime : 0});
+        setcalendarDto({studyTime : 0} , {stretchScore : 0});
         console.log(error);
       });
     // eslint-disable-next-line
@@ -68,6 +68,11 @@ const ScheduleCalendar = (props) => {
                     calendarDto.studyTime % 60
                   }분`
                 : "0시간 0분"}
+            </h2>
+            <h2>
+              기간 내 총 스트레칭 점수 :{" "}
+              {calendarDto.stretchScore !== undefined
+                ? `${calendarDto.stretchScore} 점` : "0점"}
             </h2>
           </div>
         </CalendarWrap>
