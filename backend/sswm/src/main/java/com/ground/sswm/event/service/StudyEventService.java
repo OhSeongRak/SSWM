@@ -6,4 +6,6 @@ public interface StudyEventService {
 
     // 시간 업데이트
     void addEventLog(Long userId, Long time, StudyEventDto studyEventDto, int dayBefore);
+
+    boolean checkInLive(Long userId);
 }

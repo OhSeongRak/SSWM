@@ -61,6 +61,7 @@ auth:
       - profile_image
       - account_email
     token-req-url : https://kauth.kakao.com/oauth/token
+    user-info-request-url: https://kapi.kakao.com/v2/user/me
     redirect-url-sign: https://i9a206.p.ssafy.io/kakao/sign
     redirect-url-login: https://i9a206.p.ssafy.io/kakao/login
 logging:

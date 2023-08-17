@@ -42,6 +42,17 @@ public class StudyEventRepository { // Redis
             userIds.add(Long.parseLong(key.split("_")[1]));
         }
         return userIds;
+    }
 
+    public boolean existsByUserId(Long userId) {
+        String pattern = userId + "_*_*";
+        ScanOptions scanOptions = ScanOptions.scanOptions()
+            .match(pattern)
+            .build();
+
+        Cursor<String> cursor = redisEventTemplate.opsForValue().getOperations()
+            .scan(scanOptions);
+
+        return cursor.hasNext();
     }
 }

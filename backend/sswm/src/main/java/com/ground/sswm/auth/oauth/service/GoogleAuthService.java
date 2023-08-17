@@ -5,11 +5,13 @@ import com.ground.sswm.auth.oauth.model.dto.OAuthTokenDto;
 import com.ground.sswm.auth.oauth.model.dto.OAuthUserInfoDto;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 @Service
 public class GoogleAuthService implements SocialAuthService {
+    @Value("${auth.google.token-req-url}")
+    private  String GOOGLE_TOKEN_REQUEST_URL;
 
-    private String GOOGLE_TOKEN_REQUEST_URL = "https://oauth2.googleapis.com";
-    private String CLIENT_ID = "508793857526-hjnar37f3fdnjsopr7lv7dfgkf972p5h.apps.googleusercontent.com";
-    private String CLIENT_SECRET = "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";
-//    private String REDIRECT_URI = "https://i9a206.p.ssafy.io";
-    private String REDIRECT_URI = "http://localhost:3000";
+    @Value("${auth.google.client-id}")
+    private  String GOOGLE_CLIENT_ID;
+
+    @Value("${auth.google.client-secret}")
+    private  String GOOGLE_CLIENT_SECRET;
+
+    @Value("${auth.google.redirect-url}")
+    private  String GOOGLE_REDIRECT_URI ;
     @Autowired
     private RestTemplate restTemplate;
 
@@ -95,9 +102,9 @@ public class GoogleAuthService implements SocialAuthService {
         Map<String, Object> params = new HashMap<>();
         params.put("grant_type", "authorization_code");
         params.put("code", code);
-        params.put("client_id", CLIENT_ID);
-        params.put("client_secret", CLIENT_SECRET);
-        params.put("redirect_uri", REDIRECT_URI);
+        params.put("client_id", GOOGLE_CLIENT_ID);
+        params.put("client_secret", GOOGLE_CLIENT_SECRET);
+        params.put("redirect_uri", GOOGLE_REDIRECT_URI);
         return params;
     }
 
