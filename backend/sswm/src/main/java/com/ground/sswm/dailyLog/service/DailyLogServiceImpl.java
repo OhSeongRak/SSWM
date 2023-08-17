@@ -65,7 +65,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
         log.debug("now : " + now);
-        int dayBefore = (hour < 16) ? 1 : 0;
+        int dayBefore = (hour < 4) ? 1 : 0;
         long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
         for (long day : days) {
             log.debug("days : " + day);
@@ -166,7 +166,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
-        int dayBefore = (hour < 16) ? 1 : 0;
+        int dayBefore = (hour < 4) ? 1 : 0;
         long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
 
         return DailyLogDto.from(
@@ -179,7 +179,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
-        int dayBefore = (hour < 16) ? 1 : 0;
+        int dayBefore = (hour < 4) ? 1 : 0;
         long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
 
         DailyLog dailyLog = dailyLogRepository.findAllByUserIdAndStudyroomIdAndDate(userId, studyroomId, days[0]);
