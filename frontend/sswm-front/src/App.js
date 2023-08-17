@@ -79,7 +79,7 @@ function App() {
     checkTokenValidity();
 
     // 일정 간격(예: 1분)으로 토큰 유효성 확인
-    const intervalId = setInterval(checkTokenValidity, 60000);
+    const intervalId = setInterval(checkTokenValidity, 600000);
 
     // 언마운트 시 인터벌 클리어
     return () => clearInterval(intervalId);
