@@ -7,7 +7,7 @@ import moment from "moment";
 import "./Calendar.css";
 
 const ScheduleCalendar = (props) => {
-  const [selectedDateRange, setSelectedDateRange] = useState([new Date(), new Date()]);
+  const [selectedDateRange, setSelectedDateRange] = useState([new Date().setHours(0, 0, 0, 0), new Date().setHours(23, 59, 59, 999)]);
 
   const [calendarDto, setcalendarDto] = useState([]);
 
@@ -35,7 +35,7 @@ const ScheduleCalendar = (props) => {
         console.log(response.data);
       })
       .catch((error) => {
-        setcalendarDto({ studyTime: 0 });
+        setcalendarDto({studyTime : 0} , {stretchScore : 0});
         console.log(error);
       });
     // eslint-disable-next-line
@@ -66,6 +66,11 @@ const ScheduleCalendar = (props) => {
               {calendarDto.studyTime !== undefined
                 ? `${Math.floor(calendarDto.studyTime / 60)}시간 ${calendarDto.studyTime % 60}분`
                 : "0시간 0분"}
+            </h2>
+            <h2>
+              기간 내 총 스트레칭 점수 :{" "}
+              {calendarDto.stretchScore !== undefined
+                ? `${calendarDto.stretchScore} 점` : "0점"}
             </h2>
           </div>
         </CalendarWrap>
