@@ -32,14 +32,13 @@ const EditInfo = () => {
         setUsers(response.data);
         setImage(`${process.env.REACT_APP_IMAGE_URL}/` + response.data.image);
         setNickName(response.data.nickname);
-        console.log(response.data); 
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-       // eslint-disable-next-line
-    }, []);
-
+    // eslint-disable-next-line
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -101,7 +100,6 @@ const EditInfo = () => {
           alert("사용 가능한 닉네임입니다.");
         }
         console.log("중복 확인" + response.data);
-        
       })
       .catch((error) => {
         // 오류 처리
@@ -136,7 +134,7 @@ const EditInfo = () => {
       })
       .then((response) => {
         console.log(response.data);
-        navigate("/MyPage")
+        navigate("/MyPage");
       })
       .catch((error) => {
         // 오류 처리
@@ -146,35 +144,35 @@ const EditInfo = () => {
   };
   const DeleteUser = () => {
     axios
-    .delete(`${process.env.REACT_APP_BASE_URL}/api/users`, {
-      headers: {
-        Authorization: accessToken,
-      },
-    })
-    .then((response) => {
-      console.log(response.data);
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      openSnackBar(); // Open the CustomSnackBar after closing the modal
-      window.location.replace("/Login");
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-      closeSnackBar();
-      alert("호스트는 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
-    }, []);
+      .delete(`${process.env.REACT_APP_BASE_URL}/api/users`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        openSnackBar(); // Open the CustomSnackBar after closing the modal
+        window.location.replace("/Login");
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        closeSnackBar();
+        alert("호스트는 탈퇴될 수 없습니다. 호스트 권한을 넘기고 탈퇴해주세요");
+      }, []);
   };
   // Snackbar
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
 
   const openSnackBar = () => setIsSnackBarOpen(true);
   const closeSnackBar = () => setIsSnackBarOpen(false);
-  
+
   const closeModalEvent = () => {
     setIsModalOpen(false);
-    DeleteUser()
+    DeleteUser();
   };
-  console.log('수정페이지', accessToken)
+  console.log("수정페이지", accessToken);
   return (
     <div>
       <Gnb />
@@ -188,7 +186,7 @@ const EditInfo = () => {
                   type="file"
                   ref={imageUp}
                   style={{ display: "none" }}
-                  onChange={handleFileChange} 
+                  onChange={handleFileChange}
                 />
                 {imageSrc && (
                   <Avatar
@@ -208,10 +206,10 @@ const EditInfo = () => {
                   id="filled-hidden-label-normal"
                   variant="filled"
                   onChange={handleNameChange}
-                  value = {nickName}
-                  inputProps={{maxLength:8}}
+                  value={nickName}
+                  inputProps={{ maxLength: 8 }}
                 />
-                <Button variant="outlined" color="error" onClick={checkNickName} >
+                <Button variant="outlined" color="error" onClick={checkNickName}>
                   중복확인
                 </Button>
               </EditRightContent>
@@ -269,19 +267,21 @@ const ContainerWrap = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100vh;
+  width: 80%;
+  height: 70vh;
+  margin-left: 10%;
 `;
 const EditWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80%;
-  height: 80%;
-`;
-const EditContentWrap = styled.div`
   width: 100%;
   height: 70%;
+`;
+const EditContentWrap = styled.div`
+  width: 70%;
+  height: 90%;
+  margin-bottom: 10%;
 `;
 const EditContent = styled.div`
   display: flex;
@@ -295,9 +295,7 @@ const EditLeftContent = styled.div`
   justify-content: center;
   width: 15%;
   height: 100%;
-  border-top: 1px solid black;
   border-right: 1px solid black;
-  border-bottom: 1px solid black;
   font-size: 20px;
 `;
 const EditRightContent = styled.div`
@@ -306,8 +304,6 @@ const EditRightContent = styled.div`
   padding: 0px 0px 0px 3vw;
   width: 85%;
   height: 100%;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
   font-size: 20px;
   gap: 2vw;
 `;
