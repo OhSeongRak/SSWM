@@ -20,7 +20,6 @@ import def from "../assets/dolphin.jpg";
 import { Avatar, Grid, RadioGroup, Switch, Typography } from "@mui/material";
 import MultipleSelectChip from "../components/StudyRoom/Tags";
 
-
 import axios from "axios";
 
 const Item = muistyled(Paper)(({ theme }) => ({
@@ -172,7 +171,6 @@ const CreateStudyRoom = () => {
         maxRestTime: value * 60, // 휴식 시간 값으로 업데이트
       });
     }
-    
   };
 
   // tag값 변경
@@ -233,7 +231,7 @@ const CreateStudyRoom = () => {
         alert("스터디방 개설이 되지 않았습니다.");
         console.log(Error);
       });
-      window.location.replace("/StudyRoom");
+    window.location.replace("/StudyRoom");
   };
 
   // const [checked, setChecked] = useState(true);
@@ -273,9 +271,9 @@ const CreateStudyRoom = () => {
       <ContainerWrap>
         <CreateWrap>
           <CreateContent>
-            <Grid container   justifyContent="center"  alignItems="center">
-            <ImageWrap>
-            <input
+            <Grid container justifyContent="center" alignItems="center">
+              <ImageWrap>
+                <input
                   type="file"
                   ref={imageUp}
                   style={{ display: "none" }}
@@ -289,9 +287,8 @@ const CreateStudyRoom = () => {
                     sx={{ width: 200, height: 200 }}
                   ></Avatar>
                 )}
-
-            </ImageWrap>
-            <ContentWrap>
+              </ImageWrap>
+              <ContentWrap>
                 <StudyRoomWrap>
                   <SubTitle>
                     <HomeIcon fontSize="large" />
@@ -306,12 +303,10 @@ const CreateStudyRoom = () => {
                       size="small"
                       placeholder={studyroomDto.name} // 상태값으로 설정
                       onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
-                      inputProps={{maxLength:13}}
+                      inputProps={{ maxLength: 13 }}
                     />
                     <Button
-                      sx={{  marginLeft: "10px",
-                      whiteSpace: "nowrap", 
-                      minWidth: "auto" }}
+                      sx={{ marginLeft: "10px", whiteSpace: "nowrap", minWidth: "auto" }}
                       variant="contained"
                       color="success"
                       onClick={checkStudyroomName}
@@ -327,10 +322,7 @@ const CreateStudyRoom = () => {
                   </SubTitle>
                   <SubContent>
                     <RadioGroup row defaultValue="공개">
-                      <Switch
-                        checked={studyroomDto.isPublic}
-                        onChange={handleIsPublicChange}
-                      />
+                      <Switch checked={studyroomDto.isPublic} onChange={handleIsPublicChange} />
                     </RadioGroup>
                   </SubContent>
                 </StudyRoomWrap>
@@ -348,9 +340,7 @@ const CreateStudyRoom = () => {
                       value={studyroomDto.enterCode}
                       size="small"
                       helperText={
-                        codeValidation()
-                          ? "알파벳,숫자 포함하여 8자리로 설정해주세요"
-                          : ""
+                        codeValidation() ? "알파벳,숫자 포함하여 8자리로 설정해주세요" : ""
                       }
                       inputProps={{
                         maxLength: CHARACTER_LIMIT,
@@ -358,81 +348,73 @@ const CreateStudyRoom = () => {
                       onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
                     />
                     <Typography sx={{ marginLeft: "10px" }}>
-                      {(studyroomDto.enterCode !== "") ? studyroomDto.enterCode.length : 0 }/{CHARACTER_LIMIT}
+                      {studyroomDto.enterCode !== "" ? studyroomDto.enterCode.length : 0}/
+                      {CHARACTER_LIMIT}
                     </Typography>
                   </SubContent>
                 </StudyRoomWrap>
-              <StudyRoomWrap>
-                <SubTitle>
-                  <GroupsIcon fontSize="large" />
-                  최대 인원
-                </SubTitle>
-                <SubContent>
-                  <IconButton
-                    aria-label="minus"
-                    onClick={() =>
-                      handleMaxUserNumChange(studyroomDto.maxUserNum - 1)
-                    }
-                  >
-                    <RemoveCircleOutlineIcon />
-                  </IconButton>
-                  <Item>{studyroomDto.maxUserNum}</Item>
-                  <IconButton
-                    aria-label="plus"
-                    onClick={() =>
-                      handleMaxUserNumChange(studyroomDto.maxUserNum + 1)
-                    }
-                  >
-                    <AddCircleOutlineIcon />
-                  </IconButton>
-                </SubContent>
-              </StudyRoomWrap>
-              <StudyRoomWrap>
-                <SubTitle>
-                  <ForestIcon fontSize="large" />
-                  일일 최대 휴식 시간
-                </SubTitle>
-                <SubContent>
-                  <IconButton
-                    aria-label="minus"
-                    onClick={() =>
-                      handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 - 10)
-                    }
-                  >
-                    <RemoveCircleOutlineIcon />
-                  </IconButton>
-                  <Item>{studyroomDto.maxRestTime / 60}</Item>
-                  <IconButton
-                    aria-label="plus"
-                    onClick={() =>
-                      handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 + 10)
-                    }
-                  >
-                    <AddCircleOutlineIcon />
-                  </IconButton>
-                </SubContent>
-              </StudyRoomWrap>
-              <StudyRoomWrap>
-                <SubTitle>
-                  <LocalOfferIcon fontSize="large" />
-                  태그
-                </SubTitle>
-                <SubContent>
-                  <MultipleSelectChip
-                    selectedTags={studyroomDto.tags}
-                    setSelectedTags={handleTagsChange}
-                  />
-                </SubContent>
-              </StudyRoomWrap>
-              <CreateBtn>
-              <Button variant="contained" color="success" onClick={handleSubmit}>
-                스터디 룸 생성하기
-              </Button>
-              </CreateBtn>
-            </ContentWrap> 
+                <StudyRoomWrap>
+                  <SubTitle>
+                    <GroupsIcon fontSize="large" />
+                    최대 인원
+                  </SubTitle>
+                  <SubContent>
+                    <IconButton
+                      aria-label="minus"
+                      onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum - 1)}
+                    >
+                      <RemoveCircleOutlineIcon />
+                    </IconButton>
+                    <Item>{studyroomDto.maxUserNum}</Item>
+                    <IconButton
+                      aria-label="plus"
+                      onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum + 1)}
+                    >
+                      <AddCircleOutlineIcon />
+                    </IconButton>
+                  </SubContent>
+                </StudyRoomWrap>
+                <StudyRoomWrap>
+                  <SubTitle>
+                    <ForestIcon fontSize="large" />
+                    일일 최대 휴식 시간
+                  </SubTitle>
+                  <SubContent>
+                    <IconButton
+                      aria-label="minus"
+                      onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 - 10)}
+                    >
+                      <RemoveCircleOutlineIcon />
+                    </IconButton>
+                    <Item>{studyroomDto.maxRestTime / 60}</Item>
+                    <IconButton
+                      aria-label="plus"
+                      onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 + 10)}
+                    >
+                      <AddCircleOutlineIcon />
+                    </IconButton>
+                  </SubContent>
+                </StudyRoomWrap>
+                <StudyRoomWrap>
+                  <SubTitle>
+                    <LocalOfferIcon fontSize="large" />
+                    태그
+                  </SubTitle>
+                  <SubContent>
+                    <MultipleSelectChip
+                      selectedTags={studyroomDto.tags}
+                      setSelectedTags={handleTagsChange}
+                    />
+                  </SubContent>
+                </StudyRoomWrap>
+                <CreateBtn style={{ marginTop: "10px" }}>
+                  <Button variant="contained" color="success" onClick={handleSubmit}>
+                    스터디 룸 생성하기
+                  </Button>
+                </CreateBtn>
+              </ContentWrap>
             </Grid>
           </CreateContent>
-      
         </CreateWrap>
       </ContainerWrap>
     </div>
@@ -444,15 +426,14 @@ const ContainerWrap = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100vh;
-
+  margin-left: 10vw;
+  width: 70%;
+  height: 65vh;
 `;
 const CreateWrap = styled.div`
-  display:flex;
+  display: flex;
   width: 100%;
   flex-direction: column;
-
 `;
 const CreateContent = styled.div`
   display: flex;
@@ -460,32 +441,35 @@ const CreateContent = styled.div`
   align-items: center;
   justify-content: space-around;
   border: 1px solid black;
-
+  border-radius: 10px;
+  height: 450px;
 `;
 const ImageWrap = styled.div`
   display: flex;
   justify-content: center;
-  padding : 20px;
+  padding: 20px;
+  margin-right: 30px;
 `;
-const ContentWrap=styled.div`
-  display : flex;
-  flex-direction : column;
-  padding : 10px;
-`
+const ContentWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+`;
 
 const StudyRoomWrap = styled.div`
   display: flex;
   width: 100%;
   height: 33.3%;
+  margin-bottom: 10px;
 `;
 
 const SubTitle = styled.div`
-display: flex;
-align-items: center;
-width: 100%;
-height: 45px;
-font-size: 20px;
-gap: 1vw;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 45px;
+  font-size: 20px;
+  gap: 1vw;
 `;
 const SubContent = styled.div`
   display: flex;

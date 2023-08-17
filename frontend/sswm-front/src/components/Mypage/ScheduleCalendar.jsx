@@ -64,9 +64,7 @@ const ScheduleCalendar = (props) => {
             <h2>
               기간 내 총 공부시간 :{" "}
               {calendarDto.studyTime !== undefined
-                ? `${Math.floor(calendarDto.studyTime / 60)}시간 ${
-                    calendarDto.studyTime % 60
-                  }분`
+                ? `${Math.floor(calendarDto.studyTime / 60)}시간 ${calendarDto.studyTime % 60}분`
                 : "0시간 0분"}
             </h2>
             <h2>
