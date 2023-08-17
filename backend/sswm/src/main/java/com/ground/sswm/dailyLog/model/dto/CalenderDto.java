@@ -12,4 +12,5 @@ public class CalenderDto {
     private float restTimeExp;
     private float stretchExp;
     private int studyTime;
+    private int stretchScore;
 }
