@@ -60,7 +60,7 @@ const MemberTable = ({ studyroomId }) => {
 
   const closeModalEvent = (userDto) => {
     setIsModalOpen(false);
-
+    
     axios
       .put(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/ban`, userDto, {
         headers: {
