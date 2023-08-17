@@ -17,7 +17,7 @@ public class ScheduledTasks {
     private final MySQLSelfService mySQLSelfService;
 
 //    @Scheduled(cron = "0 0/30 * * * ?") // Runs every 30 minutes
-    @Scheduled(cron = "0 0/30 * * * ?") // Runs every 1 minutes
+    @Scheduled(cron = "0 0/33 * * * ?") // Runs every 1 minutes
     public void updateRedisDataToMySQL() {
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
