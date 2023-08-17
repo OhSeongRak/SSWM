@@ -24,8 +24,6 @@ import com.ground.sswm.userStudyroom.model.dto.UserAttendTop3ResDto;
 import com.ground.sswm.userStudyroom.model.dto.UserStudyTimeResDto;
 import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -268,7 +266,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         List<UserStudyTimeResDto> userStudyTimeResDtos = new ArrayList<>();
 
         //현재 시간 가져와서 4시인지 아닌지 판단 및 날짜로 dailylog 가져오기
-        LocalTime currentTime = LocalTime.now();
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
         int dayBefore = (hour < 4) ? 1 : 0;
@@ -315,12 +313,11 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             studyroomId);
 
         //해당 달의 첫번째 날과 마지막 날을 가져옴
-        LocalDateTime now = LocalDateTime.now();
-
-        int year = now.getYear();
-        int month = now.getMonthValue();
-        int day = now.getDayOfMonth();
-        int hour = now.getHour();
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        int hour = currentTime.getHour();
+        int year = currentTime.getYear();
+        int month = currentTime.getMonthValue();
+        int day = currentTime.getDayOfMonth();
         if (day == 1 && hour < 4 ) {
             if (month == 1) {
                 year -= 1;

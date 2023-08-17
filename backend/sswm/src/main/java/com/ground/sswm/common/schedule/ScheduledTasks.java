@@ -1,6 +1,5 @@
 package com.ground.sswm.common.schedule;
 
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
