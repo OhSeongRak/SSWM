@@ -7,9 +7,7 @@ const StudyRoomMemberBoard = ({ notice }) => {
     <ContainerWrap>
       <BoardWrap>
         <BoardTitle>
-          <Background>
-            공지사항
-          </Background>
+          <Background>공지사항</Background>
         </BoardTitle>
         <BoardContent>
           <Boardnotice>{notice}</Boardnotice>
@@ -20,7 +18,7 @@ const StudyRoomMemberBoard = ({ notice }) => {
 };
 
 const Background = styled.span`
-  background-color: #F2CC47;
+  background-color: #f2cc47;
   padding: 7px;
   border-radius: 10px;
 `;
@@ -45,13 +43,13 @@ const BoardTitle = styled.div`
   width: 100%;
   font-size: 20px;
   padding: 20px 0px 0px 0px;
-  margin-bottom: 1vw;
+  margin-bottom: 2vw;
 `;
 const BoardContent = styled.div`
   display: flex;
   width: 100%;
   height: 90%;
-  border: 2px solid #b2dfdb;
+  border: 1px solid #b2dfdb;
   border-radius: 10px;
   align-items: center;
   justify-content: center;

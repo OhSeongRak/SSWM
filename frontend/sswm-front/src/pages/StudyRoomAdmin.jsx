@@ -58,7 +58,6 @@ const StudyRoomAdmin = () => {
     maxRestTime: 90 * 60,
     tags: [],
   });
-  
 
   const [isExist, setIsExist] = useState(false);
 
@@ -222,7 +221,7 @@ const StudyRoomAdmin = () => {
   // tag값 변경
   const handleTagsChange = (selectedTags) => {
     console.log("여기로오나?");
-    console.log(studyroomDto.tags)
+    console.log(studyroomDto.tags);
     console.log(selectedTags);
     // setStudyroomDto(prevStudyroomDto => {
     //   if (!Array.isArray(prevStudyroomDto)) {
@@ -237,8 +236,8 @@ const StudyRoomAdmin = () => {
       ...studyroomDto,
       tags: selectedTags,
     });
-    console.log("여기도?")
-    console.log(studyroomDto.tags)
+    console.log("여기도?");
+    console.log(studyroomDto.tags);
   };
 
   //enterCode
@@ -353,203 +352,208 @@ const StudyRoomAdmin = () => {
 
   return (
     console.log(studyroomDto.tags),
-    <div>
-      <Gnb />
-      <ContainerWrap>
-        <HeaderWrap>
-          <HeaderBtnWrap>
-            <HeaderBtn>
-              <TextField
-                hiddenLabel
-                id="filled-hidden-label-normal"
-                defaultValue={checkedStudyroomName}
-                variant="filled"
-                size="small"
-                placeholder={studyroomDto.name} // 상태값으로 설정
-                onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
-                inputProps={{maxLength:13}}
-              />
-              <Button
-                variant="contained"
-                color="success"
-                onClick={checkStudyroomName}
-              >
-                중복확인
-              </Button>
-            </HeaderBtn>
-            <HeaderBtn>
-              <TextField
-                disabled={studyroomDto.isPublic}
-                hiddenLabel
-                id="filled-hidden-label-normal"
-                variant="filled"
-                value={studyroomDto.enterCode}
-                size="small"
-                helperText={codeValidation() ? "알파벳,숫자 포함하여 8자리로 설정해주세요" : ""}
-                inputProps={{
-                  maxLength: CHARACTER_LIMIT,
-                }}
-                onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
-              />
-              <Typography sx={{ marginLeft: "10px" }}>
-                {studyroomDto.enterCode ? studyroomDto.enterCode.length : 0}/{CHARACTER_LIMIT}
-              </Typography>
-            </HeaderBtn>
-          </HeaderBtnWrap>
-        </HeaderWrap>
+    (
+      <div>
+        <Gnb />
+        <ContainerWrap>
+          <HeaderWrap>
+            <HeaderBtnWrap>
+              <HeaderBtn>
+                <TextField
+                  hiddenLabel
+                  id="filled-hidden-label-normal"
+                  defaultValue={checkedStudyroomName}
+                  variant="filled"
+                  size="small"
+                  placeholder={studyroomDto.name} // 상태값으로 설정
+                  onChange={handleNameChange} // 값이 변경될 때 호출되는 핸들러 함수
+                  inputProps={{ maxLength: 13 }}
+                />
+                <Button variant="contained" color="success" onClick={checkStudyroomName}>
+                  중복확인
+                </Button>
+              </HeaderBtn>
+              <HeaderBtn>
+                <TextField
+                  disabled={studyroomDto.isPublic}
+                  hiddenLabel
+                  id="filled-hidden-label-normal"
+                  variant="filled"
+                  value={studyroomDto.enterCode}
+                  size="small"
+                  helperText={codeValidation() ? "알파벳,숫자 포함하여 8자리로 설정해주세요" : ""}
+                  inputProps={{
+                    maxLength: CHARACTER_LIMIT,
+                  }}
+                  onChange={handleEnterCodeChange} // 값이 변경될 때 호출되는 핸들러 함수
+                />
+                <Typography sx={{ marginLeft: "10px" }}>
+                  {studyroomDto.enterCode ? studyroomDto.enterCode.length : 0}/{CHARACTER_LIMIT}
+                </Typography>
+              </HeaderBtn>
+            </HeaderBtnWrap>
+          </HeaderWrap>
 
-        <ContentWrap>
-          <ContentTop>
-            <ContentTopLeftWrap>
-              <input
-                type="file"
-                ref={imageUp}
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-              />
-              {imageSrc && (
-                <AvatarWrap onClick={onClickImage}>
-                  <Avatar alt="Default Img" src={imageSrc} sx={{ height: '100%', width: '100%' }} />
-                </AvatarWrap>
-              )}
-            </ContentTopLeftWrap>
-            <ContentTopRightWrap>
-              <StudyRoomWrap>
-                <StudyRoomTitle>
-                  <LockIcon fontSize="large" />
-                  공개 여부
-                </StudyRoomTitle>
-                <StudyRoomContent>
-                  <RadioGroup row defaultValue="공개">
-                    <Switch checked={studyroomDto.isPublic} onChange={handleIsPublicChange} />
-                  </RadioGroup>
-                </StudyRoomContent>
-              </StudyRoomWrap>
-              <StudyRoomWrap>
-                <StudyRoomTitle2>
-                  <GroupsIcon fontSize="large" />
-                  최대 인원
-                </StudyRoomTitle2>
-                <StudyRoomContent>
-                  <IconButton
-                    aria-label="minus"
-                    onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum - 1)}
-                  >
-                    <RemoveCircleOutlineIcon />
-                  </IconButton>
-                  <Item>{studyroomDto.maxUserNum}</Item>
-                  <IconButton
-                    aria-label="plus"
-                    onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum + 1)}
-                  >
-                    <AddCircleOutlineIcon />
-                  </IconButton>
-                </StudyRoomContent>
-              </StudyRoomWrap>
-              <StudyRoomWrap>
-                <StudyRoomTitle2>
-                  <ForestIcon fontSize="large" />
-                  일일 최대 휴식 시간
-                </StudyRoomTitle2>
-                <StudyRoomContent>
-                  <IconButton
-                    aria-label="minus"
-                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 - 10)}
-                  >
-                    <RemoveCircleOutlineIcon />
-                  </IconButton>
-                  <Item>{studyroomDto.maxRestTime / 60}</Item>
-                  <IconButton
-                    aria-label="plus"
-                    onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 + 10)}
-                  >
-                    <AddCircleOutlineIcon />
-                  </IconButton>
-                </StudyRoomContent>
-              </StudyRoomWrap>
-              <StudyRoomWrap>
-                <StudyRoomTitle2>
-                  <LocalOfferIcon fontSize="large" />
-                  태그
-                </StudyRoomTitle2>
-                <StudyRoomContent>
-                  <MultipleSelectChip
-                    // selectedTags={studyroomDto.tags.name !== null ? studyroomDto.tags.map(tag => tag.name) : studyroomDto.tags}
-                    selectedTags={
-                      Array.isArray(studyroomDto.tags) && studyroomDto.tags.length > 0 && typeof studyroomDto.tags[0] === 'object' && 'name' in studyroomDto.tags[0]
-                        ? studyroomDto.tags.map(tag => tag.name)
-                        : studyroomDto.tags
-                    }
-                    setSelectedTags={handleTagsChange}
-                  />
-                </StudyRoomContent>
-              </StudyRoomWrap>
-            </ContentTopRightWrap>
-          </ContentTop>
-          <ContentBottom>
-            <ContentBottomLeft>
-              <ContentBottomTitle>공지사항 관리</ContentBottomTitle>
-              <ContentBottomBoard>
-                <NoticeContainerWrap>
-                  <NoticeContentWrap
-                    maxLength={CONTENT_LIMIT}
-                    onChange={handleEnterNoticeChange}
-                    value={studyroomDto.notice == null ? "" : studyroomDto.notice}
-                  >
-                    {studyroomDto.notice}
-                  </NoticeContentWrap>
-                  <BtnWrap>
-                    <Typography sx={{ marginRight: "10px" }}>
-                      {studyroomDto.notice ? studyroomDto.notice.length : 0}/{CONTENT_LIMIT}
+          <ContentWrap>
+            <ContentTop>
+              <ContentTopLeftWrap>
+                <input
+                  type="file"
+                  ref={imageUp}
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
+                {imageSrc && (
+                  <AvatarWrap onClick={onClickImage}>
+                    <Avatar
+                      alt="Default Img"
+                      src={imageSrc}
+                      sx={{ height: "100%", width: "100%" }}
+                    />
+                  </AvatarWrap>
+                )}
+              </ContentTopLeftWrap>
+              <ContentTopRightWrap>
+                <StudyRoomWrap>
+                  <StudyRoomTitle>
+                    <LockIcon fontSize="large" />
+                    공개 여부
+                  </StudyRoomTitle>
+                  <StudyRoomContent>
+                    <RadioGroup row defaultValue="공개">
+                      <Switch checked={studyroomDto.isPublic} onChange={handleIsPublicChange} />
+                    </RadioGroup>
+                  </StudyRoomContent>
+                </StudyRoomWrap>
+                <StudyRoomWrap>
+                  <StudyRoomTitle2>
+                    <GroupsIcon fontSize="large" />
+                    최대 인원
+                  </StudyRoomTitle2>
+                  <StudyRoomContent>
+                    <IconButton
+                      aria-label="minus"
+                      onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum - 1)}
+                    >
+                      <RemoveCircleOutlineIcon />
+                    </IconButton>
+                    <Item>{studyroomDto.maxUserNum}</Item>
+                    <IconButton
+                      aria-label="plus"
+                      onClick={() => handleMaxUserNumChange(studyroomDto.maxUserNum + 1)}
+                    >
+                      <AddCircleOutlineIcon />
+                    </IconButton>
+                  </StudyRoomContent>
+                </StudyRoomWrap>
+                <StudyRoomWrap>
+                  <StudyRoomTitle2>
+                    <ForestIcon fontSize="large" />
+                    일일 최대 휴식 시간
+                  </StudyRoomTitle2>
+                  <StudyRoomContent>
+                    <IconButton
+                      aria-label="minus"
+                      onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 - 10)}
+                    >
+                      <RemoveCircleOutlineIcon />
+                    </IconButton>
+                    <Item>{studyroomDto.maxRestTime / 60}</Item>
+                    <IconButton
+                      aria-label="plus"
+                      onClick={() => handleMaxRestTimeChange(studyroomDto.maxRestTime / 60 + 10)}
+                    >
+                      <AddCircleOutlineIcon />
+                    </IconButton>
+                  </StudyRoomContent>
+                </StudyRoomWrap>
+                <StudyRoomWrap>
+                  <StudyRoomTitle2>
+                    <LocalOfferIcon fontSize="large" />
+                    태그
+                  </StudyRoomTitle2>
+                  <StudyRoomContent>
+                    <MultipleSelectChip
+                      // selectedTags={studyroomDto.tags.name !== null ? studyroomDto.tags.map(tag => tag.name) : studyroomDto.tags}
+                      selectedTags={
+                        Array.isArray(studyroomDto.tags) &&
+                        studyroomDto.tags.length > 0 &&
+                        typeof studyroomDto.tags[0] === "object" &&
+                        "name" in studyroomDto.tags[0]
+                          ? studyroomDto.tags.map((tag) => tag.name)
+                          : studyroomDto.tags
+                      }
+                      setSelectedTags={handleTagsChange}
+                    />
+                  </StudyRoomContent>
+                </StudyRoomWrap>
+              </ContentTopRightWrap>
+            </ContentTop>
+            <ContentBottom>
+              <ContentBottomLeft>
+                <ContentBottomTitle>공지사항 관리</ContentBottomTitle>
+                <ContentBottomBoard>
+                  <NoticeContainerWrap>
+                    <NoticeContentWrap
+                      maxLength={CONTENT_LIMIT}
+                      onChange={handleEnterNoticeChange}
+                      value={studyroomDto.notice == null ? "" : studyroomDto.notice}
+                    >
+                      {studyroomDto.notice}
+                    </NoticeContentWrap>
+                    <BtnWrap>
+                      <Typography sx={{ marginRight: "10px" }}>
+                        {studyroomDto.notice ? studyroomDto.notice.length : 0}/{CONTENT_LIMIT}
+                      </Typography>
+                    </BtnWrap>
+                  </NoticeContainerWrap>
+                </ContentBottomBoard>
+              </ContentBottomLeft>
+              <ContentBottomRight>
+                <ContentBottomTitle>스터디원 관리</ContentBottomTitle>
+                <ContentBottomBoard>
+                  <MemberTable studyroomId={studyroomId} />
+                </ContentBottomBoard>
+              </ContentBottomRight>
+            </ContentBottom>
+          </ContentWrap>
+
+          <FooterWrap>
+            <FooterBtnWrap>
+              <Button variant="contained" color="success" onClick={handleSubmit}>
+                수정
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleCancel}>
+                취소
+              </Button>
+              <div>
+                <Button variant="contained" color="error" onClick={openModal}>
+                  스터디룸 삭제
+                </Button>
+                <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
+                  <Box>
+                    <Typography variant="h6" component="h2">
+                      삭제 시 더 이상 해당 스터디룸이 삭제되며 복구할 수 없습니다.
+                      <br />
+                      정말 삭제하시겠습니까?
                     </Typography>
-                  </BtnWrap>
-                </NoticeContainerWrap>
-              </ContentBottomBoard>
-            </ContentBottomLeft>
-            <ContentBottomRight>
-              <ContentBottomTitle>스터디원 관리</ContentBottomTitle>
-              <ContentBottomBoard>
-                <MemberTable studyroomId={studyroomId} />
-              </ContentBottomBoard>
-            </ContentBottomRight>
-          </ContentBottom>
-        </ContentWrap>
-
-        <FooterWrap>
-          <FooterBtnWrap>
-            <Button variant="contained" color="success" onClick={handleSubmit}>
-              수정
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleCancel}>
-              취소
-            </Button>
-            <div>
-              <Button variant="contained" color="error" onClick={openModal}>
-                스터디룸 삭제
-              </Button>
-              <CustomModal isOpen={isModalOpen} closeModal={closeModal}>
-                <Box>
-                  <Typography variant="h6" component="h2">
-                    삭제 시 더 이상 해당 스터디룸이 삭제되며 복구할 수 없습니다.
-                    <br />
-                    정말 삭제하시겠습니까?
-                  </Typography>
-                  <Button onClick={(event) => closeModalEvent(event)}>확인</Button>
-                  <Button onClick={() => setIsModalOpen(false)}>취소</Button>
-                </Box>
-              </CustomModal>
-              <Snackbar
-                open={isSnackBarOpen}
-                autoHideDuration={3000}
-                onClose={closeSnackBar}
-                message="정상적으로 삭제되었습니다."
-              />
-            </div>
-          </FooterBtnWrap>
-        </FooterWrap>
-      </ContainerWrap>
-      <GFooter />
-    </div>
+                    <Button onClick={(event) => closeModalEvent(event)}>확인</Button>
+                    <Button onClick={() => setIsModalOpen(false)}>취소</Button>
+                  </Box>
+                </CustomModal>
+                <Snackbar
+                  open={isSnackBarOpen}
+                  autoHideDuration={3000}
+                  onClose={closeSnackBar}
+                  message="정상적으로 삭제되었습니다."
+                />
+              </div>
+            </FooterBtnWrap>
+          </FooterWrap>
+        </ContainerWrap>
+        <GFooter />
+      </div>
+    )
   );
 };
 
