@@ -22,7 +22,7 @@ public class ScheduledTasks {
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         int minute = currentTime.getMinute();
-
+        log.debug("작업: 30분마다 실행");
         if (hour == 4 && minute >= 0 && minute < 2) {
             log.debug("작업: 4am에만 실행");
             redisToMySQLService.updateDataFromRedisToMySQL4();
@@ -34,6 +34,9 @@ public class ScheduledTasks {
             //어제 dailylog를 가져올 지 오늘 dailylog를 가져올 지 판단 때문에 필요
             int dayBefore = (hour < 4) ? 1 : 0;
             redisToMySQLService.updateDataFromRedisToMySQL(dayBefore);
+        }
+        if (uour == 4){
+            log.debug("작업: 4시반");
         }
     }
 }
