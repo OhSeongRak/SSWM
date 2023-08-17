@@ -43,7 +43,7 @@ public class UserStudyroomController {
 
         //service에 등록 요청
         String result = userStudyroomService.joinUser(userId, studyroomId);
-
+        System.out.println("result = " + result);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -131,5 +131,14 @@ public class UserStudyroomController {
         Long userId = authService.getUserIdFromToken(token);
         boolean isHost = userStudyroomService.checkUserHost(userId, studyroomId);
         return new ResponseEntity<>(isHost, HttpStatus.OK);
+    }
+
+    @GetMapping("/{studyroomId}/is-member")
+    public ResponseEntity<Boolean> checkMember(@RequestHeader("Authorization") String token,
+        @PathVariable Long studyroomId) {
+        Long userId = authService.getUserIdFromToken(token);
+        boolean isMember = userStudyroomService.checkMember(userId, studyroomId);
+        System.out.println("isMember = " + isMember);
+        return new ResponseEntity<>(isMember, HttpStatus.OK);
     }
 }

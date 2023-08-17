@@ -51,7 +51,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     @Transactional
     //스터디룸에 가입
     public String joinUser(Long userId, Long studyroomId) {
-
+        System.out.println("joinUser");
         //엔티티 조회
         User user = userRepository.findById(userId).orElseThrow(
             () -> new UserNotFoundException("회원이 아닙니다.")
@@ -389,5 +389,11 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             .orElse(null);
 
         return userStudyroom != null && userStudyroom.getRole().equals(StudyMemberRole.HOST);
+    }
+
+    @Override
+    public boolean checkMember(Long userId, Long studyroomId) {
+
+        return userStudyroomRepository.findByUserIdAndStudyroomIdAndIsDeleted(userId, studyroomId, false).orElse(null) != null;
     }
 }
