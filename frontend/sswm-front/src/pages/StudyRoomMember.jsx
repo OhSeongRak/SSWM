@@ -18,7 +18,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Snackbar } from "@mui/material";
 import { useParams } from "react-router-dom";
-import GFooter from "../components/GFooter";
 import { useNavigate } from "react-router-dom";
 
 const formatTime = (seconds) => {
