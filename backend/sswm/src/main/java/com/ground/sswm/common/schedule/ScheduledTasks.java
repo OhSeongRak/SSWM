@@ -20,7 +20,7 @@ public class ScheduledTasks {
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         int minute = currentTime.getMinute();
-        if (hour == 15 && minute >= 15 && minute < 17) {
+        if (hour == 15 && minute >= 25 && minute < 27) {
             redisToMySQLService.updateDataFromRedisToMySQL4();
             mySQLSelfService.dailyLogToUserStudyroom();
             mySQLSelfService.UserStudyroomToStudyroom();
