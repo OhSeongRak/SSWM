@@ -93,10 +93,14 @@ public class StudyroomController {
         @RequestPart("studyroom") StudyroomDto studyroomDto) {
         log.debug("PUT : update studyroom");
         // 이미지 저장
-        String filePath = "image/studyDefault/dolphin.jpg";
+        String filePath = null;
         if (fileType != null && !fileType.isBlank() && multipartFile != null
             && !multipartFile.isEmpty()) {
             filePath = fileManageUtil.uploadFile(fileType, multipartFile);
+        }
+
+        if (filePath == null) {
+            filePath=studyroomDto.getImage();
         }
 
         studyroomDto.setImage(filePath);
