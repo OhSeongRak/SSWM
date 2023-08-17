@@ -17,7 +17,7 @@ const MyPage = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASE_URL}/api/users`, {
+      .get(`/api/users`, {
         headers: {
           Authorization: accessToken,
         },
@@ -32,27 +32,44 @@ const MyPage = () => {
     // eslint-disable-next-line
   }, []);
 
+  const handleSidebarItemClick = (e, sectionId) => {
+    e.preventDefault();
+
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div>
       <Gnb />
       <ContainerWrap>
         <SidebarWrap>
-          <SidebarItem href="#nav1">내 프로필</SidebarItem>
-          <SidebarItem href="#nav1">내가 키운나무 도감</SidebarItem>
-          <SidebarItem href="#nav3">내 스터디룸</SidebarItem>
-          <SidebarItem href="#nav4">캘린더</SidebarItem>
+          <SidebarItem href="#" onClick={(e) => handleSidebarItemClick(e, "nav1")}>
+            내 프로필
+          </SidebarItem>
+          <SidebarItem href="#" onClick={(e) => handleSidebarItemClick(e, "nav2")}>
+            내가 키운나무 도감
+          </SidebarItem>
+          <SidebarItem href="#" onClick={(e) => handleSidebarItemClick(e, "nav3")}>
+            내 스터디룸
+          </SidebarItem>
+          <SidebarItem href="#" onClick={(e) => handleSidebarItemClick(e, "nav4")}>
+            캘린더
+          </SidebarItem>
         </SidebarWrap>
 
         <ContentWrap>
-          <ProfileWrap name="nav1">
+          <ProfileWrap id="nav1">
             <MyProfile users={users} />
           </ProfileWrap>
 
-          <MyStudyWrap name="nav3">
+          <MyStudyWrap id="nav3">
             <MyStudyRoom />
           </MyStudyWrap>
 
-          <CalendarWrap name="nav4">
+          <CalendarWrap id="nav4">
             <ScheduleCalendar />
           </CalendarWrap>
         </ContentWrap>
