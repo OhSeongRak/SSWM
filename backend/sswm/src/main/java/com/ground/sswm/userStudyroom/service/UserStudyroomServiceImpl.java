@@ -385,8 +385,9 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
     @Override
     public boolean checkUserHost(Long userId, Long studyroomId) {
-        UserStudyroom userStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId,
-            studyroomId).get();
-        return userStudyroom.getRole().equals(StudyMemberRole.HOST) ? true : false;
+        UserStudyroom userStudyroom = userStudyroomRepository.findByUserIdAndStudyroomId(userId, studyroomId)
+            .orElse(null);
+
+        return userStudyroom != null && userStudyroom.getRole().equals(StudyMemberRole.HOST);
     }
 }
