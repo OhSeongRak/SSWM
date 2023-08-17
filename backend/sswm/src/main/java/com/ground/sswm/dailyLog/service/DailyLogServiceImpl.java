@@ -143,8 +143,11 @@ public class DailyLogServiceImpl implements DailyLogService {
         }
 
         float studyTime = 0f;
+        int stretchScore=0;
+
         for (DailyLog dailyLog : dailyLogs) {
             studyTime += dailyLog.getStudyTime();
+            stretchScore += dailyLog.getStretchScore();
         }
 
         CalenderDto calenderDto = new CalenderDto();
@@ -153,6 +156,7 @@ public class DailyLogServiceImpl implements DailyLogService {
         calenderDto.setStudyExp(totalStudyTimeExp);
         calenderDto.setRestTimeExp(totalRestTimeExp);
         calenderDto.setStretchExp(totalStretchExp);
+        calenderDto.setStretchScore(stretchScore);
 
         return calenderDto;
     }
