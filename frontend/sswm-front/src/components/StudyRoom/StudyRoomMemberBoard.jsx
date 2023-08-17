@@ -2,10 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const StudyRoomMemberBoard = ({ notice }) => {
-  // '.'을 만날 때마다 줄 바꿈 추가하는 함수
-  const formatNotice = (text) => {
-    return text ? text.split(".").join(".\n") : ""; // notice가 undefined일 경우에 대한 처리
-  };
 
   return (
     <ContainerWrap>
@@ -14,7 +10,7 @@ const StudyRoomMemberBoard = ({ notice }) => {
           <Background>공지사항</Background>
         </BoardTitle>
         <BoardContent>
-          <Boardnotice>{formatNotice(notice)}</Boardnotice>
+          <Boardnotice>{notice}</Boardnotice>
         </BoardContent>
       </BoardWrap>
     </ContainerWrap>
