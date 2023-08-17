@@ -51,7 +51,6 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     @Transactional
     //스터디룸에 가입
     public String joinUser(Long userId, Long studyroomId) {
-        System.out.println("joinUser");
         //엔티티 조회
         User user = userRepository.findById(userId).orElseThrow(
             () -> new UserNotFoundException("회원이 아닙니다.")
@@ -168,8 +167,6 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
     public void deleteUser(Long userId) {
         List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByUserIdAndIsDeleted(
             userId, false);
-
-        System.out.println("userStudyrooms.toString() = " + userStudyrooms.toString());
         for (UserStudyroom userStudyroom : userStudyrooms) {
 
             //호스트라면
@@ -350,7 +347,6 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             if (userStudyroom.isDeleted()) {
                 continue;
             }
-            System.out.println("hereuser" + userStudyroom);
 
             //새 userAttendResDto 생성
             UserAttendDto nowUserAttenedResDto = new UserAttendDto();
@@ -368,7 +364,6 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
             userAttendDtoQueue.add(nowUserAttenedResDto);
         }
 
-        System.out.println("userAttendDtoQueue.size() = " + userAttendDtoQueue.size());
         int queueSize = userAttendDtoQueue.size();
         //출석일이 가장 많은 3명 뽑기
         for (int i = 0; i < Math.min(3, queueSize); i++) {
