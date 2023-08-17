@@ -1,9 +1,9 @@
 package com.ground.sswm.usertree.service;
 
-import static com.ground.sswm.common.util.UnixTimeUtil.getCurrentUnixTime;
 import static com.ground.sswm.common.util.UnixTimeUtil.getStartEndOfPeriod;
 
 import com.ground.sswm.common.util.CalExpFromDailyLog;
+import com.ground.sswm.common.util.UnixTimeUtil;
 import com.ground.sswm.common.util.dto.ExpDto;
 import com.ground.sswm.dailyLog.model.DailyLog;
 import com.ground.sswm.dailyLog.repository.DailyLogRepository;
@@ -15,6 +15,7 @@ import com.ground.sswm.usertree.model.UserTree;
 import com.ground.sswm.usertree.model.dto.UserTreeResDto;
 import com.ground.sswm.usertree.repository.UserTreeRepository;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -87,11 +88,15 @@ public class UserTreeServiceImpl implements UserTreeService {
             Long treeId = userTree.getTree().getId();
             UserTreeResDto userTreeResDto = new UserTreeResDto();
 
-            long[] days = getStartEndOfPeriod(getCurrentUnixTime(), ZoneId.of("Asia/Seoul"), 0);
+            ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+            int hour = currentTime.getHour();
+            int dayBefore = (hour < 4) ? 1 : 0;
+            long now = UnixTimeUtil.getCurrentUnixTime();
+
+            long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
 
             List<DailyLog> dailyLogs = dailyLogRepository.findAllByUserIdAndDateBetween(userId,
-                days[0], days[1] - 86400L);
-
+                days[0], days[1]);
             //dailylog에서 시간 및 점수 합산해서 가져옴
             ExpDto expDto = CalExpFromDailyLog.getTimeAndScoreFromDailyLog(userId, dailyLogs);
 
