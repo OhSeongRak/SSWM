@@ -61,7 +61,7 @@ public class DailyLogServiceImpl implements DailyLogService {
             throw new UserStudyroomNotFoundException("해당 스터디룸에 가입되어 있지 않습니다.");
         }
 
-        LocalTime currentTime = LocalTime.now();
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
         log.debug("now : " + now);
@@ -159,7 +159,7 @@ public class DailyLogServiceImpl implements DailyLogService {
 
     @Override
     public DailyLogDto getDailylog(Long userId, Long studyroomId) {
-        LocalTime currentTime = LocalTime.now();
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
         int dayBefore = (hour < 4) ? 1 : 0;
@@ -172,7 +172,7 @@ public class DailyLogServiceImpl implements DailyLogService {
     @Override
     @Transactional
     public void setStretchingScore(Long userId,Long studyroomId, int score) {
-        LocalTime currentTime = LocalTime.now();
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
         int dayBefore = (hour < 4) ? 1 : 0;
