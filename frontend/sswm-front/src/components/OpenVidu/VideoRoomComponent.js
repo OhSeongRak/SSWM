@@ -101,6 +101,18 @@ class VideoRoomComponent extends Component {
             animate: true, // Whether you want to animate the transitions
         };
         
+        const message = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${this.props.studyroomId}/is-member`, {
+            headers: {
+              Authorization: accessToken,
+            },
+          });
+          
+          console.log("message.data::::a", message.data)
+          if (message.data === false) {
+            alert("잘못된 접근입니다.");
+            window.location.href = `/`;
+          }
+
         axios
         .get(`${process.env.REACT_APP_BASE_URL}/api/users`, {
             headers: {

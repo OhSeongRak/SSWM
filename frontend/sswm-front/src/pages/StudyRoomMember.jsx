@@ -74,45 +74,50 @@ const StudyRoomMember = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // dailylog 생성
-        await axios.post(
-          `${process.env.REACT_APP_BASE_URL}/api/user-logs/${studyroomId}`,
-          {},
-          {
+        // 가입된 회원인지 확인
+        const message = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/is-member`, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
+        
+        console.log("message.data::::a", message.data)
+        if (message.data === false) {
+          alert("잘못된 접근입니다.");
+          window.location.href = `/`;
+        }
+        else {
+          // dailylog 생성
+          await axios.post(`${process.env.REACT_APP_BASE_URL}/api/user-logs/${studyroomId}`, {}, {
             headers: {
               Authorization: accessToken,
             },
-          }
-        );
-
-        // 스터디룸 조회
-        const studyroomResponse = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`,
-          {
+          });
+          // 스터디룸 조회
+          const studyroomResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}`, {
             headers: {
               Authorization: accessToken,
             },
-          }
-        );
-        console.log("studyroomResponse", studyroomResponse);
-        setStudyroom(studyroomResponse.data);
-        setStudyAvgTime(formatTime(studyroomResponse.data.studyAvgTime));
-        setMaxRestTime(formatTime(studyroomResponse.data.maxRestTime));
-
-        axios
-          .get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/isHost`, {
+          });
+          console.log("studyroomResponse", studyroomResponse);
+          setStudyroom(studyroomResponse.data);
+          setStudyAvgTime(formatTime(studyroomResponse.data.studyAvgTime));
+          setMaxRestTime(formatTime(studyroomResponse.data.maxRestTime));
+  
+          axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/isHost`, {
             headers: {
               Authorization: accessToken,
             },
           })
           .then((response) => {
             setIsHost(response.data);
-          });
+          })
+        }
       } catch (error) {
         console.log(error);
         navigate("/NOTFOUND");
       }
-    };
+    };    
     fetchData();
     // eslint-disable-next-line
   }, [studyroomId, accessToken]);
