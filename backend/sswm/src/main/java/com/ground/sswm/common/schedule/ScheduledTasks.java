@@ -35,7 +35,7 @@ public class ScheduledTasks {
             int dayBefore = (hour < 4) ? 1 : 0;
             redisToMySQLService.updateDataFromRedisToMySQL(dayBefore);
         }
-        if (uour == 4){
+        if (hour == 4){
             log.debug("작업: 4시반");
         }
     }
