@@ -15,12 +15,12 @@ public class ScheduledTasks {
     private final RedisToMySQLService redisToMySQLService;
     private final MySQLSelfService mySQLSelfService;
 
-    @Scheduled(cron = "0 0/15 * * * ?") // Runs every 30 minutes
+    @Scheduled(cron = "0 0/1 * * * ?") // Runs every 30 minutes
     public void updateRedisDataToMySQL() {
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         int minute = currentTime.getMinute();
-        if (hour == 15 && minute >= 36 && minute < 38) {
+        if (hour == 15 && minute >= 40 && minute < 42) {
             System.out.println("hour==15");
             redisToMySQLService.updateDataFromRedisToMySQL4();
             mySQLSelfService.dailyLogToUserStudyroom();
@@ -30,7 +30,7 @@ public class ScheduledTasks {
             //4시 이전일때 before4 = true, 이후일때 false(24시가 넘어갔을 때)
             //어제 dailylog를 가져올 지 오늘 dailylog를 가져올 지 판단 때문에 필요
             int dayBefore = (hour < 15) ? 1 : 0;
-            redisToMySQLService.updateDataFromRedisToMySQL(dayBefore);
+            //redisToMySQLService.updateDataFromRedisToMySQL(dayBefore);
         }
 
     }
