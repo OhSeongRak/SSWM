@@ -7,7 +7,7 @@ import moment from "moment";
 import "./Calendar.css";
 
 const ScheduleCalendar = (props) => {
-  const [selectedDateRange, setSelectedDateRange] = useState([new Date(), new Date()]);
+  const [selectedDateRange, setSelectedDateRange] = useState([new Date().setHours(0, 0, 0, 0), new Date().setHours(23, 59, 59, 999)]);
 
   const [calendarDto, setcalendarDto] = useState([]);
 
