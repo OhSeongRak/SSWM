@@ -119,6 +119,7 @@ export default class ChatComponent extends Component {
                             value={this.state.message}
                             onChange={this.handleChange}
                             onKeyPress={this.handlePressKey}
+                            maxLength={28}
                         />
                         <Tooltip title="Send message">
                             <Fab size="small" id="sendButton" onClick={this.sendMessage}>
