@@ -319,8 +319,9 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
 
         int year = now.getYear();
         int month = now.getMonthValue();
+        int day = now.getDayOfMonth();
         int hour = now.getHour();
-        if (hour < 4) {
+        if (day == 1 && hour < 4 ) {
             if (month == 1) {
                 year -= 1;
                 month = 12;
