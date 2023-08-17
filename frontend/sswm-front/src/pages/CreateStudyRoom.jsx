@@ -233,25 +233,6 @@ const CreateStudyRoom = () => {
       });
   };
 
-  // const [checked, setChecked] = useState(true);
-  // const [disabled, setAble] = useState(true);
-
-  // const handleChange = () => {
-  //   if (checked) {
-  //     setAble(false);
-  //     setChecked(false);
-  //   } else {
-  //     setAble(true);
-  //     setChecked(true);
-  //   }
-  // };
-
-  // const [value, setValue] = useState("");
-
-  // const onChange = (e) => {
-  //   setValue(e.target.value);
-  // };
-
   const CHARACTER_LIMIT = 8;
 
   const codeValidation = () => {

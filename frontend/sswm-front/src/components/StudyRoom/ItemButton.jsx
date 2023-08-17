@@ -43,7 +43,11 @@ const CardHoverButton = (props) => {
     });
     // 비공개 방일 때
     if (studyroom.public === false) {
-      if (props.isHost === true) window.location.href = `/StudyRoomMember/${studyroom.id}`;
+      
+      
+      if (props.isHost === true) {
+        return window.location.href = `/StudyRoomMember/${studyroom.id}`;
+      }
 
       // 입장 코드 확인
       const isEnterCodeMatch = await axios.get(

@@ -81,7 +81,6 @@ const StudyRoomMember = () => {
           },
         });
         
-        console.log("message.data::::a", message.data)
         if (message.data === false) {
           alert("잘못된 접근입니다.");
           window.location.href = `/`;
