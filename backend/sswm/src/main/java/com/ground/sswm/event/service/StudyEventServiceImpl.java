@@ -12,9 +12,13 @@ import com.ground.sswm.event.exception.BadEventRequestException;
 import com.ground.sswm.event.repository.StudyEventRepository;
 import com.ground.sswm.studyroom.model.Studyroom;
 import com.ground.sswm.studyroom.repository.StudyroomRepository;
+import com.ground.sswm.userStudyroom.model.UserStudyroom;
+import com.ground.sswm.userStudyroom.repository.UserStudyroomRepository;
 import java.time.ZoneId;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class StudyEventServiceImpl implements StudyEventService {
     private final StudyEventRepository studyEventRepository;
     private final DailyLogRepository dailyLogRepository;
     private final StudyroomRepository studyroomRepository;
+    private final UserStudyroomRepository userStudyroomRepository;
 
     @Override
     public void addEventLog(Long userId, Long eventOccurTime, StudyEventDto studyEventDto,
@@ -105,5 +110,15 @@ public class StudyEventServiceImpl implements StudyEventService {
     @Override
     public boolean checkInLive(Long userId) {
         return studyEventRepository.existsByUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long userId) {
+        List<UserStudyroom> userStudyrooms = userStudyroomRepository.findAllByUserIdAndIsDeleted(userId, false);
+        for (UserStudyroom userStudyroom : userStudyrooms) {
+            studyEventRepository.delete(userId + "_" + userStudyroom.getStudyroom().getId() + "_STUDY");
+            studyEventRepository.delete(userId + "_" + userStudyroom.getStudyroom().getId() + "_REST");
+        }
     }
 }

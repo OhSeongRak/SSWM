@@ -8,4 +8,6 @@ public interface StudyEventService {
     void addEventLog(Long userId, Long time, StudyEventDto studyEventDto, int dayBefore);
 
     boolean checkInLive(Long userId);
+
+    void delete(Long userId);
 }
