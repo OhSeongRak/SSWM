@@ -41,11 +41,14 @@ const StudyRoomMembers = ({ studyroomId }) => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/search-user`, {
-          headers: {
-            Authorization: token,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/api/studyrooms/${studyroomId}/search-user`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
         setStudyPeople(response.data);
       } catch (error) {
         console.error("유저 데이터를 가져오는 데 실패했습니다:", error);
@@ -115,7 +118,7 @@ const ContainerWrap = styled.div`
 const MemberTitleWrap = styled.div`
   width: 100%;
   font-size: 20px;
-  margin-bottom: 1vw;
+  margin-bottom: 2vw;
 `;
 const MemberWrap = styled.div`
   display: flex;

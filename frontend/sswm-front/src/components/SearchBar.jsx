@@ -29,7 +29,7 @@ const SearchBar = ({ onSearchKeywordChange }) => {
           value={searchKeyword}
           onChange={handleInputChange}
           onKeyPress={handleInputKeyPress}
-          maxLength='20'
+          maxLength="20"
         />
 
         <SearchBarButton onClick={handleButtonClick}>
@@ -63,7 +63,7 @@ const SearchBarInput = styled.input`
   width: 100%;
   padding: 20px 75px 20px 44px;
   background: white;
-  border: 3px solid #87c159;
+  border: 1px solid #87c159;
   border-radius: 35px;
   font-weight: 700;
   font-size: 20px;
