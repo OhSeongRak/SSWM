@@ -32,7 +32,6 @@ class CardHoverMenus extends Component {
       this.setState({ isHost: response.data });
     } catch (error) {
       console.log(error);
-      console.log(this.state.isHost);
     }
   };
 
