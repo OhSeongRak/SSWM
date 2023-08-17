@@ -5,7 +5,6 @@ import static com.ground.sswm.common.util.UnixTimeUtil.getCurrentUnixTime;
 import com.ground.sswm.auth.service.AuthService;
 import com.ground.sswm.event.domain.dto.StudyEventDto;
 import com.ground.sswm.event.service.StudyEventService;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,7 @@ public class StudyEventController {
 
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
-        int dayBefore = (hour < 16) ? 1 : 0; // [새벽4시 - 익일 0 - 익일 3시59분]
+        int dayBefore = (hour < 4) ? 1 : 0; // [새벽4시 - 익일 0 - 익일 3시59분]
         studyEventService.addEventLog(userId, getCurrentUnixTime(), studyEventDto, dayBefore);
         return new ResponseEntity<>("", HttpStatus.OK);
     }

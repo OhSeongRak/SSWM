@@ -269,7 +269,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         int hour = currentTime.getHour();
         long now = UnixTimeUtil.getCurrentUnixTime();
-        int dayBefore = (hour < 16) ? 1 : 0;
+        int dayBefore = (hour < 4) ? 1 : 0;
         long[] days = getStartEndOfPeriod(now, ZoneId.of("Asia/Seoul"), dayBefore);
 
         //스터디룸 아이디 및 날짜로 검색해서 공부량 top3 가져오기
@@ -318,7 +318,7 @@ public class UserStudyroomServiceImpl implements UserStudyroomService {
         int year = currentTime.getYear();
         int month = currentTime.getMonthValue();
         int day = currentTime.getDayOfMonth();
-        if (day == 1 && hour < 16 ) {
+        if (day == 1 && hour < 4 ) {
             if (month == 1) {
                 year -= 1;
                 month = 12;
