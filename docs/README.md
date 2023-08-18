@@ -1,10 +1,33 @@
-[![message](./img/광고메세지.png)](https://www.youtube.com/watch?v=VHVgtXMp3OI)
 
+
+
+<br />
 <div align="center">
-  <h5 style="font-weight: bold;">↑ 사진을 클릭하면 UCC를 볼 수 있어요!</h5>
-  <br/>
-  <br/>
+  <a href="">
+    <img src="./img/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+<h2 align="center"><strong>Study Stretching With Me</strong></h2>
+  <p align="center">
+    <br />
+    <div>
+      <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
+      <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
+      <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
+      <br/>
+      <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black"/>  
+      <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
+      <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
+      <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
+    </div>
+    <br/>
+    <a href="https://www.youtube.com/watch?v=VHVgtXMp3OI">
+      <img src="./img/광고메세지.png"/>
+    </a>
+    <h5 style="font-weight: bold;">↑ 사진을 클릭하면 UCC를 볼 수 있어요!</h5>
+  </p>
 </div>
+<br/>
 
 
 # 목차
