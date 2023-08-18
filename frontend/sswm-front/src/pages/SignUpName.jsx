@@ -17,7 +17,9 @@ const SignUpName = () => {
 
   const [isExist, setIsExist] = useState(true);
 
-  const [imageSrc, setImage] = useState('https://sswm-image.s3.ap-northeast-2.amazonaws.com/image/userDefault/fubao.jpg');
+  const [imageSrc, setImage] = useState(
+    "https://sswm-image.s3.ap-northeast-2.amazonaws.com/image/userDefault/fubao.jpg"
+  );
 
   const imageUp = useRef();
 
@@ -60,7 +62,7 @@ const SignUpName = () => {
     setCheckedNickName(nickName);
 
     axios
-      .get(`/api/users/exists`, {
+      .get(`${process.env.REACT_APP_BASE_URL}/api/users/exists`, {
         headers: {
           Authorization: accessToken,
         },
@@ -100,11 +102,11 @@ const SignUpName = () => {
     }
 
     formData.append("nickname", encodeURIComponent(nickName));
-    
+
     // Axios 또는 Fetch API를 사용하여 formData를 서버로 전송
     // 예시로 Axios 사용
     axios
-      .put(`/api/users`, formData, {
+      .put(`${process.env.REACT_APP_BASE_URL}/api/users`, formData, {
         headers: {
           Authorization: accessToken,
           "Content-Type": "multipart/form-data",
@@ -148,7 +150,7 @@ const SignUpName = () => {
             id="demo-helper-text-aligned"
             label="Nickname"
             onChange={handleNameChange}
-            inputProps={{maxLength:8}}
+            inputProps={{ maxLength: 8 }}
           />
           <Button
             sx={{ width: "100px", marginLeft: "10px", height: 52 }}

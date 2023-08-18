@@ -7,7 +7,14 @@ import moment from "moment";
 import "./Calendar.css";
 
 const ScheduleCalendar = (props) => {
-  const [selectedDateRange, setSelectedDateRange] = useState([new Date(), new Date()]);
+  const now= new Date();
+  const yesterday= new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const start= new Date().getHours()<4 ? new Date(yesterday).setHours(0,0,0,0) : now.setHours(0,0,0,0);
+  const end= new Date().getHours()<4 ? new Date(yesterday).setHours(23, 59, 59, 999) : now.setHours(23, 59, 59, 999);
+
+  const [selectedDateRange, setSelectedDateRange] = useState([start , end]);
 
   const [calendarDto, setcalendarDto] = useState([]);
 
@@ -21,7 +28,7 @@ const ScheduleCalendar = (props) => {
   useEffect(() => {
     console.log(selectedDateRange);
     axios
-      .get(`/api/user-logs`, {
+      .get(`${process.env.REACT_APP_BASE_URL}/api/user-logs`, {
         params: {
           start: selectedDateRange[0],
           end: selectedDateRange[1],
@@ -35,7 +42,7 @@ const ScheduleCalendar = (props) => {
         console.log(response.data);
       })
       .catch((error) => {
-        setcalendarDto({studyTime : 0});
+        setcalendarDto({studyTime : 0} , {stretchScore : 0});
         console.log(error);
       });
     // eslint-disable-next-line
@@ -64,10 +71,13 @@ const ScheduleCalendar = (props) => {
             <h2>
               기간 내 총 공부시간 :{" "}
               {calendarDto.studyTime !== undefined
-                ? `${Math.floor(calendarDto.studyTime / 60)}시간 ${
-                    calendarDto.studyTime % 60
-                  }분`
+                ? `${Math.floor(calendarDto.studyTime / 60)}시간 ${calendarDto.studyTime % 60}분`
                 : "0시간 0분"}
+            </h2>
+            <h2>
+              기간 내 총 스트레칭 점수 :{" "}
+              {calendarDto.stretchScore !== undefined
+                ? `${calendarDto.stretchScore} 점` : "0점"}
             </h2>
           </div>
         </CalendarWrap>

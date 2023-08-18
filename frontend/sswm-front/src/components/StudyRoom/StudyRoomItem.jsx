@@ -9,11 +9,12 @@ import { Chip, IconButton, Typography } from "@mui/material";
 
 import LockIcon from "@mui/icons-material/Lock";
 
-function formatTime(minutes) {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+function formatTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const remainingSeconds = seconds % 3600;
+  const minutes = Math.floor(remainingSeconds / 60);
   const formattedHours = hours.toString().padStart(2, "0");
-  const formattedMinutes = remainingMinutes.toString().padStart(2, "0");
+  const formattedMinutes = minutes.toString().padStart(2, "0");
   return `${formattedHours}:${formattedMinutes}`;
 }
 

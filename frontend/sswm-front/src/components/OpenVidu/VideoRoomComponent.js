@@ -101,8 +101,20 @@ class VideoRoomComponent extends Component {
             animate: true, // Whether you want to animate the transitions
         };
         
+        const message = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/studyrooms/${this.props.studyroomId}/is-member`, {
+            headers: {
+              Authorization: accessToken,
+            },
+          });
+          
+          console.log("message.data::::a", message.data)
+          if (message.data === false) {
+            alert("잘못된 접근입니다.");
+            window.location.href = `/`;
+          }
+
         axios
-        .get(`/api/users`, {
+        .get(`${process.env.REACT_APP_BASE_URL}/api/users`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -137,40 +149,34 @@ class VideoRoomComponent extends Component {
     }
         
     async joinSession() {
-        const response = await axios
-        .get("/api/event/check-inlive", {
+        await axios
+        .delete(`${process.env.REACT_APP_BASE_URL}/api/event`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
             },
         })
+
+        this.OV = new OpenVidu();
+        this.setState({
+            session: this.OV.initSession(),
+            },
+            async () => {
+                this.subscribeToStreamCreated();
+                await this.connectToSession();
+            });
+
+        this.sendEventAxios({
+            type: 'STUDY',
+            status: 'ON',
+            studyroomId: this.state.mySessionId,
+        })
+
+        this.restOn = false;
+        this.timerOn = false;
         
-        if (response.data === true) {
-            alert("이미 라이브 중인 스터디룸이 있습니다!");
-            this.leaveSession();
-        }
-
-        else {
-            this.OV = new OpenVidu();
-            this.setState({
-                session: this.OV.initSession(),
-                },
-                async () => {
-                    this.subscribeToStreamCreated();
-                    await this.connectToSession();
-                });
-
-            this.sendEventAxios({
-                type: 'STUDY',
-                status: 'ON',
-                studyroomId: this.state.mySessionId,
-            })
-
-            this.restOn = false;
-            this.timerOn = false;
-            
-            this.sendRestTimeAxios();
-        }
+        this.sendRestTimeAxios();
+        
     }
 
     async connectToSession() {
@@ -274,7 +280,7 @@ class VideoRoomComponent extends Component {
     // axios 요청 함수
     sendEventAxios = (data) => { 
         axios
-        .post("/api/event", data, {
+        .post(`${process.env.REACT_APP_BASE_URL}/api/event`, data, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -291,7 +297,7 @@ class VideoRoomComponent extends Component {
     sendRestTimeAxios() {
         // 휴식 시간 가져오기
         axios
-        .get(`/api/user-logs/${this.state.mySessionId}`, {
+        .get(`${process.env.REACT_APP_BASE_URL}/api/user-logs/${this.state.mySessionId}`, {
             headers: {
             Authorization: accessToken,
             "Content-Type": "application/json",
@@ -624,7 +630,7 @@ class VideoRoomComponent extends Component {
             localUser.getStreamManager().publishVideo(localUser.isVideoActive());
             this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
             this.setState({ localUser: localUser });
-          }, 72000); // 72초를 밀리초로 변환한 값        
+          }, 40000); // 40초를 밀리초로 변환한 값        
 
     }
 
@@ -735,10 +741,9 @@ class VideoRoomComponent extends Component {
             if (this.state.cancel === true || newTimerValue <= 0) {
                 this.setState({
                     minute: 0,
-                    timerOn: false,
                     cancel: false
                 });
-
+                this.timerOn = false;
                 clearInterval(this.timerInterval);
                 this.setState({
                     timerRunning: false,
