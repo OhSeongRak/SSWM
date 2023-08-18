@@ -124,7 +124,7 @@ const Streching = () => {
           setClassSelected(sc);
         }
         remainingTime.current -= 1;
-      }, 10);
+      }, 5);
     } 
     window.requestAnimationFrame(loop);
 
@@ -210,7 +210,7 @@ const Streching = () => {
             <ContentViewWrap>
               <img src={imagePath} alt="Selected Pose" style={{ maxWidth: '100%', maxHeight: '100%' }}/>
             </ContentViewWrap>
-            <ContentScoreWrap>누적점수 : {sumScore.current} / 900 </ContentScoreWrap>
+            <ContentScoreWrap>누적점수 : {sumScore.current} / 500 </ContentScoreWrap>
           </ContentLeftWrap>
 
           <ContentRightWrap> {/* 유저 화면 */}
