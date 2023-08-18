@@ -630,7 +630,7 @@ class VideoRoomComponent extends Component {
             localUser.getStreamManager().publishVideo(localUser.isVideoActive());
             this.sendSignalUserChanged({ isVideoActive: localUser.isVideoActive() });
             this.setState({ localUser: localUser });
-          }, 20000); // 20초를 밀리초로 변환한 값        
+          }, 10000); // 10초를 밀리초로 변환한 값        
 
     }
 
