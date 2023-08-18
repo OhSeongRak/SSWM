@@ -124,7 +124,7 @@ const Streching = () => {
           setClassSelected(sc);
         }
         remainingTime.current -= 1;
-      }, 10);
+      }, 5);
     } 
     window.requestAnimationFrame(loop);
 
